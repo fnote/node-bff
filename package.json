@@ -1,0 +1,47 @@
+{
+  "name": "pci-grabber-bff",
+  "version": "1.0.0",
+  "description": "BFF for PCI Grabber",
+  "main": "index.js",
+  "scripts": {
+    "start": "serverless offline start --stage local --port 4000 ",
+    "deploy": "serverless deploy -v",
+    "eslint": "eslint 'src/**/*.js'",
+    "eslint-test": "eslint 'test/**/*.js' --fix",
+    "eslint-fix": "eslint 'src/**/*.js' --fix",
+    "test": "npm run jest ",
+    "jest": "jest --coverage /*.test.js"
+  },
+  "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.10.1",
+    "@babel/polyfill": "^7.10.1",
+    "aws-sdk": "^2.688.0",
+    "axios": "^0.19.2",
+    "babel-runtime": "^6.26.0",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "http-status-codes": "^1.4.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.10.2",
+    "@babel/node": "^7.10.1",
+    "@babel/preset-env": "^7.10.2",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-source-map-support": "^2.1.1",
+    "eslint": "^7.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "jest": "^26.0.1",
+    "serverless-http": "^2.5.0",
+    "serverless-offline": "^6.3.1",
+    "serverless-webpack": "^5.3.2",
+    "source-map-support": "^0.5.19",
+    "webpack": "^4.43.0",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "author": "pricing-platform",
+  "license": "ISC"
+}
