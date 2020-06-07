@@ -15,61 +15,52 @@ custom:
     exe: EXE
     prod: PROD
     local: LOCAL
+  deploymentBucket:
+    local: local
+    dev: ${ssm:/CP/PCI-GRABBER/DEV/DEPLOYMENTBUCKET}
+    exe: ${ssm:/CP/PCI-GRABBER/EXE/DEPLOYMENTBUCKET}
+    prod: ${ssm:/CP/PCI-GRABBER/PROD/DEPLOYMENTBUCKET}
 
 provider:
   name: aws
   runtime: nodejs12.x
-  endpointType: PRIVATE
+  project: pci-grabber-bff
   stage: ${opt:stage, 'dev'}
-  region: us-east-1
-  environment: ${file(env.yml)}
+  environmentShort: ${file(./env.yml):${self:provider.stage}.STAGE}
+  region: ${file(./env.yml):${self:provider.stage}.REGION}
+  environment: ${file(./env.yml):${self:provider.stage}}
+  deploymentBucket: ${self:custom.deploymentBucket.${self:provider.stage}}
+  deploymentPrefix: pci-grabber-bff
+  stackTags: ${file(AwsTags.yml):${self:provider.stage}}
+  vpc:
+    securityGroupIds:
+      - ${ssm:/CP/PCI-GRABBER/SECUTIRYGROUP1}
+      - ${ssm:/CP/PCI-GRABBER/SECUTIRYGROUP2}
+      - ${ssm:/CP/PCI-GRABBER/SECUTIRYGROUP3}
+    subnetIds:
+      - ${ssm:/CP/PCI-GRABBER/SUBNET1}
+      - ${ssm:/CP/PCI-GRABBER/SUBNET2}
+      - ${ssm:/CP/PCI-GRABBER/SUBNET3}
+  role: ${ssm:/CP/PCI-GRABBER/EXECUTIONROLE}
+  alb:
+    targetGroupPrefix: pci-grabber-${self:provider.environmentShort}
 
-iamRoleStatements:
-  - Effect: "Allow"
-    Action:
-      - "s3:ListBucket"
-    Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-  - Effect: "Allow"
-    Action:
-      - "s3:PutObject"
-    Resource:
-      Fn::Join:
-        - ""
-        - - "arn:aws:s3:::"
-          - "Ref" : "ServerlessDeploymentBucket"
-          - "/*"
-
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.js
-#    - exclude-me-dir/**
+resources:
+  - ${file(./serverless.resources.yml)}
 
 functions:
   pci-grabber-bff:
-    handler: src/index.serverlessApp
-    events: ${file(./serverless-routes.js)}
+    name: pci-grabber-bff-${self:provider.environmentShort}
+    handler: src/app.serverlessApp
+    # events: ${file(./serverless-routes.js)}
     environment:
-      ENVIRONMENT_NAME: ${opt:stage, 'dev'}
+      ENVIRONMENT: ${self:provider.environmentShort}
       PORT: ${opt:port, 4000}
-    memorySize: 1024
+    memorySize: 512
     timeout: 60
-
-#    Define function environment variables here
-#    environment:
-#      variable2: value2
-
-# you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+    events:
+     - alb:
+         listenerArn: !Ref LoadBalancerListenerHTTP
+         priority: 1
+         conditions:
+           path: /v1/*
