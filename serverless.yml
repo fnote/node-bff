@@ -43,7 +43,7 @@ provider:
       - ${ssm:/CP/PCI-GRABBER/SUBNET3}
   role: ${ssm:/CP/PCI-GRABBER/EXECUTIONROLE}
   alb:
-    targetGroupPrefix: pci-grabber-${self:provider.environmentShort}
+    targetGroupPrefix: pci-grbr-tg-${self:provider.environmentShort}-
 
 resources:
   - ${file(./serverless.resources.yml)}

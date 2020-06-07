@@ -17,8 +17,11 @@ Resources:
       Port: '80'
       Protocol: HTTP
       DefaultActions:
-        - Type: forward
-          TargetGroupArn: !Ref TargetGroup
+        - Type: fixed-response
+          FixedResponseConfig:
+            StatusCode: 200
+            ContentType: "text/plain"
+            MessageBody: "Success"
   LoadBalancerListenerHTTPHealthCheckRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
@@ -46,8 +49,11 @@ Resources:
       Port: '443'
       Protocol: HTTPS
       DefaultActions:
-        - Type: forward
-          TargetGroupArn: !Ref TargetGroup
+        - Type: fixed-response
+          FixedResponseConfig:
+            StatusCode: 200
+            ContentType: "text/plain"
+            MessageBody: "Success"
   LoadBalancerListenerHTTPSHealthCheckRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
@@ -65,13 +71,4 @@ Resources:
             Values:
               - "/healthcheck"
       ListenerArn: !Ref LoadBalancerListenerHTTPS
-      Priority: 2
-  TargetGroup:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties:
-      Name: target-group-pci-grabber-bff-${self:provider.environmentShort}
-      HealthCheckIntervalSeconds: '30'
-      HealthCheckPath: "/healthcheck"
-      HealthCheckTimeoutSeconds: '15'
-      HealthyThresholdCount: '3'
-      TargetType: lambda
+      Priority: 1
