@@ -6,6 +6,7 @@ module.exports = (async () => {
         // let the plugin determine the correct handler entry points at build time
         entry: slsw.lib.entries,
         target: 'node',
+        mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
         // 'source-map' is to have a proper stacktraces
         devtool: 'source-map',
         // we use webpack-node-externals to excludes all node deps.

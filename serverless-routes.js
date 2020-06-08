@@ -2,7 +2,8 @@ const GET = 'get';
 const version = '/v1';
 
 const routes = [
-  { path: '/', method: 'get' },
+  { path: '/', method: GET },
+  { path: '/healthcheck', method: GET}
 ];
 
 module.exports = () => {

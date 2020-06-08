@@ -11,6 +11,9 @@ custom:
     includeModules: true   # Node modules configuration for packaging
     packager: 'npm'   # Packager that will be used to package your external modules
     excludeFiles: src/**/*.test.js # Provide a glob for files to ignore
+  custom:
+    serverless-offline:
+      httpPort: 4000
   environments:
     dev: DEV
     exe: EXE
@@ -52,11 +55,10 @@ provider:
 
 functions:
   pci-grabber-bff:
-    handler: src/index.serverlessApp
+    handler: src/app.serverlessApp
     events: ${file(./serverless-routes.js)}
     environment:
       ENVIRONMENT_NAME: ${opt:stage, 'dev'}
-      PORT: ${opt:port, 4000}
     memorySize: 1024
     timeout: 60
 #    The following are a few example events you can configure

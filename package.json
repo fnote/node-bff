@@ -4,7 +4,7 @@
   "description": "BFF for PCI Grabber",
   "main": "index.js",
   "scripts": {
-    "start": "serverless offline start --stage local --port 4000 ",
+    "start": "serverless offline start --stage local --httpPort 4000 ",
     "deploy": "serverless deploy -v",
     "eslint": "eslint 'src/**/*.js'",
     "eslint-test": "eslint 'test/**/*.js' --fix",
@@ -22,7 +22,8 @@
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "http-status-codes": "^1.4.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "rotating-file-stream": "^2.1.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.1",
@@ -32,6 +33,7 @@
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-source-map-support": "^2.1.1",
+    "cors": "^2.8.5",
     "eslint": "^7.1.0",
     "eslint-plugin-import": "^2.20.2",
     "jest": "^26.0.1",
@@ -40,7 +42,8 @@
     "serverless-webpack": "^5.3.2",
     "source-map-support": "^0.5.19",
     "webpack": "^4.43.0",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^1.7.2",
+    "winston": "^3.2.1"
   },
   "author": "pricing-platform",
   "license": "ISC"
