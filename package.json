@@ -4,7 +4,7 @@
   "description": "BFF for PCI Grabber",
   "main": "index.js",
   "scripts": {
-    "start": "serverless offline start --stage local --httpPort 4000 ",
+    "start": "serverless offline start --stage exe --httpPort 4000 ",
     "deploy": "serverless deploy -v",
     "eslint": "eslint 'src/**/*.js'",
     "eslint-test": "eslint 'test/**/*.js' --fix",
@@ -23,7 +23,9 @@
     "express": "^4.17.1",
     "http-status-codes": "^1.4.0",
     "morgan": "^1.10.0",
-    "rotating-file-stream": "^2.1.1"
+    "rotating-file-stream": "^2.1.1",
+    "lambda-log": "^2.4.0",
+    "serverless-http": "^2.5.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.1",

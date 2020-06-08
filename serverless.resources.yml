@@ -1,0 +1,74 @@
+Resources:
+  ServiceALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: alb-cp-pci-grabber-bff-${self:provider.environmentShort}
+      Subnets:
+        - ${ssm:/CP/PCI-GRABBER/SUBNET1}
+        - ${ssm:/CP/PCI-GRABBER/SUBNET2}
+        - ${ssm:/CP/PCI-GRABBER/SUBNET3}
+      Scheme: internal
+      SecurityGroups:
+        - ${ssm:/CP/PCI-GRABBER/SECUTIRYGROUPELB}
+  LoadBalancerListenerHTTP:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref ServiceALB
+      Port: '80'
+      Protocol: HTTP
+      DefaultActions:
+        - Type: fixed-response
+          FixedResponseConfig:
+            StatusCode: 200
+            ContentType: "text/plain"
+            MessageBody: "Success"
+  LoadBalancerListenerHTTPHealthCheckRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: redirect
+          RedirectConfig:
+            Host: "#{host}"
+            Path: "/healthcheck"
+            Port: "#{port}"
+            Protocol: "#{protocol}"
+            StatusCode: HTTP_301
+      Conditions:
+        - Field: path-pattern
+          PathPatternConfig:
+            Values:
+              - "/healthcheck"
+      ListenerArn: !Ref LoadBalancerListenerHTTP
+      Priority: 2
+  LoadBalancerListenerHTTPS:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref ServiceALB
+      Certificates:
+        - CertificateArn: ${ssm:/CP/PCI-GRABBER/SSLCERTIFICATE}
+      Port: '443'
+      Protocol: HTTPS
+      DefaultActions:
+        - Type: fixed-response
+          FixedResponseConfig:
+            StatusCode: 200
+            ContentType: "text/plain"
+            MessageBody: "Success"
+  LoadBalancerListenerHTTPSHealthCheckRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: redirect
+          RedirectConfig:
+            Host: "#{host}"
+            Path: "/healthcheck"
+            Port: "#{port}"
+            Protocol: "#{protocol}"
+            StatusCode: HTTP_301
+      Conditions:
+        - Field: path-pattern
+          PathPatternConfig:
+            Values:
+              - "/healthcheck"
+      ListenerArn: !Ref LoadBalancerListenerHTTPS
+      Priority: 1
