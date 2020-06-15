@@ -2,14 +2,14 @@ Resources:
   ServiceALB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-      Name: alb-cp-pci-grabber-bff-${self:provider.environmentShort}
+      Name: alb-cloud-pci-bff-${self:provider.environmentShort}
       Subnets:
-        - ${ssm:/CP/PCI-GRABBER/SUBNET1}
-        - ${ssm:/CP/PCI-GRABBER/SUBNET2}
-        - ${ssm:/CP/PCI-GRABBER/SUBNET3}
+        - ${ssm:/CP/CLOUD-PCI/SUBNET1}
+        - ${ssm:/CP/CLOUD-PCI/SUBNET2}
+        - ${ssm:/CP/CLOUD-PCI/SUBNET3}
       Scheme: internal
       SecurityGroups:
-        - ${ssm:/CP/PCI-GRABBER/SECUTIRYGROUPELB}
+        - ${ssm:/CP/CLOUD-PCI/SECUTIRYGROUPELB}
   LoadBalancerListenerHTTP:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
@@ -45,7 +45,7 @@ Resources:
     Properties:
       LoadBalancerArn: !Ref ServiceALB
       Certificates:
-        - CertificateArn: ${ssm:/CP/PCI-GRABBER/SSLCERTIFICATE}
+        - CertificateArn: ${ssm:/CP/CLOUD-PCI/SSLCERTIFICATE}
       Port: '443'
       Protocol: HTTPS
       DefaultActions:

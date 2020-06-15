@@ -5,7 +5,7 @@ local:
   'Technical:ApplicationID': 'APP-001151'
   'Technical:PlatformOwner': 'krishan.senevirathne@sysco.com'
   'Technical:Environment': 'LOCAL'
-  'Technical:ApplicationSubName': 'PCI-Grabber Application BFF'
+  'Technical:ApplicationSubName': 'Cloud PCI Application BFF'
   'Technical:ApplicationRole': 'Target Group'
   'SupportEmail': '000-BT-PricingPlatform@Corp.sysco.com'
   'Approver': 'villanueva.loi@corp.sysco.com'
@@ -13,7 +13,7 @@ local:
   'Project_ID': 'BT.001176'
   '2WTAGGER': 'team-managed'
   'Platform': 'Pricing Platform'
-  'Component': 'PCI-Grabber Application BFF'
+  'Component': 'Cloud PCI Application BFF'
 
 dev:
   'Environment': 'Development'
@@ -22,7 +22,7 @@ dev:
   'Technical:ApplicationID': 'APP-001151'
   'Technical:PlatformOwner': 'krishan.senevirathne@sysco.com'
   'Technical:Environment': 'DEV'
-  'Technical:ApplicationSubName': 'PCI-Grabber Application BFF'
+  'Technical:ApplicationSubName': 'Cloud PCI Application BFF'
   'Technical:ApplicationRole': 'Target Group'
   'SupportEmail': '000-BT-PricingPlatform@Corp.sysco.com'
   'Approver': 'villanueva.loi@corp.sysco.com'
@@ -30,7 +30,7 @@ dev:
   'Project_ID': 'BT.001176'
   '2WTAGGER': 'team-managed'
   'Platform': 'Pricing Platform'
-  'Component': 'PCI-Grabber Application BFF'
+  'Component': 'Cloud PCI Application BFF'
 
 exe:
   'Environment': 'Execution'
@@ -39,7 +39,7 @@ exe:
   'Technical:ApplicationID': 'APP-001151'
   'Technical:PlatformOwner': 'krishan.senevirathne@sysco.com'
   'Technical:Environment': 'DEV'
-  'Technical:ApplicationSubName': 'PCI-Grabber Application BFF'
+  'Technical:ApplicationSubName': 'Cloud PCI Application BFF'
   'Technical:ApplicationRole': 'Target Group'
   'SupportEmail': '000-BT-PricingPlatform@Corp.sysco.com'
   'Approver': 'villanueva.loi@corp.sysco.com'
@@ -47,7 +47,7 @@ exe:
   'Project_ID': 'BT.001176'
   '2WTAGGER': 'team-managed'
   'Platform': 'Pricing Platform'
-  'Component': 'PCI-Grabber Application BFF'
+  'Component': 'Cloud PCI Application BFF'
 
 prod:
   'Environment': 'Production'
@@ -56,7 +56,7 @@ prod:
   'Technical:ApplicationID': 'APP-001151'
   'Technical:PlatformOwner': 'krishan.senevirathne@sysco.com'
   'Technical:Environment': 'DEV'
-  'Technical:ApplicationSubName': 'PCI-Grabber Application BFF'
+  'Technical:ApplicationSubName': 'Cloud PCI Application BFF'
   'Technical:ApplicationRole': 'Target Group'
   'SupportEmail': '000-BT-PricingPlatform@Corp.sysco.com'
   'Approver': 'villanueva.loi@corp.sysco.com'
@@ -64,4 +64,4 @@ prod:
   'Project_ID': 'BT.001176'
   '2WTAGGER': 'team-managed'
   'Platform': 'Pricing Platform'
-  'Component': 'PCI-Grabber Application BFF'
+  'Component': 'Cloud PCI Application BFF'

@@ -25,7 +25,7 @@ if (!fs.existsSync(logs_dir)) {
         }
     });
 }
-const logStream = rfs.createStream('pci-grabber-bff.log', {
+const logStream = rfs.createStream('cloud-pci-bff.log', {
     interval: '1d', // rotate daily
     path: logs_dir
 });
@@ -42,7 +42,7 @@ app.options('/*', (req, res) => {
 });
 
 app.get('/v1/', (req, res) => {
-    res.send(`PCI-Grabber bff is started. Environment: ${process.env.ENVIRONMENT}`);
+    res.send(`Cloud PCI bff is started. Environment: ${process.env.ENVIRONMENT}`);
 });
 
 app.use('/v1/', router);

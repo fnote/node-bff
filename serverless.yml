@@ -1,4 +1,4 @@
-service: pci-grabber-bff
+service: cloud-pci-bff
 
 plugins:
   - serverless-webpack
@@ -19,31 +19,31 @@ custom:
     prod: PROD
   deploymentBucket:
     local: local
-    dev: ${ssm:/CP/PCI-GRABBER/DEV/DEPLOYMENTBUCKET}
-    exe: ${ssm:/CP/PCI-GRABBER/EXE/DEPLOYMENTBUCKET}
-    prod: ${ssm:/CP/PCI-GRABBER/PROD/DEPLOYMENTBUCKET}
+    dev: ${ssm:/CP/CLOUD-PCI/DEV/DEPLOYMENTBUCKET}
+    exe: ${ssm:/CP/CLOUD-PCI/EXE/DEPLOYMENTBUCKET}
+    prod: ${ssm:/CP/CLOUD-PCI/PROD/DEPLOYMENTBUCKET}
 
 provider:
   name: aws
   runtime: nodejs12.x
-  project: pci-grabber-bff
+  project: cloud-pci-bff
   stage: ${opt:stage, 'dev'}
   environmentShort: ${file(./env.yml):${self:provider.stage}.STAGE}
   region: ${file(./env.yml):${self:provider.stage}.REGION}
   environment: ${file(./env.yml):${self:provider.stage}}
   deploymentBucket: ${self:custom.deploymentBucket.${self:provider.stage}}
-  deploymentPrefix: pci-grabber-bff
+  deploymentPrefix: cloud-pci-bff
   stackTags: ${file(AwsTags.yml):${self:provider.stage}}
   vpc:
     securityGroupIds:
-      - ${ssm:/CP/PCI-GRABBER/SECUTIRYGROUP1}
-      - ${ssm:/CP/PCI-GRABBER/SECUTIRYGROUP2}
-      - ${ssm:/CP/PCI-GRABBER/SECUTIRYGROUP3}
+      - ${ssm:/CP/CLOUD-PCI/SECUTIRYGROUP1}
+      - ${ssm:/CP/CLOUD-PCI/SECUTIRYGROUP2}
+      - ${ssm:/CP/CLOUD-PCI/SECUTIRYGROUP3}
     subnetIds:
-      - ${ssm:/CP/PCI-GRABBER/SUBNET1}
-      - ${ssm:/CP/PCI-GRABBER/SUBNET2}
-      - ${ssm:/CP/PCI-GRABBER/SUBNET3}
-  role: ${ssm:/CP/PCI-GRABBER/EXECUTIONROLE}
+      - ${ssm:/CP/CLOUD-PCI/SUBNET1}
+      - ${ssm:/CP/CLOUD-PCI/SUBNET2}
+      - ${ssm:/CP/CLOUD-PCI/SUBNET3}
+  role: ${ssm:/CP/CLOUD-PCI/EXECUTIONROLE}
   alb:
     targetGroupPrefix: pci-grbr-tg-${self:provider.environmentShort}-
 
@@ -51,8 +51,8 @@ resources:
   - ${file(./serverless.resources.yml)}
 
 functions:
-  pci-grabber-bff:
-    name: pci-grabber-bff-${self:provider.environmentShort}
+  cloud-pci-bff:
+    name: cloud-pci-bff-${self:provider.environmentShort}
     handler: src/app.serverlessApp
     # events: ${file(./serverless-routes.js)}
     environment:
