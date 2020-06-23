@@ -3,7 +3,7 @@
  *
  * @author: gkar5861 on 19/06/20
  **/
-import { Router } from 'express';
+import {Router} from 'express';
 import * as HttpStatus from "http-status-codes";
 import {createErrorResponse, createSuccessResponse} from "../../mapper/responseMapper";
 import logger from '../../util/logger';
@@ -17,7 +17,7 @@ import {
 import batchService from "../../service/batchService";
 
 export default () => {
-    const batchRouter = new Router({ mergeParams: true });
+    const batchRouter = new Router({mergeParams: true});
 
     batchRouter.post('/signed-url/:source', async (req, res) => {
         const source = req.params.source

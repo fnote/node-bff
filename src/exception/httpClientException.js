@@ -17,7 +17,7 @@ export default class HttpClientException extends Error {
                 headers: error.response.headers,
             };
         } else if (error.request) {
-            this.errorDetails.request = { ...error.request };
+            this.errorDetails.request = {...error.request};
         } else {
             this.errorDetails = {
                 address: error.address,

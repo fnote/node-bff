@@ -14,6 +14,7 @@ export default class InvalidRequestException extends Error {
 
         this.errorDetails.message = error;
     }
+
     getStatus() {
         if (this.errorDetails.response && this.errorDetails.response.status) {
             return this.errorDetails.response.status;

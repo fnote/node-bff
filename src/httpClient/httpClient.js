@@ -5,7 +5,6 @@
  **/
 import axios from 'axios';
 import HttpClientException from '../exception/httpClientException';
-import {HTTP_CLIENT_ERROR_CODE_INTERNAL_SERVER_ERROR} from "../util/constants";
 
 class HttpClient {
     constructor(configs) {

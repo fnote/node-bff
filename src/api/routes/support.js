@@ -6,7 +6,6 @@
 
 import {CLOUD_PCI_BFF, CLOUD_PCI_BFF_VERSION} from "../../util/constants";
 import * as HttpStatus from "http-status-codes";
-import router from "../index";
 import {Router} from "express";
 
 export default () => {
