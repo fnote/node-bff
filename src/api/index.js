@@ -4,24 +4,14 @@
  * @author: gkar5861 on 04/06/20
  **/
 import express from "express";
-import {CLOUD_PCI_BFF, CLOUD_PCI_BFF_VERSION} from "../util/constants";
-import * as HttpStatus from "http-status-codes";
-
+import BatchRouter from './routes/batch';
+import SupportRouter from './routes/support';
 const router = express.Router();
 
 // add routes here
+router.use('/batch', BatchRouter());
 
 // Health check API
-router.get('/healthcheck', (req, res) => {
-    const health = {
-        appVersion: CLOUD_PCI_BFF_VERSION,
-        appName: CLOUD_PCI_BFF,
-        uptime: process.uptime(),
-        memoryUsage: process.memoryUsage(),
-        nodeVersion: process.versions.node,
-        nodeEnv: process.env.NODE_ENV,
-    };
-    res.status(HttpStatus.OK).json(health);
-});
+router.use('/support', SupportRouter());
 
 export default router;

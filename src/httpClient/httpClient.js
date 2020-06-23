@@ -1,23 +1,28 @@
+/**
+ * Client for HTTP calls
+ *
+ * @author: gkar5861 on 10/06/20
+ **/
 import axios from 'axios';
-import HttpException from '../exception/HttpException';
+import HttpClientException from '../exception/httpClientException';
+import {HTTP_CLIENT_ERROR_CODE_INTERNAL_SERVER_ERROR} from "../util/constants";
 
 class HttpClient {
     constructor(configs) {
         this.axiosInstance = axios.create(configs);
     }
 
-    async makeRequest(type, URL, data, headers, paramsList) {
+    async makeRequest(method, url, data, headers, params) {
         try {
-            const response = await this.axiosInstance({
-                url: URL,
+            return await this.axiosInstance({
+                method,
+                url,
                 data,
-                method: type,
                 headers,
-                params: paramsList,
+                params,
             });
-            return response;
         } catch (error) {
-            throw new HttpException(error, REST_CLIENT_EXCEPTION);
+            throw new HttpClientException(error);
         }
     }
 }

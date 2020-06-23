@@ -45,7 +45,7 @@ app.get('/v1/', (req, res) => {
     res.send(`Cloud PCI bff is started. Environment: ${process.env.ENVIRONMENT}`);
 });
 
-app.use('/v1/', router);
+app.use('/v1/pci-bff/', router);
 
 // error handling middleware
 app.use((err, req, res, next) => {

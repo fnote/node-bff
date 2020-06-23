@@ -1,5 +1,10 @@
-export default class HttpException extends Error {
-    constructor(error, errorCode) {
+/**
+ * Customized Exception Class for HTTP errors
+ *
+ * @author: gkar5861 on 22/06/20
+ **/
+export default class HttpClientException extends Error {
+    constructor(error) {
         super(error.toString());
         this.name = this.constructor.name;
         Error.captureStackTrace(this, this.constructor);
@@ -32,15 +37,6 @@ export default class HttpException extends Error {
     getStatus() {
         if (this.errorDetails.response && this.errorDetails.response.status) {
             return this.errorDetails.response.status;
-        }
-        return -1;
-    }
-
-    getFaultCode() {
-        if (this.errorDetails.response && this.errorDetails.response.data
-            && this.errorDetails.response.data.fault
-            && this.errorDetails.response.data.fault.code) {
-            return this.errorDetails.response.data.fault.code;
         }
         return -1;
     }
