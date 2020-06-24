@@ -4,7 +4,7 @@
  * @author: gkar5861 on 22/06/20
  **/
 
-import {CLOUD_PCI_BFF, CLOUD_PCI_BFF_VERSION} from "../../util/constants";
+import {CLOUD_PCI_BFF, CLOUD_PCI_BFF_VERSION} from "../../../util/constants";
 import * as HttpStatus from "http-status-codes";
 import {Router} from "express";
 

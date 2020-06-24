@@ -8,7 +8,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import serverless from 'serverless-http';
 import router from './api';
-import * as morgan from 'morgan';
+import morgan from 'morgan';
 import {handleError} from './middleware/errorHandler';
 import fs from 'fs';
 

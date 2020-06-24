@@ -8,7 +8,7 @@ import logger from '../util/logger';
 import InvalidRequestException from "../exception/invalidRequestException";
 import * as HttpStatus from "http-status-codes";
 
-export function validateRequestBody(requestBody) {
+export default function validateRequestBody(requestBody) {
     if (isEmpty(requestBody) || isUndefinedFields(requestBody)) {
         logger.error(`Request body validation failed: ${requestBody}`);
         throw new InvalidRequestException(ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY, HttpStatus.BAD_REQUEST);
@@ -22,6 +22,3 @@ const isEmpty = (obj) => {
 const isUndefinedFields = (obj) => {
     return Object.entries(obj).some(([k, v], i) => !v || typeof v === 'undefined' || v === '')
 }
-
-
-

@@ -9,7 +9,7 @@
     "eslint": "eslint 'src/**/*.js'",
     "eslint-test": "eslint 'test/**/*.js' --fix",
     "eslint-fix": "eslint 'src/**/*.js' --fix",
-    "test": "npm run jest ",
+    "test": "jest --config ./jest.config.js",
     "jest": "jest --coverage /*.test.js"
   },
   "dependencies": {
@@ -43,7 +43,9 @@
     "serverless-http": "^2.5.0",
     "serverless-offline": "^6.3.1",
     "serverless-webpack": "^5.3.2",
+    "sinon": "^9.0.2",
     "source-map-support": "^0.5.19",
+    "supertest": "^4.0.2",
     "webpack": "^4.43.0",
     "webpack-node-externals": "^1.7.2"
   },

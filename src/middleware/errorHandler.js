@@ -3,25 +3,13 @@
  *
  * @author: gkar5861 on 04/06/20
  **/
+import {ERROR} from "../util/constants";
 
-class ErrorHandler extends Error {
-    constructor(statusCode, message) {
-        super();
-        this.name = statusCode;
-        this.message = message;
-    }
-}
-
-const handleError = (err, res) => {
+export function handleError(err, res) {
     const {name, message} = err;
     res.status(name).json({
-        status: "error",
+        status: ERROR,
         name,
         message
     });
-};
-
-module.exports = {
-    ErrorHandler,
-    handleError
-};
+}

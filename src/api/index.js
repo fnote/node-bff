@@ -4,8 +4,8 @@
  * @author: gkar5861 on 04/06/20
  **/
 import express from "express";
-import BatchRouter from './routes/batch';
-import SupportRouter from './routes/support';
+import BatchRouter from './routes/batch/batch';
+import SupportRouter from './routes/support/support';
 
 const router = express.Router();
 

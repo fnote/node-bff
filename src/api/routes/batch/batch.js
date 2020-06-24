@@ -5,16 +5,17 @@
  **/
 import {Router} from 'express';
 import * as HttpStatus from "http-status-codes";
-import {createErrorResponse, createSuccessResponse} from "../../mapper/responseMapper";
-import logger from '../../util/logger';
+import {createErrorResponse, createSuccessResponse} from "../../../mapper/responseMapper";
+import logger from '../../../util/logger';
 import {
     ERROR_IN_GETTING_S3_INPUT_SIGNED_URL,
     ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL,
     ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_INVALID_SOURCE,
     FILE_SOURCE_INPUT,
     FILE_SOURCE_OUTPUT,
-} from "../../util/constants";
-import batchService from "../../service/batchService";
+} from "../../../util/constants";
+import BatchService from "../../../service/batch/batchService";
+import InvalidRequestException from "../../../exception/invalidRequestException";
 
 export default () => {
     const batchRouter = new Router({mergeParams: true});
@@ -23,15 +24,15 @@ export default () => {
         const source = req.params.source
         try {
             if (source === FILE_SOURCE_INPUT) {
-                const responseData = await batchService.generateInputSignUrl(req.body);
+                const responseData = await BatchService.generateInputSignUrl(req.body);
                 res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
             } else if (source === FILE_SOURCE_OUTPUT) {
-                const responseData = await batchService.generateOutputSignUrl(req.body);
-                res.status(HttpStatus.OK).send(createSuccessResponse(responseData.data, null));
+                const responseData = await BatchService.generateOutputSignUrl(req.body);
+                res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
             } else {
                 logger.error('Invalid source found while generating signed urls');
-                res.status(HttpStatus.NOT_FOUND)
-                    .send(createErrorResponse(null, ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_INVALID_SOURCE));
+                throw new InvalidRequestException(ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_INVALID_SOURCE,
+                    HttpStatus.BAD_REQUEST);
             }
 
         } catch (error) {

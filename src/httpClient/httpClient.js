@@ -11,11 +11,11 @@ class HttpClient {
         this.axiosInstance = axios.create(configs);
     }
 
-    async makeRequest(method, url, data, headers, params) {
+    async makeRequest(method, URL, data, headers, params) {
         try {
             return await this.axiosInstance({
                 method,
-                url,
+                url: URL,
                 data,
                 headers,
                 params,
@@ -26,5 +26,4 @@ class HttpClient {
     }
 }
 
-export default HttpClient;
-export const httpClient = new HttpClient();
+export default new HttpClient();
