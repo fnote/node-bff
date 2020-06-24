@@ -21,9 +21,9 @@ export async function getParameterValueByName(paramName) {
 
     try {
         const response = await ssmClient.getParameter(params).promise();
-        return response && response.Parameter ? response.Parameter.Value : null;
+        return response && response.data ? response.data : null;
     } catch (error) {
         logger.error(error);
-        throw new Error(error);
+        throw new Error(error.toString());
     }
 }

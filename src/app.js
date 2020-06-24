@@ -15,6 +15,7 @@ import logger from "./util/logger";
 import {handleError} from "./middleware/errorHandler";
 
 const rfs = require("rotating-file-stream");
+const correlator = require("express-correlation-id");
 
 const app = express();
 
@@ -32,7 +33,11 @@ const logStream = rfs.createStream("cloud-pci-bff.log", {
     path: logsDir,
 });
 
+// generate correlation id
+app.use(correlator());
+
 // setup the logger
+morgan.token("correlationId", (req) => req.correlationId());
 app.use(morgan("combined", {stream: logStream}));
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms"));
 

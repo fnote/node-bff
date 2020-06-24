@@ -5,7 +5,7 @@
  * */
 
 import * as HttpStatus from "http-status-codes";
-import validateRequestBody from "../requestBodyValidator";
+import validateRequestBody from "../validateRequestBody";
 import InvalidRequestException from "../../exception/invalidRequestException";
 import {ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY} from "../../util/constants";
 
