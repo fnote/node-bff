@@ -2,9 +2,9 @@
  * Client for HTTP calls
  *
  * @author: gkar5861 on 10/06/20
- **/
-import axios from 'axios';
-import HttpClientException from '../exception/httpClientException';
+ * */
+import axios from "axios";
+import HttpClientException from "../exception/httpClientException";
 
 class HttpClient {
     constructor(configs) {

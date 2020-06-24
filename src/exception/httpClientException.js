@@ -2,7 +2,7 @@
  * Customized Exception Class for HTTP errors
  *
  * @author: gkar5861 on 22/06/20
- **/
+ * */
 export default class HttpClientException extends Error {
     constructor(error) {
         super(error.toString());

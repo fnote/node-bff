@@ -2,8 +2,8 @@
  * Batch service class
  *
  * @author: gkar5861 on 19/06/20
- **/
-import logger from '../../util/logger';
+ * */
+import logger from "../../util/logger";
 import HttpClient from "../../httpClient/httpClient";
 import {HTTP_POST} from "../../util/constants";
 import getBatchAPIConfigs from "../../config/configs";
@@ -24,7 +24,6 @@ class BatchService {
         return response;
     }
 
-
     async generateOutputSignUrl(requestBody) {
         validateRequestBody(requestBody);
         const request = {};
@@ -34,7 +33,6 @@ class BatchService {
         logger.debug(`Generated output signed urls response:: ${response}`);
         return response;
     }
-
 }
 
 export default new BatchService();

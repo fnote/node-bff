@@ -2,7 +2,7 @@
  * Middleware for error handling
  *
  * @author: gkar5861 on 04/06/20
- **/
+ * */
 import {ERROR} from "../util/constants";
 
 export function handleError(err, res) {
@@ -10,6 +10,6 @@ export function handleError(err, res) {
     res.status(name).json({
         status: ERROR,
         name,
-        message
+        message,
     });
 }
