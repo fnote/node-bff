@@ -43,7 +43,7 @@ describe("Response Mapper", () => {
         expect(() => createSuccessResponse(undefined, message)).toThrowError(new Error("Failure in response creation"));
     });
 
-    test("should return error response without cause attr", async () => {
+    test("should return error response with error message as cause attr", async () => {
         const error = {
             errorDetails: {
                 message: "cause",
@@ -59,7 +59,24 @@ describe("Response Mapper", () => {
         expect(res).toEqual(errorResponseWithCause);
     });
 
-    test("should return error response without cause attr", async () => {
+    test("should return error response with error as cause attr", async () => {
+        const error = {
+            message: "cause",
+        };
+
+        const errorResponseWithCause = {
+            status: ERROR,
+            message,
+            cause: {
+                message: "cause",
+            },
+        };
+
+        const res = createErrorResponse(error, message);
+        expect(res).toEqual(errorResponseWithCause);
+    });
+
+    test("should return error response without cause attr when error is null", async () => {
         const errorResponseWithoutCause = {
             status: ERROR,
             message,

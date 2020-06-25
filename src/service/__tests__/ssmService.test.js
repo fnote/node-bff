@@ -26,6 +26,21 @@ describe("SSM Service", () => {
         sinon.assert.calledOnce(promiseStub);
     });
 
+    test("should return null as param value  when there is no param value", async () => {
+        const promiseStubNull = sinon.stub().resolves({paramValue});
+        stub.callsFake(() => ({
+            promise: promiseStubNull,
+        }));
+        const val = await getParameterValueByName(paramName);
+        expect(val).toEqual(null);
+        sinon.assert.calledWithExactly(ssmClient.getParameter, {
+            Name: paramName,
+            Recursive: true,
+            WithDecryption: true,
+        });
+        sinon.assert.calledOnce(promiseStubNull);
+    });
+
     test("should throw exception when the the param name is invalid", async () => {
         const promiseStubError = sinon.stub().throws(new Error());
         stub.callsFake(() => ({

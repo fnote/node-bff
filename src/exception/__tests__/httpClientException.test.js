@@ -16,7 +16,7 @@ describe("HttpClient Exception", () => {
     });
 
     test("should return the status that provided in the error", async () => {
-        const error = {
+        const errorResponse = {
             stack: "stack",
             response: {
                 data: exception,
@@ -24,7 +24,18 @@ describe("HttpClient Exception", () => {
                 headers: "headers",
             },
         };
-        const httpClientException = new HttpClientException(error);
+        const httpClientException = new HttpClientException(errorResponse);
         expect(httpClientException.getStatus()).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
+    });
+
+    test("should return -1 as the error status when the error has request; no response", async () => {
+        const errorRequest = {
+            stack: "stack",
+            request: {
+                data: "request",
+            },
+        };
+        const httpClientException = new HttpClientException(errorRequest);
+        expect(httpClientException.getStatus()).toEqual(-1);
     });
 });
