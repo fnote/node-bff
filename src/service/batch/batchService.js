@@ -16,8 +16,9 @@ class BatchService {
 
     async generateInputSignUrl(requestBody) {
         validateRequestBody(requestBody);
-        const request = {};
-        request.fileNames = requestBody.fileNames;
+        const request = {
+            fileNames: requestBody.fileNames,
+        };
         const url = this.config.api.getInputSignedUrl;
         const response = await HttpClient.makeRequest(HTTP_POST, url, request);
         logger.debug(`Generated input signed urls response: ${response}`);
@@ -26,8 +27,9 @@ class BatchService {
 
     async generateOutputSignUrl(requestBody) {
         validateRequestBody(requestBody);
-        const request = {};
-        request.fileNames = requestBody.fileNames;
+        const request = {
+            fileNames: requestBody.fileNames,
+        };
         const url = this.config.api.getOutputSignedUrl;
         const response = await HttpClient.makeRequest(HTTP_POST, url, request);
         logger.debug(`Generated output signed urls response:: ${response}`);
