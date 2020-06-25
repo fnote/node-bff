@@ -3,7 +3,7 @@
   "presets": [
     ["@babel/preset-env", {
       "targets": {
-        "node": "10.18.1"
+        "node": "12.18.1"
       }
     }]
   ]
