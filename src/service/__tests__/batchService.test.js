@@ -1,5 +1,5 @@
 /**
- * Batch route unit tests
+ * Batch Service unit tests
  *
  * @author: gkar5861 on 22/06/20
  * */

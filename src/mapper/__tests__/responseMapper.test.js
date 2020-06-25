@@ -1,5 +1,5 @@
 /**
- * Batch route unit tests
+ * Response Mapper unit tests
  *
  * @author: gkar5861 on 23/06/20
  * */
