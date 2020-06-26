@@ -3,11 +3,11 @@
  *
  * @author: gkar5861 on 19/06/20
  * */
-import logger from "../../util/logger";
-import HttpClient from "../../httpClient/httpClient";
-import {HTTP_POST} from "../../util/constants";
-import getBatchAPIConfigs from "../../config/configs";
-import validateRequestBody from "../../validator/validateRequestBody";
+import logger from '../../util/logger';
+import HttpClient from '../../httpClient/httpClient';
+import {HTTP_POST} from '../../util/constants';
+import getBatchAPIConfigs from '../../config/configs';
+import validateRequestBody from '../../validator/validateRequestBody';
 
 class BatchService {
     constructor() {

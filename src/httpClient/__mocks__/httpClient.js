@@ -6,20 +6,20 @@
 
 const mockRequestBody = {
     fileNames: [
-        "fileName1",
-        "fileName2",
+        'fileName1',
+        'fileName2',
     ],
 };
 
 const mockResponse = {
     data: [
         {
-            fileName: "fileName1",
-            putUrl: "https://batch-output.s3.amazonaws.com/fileName1?AWSAccessKeyId=ASIAQRLXWZJ",
+            fileName: 'fileName1',
+            putUrl: 'https://batch-output.s3.amazonaws.com/fileName1?AWSAccessKeyId=ASIAQRLXWZJ',
         },
         {
-            fileName: "fileName2",
-            putUrl: "https://batch-output.s3.amazonaws.com/fileName2?AWSAccessKeyId=ASIAQRLXWZJ",
+            fileName: 'fileName2',
+            putUrl: 'https://batch-output.s3.amazonaws.com/fileName2?AWSAccessKeyId=ASIAQRLXWZJ',
         },
     ],
 };

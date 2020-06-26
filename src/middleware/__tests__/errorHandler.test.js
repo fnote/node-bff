@@ -3,18 +3,18 @@
  *
  * @author: gkar5861 on 23/06/20
  * */
-import {ERROR} from "../../util/constants";
-import {handleError} from "../errorHandler";
+import {ERROR} from '../../util/constants';
+import {handleError} from '../errorHandler';
 
-const message = "message";
-const errorType = "Internal Error";
+const message = 'message';
+const errorType = 'Internal Error';
 const error = {
     name: errorType,
     message,
 };
 
-describe("Error Handler", () => {
-    test("should return error response as status error", async () => {
+describe('Error Handler', () => {
+    test('should return error response as status error', async () => {
         const response2 = {
             status: ERROR,
             name: errorType,

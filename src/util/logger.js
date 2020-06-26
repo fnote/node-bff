@@ -1,7 +1,7 @@
-import winston from "winston";
-import {v4 as uuidv4} from "uuid";
+import winston from 'winston';
+import {v4 as uuidv4} from 'uuid';
 
-const correlator = require("express-correlation-id");
+const correlator = require('express-correlation-id');
 
 class Logger {
     constructor() {

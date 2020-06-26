@@ -5,7 +5,7 @@ module.exports = {
     jest: true
   },
   rules: {
-    'quotes': ['error', 'double'],
+    'quotes': [2, 'single', { 'avoidEscape': true }],
     'no-unused-vars': ['error', { 'gsIgnorePattern': 'next' }],
     'consistent-return':'off',
     'class-methods-use-this':'off',

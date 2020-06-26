@@ -3,72 +3,72 @@
  *
  * @author: gkar5861 on 23/06/20
  * */
-import {ERROR, SUCCESS} from "../../util/constants";
-import {createErrorResponse, createSuccessResponse} from "../responseMapper";
+import {ERROR, SUCCESS} from '../../util/constants';
+import {createErrorResponse, createSuccessResponse} from '../responseMapper';
 
-const message = "message";
+const message = 'message';
 
 const data = {
     data: {
         data: {
-            data: "data",
+            data: 'data',
         },
     },
 };
 
-describe("Response Mapper", () => {
-    test("should return success response with data attr in data when the request is success", async () => {
+describe('Response Mapper', () => {
+    test('should return success response with data attr in data when the request is success', async () => {
         const successResponse1 = {
             status: SUCCESS,
             message,
             data: {
-                data: "data",
+                data: 'data',
             },
         };
         const res = createSuccessResponse(data, message);
         expect(res).toEqual(successResponse1);
     });
 
-    test("should return success response without data attr in data when the request is success", async () => {
+    test('should return success response without data attr in data when the request is success', async () => {
         const successResponse2 = {
             status: SUCCESS,
             message,
-            data: "data",
+            data: 'data',
         };
         const res = createSuccessResponse(data.data, message);
         expect(res).toEqual(successResponse2);
     });
 
-    test("should throw error without data when the request is success", async () => {
-        expect(() => createSuccessResponse(undefined, message)).toThrowError(new Error("Failure in response creation"));
+    test('should throw error without data when the request is success', async () => {
+        expect(() => createSuccessResponse(undefined, message)).toThrowError(new Error('Failure in response creation'));
     });
 
-    test("should return error response with error message as cause attr", async () => {
+    test('should return error response with error message as cause attr', async () => {
         const error = {
             errorDetails: {
-                message: "cause",
+                message: 'cause',
             },
         };
 
         const errorResponseWithCause = {
             status: ERROR,
             message,
-            cause: "cause",
+            cause: 'cause',
         };
         const res = createErrorResponse(error, message);
         expect(res).toEqual(errorResponseWithCause);
     });
 
-    test("should return error response with error as cause attr", async () => {
+    test('should return error response with error as cause attr', async () => {
         const error = {
-            message: "cause",
+            message: 'cause',
         };
 
         const errorResponseWithCause = {
             status: ERROR,
             message,
             cause: {
-                message: "cause",
+                message: 'cause',
             },
         };
 
@@ -76,7 +76,7 @@ describe("Response Mapper", () => {
         expect(res).toEqual(errorResponseWithCause);
     });
 
-    test("should return error response without cause attr when error is null", async () => {
+    test('should return error response without cause attr when error is null', async () => {
         const errorResponseWithoutCause = {
             status: ERROR,
             message,
