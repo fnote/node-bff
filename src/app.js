@@ -23,7 +23,8 @@ app.use(correlator());
 morgan.token('correlationId', (req) => req.correlationId());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
-app.use(cors());
+app.use(cors({credentials: true, origin: true}));
+
 app.use(bodyParser.json());
 
 app.options('/*', (req, res) => {
