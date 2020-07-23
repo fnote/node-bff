@@ -21,7 +21,8 @@ module.exports = (async () => {
                     // exclude node_modules, equivalent to the above line
                     exclude: /node_modules/,
                     query: {
-                        plugins:[ ['@babel/transform-runtime'],
+                        plugins:[ 
+                            ['@babel/transform-runtime'],
                             ['@babel/plugin-proposal-class-properties']
                             ],
                     }
