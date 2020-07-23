@@ -27,3 +27,6 @@ export const ERROR_IN_GETTING_S3_INPUT_SIGNED_URL = 'Error in getting S3 input s
 export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL = 'Error in getting S3 output signed urls';
 export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_INVALID_SOURCE = 'Invalid source is passed in the url. Valid sources are input/output';
 export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY = 'Unsupported request body';
+
+// whitelisted url paths
+export const AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK = 'v1/pci-bff/support/healthcheck';
