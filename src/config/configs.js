@@ -5,4 +5,19 @@ export default function getBatchAPIConfigs() {
             getOutputSignedUrl: `${process.env.BATCH_API}/v1/batch/files/signed-url/output`,
         },
     };
-}
+};
+
+export const getAuthConfig = () => {
+    return {
+        CONFIG: {
+            jwkRequestUrl: `https://cognito-idp.us-east-1.amazonaws.com/${process.env.COGNITO_USER_POOL_ID}/.well-known/jwks.json`,
+            authTokenIssuer: `https://cognito-idp.us-east-1.amazonaws.com/${process.env.COGNITO_USER_POOL_ID}`,
+            authTokenHeaderAttribute: 'x-amzn-oidc-accesstoken',
+            authCookieName1: 'PCI-ELBAuthSessionCookie-0',
+            authCookieName2: 'PCI-ELBAuthSessionCookie-1',
+            loginRedirectionUrl: `${process.env.FRONTEND_URL}`,
+            logoutRedirectionUrl: `https://${process.env.COGNITO_AUTH_URL}/logout?client_id=${process.env.COGNITO_APP_CLIENT_ID}&logout_uri=https://google.com`
+
+        }
+    }
+};
