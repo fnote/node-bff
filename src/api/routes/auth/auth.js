@@ -11,7 +11,7 @@ export default () => {
     const AuthRouter = new Router({mergeParams: true});
     const authConfig = getAuthConfig();
 
-    AuthRouter.get('/authenticate', async (req, res) => {
+    AuthRouter.get('/login', async (req, res) => {
         let username = res.locals.username;
         logger.debug(`User: ${username} is being redirected after the login`);
         res.redirect(authConfig.CONFIG.loginRedirectionUrl + '?username=' + username);
