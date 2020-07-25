@@ -29,4 +29,4 @@ export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_INVALID_SOURCE = 'Invalid sou
 export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY = 'Unsupported request body';
 
 // whitelisted url paths
-export const AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK = 'v1/pci-bff/support/healthcheck';
+export const AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK = '/v1/pci-bff/support/healthcheck';
