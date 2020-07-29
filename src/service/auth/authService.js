@@ -6,7 +6,7 @@ import jwkToPem from "jwk-to-pem";
 import fetch from 'node-fetch';
 import {getAuthConfig} from "../../config/configs";
 
-const unauthenticatedReturn = {
+export const unauthenticatedReturn = {
     authenticated: false,
     username: null
 };
@@ -52,7 +52,7 @@ class AuthService {
                 return this.validateToken(this.pems, token, res);
             }
         } catch (e) {
-            let errorMessage = `Unexpected error occurred while validating the token`
+            let errorMessage = `Unexpected error occurred while validating the token`;
             this.sendUnauthenticatedErrorResponse(res, errorMessage);
             logger.error(`${errorMessage}: ${e}`);
             return unauthenticatedReturn;
@@ -69,7 +69,7 @@ class AuthService {
             return unauthenticatedReturn;
         }
 
-        // Fail if token is not from our User Pool
+        // Fail if token is not from the matching User Pool
         if (decodedJwt.payload.iss !== this.authConfig.CONFIG.authTokenIssuer) {
             errorMessage = 'The issuer of the token is invalid';
             logger.error(errorMessage);
@@ -95,7 +95,7 @@ class AuthService {
         }
 
         let returnObj = unauthenticatedReturn;
-        //Verify the signature of the JWT token to ensure it's really coming from our User Pool
+        //Verify the signature of the JWT token to ensure it's really coming from the matching User Pool
         jwt.verify(token, pem, {algorithms: ["RS256"]}, (err, payload) => {
             if (err) {
                 logger.error(`Token was failed to be verified with error: ${err}`);
