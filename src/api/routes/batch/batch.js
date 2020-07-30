@@ -42,7 +42,7 @@ export default () => {
                 : ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL;
             const httpStatus = error.getStatus();
             res.status(httpStatus !== -1 ? httpStatus : HttpStatus.INTERNAL_SERVER_ERROR)
-                .send(createErrorResponse(null, error, errMessage, null));
+                .send(createErrorResponse(null, errMessage, error,null));
         }
     });
 

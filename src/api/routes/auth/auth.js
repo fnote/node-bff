@@ -1,7 +1,7 @@
 /**
  * Exposes auth related routes and functions
  *
- * @author: adis0892 on 07/07/20
+ * @author: adis0892 on 18/07/20
  * */
 import {Router} from 'express';
 import {getAuthConfig} from "../../../config/configs";
