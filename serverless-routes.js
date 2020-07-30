@@ -7,7 +7,7 @@ const routes = [
   { path: '/', method: GET },
   { path: '/support/healthcheck', method: GET},
   { path: '/batch/signed-url/{source}', method: POST },
-  { path: '/auth/node-fetch', method: GET },
+  { path: '/auth/login', method: GET },
   { path: '/auth/logout', method: GET },
 ];
 
