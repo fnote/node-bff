@@ -109,12 +109,12 @@ describe('Auth Service', () => {
         expect(response).toEqual(authenticatedMockResponse);
     });
 
-    test('header not present', async () => {
+    test('should return unauthenticated response when auth token header is not present', async () => {
         const response = await AuthService.prepareToValidateToken(mockRequestWithoutToken, mockResponse);
         expect(response).toEqual(unauthenticatedReturn);
     });
 
-    test('decoded token empty', async () => {
+    test('should return unauthenticated response when decoded token is empty', async () => {
         jwt.decode.mockReturnValue(null);
         const response = await AuthService.prepareToValidateToken(mockRequest, mockResponse);
         expect(response).toEqual(unauthenticatedReturn);
@@ -135,7 +135,7 @@ describe('Auth Service', () => {
         expect(response).toEqual(unauthenticatedReturn);
     });
 
-    test('wrong access', async () => {
+    test('should return unauthenticated response when wrong access is given in the token', async () => {
         jwt.decode.mockReturnValue({
             payload : {
                 iss: 'testIssuer',
@@ -150,7 +150,7 @@ describe('Auth Service', () => {
         expect(response).toEqual(unauthenticatedReturn);
     });
 
-    test('no matching pem for the kid', async () => {
+    test('should return unauthenticated response when no matching pem for the kid is found', async () => {
         jwt.decode.mockReturnValue({
             payload : {
                 iss: 'testIssuer',
@@ -165,7 +165,7 @@ describe('Auth Service', () => {
         expect(response).toEqual(unauthenticatedReturn);
     });
 
-    test('jwt verify gives an error', async () => {
+    test('should return unauthenticated response when jwt verify gives an error', async () => {
         jwt.decode.mockReturnValue({
             payload : {
                 iss: 'testIssuer',
@@ -187,7 +187,7 @@ describe('Auth Service', () => {
         expect(response).toEqual(unauthenticatedReturn);
     });
 
-    test('principal id not present', async () => {
+    test('should return unauthenticated response when principal id is not present', async () => {
         jwt.decode.mockReturnValue({
             payload : {
                 iss: 'testIssuer',
@@ -210,7 +210,7 @@ describe('Auth Service', () => {
         expect(response).toEqual(unauthenticatedReturn);
     });
 
-    test('username not present', async () => {
+    test('should return unauthenticated response when username is not present in the decoded token', async () => {
         jwt.decode.mockReturnValue({
             payload : {
                 iss: 'testIssuer',
@@ -233,7 +233,7 @@ describe('Auth Service', () => {
         expect(response).toEqual(unauthenticatedReturn);
     });
 
-    test('username not in the expected format', async () => {
+    test('should return unauthenticated response when username is not in the expected format', async () => {
         jwt.decode.mockReturnValue({
             payload : {
                 iss: 'testIssuer',
@@ -257,7 +257,7 @@ describe('Auth Service', () => {
         expect(response).toEqual(unauthenticatedReturn);
     });
 
-    test('throw an error', async () => {
+    test('should return unauthenticated response when an an error is thrown', async () => {
         jwt.decode.mockReturnValue({
             payload : {
                 iss: 'testIssuer',
@@ -267,11 +267,6 @@ describe('Auth Service', () => {
                 kid: 'kid2'
             }
         });
-
-        const payload = {
-            sub: 'principal-id-001',
-            username: 'AD_username'
-        };
 
         jwt.verify.mockImplementation((obj, pems, param, callback) => {
             throw new Error('test-error');

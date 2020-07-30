@@ -25,7 +25,7 @@ const res = {
 const next = jest.fn();
 
 describe('Auth Middleware', () => {
-    test('should return error response as status error', async () => {
+    test('should pass the username and call next when auth process completed', async () => {
 
         await authMiddleware(req, res, next);
 
@@ -33,7 +33,7 @@ describe('Auth Middleware', () => {
         expect(next).toHaveBeenCalled();
     });
 
-    test('healthcheck', async () => {
+    test('should skip authentication when healthcheck endpoint is called', async () => {
         const req = {
             url: AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK
         };

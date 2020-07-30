@@ -18,7 +18,7 @@ jest.mock('../../../middleware/authMiddleware', () => ({
 const mockRequest = {};
 
 describe('routes: /auth', () => {
-    test('/login', async () => {
+    test('get /login should redirect the user when authentication happens', async () => {
         await request(app)
             .get('/v1/pci-bff/auth/login')
             .send(mockRequest)
@@ -29,7 +29,7 @@ describe('routes: /auth', () => {
             );
     });
 
-    test('/logout', async () => {
+    test('get /logout should redirect user to the screen after logout', async () => {
         await request(app)
             .get('/v1/pci-bff/auth/logout')
             .send(mockRequest)
