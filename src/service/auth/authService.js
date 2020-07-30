@@ -1,3 +1,9 @@
+/**
+ * Auth Service functions
+ *
+ * @author: adis0892 on 23/07/20
+ * */
+
 import * as jwt from "jsonwebtoken";
 import logger from "../../util/logger";
 import * as HttpStatus from "http-status-codes";

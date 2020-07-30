@@ -54,7 +54,7 @@ jest.mock('../../config/configs', () => ({ getAuthConfig: ()=> {
         }
     }}
 
-    } ))
+    } ));
 
 const resolvedValue = {
 
