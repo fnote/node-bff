@@ -66,7 +66,7 @@ class AuthService {
     }
 
     validateToken = (pems, token, res) => {
-        let errorMessage = 'Token validation errored out';
+        let errorMessage;
         let decodedJwt = jwt.decode(token, {complete: true});
 
         if (!decodedJwt) {
