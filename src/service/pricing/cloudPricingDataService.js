@@ -8,6 +8,7 @@ import {getCloudPricingConfig} from "../../config/configs";
 import HttpClient from "../../httpClient/httpClient";
 import logger from "../../util/logger";
 import CloudPricingDataFetchException from "../../exception/cloudPricingDataFetchException";
+import {HTTP_POST} from "../../util/constants";
 
 class CloudPricingDataService {
     constructor() {
