@@ -21,3 +21,13 @@ export const getAuthConfig = () => {
         }
     }
 };
+
+export const getCloudPricingConfig = () => {
+    return {
+        CONFIG: {
+            cloudPricingUrl: `${process.env.CLOUD_PRICING_URL}/v1/pricing/pricemanager`,
+            clientId: 'Cloud-PCI',
+            priceEngineType: 'CP'
+        }
+    }
+};
