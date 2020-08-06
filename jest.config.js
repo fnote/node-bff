@@ -9,7 +9,8 @@ module.exports = {
     "!**/index.js",
     "!**/config/**",
     "!**/httpClient/**",
-    "!**/util/**"
+    "!**/util/**",
+    "!**/exception/cloudPricingDataFetchException.js"
   ],
   transform: {
     "\\.js$": "<rootDir>/node_modules/babel-jest"

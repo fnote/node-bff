@@ -16,8 +16,6 @@ class CloudPricingDataService {
     }
 
     getCloudPricingData = async (req) => {
-
-
         const body = {
             "businessUnitNumber": `${req.body.businessUnitNumber}`,
             "customerAccount": `${req.body.customerAccount}`,
