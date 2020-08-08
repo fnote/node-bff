@@ -29,7 +29,6 @@
     "jwk-to-pem": "^2.0.4",
     "lambda-log": "^2.4.0",
     "morgan": "^1.10.0",
-    "node-fetch": "^2.6.0",
     "rotating-file-stream": "^2.1.1",
     "serverless-http": "^2.5.0",
     "source-map-support": "^0.5.19",

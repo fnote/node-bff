@@ -8,13 +8,10 @@
 import AuthService, {unauthenticatedReturn} from "../auth/authService";
 import {getAuthConfig} from "../../config/configs";
 import jwkToPem from "jwk-to-pem";
-import fetch from "node-fetch";
 import * as jwt from "jsonwebtoken";
 import {jest} from "@jest/globals";
 
-
-
-jest.mock('node-fetch');
+jest.mock('../../httpClient/httpClient');
 jest.mock('jwk-to-pem');
 jest.mock('jsonwebtoken');
 
@@ -50,33 +47,12 @@ jest.mock('../../config/configs', () => ({ getAuthConfig: ()=> {
     return {
         CONFIG: {
             authTokenHeaderAttribute: 'x-amzn-oidc-accesstoken',
-                authTokenIssuer: 'testIssuer'
+            authTokenIssuer: 'testIssuer',
+            jwkRequestUrl: `https://cognito-idp.us-east-1.amazonaws.com/local/.well-known/jwks.json`
         }
     }}
 
     } ));
-
-const resolvedValue = {
-
-    keys: [
-        {
-            'kid': 'kid1',
-            'n': 1,
-            'e': 1,
-            'kty': 1
-        },
-        {
-            'kid': 'kid2',
-            'n': 2,
-            'e': 2,
-            'kty': 2
-        }
-    ]
-
-
-}
-
-fetch.mockResolvedValue({ json: async () => Promise.resolve(resolvedValue)});
 
 jwkToPem.mockReturnValueOnce('pems2')
     .mockReturnValueOnce('pems1')

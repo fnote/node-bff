@@ -37,6 +37,27 @@ const mockResponse = {
 
 class HttpClient {
     static async makeRequest(method, URL, data) {
+        const jwkRequestURLForTest = `https://cognito-idp.us-east-1.amazonaws.com/local/.well-known/jwks.json`;
+        const resolvedValue = {
+            data: {
+                keys: [
+                    {
+                        'kid': 'kid1',
+                        'n': 1,
+                        'e': 1,
+                        'kty': 1
+                    },
+                    {
+                        'kid': 'kid2',
+                        'n': 2,
+                        'e': 2,
+                        'kty': 2
+                    }
+                ]
+            }
+
+        }
+
         if (JSON.stringify(data) === JSON.stringify(mockRequestBody)) {
             return mockResponse;
         } else if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
@@ -49,6 +70,8 @@ class HttpClient {
             return cloudPricingMockResponseForAggregatedErrorPricingCall;
         } else if (JSON.stringify(data) === JSON.stringify(pricingDataMockRequestThrowErrorForCloudPricingCall)) {
             throw new Error('test-error');
+        } else if (URL === jwkRequestURLForTest) {
+            return resolvedValue;
         }
     }
 }
