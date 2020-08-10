@@ -27,18 +27,18 @@ jest.mock('../../../middleware/authMiddleware', () => ({
 
 describe('routes: /pricing-data', () => {
     test('get /pricing-data should return correct response with HTTP OK when the flow is correct', async () => {
-       await request(app)
+        await request(app)
             .post('/v1/pci-bff/pricing/pricing-data')
             .send(pricingDataMockRequest)
             .set('Accept', 'application/json')
-           .then((res) => {
-               expect(res.status).toEqual(HttpStatus.OK);
-               expect(res.body).toBeDefined();
-               expect(res.body).toEqual(PricingDataMockResponse);
-               expect(res.body.cloudPricingResponse.cloudPricingResponseStatus).toEqual(HttpStatus.OK);
-               expect(res.body.itemInfoResponse.itemInfoResponseStatus).toEqual(HttpStatus.OK);
-               }
-           );
+            .then((res) => {
+                    expect(res.status).toEqual(HttpStatus.OK);
+                    expect(res.body).toBeDefined();
+                    expect(res.body).toEqual(PricingDataMockResponse);
+                    expect(res.body.cloudPricingResponse.cloudPricingResponseStatus).toEqual(HttpStatus.OK);
+                    expect(res.body.itemInfoResponse.itemInfoResponseStatus).toEqual(HttpStatus.OK);
+                }
+            );
     });
 
     test('get /pricing-data should return correct status (Eg: HttpStatus.BAD_GATEWAY) in cloud pricing json when only ' +

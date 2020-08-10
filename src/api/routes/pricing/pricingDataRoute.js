@@ -22,7 +22,7 @@ export default () => {
             const errMessage = 'Error occurred in getting pricing related data';
             logger.error(`${errMessage}: ${error} cause: ${error.stack}`);
             res.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .send(createErrorResponse(null, errMessage, error,null));
+                .send(createErrorResponse(null, errMessage, error, null));
         }
     });
     return cloudPricingRouter;

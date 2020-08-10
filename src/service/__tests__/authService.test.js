@@ -21,20 +21,22 @@ const tokenName = authConfig.CONFIG.authTokenHeaderAttribute
 const mockRequest = {
     headers: {
         [tokenName]: 'access-token',
-}
-};
-
-const mockRequestWithoutToken = {
-    headers: {
     }
 };
 
-let mockResponse = {
-    end: function(){},
-    status: function() {
-        return {send: function () {
+const mockRequestWithoutToken = {
+    headers: {}
+};
 
-        }}
+let mockResponse = {
+    end: function () {
+    },
+    status: function () {
+        return {
+            send: function () {
+
+            }
+        }
     }
 };
 
@@ -43,16 +45,18 @@ const authenticatedMockResponse = {
     "username": "username"
 };
 
-jest.mock('../../config/configs', () => ({ getAuthConfig: ()=> {
-    return {
-        CONFIG: {
-            authTokenHeaderAttribute: 'x-amzn-oidc-accesstoken',
-            authTokenIssuer: 'testIssuer',
-            jwkRequestUrl: `https://cognito-idp.us-east-1.amazonaws.com/local/.well-known/jwks.json`
+jest.mock('../../config/configs', () => ({
+    getAuthConfig: () => {
+        return {
+            CONFIG: {
+                authTokenHeaderAttribute: 'x-amzn-oidc-accesstoken',
+                authTokenIssuer: 'testIssuer',
+                jwkRequestUrl: `https://cognito-idp.us-east-1.amazonaws.com/local/.well-known/jwks.json`
+            }
         }
-    }}
+    }
 
-    } ));
+}));
 
 jwkToPem.mockReturnValueOnce('pems2')
     .mockReturnValueOnce('pems1')
@@ -62,7 +66,7 @@ describe('Auth Service', () => {
     test('should generate the authenticated output when a valid token is given', async () => {
 
         jwt.decode.mockReturnValue({
-            payload : {
+            payload: {
                 iss: 'testIssuer',
                 token_use: 'access',
             },
@@ -98,7 +102,7 @@ describe('Auth Service', () => {
 
     test('wrong issuer', async () => {
         jwt.decode.mockReturnValue({
-            payload : {
+            payload: {
                 iss: 'wrongIssuer',
                 token_use: 'access',
             },
@@ -113,7 +117,7 @@ describe('Auth Service', () => {
 
     test('should return unauthenticated response when wrong access is given in the token', async () => {
         jwt.decode.mockReturnValue({
-            payload : {
+            payload: {
                 iss: 'testIssuer',
                 token_use: 'wrong-access',
             },
@@ -128,7 +132,7 @@ describe('Auth Service', () => {
 
     test('should return unauthenticated response when no matching pem for the kid is found', async () => {
         jwt.decode.mockReturnValue({
-            payload : {
+            payload: {
                 iss: 'testIssuer',
                 token_use: 'access',
             },
@@ -143,7 +147,7 @@ describe('Auth Service', () => {
 
     test('should return unauthenticated response when jwt verify gives an error', async () => {
         jwt.decode.mockReturnValue({
-            payload : {
+            payload: {
                 iss: 'testIssuer',
                 token_use: 'access',
             },
@@ -165,7 +169,7 @@ describe('Auth Service', () => {
 
     test('should return unauthenticated response when principal id is not present', async () => {
         jwt.decode.mockReturnValue({
-            payload : {
+            payload: {
                 iss: 'testIssuer',
                 token_use: 'access',
             },
@@ -188,7 +192,7 @@ describe('Auth Service', () => {
 
     test('should return unauthenticated response when username is not present in the decoded token', async () => {
         jwt.decode.mockReturnValue({
-            payload : {
+            payload: {
                 iss: 'testIssuer',
                 token_use: 'access',
             },
@@ -211,7 +215,7 @@ describe('Auth Service', () => {
 
     test('should return unauthenticated response when username is not in the expected format', async () => {
         jwt.decode.mockReturnValue({
-            payload : {
+            payload: {
                 iss: 'testIssuer',
                 token_use: 'access',
             },
@@ -235,7 +239,7 @@ describe('Auth Service', () => {
 
     test('should return unauthenticated response when an an error is thrown', async () => {
         jwt.decode.mockReturnValue({
-            payload : {
+            payload: {
                 iss: 'testIssuer',
                 token_use: 'access',
             },

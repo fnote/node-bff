@@ -17,8 +17,7 @@ jest.mock('../../service/auth/authService', () => ({
     }
 }));
 
-const req = {
-}
+const req = {}
 const res = {
     locals: {}
 }

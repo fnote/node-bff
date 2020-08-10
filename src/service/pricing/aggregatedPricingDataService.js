@@ -27,19 +27,19 @@ class AggregatedPricingDataService {
             })
         };
 
-         return await Promise.all([
+        return await Promise.all([
             cloudPricingCall,
             itemInfoCall()
-         ])
-             .then(([cloudPricingResponse, itemInfoResponse]) => {
-                 return {
-                     'cloudPricingResponse': {
-                         'cloudPricingResponseStatus': cloudPricingResponse.status,
-                         'cloudPricingResponseData': cloudPricingResponse.data
-                     },
-                     'itemInfoResponse': itemInfoResponse.data
-                 };
-             });
+        ])
+            .then(([cloudPricingResponse, itemInfoResponse]) => {
+                return {
+                    'cloudPricingResponse': {
+                        'cloudPricingResponseStatus': cloudPricingResponse.status,
+                        'cloudPricingResponseData': cloudPricingResponse.data
+                    },
+                    'itemInfoResponse': itemInfoResponse.data
+                };
+            });
     }
 
 }
