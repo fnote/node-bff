@@ -79,10 +79,3 @@ functions:
          priority: 1
          conditions:
            path: /v1/*
-
-      - alb:
-          listenerArn: !Ref LoadBalancerListenerHTTPS
-          priority: 2
-          conditions:
-            path: /v1/*
-          authorizer: 'cognitoAuth'

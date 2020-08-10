@@ -11,11 +11,14 @@ import morgan from 'morgan';
 import * as HttpStatus from 'http-status-codes';
 import router from './api';
 import {handleError} from './middleware/errorHandler';
-import {authMiddleware} from "./middleware/authMiddleware";
+import {authMiddleware} from './middleware/authMiddleware';
+import {initializer} from './initializer';
 
 const correlator = require('express-correlation-id');
 
 const app = express();
+
+app.use(initializer);
 
 // generate correlation id
 app.use(correlator());

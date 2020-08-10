@@ -7,7 +7,7 @@ import express from 'express';
 import BatchRouter from './routes/batch/batch';
 import SupportRouter from './routes/support/support';
 import AuthRouter from './routes/auth/auth';
-import CloudPricingRouter from './routes/pricing/pricingDataRoute'
+import CloudPricingRouter from './routes/pricing/pricingDataRoute';
 
 const router = express.Router();
 

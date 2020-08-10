@@ -11,7 +11,7 @@ export default class CloudPricingDataFetchException extends Error {
         this.name = this.constructor.name;
         this.errorDetails = {};
 
-        this.cause = cause
+        this.cause = cause;
         this.errorDetails.message = error;
     }
 

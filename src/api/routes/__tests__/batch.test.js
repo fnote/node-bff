@@ -6,6 +6,7 @@
 
 import request from 'supertest';
 import * as HttpStatus from 'http-status-codes';
+import {jest} from '@jest/globals';
 import {app} from '../../../app';
 import {
     ERROR,
@@ -13,14 +14,11 @@ import {
     ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
     SUCCESS,
 } from '../../../util/constants';
-import {jest} from "@jest/globals";
 
 jest.mock('../../../httpClient/httpClient');
 
 jest.mock('../../../middleware/authMiddleware', () => ({
-    authMiddleware: (req, res, next) => {
-        return next();
-    }
+    authMiddleware: (req, res, next) => next(),
 }));
 
 const mockRequest = {
