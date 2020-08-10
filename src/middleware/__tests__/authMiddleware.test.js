@@ -15,8 +15,7 @@ jest.mock('../../service/auth/authService', () => ({
         }),
 }));
 
-const req = {
-};
+let req = {};
 const res = {
     locals: {},
 };
@@ -31,7 +30,7 @@ describe('Auth Middleware', () => {
     });
 
     test('should skip authentication when healthcheck endpoint is called', async () => {
-        const req = {
+        req = {
             url: AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK,
         };
 

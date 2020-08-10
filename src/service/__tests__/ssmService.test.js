@@ -4,7 +4,7 @@
  * @author: gkar5861 on 23/06/20
  * */
 import sinon from 'sinon';
-import {getParameterValueByName, ssmClient} from '../aws/ssmService';
+import {getSsmConfig, ssmClient} from '../aws/ssmService';
 
 const paramName = 'paramName';
 const paramValue = 'paramValue';
@@ -16,7 +16,7 @@ describe('SSM Service', () => {
         stub.callsFake(() => ({
             promise: promiseStub,
         }));
-        const val = await getParameterValueByName(paramName);
+        const val = await getSsmConfig(paramName);
         expect(val).toEqual(paramValue);
         sinon.assert.calledWithExactly(ssmClient.getParameter, {
             Name: paramName,
@@ -31,7 +31,7 @@ describe('SSM Service', () => {
         stub.callsFake(() => ({
             promise: promiseStubNull,
         }));
-        const val = await getParameterValueByName(paramName);
+        const val = await getSsmConfig(paramName);
         expect(val).toEqual(null);
         sinon.assert.calledWithExactly(ssmClient.getParameter, {
             Name: paramName,
@@ -46,7 +46,7 @@ describe('SSM Service', () => {
         stub.callsFake(() => ({
             promise: promiseStubError,
         }));
-        expect(() => getParameterValueByName('')).rejects.toThrowError(new Error('Error'));
+        expect(() => getSsmConfig('')).rejects.toThrowError(new Error('Error'));
         sinon.assert.calledWithExactly(ssmClient.getParameter, {
             Name: '',
             Recursive: true,

@@ -50,6 +50,7 @@ jest.mock('../../config/configs', () => ({
         CONFIG: {
             authTokenHeaderAttribute: 'x-amzn-oidc-accesstoken',
                 authTokenIssuer: 'testIssuer',
+            jwkRequestUrl: 'https://cognito-idp.us-east-1.amazonaws.com/local/.well-known/jwks.json',
         },
     }),
 
@@ -105,7 +106,8 @@ describe('Auth Service', () => {
     });
 
     test('should return unauthenticated response when auth token header is not present', async () => {
-        const response = await AuthService.prepareToValidateToken(mockRequestWithoutToken, mockResponse);
+        const response = await AuthService
+            .prepareToValidateToken(mockRequestWithoutToken, mockResponse);
         expect(response).toEqual(unauthenticatedReturn);
     });
 
@@ -262,7 +264,7 @@ describe('Auth Service', () => {
             },
         });
 
-        jwt.verify.mockImplementation((obj, pems, param, callback) => {
+        jwt.verify.mockImplementation(() => {
             throw new Error('test-error');
         });
 

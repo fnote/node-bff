@@ -9,8 +9,9 @@ import logger from "../../util/logger";
 import * as HttpStatus from "http-status-codes";
 import {createErrorResponse} from "../../mapper/responseMapper";
 import jwkToPem from "jwk-to-pem";
-import fetch from 'node-fetch';
 import {getAuthConfig} from "../../config/configs";
+import HttpClient from "../../httpClient/httpClient";
+import {HTTP_GET} from "../../util/constants";
 
 export const unauthenticatedReturn = {
     authenticated: false,
@@ -39,9 +40,8 @@ class AuthService {
                 this.pems = {};
 
                 //Download the JWKs and save it as PEM
-                let response = await fetch(this.authConfig.CONFIG.jwkRequestUrl);
-                let data = await response.json();
-                let keys = data['keys'];
+                const response = await HttpClient.makeRequest(HTTP_GET, this.authConfig.CONFIG.jwkRequestUrl);
+                let keys = response.data['keys'];
                 for (let i = 0; i < keys.length; i++) {
                     //Convert each key to PEM
                     let keyId = keys[i].kid;

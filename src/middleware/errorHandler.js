@@ -7,7 +7,7 @@ import {ERROR} from '../util/constants';
 import logger from '../util/logger';
 
 export function handleError(err, res) {
-    logger.error(`Unhandled error occurred: ${err}`);
+    logger.error(`Unhandled error occurred: ${err}, stacktrace: ${err.stack}`);
     const {name, message} = err;
     res.status(name).json({
         status: ERROR,

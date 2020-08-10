@@ -2,21 +2,21 @@ module.exports = {
   env: {
     es6: true,
     node: true,
-    jest: true
+    jest: true,
   },
   rules: {
-    'quotes': [2, 'single', { 'avoidEscape': true }],
-    'no-unused-vars': ['error', { 'gsIgnorePattern': 'next' }],
-    'consistent-return':'off',
-    'class-methods-use-this':'off',
-    'import/prefer-default-export':'off',
-    'indent': 'off',
+    quotes: [2, 'single', { avoidEscape: true }],
+    'no-unused-vars': ['error', { gsIgnorePattern: 'next' }],
+    'consistent-return': 'off',
+    'class-methods-use-this': 'off',
+    'import/prefer-default-export': 'off',
+    indent: 'off',
     'no-trailing-spaces': 'off',
-    'object-curly-spacing': 'off'
+    'object-curly-spacing': 'off',
   },
   extends: [
     'airbnb-base',
-    'eslint:recommended'
+    'eslint:recommended',
   ],
   globals: {
     Atomics: 'readonly',
@@ -25,5 +25,5 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
-  }
+  },
 };
