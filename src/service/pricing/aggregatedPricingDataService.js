@@ -5,31 +5,18 @@
  * */
 
 import CloudPricingDataService from "./cloudPricingDataService";
+import ProductInfoService from "../productInfo/productInfoService";
 
 class AggregatedPricingDataService {
 
     getAggregatedPricingData = async (req) => {
         const cloudPricingCall = CloudPricingDataService.getCloudPricingData(req);
 
-        //call item info service and throw error if an error occurred
-        const itemInfoValues = {
-            data: {
-                'itemName': 'abc',
-                "itemInfoResponseStatus": 200,
-            }
-        };
-
-        const itemInfoCall = () => {
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    resolve(itemInfoValues)
-                }, 500)
-            })
-        };
+        const itemInfoCall = ProductInfoService.getProductInfo(req.body.businessUnitNumber, req.body.products[0].supc);
 
          return await Promise.all([
             cloudPricingCall,
-            itemInfoCall()
+            itemInfoCall
          ])
              .then(([cloudPricingResponse, itemInfoResponse]) => {
                  return {
@@ -37,7 +24,11 @@ class AggregatedPricingDataService {
                          'cloudPricingResponseStatus': cloudPricingResponse.status,
                          'cloudPricingResponseData': cloudPricingResponse.data
                      },
-                     'itemInfoResponse': itemInfoResponse.data
+                     'itemInfoResponse': {
+                         'itemInfoResponseStatus': itemInfoResponse.status,
+                         'itemInfoResponseData': itemInfoResponse.data
+                     },
+
                  };
              });
     }

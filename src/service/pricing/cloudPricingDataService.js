@@ -5,7 +5,7 @@
  * */
 
 import {getCloudPricingConfig} from "../../config/configs";
-import HttpClient from "../../httpClient/httpClient";
+import {httpClient} from "../../httpClient/httpClient";
 import logger from "../../util/logger";
 import CloudPricingDataFetchException from "../../exception/cloudPricingDataFetchException";
 import {HTTP_POST} from "../../util/constants";
@@ -32,10 +32,10 @@ class CloudPricingDataService {
             "Accept": "application/json",
             "clientID": this.cloudPricingConfig.CONFIG.clientId,
             "priceEngineType": this.cloudPricingConfig.CONFIG.priceEngineType
-        }
+        };
 
         try {
-            return await HttpClient.makeRequest(HTTP_POST, this.cloudPricingConfig.CONFIG.cloudPricingUrl, body, headers);
+            return await httpClient.makeRequest(HTTP_POST, this.cloudPricingConfig.CONFIG.cloudPricingUrl, body, headers);
         } catch (e) {
             const errorMessage = 'Failed to fetch data from Cloud Pricing Endpoint';
             logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
