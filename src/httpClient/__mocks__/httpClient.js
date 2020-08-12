@@ -13,16 +13,20 @@ import {
     pricingDataMockRequest,
     pricingDataMockRequestForErrorOnCloudPricingCall,
     pricingDataMockRequestThrowErrorForCloudPricingCall,
+    productInfoErrorMockResponse,
+    productInfoMockResponse,
 } from '../../config/test.config';
+import HttpClientException from "../../exception/httpClientException";
+import {HTTP_CLIENT_EXCEPTION} from "../../exception/exceptionCodes";
 
-const mockRequestBody = {
+const batchApiMockRequestBody = {
     fileNames: [
         'fileName1',
         'fileName2',
     ],
 };
 
-const mockResponse = {
+const batchApiMockResponse = {
     data: [
         {
             fileName: 'fileName1',
@@ -36,7 +40,7 @@ const mockResponse = {
 };
 
 class HttpClient {
-    static async makeRequest(method, URL, data) {
+    async makeRequest(method, URL, data) {
         const jwkRequestURLForTest = 'https://cognito-idp.us-east-1.amazonaws.com/local/.well-known/jwks.json';
         const resolvedValue = {
             data: {
@@ -58,10 +62,14 @@ class HttpClient {
 
         };
 
-        if (JSON.stringify(data) === JSON.stringify(mockRequestBody)) {
-            return mockResponse;
+        if (JSON.stringify(data) === JSON.stringify(batchApiMockRequestBody)) {
+            return batchApiMockResponse;
         } if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
             return cloudPricingMockResponse;
+        } if (URL.includes('/opcos/068/products/7203474')) {
+            return productInfoMockResponse;
+        } if (URL.includes('/opcos/999/products/9999999')) {
+            throw new HttpClientException('Http client exception', HTTP_CLIENT_EXCEPTION);
         } if (JSON.stringify(data) === JSON
             .stringify(cloudPricingMockRequestForErrorScenario.body)) {
             throw new Error('test-error');
@@ -81,3 +89,4 @@ class HttpClient {
 }
 
 export default HttpClient;
+export const httpClient = new HttpClient();

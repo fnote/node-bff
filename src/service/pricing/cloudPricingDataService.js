@@ -35,7 +35,7 @@ class CloudPricingDataService {
         try {
             return await httpClient.makeRequest(
                 HTTP_POST, this.cloudPricingConfig.CONFIG.cloudPricingUrl, body, headers,
-                );
+            );
         } catch (e) {
             const errorMessage = 'Failed to fetch data from Cloud Pricing Endpoint';
             logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);

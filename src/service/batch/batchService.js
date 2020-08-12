@@ -4,7 +4,7 @@
  * @author: gkar5861 on 19/06/20
  * */
 import logger from '../../util/logger';
-import HttpClient from '../../httpClient/httpClient';
+import {httpClient} from '../../httpClient/httpClient';
 import {HTTP_POST} from '../../util/constants';
 import getBatchAPIConfigs from '../../config/configs';
 import validateRequestBody from '../../validator/validateRequestBody';
@@ -20,7 +20,7 @@ class BatchService {
             fileNames: requestBody.fileNames,
         };
         const url = this.config.api.getInputSignedUrl;
-        const response = await HttpClient.makeRequest(HTTP_POST, url, request);
+        const response = await httpClient.makeRequest(HTTP_POST, url, request);
         logger.debug(`Generated input signed urls response: ${response}`);
         return response;
     }
@@ -31,7 +31,7 @@ class BatchService {
             fileNames: requestBody.fileNames,
         };
         const url = this.config.api.getOutputSignedUrl;
-        const response = await HttpClient.makeRequest(HTTP_POST, url, request);
+        const response = await httpClient.makeRequest(HTTP_POST, url, request);
         logger.debug(`Generated output signed urls response:: ${response}`);
         return response;
     }

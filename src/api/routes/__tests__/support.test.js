@@ -7,6 +7,14 @@ import request from 'supertest';
 import * as HttpStatus from 'http-status-codes';
 import {app} from '../../../app';
 import {CLOUD_PCI_BFF, CLOUD_PCI_BFF_VERSION} from '../../../util/constants';
+import {jest} from "@jest/globals";
+
+jest.mock('../../../middleware/authMiddleware', () => ({
+    authMiddleware: (req, res, next) => next(),
+}));
+jest.mock('../../../initializer', () => ({
+    initializer: (req, res, next) => next(),
+}));
 
 describe('routes: /support', () => {
     test('get /support/healthcheck should return project details when the app is up and running', async () => {

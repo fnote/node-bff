@@ -20,16 +20,16 @@ class AggregatedPricingDataService {
             itemInfoCall,
         ])
             .then(([cloudPricingResponse, itemInfoResponse]) => ({
-                    cloudPricingResponse: {
-                        cloudPricingResponseStatus: cloudPricingResponse.status,
-                        cloudPricingResponseData: cloudPricingResponse.data,
-                    },
-                    itemInfoResponse: {
-                        itemInfoResponseStatus: itemInfoResponse.status,
-                        itemInfoResponseData: itemInfoResponse.data,
-                    },
+                cloudPricingResponse: {
+                    cloudPricingResponseStatus: cloudPricingResponse.status,
+                    cloudPricingResponseData: cloudPricingResponse.data,
+                },
+                itemInfoResponse: {
+                    itemInfoResponseStatus: itemInfoResponse.status,
+                    itemInfoResponseData: itemInfoResponse.data,
+                },
 
-                }));
+            }));
     }
 }
 

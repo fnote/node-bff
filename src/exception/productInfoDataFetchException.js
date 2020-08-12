@@ -16,8 +16,8 @@ export default class ProductInfoDataFetchException extends Error {
     }
 
     getStatus() {
-        if (this.errorDetails.response && this.errorDetails.response.status) {
-            return this.errorDetails.response.status;
+        if (this.errorDetails.message) {
+            return this.errorDetails.message;
         }
         return -1;
     }
