@@ -13,11 +13,10 @@ import {
     pricingDataMockRequest,
     pricingDataMockRequestForErrorOnCloudPricingCall,
     pricingDataMockRequestThrowErrorForCloudPricingCall,
-    productInfoErrorMockResponse,
     productInfoMockResponse,
 } from '../../config/test.config';
-import HttpClientException from "../../exception/httpClientException";
-import {HTTP_CLIENT_EXCEPTION} from "../../exception/exceptionCodes";
+import HttpClientException from '../../exception/httpClientException';
+import {HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
 
 const batchApiMockRequestBody = {
     fileNames: [

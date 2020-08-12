@@ -7,7 +7,7 @@
 import request from 'supertest';
 import * as HttpStatus from 'http-status-codes';
 import {jest} from '@jest/globals';
-import {app} from '../../../app';
+import app from '../../../app';
 import {
     ERROR,
     ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_INVALID_SOURCE,
@@ -43,7 +43,7 @@ const mockResponse = [
 
 describe('routes: /batch', () => {
     test('post /batch/signed-url/{source} should return write signed-urls when the source is input', async () => {
-        const response = await request(app)
+        const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/input')
             .send(mockRequest)
             .set('Accept', 'application/json');
@@ -54,7 +54,7 @@ describe('routes: /batch', () => {
     });
 
     test('post /batch/signed-url/{source} should return read signed-urls when the source is output', async () => {
-        const response = await request(app)
+        const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/output')
             .send(mockRequest)
             .set('Accept', 'application/json');
@@ -65,7 +65,7 @@ describe('routes: /batch', () => {
     });
 
     test('post /batch/signed-url/{source} should throw exception when the source is invalid', async () => {
-        const response = await request(app)
+        const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/invalid')
             .send(mockRequest)
             .set('Accept', 'application/json');
@@ -76,7 +76,7 @@ describe('routes: /batch', () => {
 
     test('post /batch/signed-url/{source} should throw exception when request body is invalid', async () => {
         const invalidRequestBody = {};
-        const response = await request(app)
+        const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/input')
             .send(invalidRequestBody)
             .set('Accept', 'application/json');

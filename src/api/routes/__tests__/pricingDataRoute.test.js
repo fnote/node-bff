@@ -7,13 +7,11 @@
 import request from 'supertest';
 import * as HttpStatus from 'http-status-codes';
 import {jest} from '@jest/globals';
-import {app} from '../../../app';
+import app from '../../../app';
 import {
     pricingDataMockRequest,
-    pricingDataMockRequestForErrorOnCloudPricingCall,
     pricingDataMockRequestThrowErrorForCloudPricingCall,
     PricingDataMockResponse,
-    PricingDataMockResponseForErrorOnCloudPricingCall,
     pricingDataMockResponseThrowErrorForCloudPricingCall,
 } from '../../../config/test.config';
 
@@ -30,7 +28,7 @@ jest.mock('../../../initializer', () => ({
 describe('routes: /pricing-data', () => {
     test('get /pricing-data should return correct response with HTTP OK when the flow is correct', async () => {
         jest.setTimeout(100000);
-        await request(app)
+        await request(app.app)
             .post('/v1/pci-bff/pricing/pricing-data')
             .send(pricingDataMockRequest)
             .set('Accept', 'application/json')
@@ -46,7 +44,7 @@ describe('routes: /pricing-data', () => {
 
     test('get /pricing-data should return error response when the pricing call catches an error', async () => {
         jest.setTimeout(100000);
-        const res = await request(app)
+        const res = await request(app.app)
             .post('/v1/pci-bff/pricing/pricing-data')
             .send(pricingDataMockRequestThrowErrorForCloudPricingCall)
             .set('Accept', 'application/json');

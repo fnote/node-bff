@@ -5,9 +5,9 @@
  * */
 import request from 'supertest';
 import * as HttpStatus from 'http-status-codes';
-import {app} from '../../../app';
+import {jest} from '@jest/globals';
+import app from '../../../app';
 import {CLOUD_PCI_BFF, CLOUD_PCI_BFF_VERSION} from '../../../util/constants';
-import {jest} from "@jest/globals";
 
 jest.mock('../../../middleware/authMiddleware', () => ({
     authMiddleware: (req, res, next) => next(),
@@ -18,7 +18,7 @@ jest.mock('../../../initializer', () => ({
 
 describe('routes: /support', () => {
     test('get /support/healthcheck should return project details when the app is up and running', async () => {
-        const response = await request(app)
+        const response = await request(app.app)
             .get('/v1/pci-bff/support/healthcheck')
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.OK);

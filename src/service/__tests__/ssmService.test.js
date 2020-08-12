@@ -56,6 +56,5 @@ describe('SSM Service', () => {
             WithDecryption: true,
         });
         sinon.assert.calledOnce(promiseStub);
-
     });
 });
