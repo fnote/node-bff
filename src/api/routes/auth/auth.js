@@ -12,9 +12,15 @@ export default () => {
     const authConfig = getAuthConfig();
 
     AuthRouter.get('/login', async (req, res) => {
-        const {username} = res.locals;
-        logger.debug(`User: ${username} is being redirected after the login`);
-        res.redirect(`${authConfig.CONFIG.loginRedirectionUrl}?username=${username}`);
+        const {authResponse} = res.locals;
+        if (authResponse.authenticated) {
+            logger.debug(`User: ${authResponse.username} is being redirected after the login`);
+            res.redirect(`${authConfig.CONFIG.loginRedirectionUrl}?username=${username}`);
+        } else {
+            const cause = authResponse.cause;
+            logger.error(`User authentication failed, so redirecting user back to login page. cause: ${cause}`);
+            res.redirect(`${authConfig.CONFIG.loginRedirectionUrl}?login=error`);
+        }
     });
 
     AuthRouter.get('/logout', (req, res) => {
@@ -22,6 +28,10 @@ export default () => {
         res.clearCookie(authConfig.CONFIG.authCookieName2);
 
         res.redirect(authConfig.CONFIG.logoutRedirectionUrl);
+    });
+
+    AuthRouter.get('/user-details', (req, res) => {
+
     });
 
     return AuthRouter;
