@@ -30,3 +30,6 @@ export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY = 'U
 
 // whitelisted url paths
 export const AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK = '/v1/pci-bff/support/healthcheck';
+
+export const LOGIN_URL = '/v1/pci-bff/auth/login';
+export const LOGOUT_URL = '/v1/pci-bff/auth/logout';
