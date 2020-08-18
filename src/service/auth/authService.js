@@ -10,7 +10,7 @@ import * as HttpStatus from "http-status-codes";
 import {createErrorResponse} from "../../mapper/responseMapper";
 import jwkToPem from "jwk-to-pem";
 import {getAuthConfig} from "../../config/configs";
-import HttpClient from "../../httpClient/httpClient";
+import {httpClient} from "../../httpClient/httpClient";
 import {HTTP_GET} from "../../util/constants";
 
 export const unauthenticatedReturn = {
@@ -40,7 +40,7 @@ class AuthService {
                 this.pems = {};
 
                 //Download the JWKs and save it as PEM
-                const response = await HttpClient.makeRequest(HTTP_GET, this.authConfig.CONFIG.jwkRequestUrl);
+                const response = await httpClient.makeRequest(HTTP_GET, this.authConfig.CONFIG.jwkRequestUrl);
                 let keys = response.data['keys'];
                 for (let i = 0; i < keys.length; i++) {
                     //Convert each key to PEM
