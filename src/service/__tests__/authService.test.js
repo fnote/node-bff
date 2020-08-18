@@ -11,6 +11,7 @@ import {jest} from '@jest/globals';
 import {getAuthConfig} from '../../config/configs';
 import AuthService, {unauthenticatedReturn} from '../auth/authService';
 
+jest.mock('../../httpClient/httpClient');
 jest.mock('node-fetch');
 jest.mock('jwk-to-pem');
 jest.mock('jsonwebtoken');
@@ -49,7 +50,7 @@ jest.mock('../../config/configs', () => ({
  getAuthConfig: () => ({
         CONFIG: {
             authTokenHeaderAttribute: 'x-amzn-oidc-accesstoken',
-                authTokenIssuer: 'testIssuer',
+            authTokenIssuer: 'testIssuer',
             jwkRequestUrl: 'https://cognito-idp.us-east-1.amazonaws.com/local/.well-known/jwks.json',
         },
     }),
