@@ -48,7 +48,7 @@ provider:
   alb:
     targetGroupPrefix: pci-grbr-tg-${self:provider.environmentShort}-
     authorizers:
-      cognitoAuth:
+      cognitoLoginAuth:
         type: 'cognito'
         onUnauthenticatedRequest: 'authenticate' # Redirect unauthenticated clients to Cognito login page
         scope: 'openid'
@@ -57,6 +57,16 @@ provider:
         userPoolArn: ${file(./env.yml):${self:provider.stage}.COGNITO_USER_POOL_ARN}
         userPoolClientId: ${file(./env.yml):${self:provider.stage}.COGNITO_APP_CLIENT_ID}
         userPoolDomain: ${file(./env.yml):${self:provider.stage}.COGNITO_DOMAIN}
+      cognitoAuth:
+        type: 'cognito'
+        onUnauthenticatedRequest: 'allow'
+        scope: 'openid'
+        sessionCookieName: 'PCI-ELBAuthSessionCookie'
+        sessionTimeout: 432000
+        userPoolArn: ${file(./env.yml):${self:provider.stage}.COGNITO_USER_POOL_ARN}
+        userPoolClientId: ${file(./env.yml):${self:provider.stage}.COGNITO_APP_CLIENT_ID}
+        userPoolDomain: ${file(./env.yml):${self:provider.stage}.COGNITO_DOMAIN}
+
 
 resources:
   - ${file(./serverless.resources.yml)}
@@ -79,3 +89,15 @@ functions:
          priority: 1
          conditions:
            path: /v1/*
+      - alb:
+          listenerArn: !Ref LoadBalancerListenerHTTPS
+          priority: 2
+          conditions:
+            path: /v1/pci-bff/auth/login
+          authorizer: 'cognitoLoginAuth'
+      - alb:
+          listenerArn: !Ref LoadBalancerListenerHTTPS
+          priority: 3
+          conditions:
+            path: /v1/*
+          authorizer: 'cognitoAuth'
