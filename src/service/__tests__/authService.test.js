@@ -12,7 +12,6 @@ import {getAuthConfig} from '../../config/configs';
 import AuthService, {unauthenticatedReturn} from '../auth/authService';
 
 jest.mock('../../httpClient/httpClient');
-jest.mock('node-fetch');
 jest.mock('jwk-to-pem');
 jest.mock('jsonwebtoken');
 
@@ -56,27 +55,6 @@ jest.mock('../../config/configs', () => ({
     }),
 
     }));
-
-const resolvedValue = {
-
-    keys: [
-        {
-            kid: 'kid1',
-            n: 1,
-            e: 1,
-            kty: 1,
-        },
-        {
-            kid: 'kid2',
-            n: 2,
-            e: 2,
-            kty: 2,
-        },
-    ],
-
-};
-
-fetch.mockResolvedValue({ json: async () => Promise.resolve(resolvedValue)});
 
 jwkToPem.mockReturnValueOnce('pems2')
     .mockReturnValueOnce('pems1');
