@@ -54,16 +54,3 @@ Resources:
             StatusCode: 200
             ContentType: "text/plain"
             MessageBody: "Success"
-  LoadBalancerListenerHTTPSHealthCheckRule:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    Properties:
-      Actions:
-        - Type: forward
-          TargetGroupArn: !Ref CloudDashpciDashbffAlbTargetGroupLoadBalancerListenerHTTPS
-      Conditions:
-        - Field: path-pattern
-          PathPatternConfig:
-            Values:
-              - "/v1/pci-bff/support/healthcheck"
-      ListenerArn: !Ref LoadBalancerListenerHTTPS
-      Priority: 1
