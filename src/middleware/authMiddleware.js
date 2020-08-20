@@ -5,15 +5,15 @@ import * as HttpStatus from "http-status-codes";
 import {createErrorResponse} from "../mapper/responseMapper";
 
 export async function authMiddleware(req, res, next) {
-    if (process.env.STAGE !== 'LOCAL' && (req.url !== AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK)) {
+    if (process.env.STAGE !== 'LOCAL' && (req.url !== AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK) && (req.url !== LOGOUT_URL)) {
         try {
             logger.debug('Sending to authenticate the request');
             const authResponse = await AuthService.prepareToValidateToken(req, res);
 
-            /* Since login and logout are browser calls from frontend, unauthenticated response should be res.direct to an login error,
+            /* Since login is browser calls from frontend, unauthenticated response should be res.direct to an login error,
             can't directly send an error response like for other rest ajax calls
              */
-            if (req.url === LOGIN_URL || req.url === LOGOUT_URL) {
+            if (req.url === LOGIN_URL) {
                 res.locals.authResponse = authResponse;
                 next();
             } else if (authResponse.authenticated) {
