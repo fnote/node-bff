@@ -29,8 +29,6 @@ class AuthService {
         try {
             let token = req.headers[this.authConfig.CONFIG.authTokenHeaderAttribute];
 
-            token = 'eyJraWQiOiJzYzVyUWJiMiszZnM3cmI5ODNBY0ZLZVhLNVJFdXgrMlpraUhlejE2ZlU0PSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI3YzA2N2RkNy04ZWExLTQ1NGMtOTJiMC03Mjc2MGM3NGJhOTciLCJjb2duaXRvOmdyb3VwcyI6WyJ1cy1lYXN0LTFfSTVkdE5FOWQxX0F6dXJlQUQiXSwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJvcGVuaWQiLCJhdXRoX3RpbWUiOjE1OTYxNDUwNDUsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX0k1ZHRORTlkMSIsImV4cCI6MTU5NjE0ODY0NSwiaWF0IjoxNTk2MTQ1MDQ1LCJ2ZXJzaW9uIjoyLCJqdGkiOiIzYzRmM2YyYy0yNzJhLTQxZGMtYjNmYy00OTZkYWYwNjIzYTMiLCJjbGllbnRfaWQiOiIydDE2b3FxZWEzZHM1YzJvcnAzcnBxbWU1YiIsInVzZXJuYW1lIjoiYXp1cmVhZF9hZGlzMDg5MiJ9.OxbUZ2bh-3_96x3DF_Xc1mNH1b6T_dq9Iux_TQKDN60c2vYRiA6ag2BxZJ7bTL07UBsZsRz1kjiw77SHSzHaT52wlSgiSFw2oRNgspC2loTYtfkaLhsSijLN3fXGRHPwanLRuclY-oqq5w-QB8GcmNbYXWTBYNcp2yEo3SZ9f5LHqMiSGc18rTFM6A6GRjVYIXbGyMIRb5_1mMJTZaQO6doqjVV7AzMEX9ib4F4FAAboMYPhYqDenEth1ZYUy0Eww8N8z2m4Du7WEAykpyL1UyuhOU6loa38R8oPxyFs7l7K6ei6rqp6ylLg8UteJRTI00NrMOH9bLuAklAp3cqFJQ'
-
             if (!token) {
                 let errorMessage = 'Access token is missing from header';
                 logger.error(errorMessage);
