@@ -13,11 +13,12 @@ export default () => {
 
     AuthRouter.get('/login', async (req, res) => {
         const {authResponse} = res.locals;
-        if (authResponse.authenticated) {
-            logger.debug(`User: ${authResponse.username} is being redirected after the login`);
+        if (authResponse && authResponse.authenticated) {
+            const username = authResponse.username;
+            logger.debug(`User: ${username} is being redirected after the login`);
             res.redirect(`${authConfig.CONFIG.loginRedirectionUrl}?username=${username}`);
         } else {
-            const cause = authResponse.cause;
+            const cause = authResponse ? authResponse.cause: 'No auth response';
             logger.error(`User authentication failed, so redirecting user back to login page. cause: ${cause}`);
             res.redirect(`${authConfig.CONFIG.loginRedirectionUrl}?login=error`);
         }
