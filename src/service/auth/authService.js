@@ -35,12 +35,13 @@ class AuthService {
                 return this.sendUnauthenticatedErrorResponse(res, errorMessage);
             }
 
-            if (!this.pems) {
-                this.pems = {};
-
+            if (!this.pems || Object.keys(this.pems).length === 0) {
                 //Download the JWKs and save it as PEM
                 const response = await httpClient.makeRequest(HTTP_GET, this.authConfig.CONFIG.jwkRequestUrl);
                 let keys = response.data['keys'];
+
+                this.pems = {};
+
                 for (let i = 0; i < keys.length; i++) {
                     //Convert each key to PEM
                     let keyId = keys[i].kid;
