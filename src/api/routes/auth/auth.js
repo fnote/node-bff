@@ -34,7 +34,7 @@ export default () => {
     });
 
     AuthRouter.get('/user-details', (req, res) => {
-        try {
+
             const {authResponse} = res.locals;
             if (authResponse && authResponse.authenticated) {
                 const userDetailsData = authResponse.userDetailsData;
@@ -51,12 +51,6 @@ export default () => {
                 res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized', 'User cannot be authenticated',
                     null, cause));
             }
-        } catch (error) {
-            const errMessage = 'Error occurred in getting user details';
-            logger.error(`${errMessage} for req ${req}: ${error} cause: ${error.stack}`);
-            res.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .send(createErrorResponse(null, errMessage, error, null));
-        }
     });
 
     return AuthRouter;
