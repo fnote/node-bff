@@ -16,8 +16,6 @@ class BusinessUnitDao {
 
             const [rows, fields] = await connection.execute('SELECT bunit_id, bunit_name, periscope_on from business_unit');
 
-            console.log(rows)
-
             return rows;
 
         } catch (e) {

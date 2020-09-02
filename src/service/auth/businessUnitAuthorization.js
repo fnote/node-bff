@@ -11,10 +11,6 @@ class BusinessUnitAuthorization {
 
     loadBusinessUnitDetails = async () => {
         this.businessUnitDetailsArray = await BusinessUnitDao.getBusinessUnitDetails();
-
-        this.businessUnitDetailsArray.forEach((row) => {
-            console.log(`${row.bunit_id} lives in ${row.bunit_name}`);
-        });
     };
 
     matchedValidBusinessUnitFromGivenList = (bUnit, bUnitList) => {
