@@ -12,7 +12,7 @@ import {httpClient} from '../../httpClient/httpClient';
 import {HTTP_GET} from "../../util/constants";
 import BusinessUnitAuthorization from '../auth/businessUnitAuthorization'
 
-export const unauthenticatedReturn = {
+const unauthenticatedReturn = {
     authenticated: false,
     username: null
 };
@@ -82,7 +82,7 @@ class AuthService {
 
         //Reject the jwt if it's not an 'Access Token'
         if (decodedJwt.payload.token_use !== 'access') {
-            errorMessage = 'Token is not an access toke';
+            errorMessage = 'Token is not an access token';
             logger.error(errorMessage);
             return this.sendUnauthenticatedErrorResponse(res, errorMessage);
         }
@@ -100,7 +100,8 @@ class AuthService {
         jwt.verify(accessToken, pem, {algorithms: ["RS256"]}, (err, payload) => {
             if (err) {
                 logger.error(`Token was failed to be verified with error: ${err}`);
-                returnObj = this.sendUnauthenticatedErrorResponse(res, err.message);
+                const cause = err.message || 'Token was failed to be verified';
+                returnObj = this.sendUnauthenticatedErrorResponse(res, cause);
             } else {
                 const principalId = payload.sub;
                 if (principalId) {
@@ -128,11 +129,9 @@ class AuthService {
     }
 
     decodeUserClaimToken = (req, res) => {
-        const userClaimToken = req.headers[this.authConfig.CONFIG.authTokenHeaderAttribute];
+        const userClaimToken = req.headers[this.authConfig.CONFIG.userClaimHeaderAttribute];
 
         const decodedPayloadFromJwt = JSON.parse(Buffer.from(userClaimToken.split('.')[1], 'base64').toString());
-
-        console.log('from jwt decode', decodedPayloadFromJwt);
 
         if(decodedPayloadFromJwt) {
             if (decodedPayloadFromJwt.username) {

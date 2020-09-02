@@ -12,6 +12,7 @@ export const getAuthConfig = () => ({
             jwkRequestUrl: `https://cognito-idp.us-east-1.amazonaws.com/${process.env.COGNITO_USER_POOL_ID}/.well-known/jwks.json`,
             authTokenIssuer: `https://cognito-idp.us-east-1.amazonaws.com/${process.env.COGNITO_USER_POOL_ID}`,
             authTokenHeaderAttribute: 'x-amzn-oidc-accesstoken',
+            userClaimHeaderAttribute: 'x-amzn-oidc-data',
             authCookieName1: 'PCI-ELBAuthSessionCookie-0',
             authCookieName2: 'PCI-ELBAuthSessionCookie-1',
             loginRedirectionUrl: `${process.env.FRONTEND_URL}`,
