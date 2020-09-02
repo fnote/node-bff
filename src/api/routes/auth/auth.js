@@ -6,6 +6,8 @@
 import {Router} from 'express';
 import {getAuthConfig} from '../../../config/configs';
 import logger from '../../../util/logger';
+import * as HttpStatus from "http-status-codes";
+import {createErrorResponse} from "../../../mapper/responseMapper";
 
 export default () => {
     const AuthRouter = new Router({mergeParams: true});
@@ -32,7 +34,29 @@ export default () => {
     });
 
     AuthRouter.get('/user-details', (req, res) => {
+        try {
+            const {authResponse} = res.locals;
+            if (authResponse && authResponse.authenticated) {
+                const userDetailsData = authResponse.userDetailsData;
 
+                if (userDetailsData && Object.keys(userDetailsData).length > 0) {
+                    res.status(HttpStatus.OK).send(userDetailsData);
+                } else {
+                    res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized', 'User cannot be authenticated',
+                        null, 'User details are not present'));
+                }
+
+            } else {
+                const cause = authResponse ? authResponse.cause : null
+                res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized', 'User cannot be authenticated',
+                    null, cause));
+            }
+        } catch (error) {
+            const errMessage = 'Error occurred in getting user details';
+            logger.error(`${errMessage} for req ${req}: ${error} cause: ${error.stack}`);
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .send(createErrorResponse(null, errMessage, error, null));
+        }
     });
 
     return AuthRouter;
