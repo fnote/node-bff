@@ -12,6 +12,9 @@ module.exports = {
     '!**/httpClient/**',
     '!**/util/**',
     '!**/exception/cloudPricingDataFetchException.js',
+    '!**/exception/databaseException.js',
+    '!**/dao/**',
+    '!**/database/**'
   ],
   transform: {
     '\\.js$': '<rootDir>/node_modules/babel-jest',
