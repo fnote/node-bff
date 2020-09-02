@@ -36,7 +36,7 @@ class AuthService {
 
             if (!this.pems || Object.keys(this.pems).length === 0) {
                 //Download the JWKs and save it as PEM
-                const response = await HttpClient.makeRequest(HTTP_GET, this.authConfig.CONFIG.jwkRequestUrl);
+                const response = await httpClient.makeRequest(HTTP_GET, this.authConfig.CONFIG.jwkRequestUrl);
                 let keys = response.data['keys'];
 
                 this.pems = {};
