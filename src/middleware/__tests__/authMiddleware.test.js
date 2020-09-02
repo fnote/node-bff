@@ -25,7 +25,7 @@ describe('Auth Middleware', () => {
     test('should pass the username and call next when auth process completed', async () => {
         await authMiddleware(req, res, next);
 
-        expect(res.locals.username).toEqual('test-username');
+        expect(res.locals.authResponse.username).toEqual('test-username');
         expect(next).toHaveBeenCalled();
     });
 

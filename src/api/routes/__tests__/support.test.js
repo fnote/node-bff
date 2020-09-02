@@ -8,7 +8,6 @@ import * as HttpStatus from 'http-status-codes';
 import {jest} from '@jest/globals';
 import app from '../../../app';
 import {CLOUD_PCI_BFF, CLOUD_PCI_BFF_VERSION} from '../../../util/constants';
-import {jest} from "@jest/globals";
 
 jest.mock('../../../initializer', () => ({
     initializer: (req, res, next) => next(),

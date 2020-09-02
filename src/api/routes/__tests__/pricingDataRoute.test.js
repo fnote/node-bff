@@ -25,6 +25,13 @@ jest.mock('../../../initializer', () => ({
     initializer: (req, res, next) => next(),
 }));
 
+jest.mock('../../../service/auth/businessUnitAuthorization', () => ({
+    isAuthorizedRequest: () => {
+        return true;
+    },
+
+}));
+
 describe('routes: /pricing-data', () => {
     test('get /pricing-data should return correct response with HTTP OK when the flow is correct', async () => {
         jest.setTimeout(100000);
