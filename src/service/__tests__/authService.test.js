@@ -255,53 +255,6 @@ describe('Auth Service', () => {
         expect(response).toEqual(unauthenticatedReturn);
     });
 
-    // test('should return unauthenticated response when username is not present in the decoded token', async () => {
-    //     jwt.decode.mockReturnValue({
-    //         payload: {
-    //             iss: 'testIssuer',
-    //             token_use: 'access',
-    //         },
-    //         header: {
-    //             kid: 'kid2',
-    //         },
-    //     });
-    //
-    //     const payload = {
-    //         sub: 'principal-id-001',
-    //     };
-    //
-    //     jwt.verify.mockImplementation((obj, pems, param, callback) => {
-    //         callback(null, payload);
-    //     });
-    //
-    //     const response = await AuthService.prepareToValidateToken(mockRequest, mockResponse);
-    //     expect(response).toEqual(unauthenticatedReturn);
-    // });
-
-    // test('should return unauthenticated response when username is not in the expected format', async () => {
-    //     jwt.decode.mockReturnValue({
-    //         payload: {
-    //             iss: 'testIssuer',
-    //             token_use: 'access',
-    //         },
-    //         header: {
-    //             kid: 'kid2',
-    //         },
-    //     });
-    //
-    //     const payload = {
-    //         sub: 'principal-id-001',
-    //         username: 'username',
-    //     };
-    //
-    //     jwt.verify.mockImplementation((obj, pems, param, callback) => {
-    //         callback(null, payload);
-    //     });
-    //
-    //     const response = await AuthService.prepareToValidateToken(mockRequest, mockResponse);
-    //     expect(response).toEqual(unauthenticatedReturn);
-    // });
-
     test('should return unauthenticated response when an an error is thrown', async () => {
         jwt.decode.mockReturnValue({
             payload: {
