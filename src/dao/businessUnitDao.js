@@ -5,7 +5,7 @@
  * */
 
 import {closeConnection, getConnection} from "../database/databaseConnection";
-import DatabaseException from "../exception/DatabaseException";
+import DatabaseException from "../exception/databaseException";
 import logger from '../util/logger';
 
 class BusinessUnitDao {
