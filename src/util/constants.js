@@ -33,3 +33,7 @@ export const AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK = '/v1/pci-bff/support/hea
 
 export const LOGIN_URL = '/v1/pci-bff/auth/login';
 export const LOGOUT_URL = '/v1/pci-bff/auth/logout';
+
+// user roles
+export const ROLE_GENERAL_USER = 'generaluser'
+export const ROLE_APP_ADMIN = 'appadmin'
