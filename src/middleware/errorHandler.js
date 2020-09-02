@@ -5,13 +5,14 @@
  * */
 import {ERROR} from '../util/constants';
 import logger from '../util/logger';
+import {INTERNAL_SERVER_ERROR} from "http-status-codes";
 
 export function handleError(err, res) {
     logger.error(`Unhandled error occurred: ${err}, stacktrace: ${err.stack}`);
-    const {name, message} = err;
-    res.status(name).json({
+    const {cause, message} = err;
+    res.status(INTERNAL_SERVER_ERROR).json({
         status: ERROR,
-        name,
         message,
+        cause
     });
 }
