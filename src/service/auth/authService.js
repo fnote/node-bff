@@ -6,12 +6,11 @@
 
 import * as jwt from "jsonwebtoken";
 import logger from "../../util/logger";
-import * as HttpStatus from "http-status-codes";
-import {createErrorResponse} from "../../mapper/responseMapper";
 import jwkToPem from "jwk-to-pem";
 import {getAuthConfig} from "../../config/configs";
 import {httpClient} from '../../httpClient/httpClient';
 import {HTTP_GET} from "../../util/constants";
+import BusinessUnitAuthorization from '../auth/businessUnitAuthorization'
 
 export const unauthenticatedReturn = {
     authenticated: false,
@@ -27,9 +26,9 @@ class AuthService {
 
     prepareToValidateToken = async (req, res) => {
         try {
-            let token = req.headers[this.authConfig.CONFIG.authTokenHeaderAttribute];
+            const accessToken = req.headers[this.authConfig.CONFIG.authTokenHeaderAttribute];
 
-            if (!token) {
+            if (!accessToken) {
                 let errorMessage = 'Access token is missing from header';
                 logger.error(errorMessage);
                 return this.sendUnauthenticatedErrorResponse(res, errorMessage);
@@ -51,22 +50,23 @@ class AuthService {
                     let jwk = {kty: keyType, n: modulus, e: exponent};
                     this.pems[keyId] = jwkToPem(jwk);
                 }
-                return this.validateToken(this.pems, token, res);
+                return this.validateToken(this.pems, accessToken, req, res);
 
 
             } else {
-                return this.validateToken(this.pems, token, res);
+                return this.validateToken(this.pems, accessToken, req, res);
             }
         } catch (e) {
             let errorMessage = `Unexpected error occurred while validating the token`;
-            logger.error(`${errorMessage}: ${e}`);
+            console.log(e)
+            logger.error(`${errorMessage}: ${e} stacktrace: ${e.stackTrace}`);
             return this.sendUnauthenticatedErrorResponse(res, errorMessage);
         }
     }
 
-    validateToken = (pems, token, res) => {
+    validateToken = (pems, accessToken, req, res) => {
         let errorMessage;
-        let decodedJwt = jwt.decode(token, {complete: true});
+        let decodedJwt = jwt.decode(accessToken, {complete: true});
 
         if (!decodedJwt) {
             errorMessage = 'Not a valid JWT token';
@@ -97,30 +97,21 @@ class AuthService {
 
         let returnObj = unauthenticatedReturn;
         //Verify the signature of the JWT token to ensure it's really coming from the matching User Pool
-        jwt.verify(token, pem, {algorithms: ["RS256"]}, (err, payload) => {
+        jwt.verify(accessToken, pem, {algorithms: ["RS256"]}, (err, payload) => {
             if (err) {
                 logger.error(`Token was failed to be verified with error: ${err}`);
                 returnObj = this.sendUnauthenticatedErrorResponse(res, err.message);
             } else {
-                let principalId = payload.sub;
-                let usernameWithAdTag = payload.username;
+                const principalId = payload.sub;
+                if (principalId) {
 
-                if (principalId && usernameWithAdTag) {
-                    let username = usernameWithAdTag.split('_')[1];
-                    if (username) {
                         // Pass to the authorization
-                        logger.info(`The user's principal id: ${principalId} username: ${username}`);
-                        returnObj = {
-                            authenticated: true,
-                            username: username,
-                            cause: null
-                        };
-                    } else {
-                        logger.error(`Username in the auth token is not in the expected format: ${username}`);
-                        returnObj = this.sendUnauthenticatedErrorResponse(res, 'Username given in the authentication token is invalid');
-                    }
+                        logger.info(`The user's principal id: ${principalId}`);
+
+                        returnObj = this.decodeUserClaimToken(req, res);
+
                 } else {
-                    logger.error(`After token verification either principal id: ${principalId} or username: ${usernameWithAdTag} is not present`);
+                    logger.error(`After token verification principal id: ${principalId} is not present`);
                     returnObj = this.sendUnauthenticatedErrorResponse(res, 'Required variables for authentication are invalid');
                 }
             }
@@ -136,6 +127,52 @@ class AuthService {
         };
     }
 
+    decodeUserClaimToken = (req, res) => {
+        const userClaimToken = req.headers[this.authConfig.CONFIG.authTokenHeaderAttribute];
+
+        const decodedPayloadFromJwt = JSON.parse(Buffer.from(userClaimToken.split('.')[1], 'base64').toString());
+
+        console.log('from jwt decode', decodedPayloadFromJwt);
+
+        if(decodedPayloadFromJwt) {
+            if (decodedPayloadFromJwt.username) {
+                const username = decodedPayloadFromJwt.username.split('_')[1];
+                if(username) {
+                    const locale = decodedPayloadFromJwt.locale;
+                    const opcoString = locale.substring(0,3);
+                    const opcoParsed = parseInt(opcoString);
+                    let authorizedBunitList;
+                    if (isNaN(opcoParsed)) {
+                        authorizedBunitList = [];
+                    } else {
+                        authorizedBunitList = BusinessUnitAuthorization.getAuthorizedBusinessUnits(opcoString, decodedPayloadFromJwt.profile);
+                    }
+
+                    const userDetailsData = {}
+                    userDetailsData.authorizedBunitList = authorizedBunitList;
+                    userDetailsData.firstName = decodedPayloadFromJwt.given_name;
+                    userDetailsData.lastName = decodedPayloadFromJwt.family_name;
+                    userDetailsData.username = username;
+                    userDetailsData.email = decodedPayloadFromJwt.email;
+                    userDetailsData.jobTitle = decodedPayloadFromJwt.zoneinfo;
+
+                    return {
+                        authenticated: true,
+                        username: username,
+                        cause: null,
+                        userDetailsData: userDetailsData
+                    };
+                } else {
+                    logger.error(`Username in the auth token is not in the expected format: ${username}`);
+                    return this.sendUnauthenticatedErrorResponse(res, 'Username given in the authentication token is invalid');
+
+                }
+            } else {
+                logger.error(`Username is not present in the auth token`);
+                return this.sendUnauthenticatedErrorResponse(res, 'Username is not present in the auth token');
+            }
+        }
+    }
 }
 
 export default new AuthService();
