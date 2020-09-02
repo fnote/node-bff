@@ -1,1 +1,1 @@
-export const getAccessToken = () => Promise.resolve('dd');
+export const getAccessToken = () => Promise.resolve('mock access token');

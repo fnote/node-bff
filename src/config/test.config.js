@@ -1,5 +1,27 @@
 import * as HTTP from 'http-status-codes';
 
+export const productInfoMockResponse = {
+    status: HTTP.OK,
+    data: {
+        id: '7203474',
+        name: 'BEEF RIBEYE LIPON CH 112A',
+        description: 'Beef Ribeye Lip-On Choice NAMP 112A',
+        lineDescription: 'THIS IBP CHOICE RIBEYE IS BONELESS AND PRACTICALLY FREE OF SURFACE FAT AND INTERCOSTAL MEAT. THE LIP-ON LEAVES A LIP(MAXIMUM WIDTH OF TWO INCHES) OF MUSCLES AND RELATED FAT ATTACHED TO THE OUTER TIP OF THE RIBEYE MUSCLE.APPLICATIONS ARE BONELESS RIB ROASTS, HIGH QUALITY ROAST BEEF,GRILLED OR BROILED RIBEYE STEAK FOR LOTS OF PLATE COVERAGE. THIS PRODUCT IS CHOICE.',
+        pack: '5',
+        size: 'HEAVY',
+        brandId: 'IBP',
+        brand: 'IOWA BEEF PROCESSORS',
+    },
+};
+
+export const productInfoErrorMockResponse = {
+    errorCode: '1002',
+    incidentId: '2a52a105-10ef-4c61-891d-ea3cf987de4c',
+    errors: [
+        'OPCOPRODUCT can not be found!',
+    ],
+};
+
 export const cloudPricingMockResponse = {
     businessUnitNumber: '068',
     customerAccount: '758026',
@@ -47,7 +69,7 @@ export const cloudPricingMockRequestForErrorScenario = {
 };
 
 export const pricingDataMockRequest = {
-    businessUnitNumber: '067',
+    businessUnitNumber: '068',
     customerAccount: '758028',
     priceRequestDate: '20200605',
     products: [
@@ -61,7 +83,7 @@ export const PricingDataMockResponse = {
     cloudPricingResponse: {
         cloudPricingResponseStatus: 200,
         cloudPricingResponseData: {
-            businessUnitNumber: '067',
+            businessUnitNumber: '068',
             customerAccount: '758026',
             priceRequestDate: '20200605',
             requestStatuses: [],
@@ -81,15 +103,15 @@ export const PricingDataMockResponse = {
         },
     },
     itemInfoResponse: {
-        itemInfoResponseStatus: 200,
-        itemName: 'abc',
+        itemInfoResponseStatus: productInfoMockResponse.status,
+        itemInfoResponseData: productInfoMockResponse.data,
     },
 };
 
 export const cloudPricingMockResponseForAggregatedPricingCall = {
     status: HTTP.OK,
     data: {
-        businessUnitNumber: '067',
+        businessUnitNumber: '068',
         customerAccount: '758026',
         priceRequestDate: '20200605',
         requestStatuses: [],
@@ -167,8 +189,8 @@ export const PricingDataMockResponseForErrorOnCloudPricingCall = {
         },
     },
     itemInfoResponse: {
-        itemInfoResponseStatus: 200,
-        itemName: 'abc',
+        itemInfoResponseStatus: productInfoMockResponse.status,
+        itemInfoResponseData: productInfoMockResponse.data,
     },
 };
 
