@@ -13,9 +13,9 @@ class BusinessUnitAuthorization {
         this.businessUnitDetailsArray = await BusinessUnitDao.getBusinessUnitDetails();
     };
 
-    matchedValidBusinessUnitFromGivenList = (bUnit, bUnitList) => {
-        if(bUnitList) {
-            return bUnitList.filter(bUnitDetails =>
+    matchedValidBusinessUnitFromGivenList = (bUnit, bUnitDetailsList) => {
+        if(bUnitDetailsList) {
+            return bUnitDetailsList.filter(bUnitDetails =>
                 bUnit === bUnitDetails.bunit_id
             )
         } else {
@@ -59,7 +59,7 @@ class BusinessUnitAuthorization {
                 const authorizedPricingTransformationEnabledBusinessUnitList =
                     this.matchedPricingTransformationEnabledBusinessUnit(opcoAttributeBunit);
 
-                if(authorizedPricingTransformationEnabledBusinessUnitList > 0) {
+                if(authorizedPricingTransformationEnabledBusinessUnitList.length > 0) {
                     // Opco attribute matches one of the opcos and also is a pricing transformation enabled opco then return that opco
                     return authorizedPricingTransformationEnabledBusinessUnitList
                 } else {
