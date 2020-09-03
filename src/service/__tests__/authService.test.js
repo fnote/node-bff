@@ -8,7 +8,7 @@ import jwkToPem from 'jwk-to-pem';
 import * as jwt from 'jsonwebtoken';
 import {jest} from '@jest/globals';
 import {getAuthConfig} from '../../config/configs';
-import AuthService, {unauthenticatedReturn} from '../auth/authService';
+import AuthService from '../auth/authService';
 
 jest.mock('../../httpClient/httpClient');
 jest.mock('jwk-to-pem');
@@ -49,8 +49,16 @@ const authenticatedMockResponse = {
     "username": "username",
     "userDetailsData": {
         "authorizedBunitList": [
-            "001",
-            "002",
+            {
+                bunit_id: '001',
+                bunit_name: 'Sysco Jackson',
+                periscope_on: 'Y'
+            },
+            {
+                bunit_id: '003',
+                bunit_name: 'Sysco Jacksonville',
+                periscope_on: 'Y'
+            },
         ],
         "email": "firstName.secondName@syscolabs.com",
         "firstName": "firstName",
@@ -74,7 +82,18 @@ jest.mock('../../config/configs', () => ({
 
 jest.mock('../auth/businessUnitAuthorization', () => ({
     getAuthorizedBusinessUnits: () => {
-        return ['001', '002']
+        return [
+            {
+                bunit_id: '001',
+                bunit_name: 'Sysco Jackson',
+                periscope_on: 'Y'
+            },
+            {
+                bunit_id: '003',
+                bunit_name: 'Sysco Jacksonville',
+                periscope_on: 'Y'
+            },
+        ]
     },
 
 }));
