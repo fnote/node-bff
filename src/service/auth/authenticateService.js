@@ -176,17 +176,18 @@ class AuthenticateService {
                             .getAuthorizedBusinessUnits(opcoString, selectedUserRole);
                     }
 
-                    const userDetailsData = {}
-                    userDetailsData.authorizedBunitList = authorizedBunitList;
-                    userDetailsData.firstName = decodedPayloadFromJwt.given_name;
-                    userDetailsData.lastName = decodedPayloadFromJwt.family_name;
-                    userDetailsData.username = username;
-                    userDetailsData.email = decodedPayloadFromJwt.email;
-                    userDetailsData.jobTitle = decodedPayloadFromJwt.zoneinfo;
+                    const userDetailsData = {
+                        authorizedBunitList: authorizedBunitList,
+                        firstName: decodedPayloadFromJwt.given_name,
+                        lastName: decodedPayloadFromJwt.family_name,
+                        username: username,
+                        email: decodedPayloadFromJwt.email,
+                        jobTitle: decodedPayloadFromJwt.zoneinfo
+                    };
 
                     logger.info(`Authenticated user's user details: First name: ${userDetailsData.firstName}
-                    Last name: ${userDetailsData.lastName} Username: ${userDetailsData.username} 
-                    Email: ${userDetailsData.email}`);
+                    Last name: ${userDetailsData.lastName} Username: ${userDetailsData.username}
+                     Email: ${userDetailsData.email}`);
 
                     logger.info(`User is identified with a job title: ${userDetailsData.jobTitle}`);
 
