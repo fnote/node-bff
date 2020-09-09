@@ -35,5 +35,14 @@ export const LOGIN_URL = '/v1/pci-bff/auth/login';
 export const LOGOUT_URL = '/v1/pci-bff/auth/logout';
 
 // user roles
-export const ROLE_GENERAL_USER = 'generaluser'
-export const ROLE_APP_ADMIN = 'appadmin'
+export const ROLE_APP_ADMIN = 'appadmin';
+export const ROLE_GENERAL_USER = 'generaluser';
+export const ROLE_DDS_ADMIN = 'ddsadmin';
+export const ROLE_VP_MERCHANDISING = 'vpofmerc';
+export const ROLE_CFO = 'cfo';
+export const ROLE_VP_SALES = 'vpofsales';
+export const ROLE_DRM = 'drm';
+export const ROLE_RSM = 'rsm';
+export const ROLE_DSM = 'dsm';
+
+export const MAX_ROLE_HIERARCHY_NUMBER = 10000;
