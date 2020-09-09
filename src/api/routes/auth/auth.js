@@ -20,7 +20,7 @@ export default () => {
             logger.debug(`User: ${username} is being redirected after the login`);
             res.redirect(`${authConfig.CONFIG.loginRedirectionUrl}?username=${username}`);
         } else {
-            const cause = authResponse ? authResponse.cause: 'No auth response';
+            const cause = authResponse ? authResponse.cause : 'No auth response';
             logger.error(`User authentication failed, so redirecting user back to login page. cause: ${cause}`);
             res.redirect(`${authConfig.CONFIG.loginRedirectionUrl}?login=error`);
         }
@@ -35,22 +35,22 @@ export default () => {
 
     AuthRouter.get('/user-details', (req, res) => {
 
-            const {authResponse} = res.locals;
-            if (authResponse && authResponse.authenticated) {
-                const userDetailsData = authResponse.userDetailsData;
+        const {authResponse} = res.locals;
+        if (authResponse && authResponse.authenticated) {
+            const userDetailsData = authResponse.userDetailsData;
 
-                if (userDetailsData && Object.keys(userDetailsData).length > 0) {
-                    res.status(HttpStatus.OK).send(userDetailsData);
-                } else {
-                    res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized', 'User cannot be authenticated',
-                        null, 'User details are not present'));
-                }
-
+            if (userDetailsData && Object.keys(userDetailsData).length > 0) {
+                res.status(HttpStatus.OK).send(userDetailsData);
             } else {
-                const cause = authResponse ? authResponse.cause : null
                 res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized', 'User cannot be authenticated',
-                    null, cause));
+                    null, 'User details are not present'));
             }
+
+        } else {
+            const cause = authResponse ? authResponse.cause : null
+            res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized', 'User cannot be authenticated',
+                null, cause));
+        }
     });
 
     return AuthRouter;

@@ -18,7 +18,7 @@ export default () => {
         try {
             const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
 
-            if(isAuthorized) {
+            if (isAuthorized) {
                 const responseData = await AggregatedPricingDataService.getAggregatedPricingData(req);
                 res.status(HttpStatus.OK).send(responseData);
             } else {

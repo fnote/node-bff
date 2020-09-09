@@ -1,4 +1,9 @@
 import * as HttpStatus from "http-status-codes";
+import {jest} from '@jest/globals';
+import {authMiddleware} from '../authMiddleware';
+import {AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK, LOGIN_URL, LOGOUT_URL} from '../../util/constants';
+import AuthenticateService from '../../service/auth/authenticateService';
+import httpMocks from 'node-mocks-http'
 
 /**
  * Auth middleware unit tests
@@ -6,12 +11,6 @@ import * as HttpStatus from "http-status-codes";
  * @author: adis0892 on 26/07/20
  * */
 jest.mock('../../service/auth/authenticateService');
-
-import {jest} from '@jest/globals';
-import {authMiddleware} from '../authMiddleware';
-import {AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK, LOGIN_URL, LOGOUT_URL} from '../../util/constants';
-import AuthenticateService from '../../service/auth/authenticateService';
-import httpMocks from 'node-mocks-http'
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -88,7 +87,7 @@ describe('Auth Middleware', () => {
         const req = httpMocks.createRequest();
         const res = httpMocks.createResponse();
 
-       await authMiddleware(req, res, next);
+        await authMiddleware(req, res, next);
 
         expect(res.statusCode).toEqual(HttpStatus.UNAUTHORIZED);
 
@@ -99,7 +98,7 @@ describe('Auth Middleware', () => {
         const res = httpMocks.createResponse();
 
         await AuthenticateService.prepareToValidateToken.mockImplementationOnce(() => {
-            throw Error('test-error');
+                throw Error('test-error');
             }
         );
 

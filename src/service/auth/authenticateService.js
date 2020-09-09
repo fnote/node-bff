@@ -28,7 +28,7 @@ class AuthenticateService {
         try {
             let accessToken = req.headers[this.authConfig.CONFIG.authTokenHeaderAttribute];
 
-           logger.debug(`Given access token: ${accessToken}`)
+            logger.debug(`Given access token: ${accessToken}`);
 
             if (!accessToken) {
                 let errorMessage = 'Access token is missing from header';
@@ -108,10 +108,10 @@ class AuthenticateService {
                 const principalId = payload.sub;
                 if (principalId) {
 
-                        // Pass to the authorization
-                        logger.info(`The user's principal id: ${principalId}`);
+                    // Pass to the authorization
+                    logger.info(`The user's principal id: ${principalId}`);
 
-                        returnObj = this.decodeUserClaimToken(req, res);
+                    returnObj = this.decodeUserClaimToken(req, res);
 
                 } else {
                     logger.error(`After token verification principal id: ${principalId} is not present`);
@@ -136,12 +136,12 @@ class AuthenticateService {
 
         const decodedPayloadFromJwt = JSON.parse(Buffer.from(userClaimToken.split('.')[1], 'base64').toString());
 
-        if(decodedPayloadFromJwt) {
+        if (decodedPayloadFromJwt) {
             if (decodedPayloadFromJwt.username) {
                 const username = decodedPayloadFromJwt.username.split('_')[1];
-                if(username) {
+                if (username) {
                     const locale = decodedPayloadFromJwt.locale;
-                    const opcoString = locale.substring(0,3);
+                    const opcoString = locale.substring(0, 3);
                     const opcoParsed = parseInt(opcoString);
                     let authorizedBunitList;
                     if (isNaN(opcoParsed)) {
@@ -160,7 +160,7 @@ class AuthenticateService {
                                 return item.trim();
                             });
 
-                            if(userRolesArray.length > 1) {
+                            if (userRolesArray.length > 1) {
                                 userRolesArray[0] = userRolesArray[0].substring(1);
 
                                 const lastElement = userRolesArray[userRolesArray.length - 1];

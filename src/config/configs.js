@@ -1,9 +1,13 @@
 import {
     ROLE_APP_ADMIN,
     ROLE_CFO,
-    ROLE_DDS_ADMIN, ROLE_DRM, ROLE_DSM,
-    ROLE_GENERAL_USER, ROLE_RSM,
-    ROLE_VP_MERCHANDISING, ROLE_VP_SALES
+    ROLE_DDS_ADMIN,
+    ROLE_DRM,
+    ROLE_DSM,
+    ROLE_GENERAL_USER,
+    ROLE_RSM,
+    ROLE_VP_MERCHANDISING,
+    ROLE_VP_SALES
 } from "../util/constants";
 
 export default function getBatchAPIConfigs() {
@@ -16,32 +20,32 @@ export default function getBatchAPIConfigs() {
 }
 
 export const getAuthConfig = () => ({
-        CONFIG: {
-            jwkRequestUrl: `https://cognito-idp.us-east-1.amazonaws.com/${process.env.COGNITO_USER_POOL_ID}/.well-known/jwks.json`,
-            authTokenIssuer: `https://cognito-idp.us-east-1.amazonaws.com/${process.env.COGNITO_USER_POOL_ID}`,
-            authTokenHeaderAttribute: 'x-amzn-oidc-accesstoken',
-            userClaimHeaderAttribute: 'x-amzn-oidc-data',
-            authCookieName1: 'PCI-ELBAuthSessionCookie-0',
-            authCookieName2: 'PCI-ELBAuthSessionCookie-1',
-            loginRedirectionUrl: `${process.env.FRONTEND_URL}`,
-            logoutRedirectionUrl: `https://${process.env.COGNITO_AUTH_URL}/logout?client_id=${process.env.COGNITO_APP_CLIENT_ID}&logout_uri=https://google.com`,
+    CONFIG: {
+        jwkRequestUrl: `https://cognito-idp.us-east-1.amazonaws.com/${process.env.COGNITO_USER_POOL_ID}/.well-known/jwks.json`,
+        authTokenIssuer: `https://cognito-idp.us-east-1.amazonaws.com/${process.env.COGNITO_USER_POOL_ID}`,
+        authTokenHeaderAttribute: 'x-amzn-oidc-accesstoken',
+        userClaimHeaderAttribute: 'x-amzn-oidc-data',
+        authCookieName1: 'PCI-ELBAuthSessionCookie-0',
+        authCookieName2: 'PCI-ELBAuthSessionCookie-1',
+        loginRedirectionUrl: `${process.env.FRONTEND_URL}`,
+        logoutRedirectionUrl: `https://${process.env.COGNITO_AUTH_URL}/logout?client_id=${process.env.COGNITO_APP_CLIENT_ID}&logout_uri=https://google.com`,
 
-        },
-    });
+    },
+});
 
 export const getCloudPricingConfig = () => ({
-        CONFIG: {
-            cloudPricingUrl: `${process.env.CLOUD_PRICING_URL}/v1/pricing/pricemanager`,
-            clientId: 'Cloud-PCI',
-            priceEngineType: 'CP',
-        },
-    });
+    CONFIG: {
+        cloudPricingUrl: `${process.env.CLOUD_PRICING_URL}/v1/pricing/pricemanager`,
+        clientId: 'Cloud-PCI',
+        priceEngineType: 'CP',
+    },
+});
 
 export const getProductInfoApiConfig = () => ({
-        CONFIG: {
-            productInfoApiUrl: `${process.env.API_CENTRAL_BASE_URL}/sm/product-info/1.0.0`,
-        },
-    });
+    CONFIG: {
+        productInfoApiUrl: `${process.env.API_CENTRAL_BASE_URL}/sm/product-info/1.0.0`,
+    },
+});
 
 export const getApiCentralConfig = () => ({
     CONFIG: {

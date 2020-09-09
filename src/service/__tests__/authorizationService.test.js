@@ -14,13 +14,14 @@ import {
     ROLE_DRM,
     ROLE_DSM,
     ROLE_GENERAL_USER,
-    ROLE_RSM, ROLE_VP_MERCHANDISING,
+    ROLE_RSM,
+    ROLE_VP_MERCHANDISING,
     ROLE_VP_SALES
 } from "../../util/constants";
 
 const OTHER_ROLE = 'otherRole'
 
-const bUnitDetailForOpco001 =     {
+const bUnitDetailForOpco001 = {
     bunit_id: '001',
     bunit_name: 'Sysco Jackson',
     periscope_on: 'Y'
@@ -35,7 +36,7 @@ const bUnitDetailForOpco003 = {
 const bUnitDetailsArray = [
     bUnitDetailForOpco001,
 
-     {
+    {
         bunit_id: '002',
         bunit_name: 'Sysco Atlanta',
         periscope_on: 'N'
@@ -43,17 +44,17 @@ const bUnitDetailsArray = [
 
     bUnitDetailForOpco003,
 
-     {
+    {
         bunit_id: '004',
         bunit_name: 'Sysco Central California',
         periscope_on: 'N'
     },
-     {
+    {
         bunit_id: '005',
         bunit_name: 'Sysco Intermountain',
         periscope_on: 'N'
     }
-    ]
+]
 
 describe('Auth Service', () => {
     test('should send the bunit array of the given bunit when the passed bunit matches with one in the passed bunit details array', async () => {

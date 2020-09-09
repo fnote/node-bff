@@ -12,17 +12,17 @@ import * as HttpStatus from 'http-status-codes';
 import {jest} from '@jest/globals';
 import app from '../../../app';
 
-const userDetailsMockResponse =  {
-        "authorizedBunitList": [
-            "001",
-            "002",
-        ],
-        "email": "firstName.secondName@syscolabs.com",
-        "firstName": "firstName",
-        "jobTitle": "jobTitle",
-        "lastName": "secondName",
-        "username": "username"
-    }
+const userDetailsMockResponse = {
+    "authorizedBunitList": [
+        "001",
+        "002",
+    ],
+    "email": "firstName.secondName@syscolabs.com",
+    "firstName": "firstName",
+    "jobTitle": "jobTitle",
+    "lastName": "secondName",
+    "username": "username"
+}
 
 jest.mock('../../../initializer', () => ({
     initializer: (req, res, next) => next(),
@@ -33,12 +33,11 @@ const mockRequest = {};
 describe('routes: /auth', () => {
     test('get /login should redirect the user when authentication happens', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
-                    res.locals.authResponse = {
-                        "authenticated": true,
-                        "cause": null,
-                    }
-                    next()
-
+            res.locals.authResponse = {
+                "authenticated": true,
+                "cause": null,
+            }
+            next()
         });
 
         await request(app.app)
@@ -46,8 +45,8 @@ describe('routes: /auth', () => {
             .send(mockRequest)
             .set('Accept', 'application/json')
             .then((res) => {
-                    expect(res.status).toEqual(HttpStatus.MOVED_TEMPORARILY);
-                });
+                expect(res.status).toEqual(HttpStatus.MOVED_TEMPORARILY);
+            });
     });
 
     test('get /login should redirect the user when authentication happens even when authenticate: false', async () => {
@@ -86,32 +85,32 @@ describe('routes: /auth', () => {
             .send(mockRequest)
             .set('Accept', 'application/json')
             .then((res) => {
-                    const {location} = res.headers;
-                    expect(res.status).toEqual(HttpStatus.MOVED_TEMPORARILY);
-                    expect(location).toEqual(expect.stringMatching('logout_uri='));
-                });
+                const {location} = res.headers;
+                expect(res.status).toEqual(HttpStatus.MOVED_TEMPORARILY);
+                expect(location).toEqual(expect.stringMatching('logout_uri='));
+            });
     });
 
     test('get /user-details should send successful response when auth response is successful', async () => {
 
         authMiddleware.mockImplementationOnce((req, res, next) => {
-                    res.locals.authResponse = {
-                        "authenticated": true,
-                        "cause": null,
-                        "username": "username",
-                        "userDetailsData": {
-                            "authorizedBunitList": [
-                                "001",
-                                "002",
-                            ],
-                            "email": "firstName.secondName@syscolabs.com",
-                            "firstName": "firstName",
-                            "jobTitle": "jobTitle",
-                            "lastName": "secondName",
-                            "username": "username"
-                        },
-                    }
-                    next()
+            res.locals.authResponse = {
+                "authenticated": true,
+                "cause": null,
+                "username": "username",
+                "userDetailsData": {
+                    "authorizedBunitList": [
+                        "001",
+                        "002",
+                    ],
+                    "email": "firstName.secondName@syscolabs.com",
+                    "firstName": "firstName",
+                    "jobTitle": "jobTitle",
+                    "lastName": "secondName",
+                    "username": "username"
+                },
+            }
+            next()
 
         });
 
@@ -139,7 +138,7 @@ describe('routes: /auth', () => {
 
         const errorResponse = {
             "message": "User cannot be authenticated",
-           "status": "Unauthorized",
+            "status": "Unauthorized",
         }
 
         await request(app.app)
@@ -167,9 +166,9 @@ describe('routes: /auth', () => {
 
         const errorResponse = {
             "cause": "User details are not present",
-          "message": "User cannot be authenticated",
+            "message": "User cannot be authenticated",
             "status": "Unauthorized",
-    }
+        }
 
         await request(app.app)
             .get('/v1/pci-bff/auth/user-details')

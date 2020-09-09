@@ -8,6 +8,7 @@ import BusinessUnitDao from '../../dao/businessUnitDao'
 import {MAX_ROLE_HIERARCHY_NUMBER, ROLE_APP_ADMIN, ROLE_GENERAL_USER} from "../../util/constants";
 import {getAuthorizationRoleHierarchy} from "../../config/configs";
 import logger from "../../util/logger";
+
 class AuthorizationService {
     businessUnitDetailsArray;
 
@@ -16,7 +17,7 @@ class AuthorizationService {
     };
 
     matchedValidBusinessUnitFromGivenList = (bUnit, bUnitDetailsList) => {
-        if(bUnitDetailsList) {
+        if (bUnitDetailsList) {
             return bUnitDetailsList.filter(bUnitDetails =>
                 bUnit === bUnitDetails.bunit_id
             )
@@ -26,7 +27,7 @@ class AuthorizationService {
     }
 
     matchedPricingTransformationEnabledBusinessUnit = (bUnit) => {
-        if(this.businessUnitDetailsArray) {
+        if (this.businessUnitDetailsArray) {
             return this.businessUnitDetailsArray.filter(bUnitDetails =>
                 bUnit === bUnitDetails.bunit_id && bUnitDetails.periscope_on === "Y"
             )
@@ -36,7 +37,7 @@ class AuthorizationService {
     }
 
     generatePricingTransformationEnabledAllBusinessUnit = () => {
-        if(this.businessUnitDetailsArray) {
+        if (this.businessUnitDetailsArray) {
             return this.businessUnitDetailsArray.filter(bUnitDetails =>
                 bUnitDetails.periscope_on === "Y"
             )
@@ -46,7 +47,7 @@ class AuthorizationService {
     }
 
     getAuthorizedBusinessUnits = (opcoAttributeBunit, userRole) => {
-        if(userRole === ROLE_APP_ADMIN || userRole === ROLE_GENERAL_USER) {
+        if (userRole === ROLE_APP_ADMIN || userRole === ROLE_GENERAL_USER) {
             // If these user roles, they should have access to all opcos
             logger.info(`User because of his user role: ${userRole} is given access to all opcos`);
             return this.generatePricingTransformationEnabledAllBusinessUnit();
@@ -58,12 +59,12 @@ class AuthorizationService {
             const matchedValidBusinessUnitList =
                 this.matchedValidBusinessUnitFromGivenList(opcoAttributeBunit, this.businessUnitDetailsArray);
 
-            if(matchedValidBusinessUnitList.length > 0) {
+            if (matchedValidBusinessUnitList.length > 0) {
 
                 const authorizedPricingTransformationEnabledBusinessUnitList =
                     this.matchedPricingTransformationEnabledBusinessUnit(opcoAttributeBunit);
 
-                if(authorizedPricingTransformationEnabledBusinessUnitList.length > 0) {
+                if (authorizedPricingTransformationEnabledBusinessUnitList.length > 0) {
                     // Opco attribute matches one of the opcos and also is a pricing transformation enabled opco then return that opco
                     return authorizedPricingTransformationEnabledBusinessUnitList
                 } else {
@@ -86,10 +87,10 @@ class AuthorizationService {
         const requestedBunit = req.body.businessUnitNumber;
         const userDetailsData = authResponse.userDetailsData;
 
-        if(userDetailsData && Object.keys(userDetailsData).length > 0) {
+        if (userDetailsData && Object.keys(userDetailsData).length > 0) {
             const authorizedBunitListForTheUser = userDetailsData.authorizedBunitList;
             const filteredOutBunits = this.matchedValidBusinessUnitFromGivenList(requestedBunit, authorizedBunitListForTheUser)
-            if(filteredOutBunits.length > 0) {
+            if (filteredOutBunits.length > 0) {
                 logger.info(`User's requested opco: ${requestedBunit} matched with his authorized opcos, so request is authorized`);
                 return true;
             }
@@ -108,7 +109,7 @@ class AuthorizationService {
         rolesArray.forEach(roleFromUserLogin => {
             const hierarchyNumber = authorizationRoleHierarchy[roleFromUserLogin];
 
-            if(selectedHierarchyNumber > hierarchyNumber) {
+            if (selectedHierarchyNumber > hierarchyNumber) {
                 selectedAuthorizedRole = roleFromUserLogin;
                 selectedHierarchyNumber = hierarchyNumber;
             }
