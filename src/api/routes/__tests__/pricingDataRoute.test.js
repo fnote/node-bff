@@ -25,7 +25,7 @@ jest.mock('../../../initializer', () => ({
     initializer: (req, res, next) => next(),
 }));
 
-jest.mock('../../../service/auth/businessUnitAuthorization', () => ({
+jest.mock('../../../service/auth/authorizationService', () => ({
     isAuthorizedRequest: () => {
         return true;
     },

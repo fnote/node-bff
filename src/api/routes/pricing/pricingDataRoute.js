@@ -9,21 +9,21 @@ import * as HttpStatus from 'http-status-codes';
 import AggregatedPricingDataService from '../../../service/pricing/aggregatedPricingDataService';
 import logger from '../../../util/logger';
 import {createErrorResponse} from '../../../mapper/responseMapper';
-import BusinessUnitAuthorization from '../../../service/auth/businessUnitAuthorization';
+import AuthorizationService from '../../../service/auth/authorizationService';
 
 export default () => {
     const cloudPricingRouter = new Router({mergeParams: true});
 
     cloudPricingRouter.post('/pricing-data', async (req, res) => {
         try {
-            const isAuthorized = BusinessUnitAuthorization.isAuthorizedRequest(req, res);
+            const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
 
             if(isAuthorized) {
                 const responseData = await AggregatedPricingDataService.getAggregatedPricingData(req);
                 res.status(HttpStatus.OK).send(responseData);
             } else {
                 res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized',
-                    'User is not authorized to perform this action/ for the requested opco',
+                    'User is not authorized to perform this action in the requested opco',
                     null, 'User authorization validations failed'));
             }
         } catch (error) {

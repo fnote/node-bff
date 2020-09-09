@@ -1,5 +1,3 @@
-import {ROLE_APP_ADMIN, ROLE_GENERAL_USER} from "../../util/constants";
-
 /**
  * BusinessUnit Authorization unit tests
  *
@@ -7,9 +5,18 @@ import {ROLE_APP_ADMIN, ROLE_GENERAL_USER} from "../../util/constants";
  * */
 jest.mock('../../dao/businessUnitDao');
 
-import BusinessUnitAuthorization from '../auth/businessUnitAuthorization';
+import AuthorizationService from '../auth/authorizationService';
 import {jest} from "@jest/globals";
 import BusinessUnitDao from '../../dao/businessUnitDao'
+import {
+    ROLE_APP_ADMIN,
+    ROLE_CFO,
+    ROLE_DRM,
+    ROLE_DSM,
+    ROLE_GENERAL_USER,
+    ROLE_RSM, ROLE_VP_MERCHANDISING,
+    ROLE_VP_SALES
+} from "../../util/constants";
 
 const OTHER_ROLE = 'otherRole'
 
@@ -51,19 +58,19 @@ const bUnitDetailsArray = [
 describe('Auth Service', () => {
     test('should send the bunit array of the given bunit when the passed bunit matches with one in the passed bunit details array', async () => {
 
-        const filteredArray = BusinessUnitAuthorization.matchedValidBusinessUnitFromGivenList('001', bUnitDetailsArray);
+        const filteredArray = AuthorizationService.matchedValidBusinessUnitFromGivenList('001', bUnitDetailsArray);
         expect(filteredArray).toEqual([bUnitDetailForOpco001]);
     });
 
     test('should send an empty array when the passed bunit does not match with one in the passed bunit details array', async () => {
 
-        const filteredArray = BusinessUnitAuthorization.matchedValidBusinessUnitFromGivenList('900', bUnitDetailsArray);
+        const filteredArray = AuthorizationService.matchedValidBusinessUnitFromGivenList('900', bUnitDetailsArray);
         expect(filteredArray).toEqual([]);
     });
 
     test('should send an empty array when the passed bunit details is empty', async () => {
 
-        const filteredArray = BusinessUnitAuthorization.matchedValidBusinessUnitFromGivenList('001', []);
+        const filteredArray = AuthorizationService.matchedValidBusinessUnitFromGivenList('001', []);
         expect(filteredArray).toEqual([]);
     });
 
@@ -71,45 +78,45 @@ describe('Auth Service', () => {
         'and is in the bunit details array', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray)
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = BusinessUnitAuthorization.matchedPricingTransformationEnabledBusinessUnit('001');
+        const filteredArray = AuthorizationService.matchedPricingTransformationEnabledBusinessUnit('001');
         expect(filteredArray).toEqual([bUnitDetailForOpco001]);
     });
 
     test('should send an empty array when the passed bunit has periscope_on as N although it is in the bunit details array', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray)
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = BusinessUnitAuthorization.matchedPricingTransformationEnabledBusinessUnit('002');
+        const filteredArray = AuthorizationService.matchedPricingTransformationEnabledBusinessUnit('002');
         expect(filteredArray).toEqual([]);
     });
 
     test('should send an empty array when the passed bunit does not match a bunit in the bunit details array', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray)
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = BusinessUnitAuthorization.matchedPricingTransformationEnabledBusinessUnit('900');
+        const filteredArray = AuthorizationService.matchedPricingTransformationEnabledBusinessUnit('900');
         expect(filteredArray).toEqual([]);
     });
 
     test('should send an empty array when the bunit details array is null', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(null)
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = BusinessUnitAuthorization.matchedPricingTransformationEnabledBusinessUnit('001');
+        const filteredArray = AuthorizationService.matchedPricingTransformationEnabledBusinessUnit('001');
         expect(filteredArray).toEqual([]);
     });
 
     test('should send the bunit array of that have periscope_on as Y when called generatePricingTransformationEnabledAllBusinessUnit', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray)
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = BusinessUnitAuthorization.generatePricingTransformationEnabledAllBusinessUnit();
+        const filteredArray = AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit();
         expect(filteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
     });
 
@@ -134,54 +141,54 @@ describe('Auth Service', () => {
 
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArrayWithNoPerisoceOnYes)
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = BusinessUnitAuthorization.generatePricingTransformationEnabledAllBusinessUnit();
+        const filteredArray = AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit();
         expect(filteredArray).toEqual([]);
     });
 
     test('should send an empty array when called bUnitDetailsArray is empty', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue('')
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = BusinessUnitAuthorization.generatePricingTransformationEnabledAllBusinessUnit();
+        const filteredArray = AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit();
         expect(filteredArray).toEqual([]);
     });
 
     test('should send the bunit array of that have periscope_on as Y when called with user role: ROLE_APP_ADMIN', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = BusinessUnitAuthorization.getAuthorizedBusinessUnits('001', ROLE_APP_ADMIN);
+        const filteredArray = AuthorizationService.getAuthorizedBusinessUnits('001', ROLE_APP_ADMIN);
         expect(filteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
     });
 
     test('should send the bunit array of that have periscope_on as Y when called with user role: ROLE_GENERAL_USER', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = BusinessUnitAuthorization.getAuthorizedBusinessUnits('001', ROLE_GENERAL_USER);
+        const filteredArray = AuthorizationService.getAuthorizedBusinessUnits('001', ROLE_GENERAL_USER);
         expect(filteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
     });
 
     test('should send an empty array when opcoAtrribute is passed as null', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = BusinessUnitAuthorization.getAuthorizedBusinessUnits(null, OTHER_ROLE);
+        const filteredArray = AuthorizationService.getAuthorizedBusinessUnits(null, OTHER_ROLE);
         expect(filteredArray).toEqual([]);
     });
 
     test('should send an empty array when opcoAtrribute is passed empty', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = BusinessUnitAuthorization.getAuthorizedBusinessUnits('', OTHER_ROLE);
+        const filteredArray = AuthorizationService.getAuthorizedBusinessUnits('', OTHER_ROLE);
         expect(filteredArray).toEqual([]);
     });
 
@@ -189,18 +196,18 @@ describe('Auth Service', () => {
         'that satisfies the authorization condition: one matching opco and it is periscope_on Y', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = BusinessUnitAuthorization.getAuthorizedBusinessUnits('001', OTHER_ROLE);
+        const filteredArray = AuthorizationService.getAuthorizedBusinessUnits('001', OTHER_ROLE);
         expect(filteredArray).toEqual([bUnitDetailForOpco001]);
     });
 
     test('should send an empty array even though the passed bunit it a matching one to the list of bunit but is not periscope_on N', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = BusinessUnitAuthorization.getAuthorizedBusinessUnits('005', OTHER_ROLE);
+        const filteredArray = AuthorizationService.getAuthorizedBusinessUnits('005', OTHER_ROLE);
         expect(filteredArray).toEqual([]);
     });
 
@@ -208,9 +215,9 @@ describe('Auth Service', () => {
         'because it would be an indicator like 000: corporate, 341: sysco labs', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = BusinessUnitAuthorization.getAuthorizedBusinessUnits('341', OTHER_ROLE);
+        const filteredArray = AuthorizationService.getAuthorizedBusinessUnits('341', OTHER_ROLE);
         expect(filteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
     });
 
@@ -249,9 +256,9 @@ describe('Auth Service', () => {
             }
         };
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const isAuthorized = BusinessUnitAuthorization.isAuthorizedRequest(req, res);
+        const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
         expect(isAuthorized).toEqual(true);
     });
 
@@ -290,9 +297,9 @@ describe('Auth Service', () => {
             }
         };
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const isAuthorized = BusinessUnitAuthorization.isAuthorizedRequest(req, res);
+        const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
         expect(isAuthorized).toEqual(false);
     });
 
@@ -311,9 +318,9 @@ describe('Auth Service', () => {
             }
         };
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const isAuthorized = BusinessUnitAuthorization.isAuthorizedRequest(req, res);
+        const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
         expect(isAuthorized).toEqual(false);
     });
 
@@ -341,9 +348,9 @@ describe('Auth Service', () => {
             }
         };
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const isAuthorized = BusinessUnitAuthorization.isAuthorizedRequest(req, res);
+        const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
         expect(isAuthorized).toEqual(false);
     });
 
@@ -370,9 +377,33 @@ describe('Auth Service', () => {
             }
         };
 
-        await BusinessUnitAuthorization.loadBusinessUnitDetails();
+        await AuthorizationService.loadBusinessUnitDetails();
 
-        const isAuthorized = BusinessUnitAuthorization.isAuthorizedRequest(req, res);
+        const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
         expect(isAuthorized).toEqual(false);
+    });
+
+    test('should send ROLE_APP_ADMIN when passed other roles is less priority in the hierarchy', async () => {
+        const rolesArrayFromUser = [ROLE_APP_ADMIN, ROLE_GENERAL_USER]
+        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser);
+        expect(selectedRole).toEqual(ROLE_APP_ADMIN);
+    });
+
+    test('should send ROLE_GENERAL_USER when passed other roles is less priority in the hierarchy', async () => {
+        const rolesArrayFromUser = [ROLE_CFO, ROLE_GENERAL_USER, ROLE_DSM, ROLE_DRM]
+        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser);
+        expect(selectedRole).toEqual(ROLE_GENERAL_USER);
+    });
+
+    test('should send ROLE_VP_MERCHANDISING when passed other roles is less priority in the hierarchy', async () => {
+        const rolesArrayFromUser = [ROLE_DSM, ROLE_VP_SALES, ROLE_DRM, ROLE_CFO, ROLE_RSM, ROLE_VP_MERCHANDISING]
+        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser);
+        expect(selectedRole).toEqual(ROLE_VP_MERCHANDISING);
+    });
+
+    test('should send an empty role when no role array is passed', async () => {
+        const rolesArrayFromUser = []
+        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser);
+        expect(selectedRole).toEqual('');
     });
 });

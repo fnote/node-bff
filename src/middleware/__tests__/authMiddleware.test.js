@@ -5,12 +5,12 @@ import * as HttpStatus from "http-status-codes";
  *
  * @author: adis0892 on 26/07/20
  * */
-jest.mock('../../service/auth/authService');
+jest.mock('../../service/auth/authenticateService');
 
 import {jest} from '@jest/globals';
 import {authMiddleware} from '../authMiddleware';
 import {AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK, LOGIN_URL, LOGOUT_URL} from '../../util/constants';
-import AuthService from '../../service/auth/authService';
+import AuthenticateService from '../../service/auth/authenticateService';
 import httpMocks from 'node-mocks-http'
 
 beforeEach(() => {
@@ -29,7 +29,7 @@ const next = jest.fn();
 
 describe('Auth Middleware', () => {
     test('should pass the username and call next when auth process completed', async () => {
-        await AuthService.prepareToValidateToken.mockImplementationOnce(() => ({
+        await AuthenticateService.prepareToValidateToken.mockImplementationOnce(() => ({
                 authenticated: true,
                 username: 'test-username',
             })
@@ -62,7 +62,7 @@ describe('Auth Middleware', () => {
     });
 
     test('should skip authentication when login endpoint is called', async () => {
-        await AuthService.prepareToValidateToken.mockImplementationOnce(() => ({
+        await AuthenticateService.prepareToValidateToken.mockImplementationOnce(() => ({
                 authenticated: true,
                 username: 'test-username',
             })
@@ -79,7 +79,7 @@ describe('Auth Middleware', () => {
     });
 
     test('should give unauthorized http response status when not login endpoint is called and authenticate: false', async () => {
-        await AuthService.prepareToValidateToken.mockImplementationOnce(() => ({
+        await AuthenticateService.prepareToValidateToken.mockImplementationOnce(() => ({
                 authenticated: false,
                 username: 'test-username',
             })
@@ -87,8 +87,6 @@ describe('Auth Middleware', () => {
 
         const req = httpMocks.createRequest();
         const res = httpMocks.createResponse();
-
-
 
        await authMiddleware(req, res, next);
 
@@ -100,7 +98,7 @@ describe('Auth Middleware', () => {
         const req = httpMocks.createRequest();
         const res = httpMocks.createResponse();
 
-        await AuthService.prepareToValidateToken.mockImplementationOnce(() => {
+        await AuthenticateService.prepareToValidateToken.mockImplementationOnce(() => {
             throw Error('test-error');
             }
         );
