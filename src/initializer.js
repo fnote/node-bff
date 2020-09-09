@@ -1,7 +1,7 @@
 import {loadSsmConfigs} from './service/aws/ssmService';
 import {getAccessToken} from './util/accessTokenGenerator';
 import logger from './util/logger';
-import BusinessUnitAuthorization from "./service/auth/businessUnitAuthorization";
+import AuthorizationService from "./service/auth/authorizationService";
 
 /**
  * Lambda initializer for hot starts
@@ -23,7 +23,7 @@ export async function initializer(req, res, next) {
              */
             await loadSsmConfigs();
 
-            await BusinessUnitAuthorization.loadBusinessUnitDetails();
+            await AuthorizationService.loadBusinessUnitDetails();
 
             /**
              * Generate access token at the synchronous level to avoid
