@@ -16,7 +16,7 @@ const getConnection = async () => {
     return mysql.createConnection({
         host: host,
         user: user,password,
-        database: 'CPPDB_Common01d'
+        database: `${process.env.COMMON_DB_NAME}`
     });
 }
 
