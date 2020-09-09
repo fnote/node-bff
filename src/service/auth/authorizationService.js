@@ -5,8 +5,10 @@
  * */
 
 import BusinessUnitDao from '../../dao/businessUnitDao'
-import {ROLE_APP_ADMIN, ROLE_GENERAL_USER} from "../../util/constants";
-class BusinessUnitAuthorization {
+import {MAX_ROLE_HIERARCHY_NUMBER, ROLE_APP_ADMIN, ROLE_GENERAL_USER} from "../../util/constants";
+import {getAuthorizationRoleHierarchy} from "../../config/configs";
+import logger from "../../util/logger";
+class AuthorizationService {
     businessUnitDetailsArray;
 
     loadBusinessUnitDetails = async () => {
@@ -46,9 +48,11 @@ class BusinessUnitAuthorization {
     getAuthorizedBusinessUnits = (opcoAttributeBunit, userRole) => {
         if(userRole === ROLE_APP_ADMIN || userRole === ROLE_GENERAL_USER) {
             // If these user roles, they should have access to all opcos
+            logger.info(`User because of his user role: ${userRole} is given access to all opcos`);
             return this.generatePricingTransformationEnabledAllBusinessUnit();
-        } else if (!opcoAttributeBunit) {
-            // If AD opco attribute is null or empty, then he should not have access to any opco
+        } else if (!opcoAttributeBunit || !userRole) {
+            // If AD opco attribute or user role is null or empty, then he should not have access to any opco
+            logger.info(`User's opco attribute or user role is empty so given access to no opco`);
             return []
         } else {
             const matchedValidBusinessUnitList =
@@ -63,8 +67,9 @@ class BusinessUnitAuthorization {
                     // Opco attribute matches one of the opcos and also is a pricing transformation enabled opco then return that opco
                     return authorizedPricingTransformationEnabledBusinessUnitList
                 } else {
-                    // Opco attribute matches one of the opcos but is not a pricing transformation enabled opco
+                    // Opco attribute matches one of the opcos but is not a pricing transformation enabled opcos
                     // so then he has access to no matching opco
+                    logger.info(`User's opco: ${opcoAttributeBunit} does not match with pricing transformation enabled opcos, so giving access to no opco`);
                     return []
                 }
             } else {
@@ -85,11 +90,32 @@ class BusinessUnitAuthorization {
             const authorizedBunitListForTheUser = userDetailsData.authorizedBunitList;
             const filteredOutBunits = this.matchedValidBusinessUnitFromGivenList(requestedBunit, authorizedBunitListForTheUser)
             if(filteredOutBunits.length > 0) {
+                logger.info(`User's requested opco: ${requestedBunit} matched with his authorized opcos, so request is authorized`);
                 return true;
             }
+            logger.info(`User's requested opco: ${requestedBunit} does nt match with his authorized opcos: ${authorizedBunitListForTheUser},
+             so request is NOT authorized`);
         }
+        logger.info(`User details data is empty for the request: ${req}, so request is NOT authorized`);
         return false;
+    }
+
+    getTheRoleWithHighestAuthority = (rolesArray) => {
+        const authorizationRoleHierarchy = getAuthorizationRoleHierarchy();
+        let selectedAuthorizedRole = '';
+
+        let selectedHierarchyNumber = MAX_ROLE_HIERARCHY_NUMBER;
+        rolesArray.forEach(roleFromUserLogin => {
+            const hierarchyNumber = authorizationRoleHierarchy[roleFromUserLogin];
+
+            if(selectedHierarchyNumber > hierarchyNumber) {
+                selectedAuthorizedRole = roleFromUserLogin;
+                selectedHierarchyNumber = hierarchyNumber;
+            }
+        });
+        logger.info(`Out of all the user roles, user's highest authorized role was selected as ${selectedAuthorizedRole}`);
+        return selectedAuthorizedRole;
     }
 }
 
-export default new BusinessUnitAuthorization();
+export default new AuthorizationService();
