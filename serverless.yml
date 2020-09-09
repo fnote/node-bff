@@ -85,10 +85,10 @@ functions:
 #    events: ${file(./serverless-routes.js)}
     events:
       - alb:
-         listenerArn: !Ref LoadBalancerListenerHTTP
-         priority: 1
-         conditions:
-           path: /v1/*
+          listenerArn: !Ref LoadBalancerListenerHTTP
+          priority: 1
+          conditions:
+            path: /v1/*
       - alb:
           listenerArn: !Ref LoadBalancerListenerHTTPS
           priority: 2
