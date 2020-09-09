@@ -10,14 +10,14 @@ import jwkToPem from "jwk-to-pem";
 import {getAuthConfig} from "../../config/configs";
 import {httpClient} from '../../httpClient/httpClient';
 import {HTTP_GET} from "../../util/constants";
-import BusinessUnitAuthorization from '../auth/businessUnitAuthorization'
+import AuthorizationService from './authorizationService'
 
 const unauthenticatedReturn = {
     authenticated: false,
     username: null
 };
 
-class AuthService {
+class AuthenticateService {
     pems;
 
     constructor() {
@@ -26,7 +26,10 @@ class AuthService {
 
     prepareToValidateToken = async (req, res) => {
         try {
-            const accessToken = req.headers[this.authConfig.CONFIG.authTokenHeaderAttribute];
+            let accessToken = req.headers[this.authConfig.CONFIG.authTokenHeaderAttribute];
+            accessToken = 'eyJraWQiOiJyTGtxaFwvd0tua3NJUmlLZnl4VzFiTEtJXC9sTTBWSjY4a2RBU0hmeFBBNG89IiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiIzZTY1MWQ5ZS05ZWJjLTRkM2ItYTNjNS1mY2Y4MDhjYmFiZDciLCJjb2duaXRvOmdyb3VwcyI6WyJ1cy1lYXN0LTFfb0ZNTlZzamQ0X0F6dXJlQUQiXSwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJvcGVuaWQiLCJhdXRoX3RpbWUiOjE1OTk1OTYwOTMsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX29GTU5Wc2pkNCIsImV4cCI6MTU5OTU5OTY5MywiaWF0IjoxNTk5NTk2MDkzLCJ2ZXJzaW9uIjoyLCJqdGkiOiIwNTJlZjUxMC1hYTMzLTRlODItODg5NS1iMDI3OWMxMjUyYmMiLCJjbGllbnRfaWQiOiIzYzEycXVoOG1zb2ZpOWZpbjhwZmM5MTAxdCIsInVzZXJuYW1lIjoiYXp1cmVhZF9hZGlzMDg5MiJ9.IeUYd1aZ7xJNEI3C4rf_MVXXQpejSAfC1I0YICqs59ClgyRluzGs91E44Iq1gIMKqaOPWQv5-W9_B_iOwWeK4Cr-PKTaQZjlSjlsL6q2wqIVAYIMScBaWwXssvfENtWqz71BverRGLMQO5bBNk6mIooFPFIsb4fpMN2V-sF9qCZcBw9LCwT1SPhmGTvvo7wOhOFQSfBT-ob4ag2Apb6mTBXfUVwXYFEMM-BY740_sQVH3-8sT08Fybw-NC3LW3NCHftIIZKc4XltLAL2rVLhcpHhDyBUuaWD1WrQ9ZdElPpC5a1K6Ab7jUBXbio4Ltbs45XxLyg9WNuWEgLy-iRtKg'
+
+           logger.debug(`Given access token: ${accessToken}`)
 
             if (!accessToken) {
                 let errorMessage = 'Access token is missing from header';
@@ -129,7 +132,8 @@ class AuthService {
     }
 
     decodeUserClaimToken = (req, res) => {
-        const userClaimToken = req.headers[this.authConfig.CONFIG.userClaimHeaderAttribute];
+        let userClaimToken = req.headers[this.authConfig.CONFIG.userClaimHeaderAttribute];
+        logger.debug(`Given user claim token: ${userClaimToken}`);
 
         const decodedPayloadFromJwt = JSON.parse(Buffer.from(userClaimToken.split('.')[1], 'base64').toString());
 
@@ -142,9 +146,34 @@ class AuthService {
                     const opcoParsed = parseInt(opcoString);
                     let authorizedBunitList;
                     if (isNaN(opcoParsed)) {
+                        logger.info(`User's opco attribute: ${opcoParsed} is not numeric parsable, so returning empty set of authorized opco list`);
                         authorizedBunitList = [];
                     } else {
-                        authorizedBunitList = BusinessUnitAuthorization.getAuthorizedBusinessUnits(opcoString, decodedPayloadFromJwt.profile);
+                        //User roles can come in two formats
+                        //If it's single role: it'll come like a string "rsm"
+                        //If it's multiple: it'll come like "[appadmin, generaluser]"
+
+                        const userRoles = decodedPayloadFromJwt.profile;
+                        let selectedUserRole = userRoles
+
+                        try {
+                            const userRolesArray = userRoles.split(',').map((item) => {
+                                return item.trim();
+                            });
+
+                            if(userRolesArray.length > 1) {
+                                userRolesArray[0] = userRolesArray[0].substring(1);
+
+                                const lastElement = userRolesArray[userRolesArray.length - 1];
+                                userRolesArray[userRolesArray.length - 1] = lastElement.substring(0, lastElement.length - 1);
+
+                                selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray);
+                            }
+                        } catch (e) {
+                            logger.error(`Error in parsing the user role value: ${userRoles}`);
+                            selectedUserRole = userRoles;
+                        }
+                        authorizedBunitList = AuthorizationService.getAuthorizedBusinessUnits(opcoString, selectedUserRole);
                     }
 
                     const userDetailsData = {}
@@ -154,6 +183,11 @@ class AuthService {
                     userDetailsData.username = username;
                     userDetailsData.email = decodedPayloadFromJwt.email;
                     userDetailsData.jobTitle = decodedPayloadFromJwt.zoneinfo;
+
+                    logger.info(`Authenticated user's user details: First name: ${userDetailsData.firstName}
+                    Last name: ${userDetailsData.lastName} Username: ${userDetailsData.username} Email: ${userDetailsData.email}`);
+
+                    logger.info(`User is identified with a job title: ${userDetailsData.jobTitle}`);
 
                     return {
                         authenticated: true,
@@ -174,4 +208,4 @@ class AuthService {
     }
 }
 
-export default new AuthService();
+export default new AuthenticateService();
