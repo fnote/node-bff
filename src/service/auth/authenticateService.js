@@ -172,7 +172,8 @@ class AuthenticateService {
                             logger.error(`Error in parsing the user role value: ${userRoles}`);
                             selectedUserRole = userRoles;
                         }
-                        authorizedBunitList = AuthorizationService.getAuthorizedBusinessUnits(opcoString, selectedUserRole);
+                        authorizedBunitList = AuthorizationService
+                            .getAuthorizedBusinessUnits(opcoString, selectedUserRole);
                     }
 
                     const userDetailsData = {}
@@ -184,7 +185,8 @@ class AuthenticateService {
                     userDetailsData.jobTitle = decodedPayloadFromJwt.zoneinfo;
 
                     logger.info(`Authenticated user's user details: First name: ${userDetailsData.firstName}
-                    Last name: ${userDetailsData.lastName} Username: ${userDetailsData.username} Email: ${userDetailsData.email}`);
+                    Last name: ${userDetailsData.lastName} Username: ${userDetailsData.username} 
+                    Email: ${userDetailsData.email}`);
 
                     logger.info(`User is identified with a job title: ${userDetailsData.jobTitle}`);
 
@@ -196,7 +198,8 @@ class AuthenticateService {
                     };
                 } else {
                     logger.error(`Username in the auth token is not in the expected format: ${username}`);
-                    return this.sendUnauthenticatedErrorResponse(res, 'Username given in the authentication token is invalid');
+                    return this.sendUnauthenticatedErrorResponse(res,
+                        'Username given in the authentication token is invalid');
 
                 }
             } else {
