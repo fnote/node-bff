@@ -8,7 +8,7 @@ import jwkToPem from 'jwk-to-pem';
 import * as jwt from 'jsonwebtoken';
 import {jest} from '@jest/globals';
 import {getAuthConfig} from '../../config/configs';
-import AuthService from '../auth/authService';
+import AuthenticateService from '../auth/authenticateService';
 
 jest.mock('../../httpClient/httpClient');
 jest.mock('jwk-to-pem');
@@ -80,7 +80,7 @@ jest.mock('../../config/configs', () => ({
 
 }));
 
-jest.mock('../auth/businessUnitAuthorization', () => ({
+jest.mock('../auth/authorizationService', () => ({
     getAuthorizedBusinessUnits: () => {
         return [
             {
@@ -134,12 +134,12 @@ describe('Auth Service', () => {
             callback(null, payload);
         });
 
-        const response = await AuthService.prepareToValidateToken(mockRequest, mockResponse);
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         expect(response).toEqual(authenticatedMockResponse);
     });
 
     test('should return unauthenticated response when auth token header is not present', async () => {
-        const response = await AuthService
+        const response = await AuthenticateService
             .prepareToValidateToken(mockRequestWithoutToken, mockResponse);
         const unauthenticatedReturn = {
             "authenticated": false,
@@ -151,7 +151,7 @@ describe('Auth Service', () => {
 
     test('should return unauthenticated response when decoded token is empty', async () => {
         jwt.decode.mockReturnValue(null);
-        const response = await AuthService.prepareToValidateToken(mockRequest, mockResponse);
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         const unauthenticatedReturn = {
             "authenticated": false,
             "cause": "Not a valid JWT token",
@@ -171,7 +171,7 @@ describe('Auth Service', () => {
             },
         });
 
-        const response = await AuthService.prepareToValidateToken(mockRequest, mockResponse);
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         const unauthenticatedReturn = {
             "authenticated": false,
             "cause": "The issuer of the token is invalid",
@@ -191,7 +191,7 @@ describe('Auth Service', () => {
             },
         });
 
-        const response = await AuthService.prepareToValidateToken(mockRequest, mockResponse);
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         const unauthenticatedReturn = {
             "authenticated": false,
             "cause": "Token is not an access token",
@@ -211,7 +211,7 @@ describe('Auth Service', () => {
             },
         });
 
-        const response = await AuthService.prepareToValidateToken(mockRequest, mockResponse);
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         const unauthenticatedReturn = {
             "authenticated": false,
             "cause": "Invalid access token",
@@ -237,7 +237,7 @@ describe('Auth Service', () => {
             callback(error, null);
         });
 
-        const response = await AuthService.prepareToValidateToken(mockRequest, mockResponse);
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         const unauthenticatedReturn = {
             "authenticated": false,
             "cause": "Token was failed to be verified",
@@ -265,7 +265,7 @@ describe('Auth Service', () => {
             callback(null, payload);
         });
 
-        const response = await AuthService.prepareToValidateToken(mockRequest, mockResponse);
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         const unauthenticatedReturn = {
             "authenticated": false,
             "cause": "Required variables for authentication are invalid",
@@ -289,7 +289,7 @@ describe('Auth Service', () => {
             throw new Error('test-error');
         });
 
-        const response = await AuthService.prepareToValidateToken(mockRequest, mockResponse);
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         const unauthenticatedReturn = {
             "authenticated": false,
             "cause": "Unexpected error occurred while validating the token",
