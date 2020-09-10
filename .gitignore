@@ -1,10 +1,20 @@
 # package directories
 node_modules
 jspm_packages
+.idea
 
-# Serverless directories
+# serverless directories
 .serverless
+
+# sonnar scanner
+.scannerwork
+
+# coverage
+coverage
 
 #webpack
 .webpack
+
+#node
+package-lock.json
 

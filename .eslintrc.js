@@ -1,11 +1,11 @@
 module.exports = {
   env: {
-    'es6': true,
-    'node': true
+    es6: true,
+    node: true,
+    jest: true
   },
   rules: {
-    'semi': ['error', 'ways'],
-    'quotes': ['error', 'double'],
+    'quotes': [2, 'single', { 'avoidEscape': true }],
     'no-unused-vars': ['error', { 'gsIgnorePattern': 'next' }],
     'consistent-return':'off',
     'class-methods-use-this':'off',
