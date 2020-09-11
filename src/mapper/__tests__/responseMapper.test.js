@@ -51,9 +51,12 @@ describe('Response Mapper', () => {
         };
 
         const errorResponseWithCause = {
-            status: ERROR,
+            status: {
+                "errorDetails": {
+                    "message": "cause"
+                }
+            },
             message,
-            cause: 'cause',
         };
         const res = createErrorResponse(error, message);
         expect(res).toEqual(errorResponseWithCause);
@@ -65,11 +68,10 @@ describe('Response Mapper', () => {
         };
 
         const errorResponseWithCause = {
-            status: ERROR,
-            message,
-            cause: {
-                message: 'cause',
+            status: {
+                "message": "cause"
             },
+            message
         };
 
         const res = createErrorResponse(error, message);

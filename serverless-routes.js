@@ -7,6 +7,8 @@ const routes = [
   { path: '/', method: GET },
   { path: '/support/healthcheck', method: GET},
   { path: '/batch/signed-url/{source}', method: POST },
+  { path: '/auth/login', method: GET },
+  { path: '/auth/logout', method: GET },
 ];
 
 module.exports = () => {

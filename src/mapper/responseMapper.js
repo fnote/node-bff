@@ -19,14 +19,14 @@ export function createSuccessResponse(data, message) {
     };
 }
 
-export function createErrorResponse(error, message) {
+export function createErrorResponse(status, message, error, cause) {
     const errorResponse = {
-        status: ERROR,
+        status: status || ERROR,
         message: message || 'Internal server error',
     };
 
-    if (error) {
-        errorResponse.cause = error.errorDetails ? error.errorDetails.message : error;
+    if (cause || error) {
+        errorResponse.cause = cause || (error.errorDetails ? error.errorDetails.message : error);
     }
     return errorResponse;
 }

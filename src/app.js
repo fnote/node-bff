@@ -11,6 +11,7 @@ import morgan from 'morgan';
 import * as HttpStatus from 'http-status-codes';
 import router from './api';
 import {handleError} from './middleware/errorHandler';
+import {authMiddleware} from "./middleware/authMiddleware";
 
 const correlator = require('express-correlation-id');
 
@@ -23,16 +24,15 @@ app.use(correlator());
 morgan.token('correlationId', (req) => req.correlationId());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
-app.use(cors());
+app.use(cors({credentials: true, origin: true}));
+
 app.use(bodyParser.json());
 
 app.options('/*', (req, res) => {
     res.send(HttpStatus.OK);
 });
 
-app.get('/v1/', (req, res) => {
-    res.send(`Cloud PCI bff is started. Environment: ${process.env.ENVIRONMENT}`);
-});
+app.use(authMiddleware);
 
 app.use('/v1/pci-bff/', router);
 
