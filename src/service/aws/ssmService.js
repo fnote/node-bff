@@ -12,18 +12,29 @@ export const ssmClient = new AWS.SSM({
     region: AWS_REGION,
 });
 
-export async function getParameterValueByName(paramName) {
+const values = {};
+const configBaseURL = `/CP/CLOUD-PCI/${process.env.STAGE}`;
+
+export async function loadSsmConfigs() {
+    logger.info('initializing: ');
     const params = {
-        Name: paramName,
+        Path: configBaseURL,
         Recursive: true,
         WithDecryption: true,
     };
-
-    try {
-        const response = await ssmClient.getParameter(params).promise();
-        return response && response.data ? response.data : null;
-    } catch (error) {
-        logger.error(error);
-        throw new Error(error.toString());
-    }
+    const response = await ssmClient.getParametersByPath(params).promise();
+    response.Parameters.forEach((element) => {
+        if (element.Name === `${configBaseURL}/APICENTRAL/ACCESSKEY`) {
+            values.ApiCentralAuthorizationToken = element.Value;
+        }
+    });
+    return values;
 }
+
+export const getSsmConfig = async (key) => {
+    if (values[key]) {
+        return values[key];
+    }
+    const msg = `configuration key ${key} not found`;
+    throw new Error(msg);
+};

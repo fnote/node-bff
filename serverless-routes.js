@@ -9,6 +9,7 @@ const routes = [
   { path: '/batch/signed-url/{source}', method: POST },
   { path: '/auth/login', method: GET },
   { path: '/auth/logout', method: GET },
+  { path: '/pricing/pricing-data', method: POST },
 ];
 
 module.exports = () => {

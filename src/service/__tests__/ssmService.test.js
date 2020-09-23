@@ -4,54 +4,57 @@
  * @author: gkar5861 on 23/06/20
  * */
 import sinon from 'sinon';
-import {getParameterValueByName, ssmClient} from '../aws/ssmService';
+import {getSsmConfig, loadSsmConfigs, ssmClient} from '../aws/ssmService';
 
-const paramName = 'paramName';
-const paramValue = 'paramValue';
-const stub = sinon.stub(ssmClient, 'getParameter');
+const paramName = 'ApiCentralAuthorizationToken';
+const paramValue = 'mockParamValue';
+const stub = sinon.stub(ssmClient, 'getParametersByPath');
+const ssmResponse = {
+    Parameters: [
+        {
+            Name: '/CP/CLOUD-PCI/undefined/APICENTRAL/ACCESSKEY',
+            Type: 'String',
+            Value: paramValue,
+            Version: 1,
+        },
+        {
+            Name: 'mock name',
+            Type: 'String',
+            Value: 'mock value',
+            Version: 1,
+        },
+    ],
+};
 
 describe('SSM Service', () => {
-    test('should return param value  when the the param name is given', async () => {
-        const promiseStub = sinon.stub().resolves({data: paramValue});
+    test('should return token value  when the the token param name is given', async () => {
+        const promiseStub = sinon.stub().resolves(ssmResponse);
         stub.callsFake(() => ({
             promise: promiseStub,
         }));
-        const val = await getParameterValueByName(paramName);
+        await loadSsmConfigs();
+        const val = await getSsmConfig(paramName);
         expect(val).toEqual(paramValue);
-        sinon.assert.calledWithExactly(ssmClient.getParameter, {
-            Name: paramName,
+        sinon.assert.calledWithMatch(ssmClient.getParametersByPath, {
+            Path: '/CP/CLOUD-PCI/undefined',
             Recursive: true,
             WithDecryption: true,
         });
         sinon.assert.calledOnce(promiseStub);
     });
 
-    test('should return null as param value  when there is no param value', async () => {
-        const promiseStubNull = sinon.stub().resolves({paramValue});
-        stub.callsFake(() => ({
-            promise: promiseStubNull,
-        }));
-        const val = await getParameterValueByName(paramName);
-        expect(val).toEqual(null);
-        sinon.assert.calledWithExactly(ssmClient.getParameter, {
-            Name: paramName,
-            Recursive: true,
-            WithDecryption: true,
-        });
-        sinon.assert.calledOnce(promiseStubNull);
-    });
-
     test('should throw exception when the the param name is invalid', async () => {
-        const promiseStubError = sinon.stub().throws(new Error());
+        const promiseStub = sinon.stub().resolves(ssmResponse);
         stub.callsFake(() => ({
-            promise: promiseStubError,
+            promise: promiseStub,
         }));
-        expect(() => getParameterValueByName('')).rejects.toThrowError(new Error('Error'));
-        sinon.assert.calledWithExactly(ssmClient.getParameter, {
-            Name: '',
+        await loadSsmConfigs();
+        expect(() => getSsmConfig('')).rejects.toThrowError(new Error('configuration key  not found'));
+        sinon.assert.calledWithMatch(ssmClient.getParametersByPath, {
+            Path: '/CP/CLOUD-PCI/undefined',
             Recursive: true,
             WithDecryption: true,
         });
-        sinon.assert.calledOnce(promiseStubError);
+        sinon.assert.calledOnce(promiseStub);
     });
 });

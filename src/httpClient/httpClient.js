@@ -5,6 +5,7 @@
  * */
 import axios from 'axios';
 import HttpClientException from '../exception/httpClientException';
+import {HTTP_CLIENT_EXCEPTION} from '../exception/exceptionCodes';
 
 class HttpClient {
     constructor(configs) {
@@ -21,9 +22,10 @@ class HttpClient {
                 params,
             });
         } catch (error) {
-            throw new HttpClientException(error);
+            throw new HttpClientException(error, HTTP_CLIENT_EXCEPTION);
         }
     }
 }
 
-export default new HttpClient();
+export default HttpClient;
+export const httpClient = new HttpClient();

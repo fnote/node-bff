@@ -4,12 +4,14 @@
  * @author: gkar5861 on 22/06/20
  * */
 export default class HttpClientException extends Error {
-    constructor(error) {
+    constructor(error, errorCode) {
         super(error.toString());
         this.name = this.constructor.name;
         Error.captureStackTrace(this, this.constructor);
         this.stack += `\nCaused By:\n${error.stack}`;
         this.errorDetails = {};
+        this.errorCode = errorCode;
+
         if (error.response) {
             this.errorDetails.response = {
                 data: error.response.data,
@@ -32,6 +34,10 @@ export default class HttpClientException extends Error {
         }
         this.errorDetails.message = error.message;
         this.errorDetails.config = error.config;
+    }
+
+    setErrorCode(errorCode) {
+        this.errorCode = errorCode;
     }
 
     getStatus() {
