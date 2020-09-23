@@ -26,6 +26,12 @@ export async function loadSsmConfigs() {
     response.Parameters.forEach((element) => {
         if (element.Name === `${configBaseURL}/APICENTRAL/ACCESSKEY`) {
             values.ApiCentralAuthorizationToken = element.Value;
+        } else if (element.Name === `${configBaseURL}/DATABASE/COMMON/DB_URL`) {
+            values.commonDbURL = element.Value;
+        } else if (element.Name === `${configBaseURL}/DATABASE/COMMON/PASSWORD`) {
+            values.commonDbPassword = element.Value;
+        } else if (element.Name === `${configBaseURL}/DATABASE/COMMON/USERNAME`) {
+            values.commonDbUsername = element.Value;
         }
     });
     return values;

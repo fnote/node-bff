@@ -5,9 +5,10 @@
  * */
 import {ERROR} from '../../util/constants';
 import {handleError} from '../errorHandler';
+import {INTERNAL_SERVER_ERROR} from "http-status-codes";
 
 const message = 'message';
-const errorType = 'Internal Error';
+const errorType = INTERNAL_SERVER_ERROR;
 const error = {
     name: errorType,
     message,
@@ -16,10 +17,11 @@ const error = {
 describe('Error Handler', () => {
     test('should return error response as status error', async () => {
         const response2 = {
+            "cause": undefined,
             status: ERROR,
-            name: errorType,
             message,
         };
+
         const jsonObj = jest.fn();
         const responsePassed = {
             status: jest.fn(() => ({

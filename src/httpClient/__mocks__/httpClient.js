@@ -63,13 +63,17 @@ class HttpClient {
 
         if (JSON.stringify(data) === JSON.stringify(batchApiMockRequestBody)) {
             return batchApiMockResponse;
-        } if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
+        }
+        if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
             return cloudPricingMockResponse;
-        } if (URL.includes('/opcos/068/products/7203474')) {
+        }
+        if (URL.includes('/opcos/068/products/7203474')) {
             return productInfoMockResponse;
-        } if (URL.includes('/opcos/999/products/9999999')) {
+        }
+        if (URL.includes('/opcos/999/products/9999999')) {
             throw new HttpClientException('Http client exception', HTTP_CLIENT_EXCEPTION);
-        } if (JSON.stringify(data) === JSON
+        }
+        if (JSON.stringify(data) === JSON
             .stringify(cloudPricingMockRequestForErrorScenario.body)) {
             throw new Error('test-error');
         } else if (JSON.stringify(data) === JSON
