@@ -54,7 +54,7 @@ const bUnitDetailsArray = [
         bunit_name: 'Sysco Intermountain',
         periscope_on: 'N'
     }
-]
+];
 
 describe('Auth Service', () => {
     test('should send the bunit array of the given bunit when the passed bunit matches with one in the passed bunit details array', async () => {
@@ -77,7 +77,7 @@ describe('Auth Service', () => {
 
     test('should send the bunit array of the given bunit when the passed bunit matches one bunit that has periscope_on as Y ' +
         'and is in the bunit details array', async () => {
-        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray)
+        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
         await AuthorizationService.loadBusinessUnitDetails();
 
@@ -86,7 +86,7 @@ describe('Auth Service', () => {
     });
 
     test('should send an empty array when the passed bunit has periscope_on as N although it is in the bunit details array', async () => {
-        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray)
+        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
         await AuthorizationService.loadBusinessUnitDetails();
 
@@ -95,7 +95,7 @@ describe('Auth Service', () => {
     });
 
     test('should send an empty array when the passed bunit does not match a bunit in the bunit details array', async () => {
-        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray)
+        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
         await AuthorizationService.loadBusinessUnitDetails();
 
@@ -104,7 +104,7 @@ describe('Auth Service', () => {
     });
 
     test('should send an empty array when the bunit details array is null', async () => {
-        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(null)
+        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(null);
 
         await AuthorizationService.loadBusinessUnitDetails();
 
@@ -113,7 +113,7 @@ describe('Auth Service', () => {
     });
 
     test('should send the bunit array of that have periscope_on as Y when called generatePricingTransformationEnabledAllBusinessUnit', async () => {
-        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray)
+        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
         await AuthorizationService.loadBusinessUnitDetails();
 
@@ -140,7 +140,7 @@ describe('Auth Service', () => {
             }
         ]
 
-        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArrayWithNoPerisoceOnYes)
+        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArrayWithNoPerisoceOnYes);
 
         await AuthorizationService.loadBusinessUnitDetails();
 
@@ -149,7 +149,7 @@ describe('Auth Service', () => {
     });
 
     test('should send an empty array when called bUnitDetailsArray is empty', async () => {
-        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue('')
+        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue('');
 
         await AuthorizationService.loadBusinessUnitDetails();
 
@@ -385,25 +385,25 @@ describe('Auth Service', () => {
     });
 
     test('should send ROLE_APP_ADMIN when passed other roles is less priority in the hierarchy', async () => {
-        const rolesArrayFromUser = [ROLE_APP_ADMIN, ROLE_GENERAL_USER]
+        const rolesArrayFromUser = [ROLE_APP_ADMIN, ROLE_GENERAL_USER];
         const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser);
         expect(selectedRole).toEqual(ROLE_APP_ADMIN);
     });
 
     test('should send ROLE_GENERAL_USER when passed other roles is less priority in the hierarchy', async () => {
-        const rolesArrayFromUser = [ROLE_CFO, ROLE_GENERAL_USER, ROLE_DSM, ROLE_DRM]
+        const rolesArrayFromUser = [ROLE_CFO, ROLE_GENERAL_USER, ROLE_DSM, ROLE_DRM];
         const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser);
         expect(selectedRole).toEqual(ROLE_GENERAL_USER);
     });
 
     test('should send ROLE_VP_MERCHANDISING when passed other roles is less priority in the hierarchy', async () => {
-        const rolesArrayFromUser = [ROLE_DSM, ROLE_VP_SALES, ROLE_DRM, ROLE_CFO, ROLE_RSM, ROLE_VP_MERCHANDISING]
+        const rolesArrayFromUser = [ROLE_DSM, ROLE_VP_SALES, ROLE_DRM, ROLE_CFO, ROLE_RSM, ROLE_VP_MERCHANDISING];
         const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser);
         expect(selectedRole).toEqual(ROLE_VP_MERCHANDISING);
     });
 
     test('should send an empty role when no role array is passed', async () => {
-        const rolesArrayFromUser = []
+        const rolesArrayFromUser = [];
         const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser);
         expect(selectedRole).toEqual('');
     });

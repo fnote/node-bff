@@ -60,7 +60,6 @@ class AuthenticateService {
             }
         } catch (e) {
             let errorMessage = `Unexpected error occurred while validating the token`;
-            console.log(e)
             logger.error(`${errorMessage}: ${e} stacktrace: ${e.stackTrace}`);
             return this.sendUnauthenticatedErrorResponse(res, errorMessage);
         }
@@ -145,7 +144,7 @@ class AuthenticateService {
                     const opcoParsed = parseInt(opcoString);
                     let authorizedBunitList;
                     if (isNaN(opcoParsed)) {
-                        logger.info(`User's opco attribute: ${opcoParsed} is not numeric parsable, so returning empty set of authorized opco list`);
+                        logger.warn(`User's opco attribute: ${opcoParsed} is not numeric parsable, so returning empty set of authorized opco list`);
                         authorizedBunitList = [];
                     } else {
                         //User roles can come in two formats
