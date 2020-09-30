@@ -6,6 +6,10 @@
   "scripts": {
     "start": "serverless offline start --stage local --httpPort 4000 ",
     "deploy": "serverless deploy -v --stage exe",
+    "package:dev": "serverless package --stage dev --package cloud-pci-bff-dev",
+    "package:stg": "serverless package --stage stg --package cloud-pci-bff-stg",
+    "package:exe": "serverless package --stage exe --package cloud-pci-bff-exe",
+    "package:prod": "serverless package --stage prod --package cloud-pci-bff-prod",
     "eslint": "eslint 'src/**/*.js'",
     "eslint-test": "eslint 'test/**/*.js' --fix",
     "eslint-fix": "eslint 'src/**/*.js' --fix",
