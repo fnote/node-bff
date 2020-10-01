@@ -1,8 +1,8 @@
 /**
-2000 - 2999 -> Downstream API Exceptions
-3000 - 3999 -> Configuration Exceptions
-4000 - 4999 -> Other
-*/
+ 2000 - 2999 -> Downstream API Exceptions
+ 3000 - 3999 -> Configuration Exceptions
+ 4000 - 4999 -> Other
+ */
 
 export const GENERAL_EXCEPTION = 4000;
 

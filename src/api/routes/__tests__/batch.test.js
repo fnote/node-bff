@@ -24,6 +24,10 @@ jest.mock('../../../initializer', () => ({
     initializer: (req, res, next) => next(),
 }));
 
+jest.mock('../../../initializer', () => ({
+    initializer: (req, res, next) => next(),
+}));
+
 const mockRequest = {
     fileNames: [
         'fileName1',

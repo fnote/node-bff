@@ -9,6 +9,10 @@ import {jest} from '@jest/globals';
 import app from '../../../app';
 import {CLOUD_PCI_BFF, CLOUD_PCI_BFF_VERSION} from '../../../util/constants';
 
+jest.mock('../../../initializer', () => ({
+    initializer: (req, res, next) => next(),
+}));
+
 jest.mock('../../../middleware/authMiddleware', () => ({
     authMiddleware: (req, res, next) => next(),
 }));

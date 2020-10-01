@@ -25,6 +25,13 @@ jest.mock('../../../initializer', () => ({
     initializer: (req, res, next) => next(),
 }));
 
+jest.mock('../../../service/auth/authorizationService', () => ({
+    isAuthorizedRequest: () => {
+        return true;
+    },
+
+}));
+
 describe('routes: /pricing-data', () => {
     test('get /pricing-data should return correct response with HTTP OK when the flow is correct', async () => {
         jest.setTimeout(100000);
@@ -33,13 +40,13 @@ describe('routes: /pricing-data', () => {
             .send(pricingDataMockRequest)
             .set('Accept', 'application/json')
             .then((res) => {
-                    expect(res.status).toEqual(HttpStatus.OK);
-                    expect(res.body).toBeDefined();
-                    expect(res.body).toEqual(PricingDataMockResponse);
-                    expect(res.body.cloudPricingResponse.cloudPricingResponseStatus)
-                        .toEqual(HttpStatus.OK);
-                    expect(res.body.itemInfoResponse.itemInfoResponseStatus).toEqual(HttpStatus.OK);
-                });
+                expect(res.status).toEqual(HttpStatus.OK);
+                expect(res.body).toBeDefined();
+                expect(res.body).toEqual(PricingDataMockResponse);
+                expect(res.body.cloudPricingResponse.cloudPricingResponseStatus)
+                    .toEqual(HttpStatus.OK);
+                expect(res.body.itemInfoResponse.itemInfoResponseStatus).toEqual(HttpStatus.OK);
+            });
     });
 
     test('get /pricing-data should return error response when the pricing call catches an error', async () => {
