@@ -46,7 +46,7 @@ provider:
       - ${ssm:/CP/CLOUD-PCI/SUBNET3}
   role: ${ssm:/CP/CLOUD-PCI/EXECUTIONROLE}
   alb:
-    targetGroupPrefix: pci-grbr-tg-${self:provider.environmentShort}-
+    targetGroupPrefix: cloud-pci-${self:provider.environmentShort}-
     authorizers:
       cognitoLoginAuth:
         type: 'cognito'
