@@ -147,8 +147,8 @@ class AuthenticateService {
                         opcoString = locale.substring(0, 3);
                         opcoParsed = parseInt(opcoString);
                     } catch (e) {
-                        logger.error(`Authorized OPCO value given in the auth token is not in the expected format: ${locale}. 
-                        So error occurred while processing: ${e}, stacktrace: ${e.stack}`);
+                        logger.error(`Authorized OPCO value given in the auth token is not in the expected format: ${locale}.
+                         So error occurred while processing: ${e}, stacktrace: ${e.stack}`);
 
                         return this.sendUnauthenticatedErrorResponse(res,
                             'Authorized OPCO given in the authentication token is invalid');
