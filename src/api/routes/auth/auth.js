@@ -16,7 +16,7 @@ export default () => {
     AuthRouter.get('/login', async (req, res) => {
         const {authResponse} = res.locals;
         if (authResponse && authResponse.authenticated) {
-            const username = authResponse.username;
+            const {username} = authResponse;
             logger.debug(`User: ${username} is being redirected after the login`);
             res.redirect(`${authConfig.CONFIG.loginRedirectionUrl}?username=${username}`);
         } else {
@@ -37,7 +37,7 @@ export default () => {
 
         const {authResponse} = res.locals;
         if (authResponse && authResponse.authenticated) {
-            const userDetailsData = authResponse.userDetailsData;
+            const {userDetailsData} = authResponse;
 
             if (userDetailsData && Object.keys(userDetailsData).length > 0) {
                 res.status(HttpStatus.OK).send(userDetailsData);

@@ -1,8 +1,8 @@
 import {AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK, LOGIN_URL, LOGOUT_URL} from '../util/constants';
 import AuthenticateService from '../service/auth/authenticateService';
 import logger from '../util/logger';
-import * as HttpStatus from "http-status-codes";
-import {createErrorResponse} from "../mapper/responseMapper";
+import * as HttpStatus from 'http-status-codes';
+import {createErrorResponse} from '../mapper/responseMapper';
 
 export async function authMiddleware(req, res, next) {
     if (process.env.STAGE !== 'LOCAL' && (req.url !== AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK) && (req.url !== LOGOUT_URL)) {
