@@ -140,9 +140,22 @@ class AuthenticateService {
                 const username = decodedPayloadFromJwt.username.split('_')[1];
                 if (username) {
                     const locale = decodedPayloadFromJwt.locale;
-                    const opcoString = locale.substring(0, 3);
-                    const opcoParsed = parseInt(opcoString);
+                    let opcoParsed;
+                    let opcoString;
+
+                    try {
+                        opcoString = locale.substring(0, 3);
+                        opcoParsed = parseInt(opcoString);
+                    } catch (e) {
+                        logger.error(`Authorized OPCO value given in the auth token is not in the expected format: ${locale}.
+                         So error occurred while processing: ${e}, stacktrace: ${e.stack}`);
+
+                        return this.sendUnauthenticatedErrorResponse(res,
+                            'Authorized OPCO given in the authentication token is invalid');
+                    }
+
                     let authorizedBunitList;
+                    let selectedUserRole;
                     if (isNaN(opcoParsed)) {
                         logger.warn(`User's opco attribute: ${opcoParsed} is not numeric parsable, so returning empty set of authorized opco list`);
                         authorizedBunitList = [];
@@ -152,7 +165,7 @@ class AuthenticateService {
                         //If it's multiple: it'll come like "[appadmin, generaluser]"
 
                         const userRoles = decodedPayloadFromJwt.profile;
-                        let selectedUserRole = userRoles
+                        selectedUserRole = userRoles
 
                         try {
                             const userRolesArray = userRoles.split(',').map((item) => {
@@ -181,7 +194,8 @@ class AuthenticateService {
                         lastName: decodedPayloadFromJwt.family_name,
                         username: username,
                         email: decodedPayloadFromJwt.email,
-                        jobTitle: decodedPayloadFromJwt.zoneinfo
+                        jobTitle: decodedPayloadFromJwt.zoneinfo,
+                        role: selectedUserRole
                     };
 
                     logger.info(`Authenticated user's user details: First name: ${userDetailsData.firstName}

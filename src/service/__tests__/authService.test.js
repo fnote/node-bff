@@ -64,7 +64,8 @@ const authenticatedMockResponse = {
         "firstName": "firstName",
         "jobTitle": "jobTitle",
         "lastName": "secondName",
-        "username": "username"
+        "username": "username",
+        "role": "appadmin"
     },
 }
 
