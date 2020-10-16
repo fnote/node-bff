@@ -21,7 +21,7 @@ class CloudPricingDataService {
             customerAccount: `${req.body.customerAccount}`,
             priceRequestDate: `${req.body.priceRequestDate}`,
             products: [
-                ...req.body.products,
+                { ...req.body.product }
             ],
         };
 
@@ -32,12 +32,46 @@ class CloudPricingDataService {
             priceEngineType: this.cloudPricingConfig.CONFIG.priceEngineType,
         };
 
+        let reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl + this.cloudPricingConfig.CONFIG.productPricesEndpoint;
+
         try {
             return await httpClient.makeRequest(
-                HTTP_POST, this.cloudPricingConfig.CONFIG.cloudPricingUrl, body, headers,
+                HTTP_POST, reqUrl, body, headers,
             );
         } catch (e) {
-            const errorMessage = 'Failed to fetch data from Cloud Pricing Endpoint';
+            const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint ${reqUrl}`;
+            logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
+            throw new CloudPricingDataFetchException(
+                errorMessage,
+                e.message,
+            );
+        }
+    }
+
+    async getCloudPricingPCIData(req) {
+        const body = {
+            businessUnitNumber: `${req.body.businessUnitNumber}`,
+            customerAccount: `${req.body.customerAccount}`,
+            priceRequestDate: `${req.body.priceRequestDate}`,
+            products: [
+                { ...req.body.product, quantity: `${req.body.requestedQuantity}` }
+            ],
+        };
+        const headers = {
+            'Content-type': 'application/json',
+            Accept: 'application/json',
+            clientID: this.cloudPricingConfig.CONFIG.clientId,
+            priceEngineType: this.cloudPricingConfig.CONFIG.priceEngineType,
+        };
+
+        let reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl + this.cloudPricingConfig.CONFIG.pciPricesEndpoint;
+
+        try {
+            return await httpClient.makeRequest(
+                HTTP_POST, reqUrl, body, headers,
+            );
+        } catch (e) {
+            const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint ${reqUrl}`;
             logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
             throw new CloudPricingDataFetchException(
                 errorMessage,

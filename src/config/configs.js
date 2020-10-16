@@ -35,9 +35,11 @@ export const getAuthConfig = () => ({
 
 export const getCloudPricingConfig = () => ({
     CONFIG: {
-        cloudPricingUrl: `${process.env.CLOUD_PRICING_URL}/v1/pricing/pricemanager`,
+        cloudPricingBaseUrl: `${process.env.CLOUD_PRICING_URL}/v1/pricing/`,
         clientId: 'Cloud-PCI',
         priceEngineType: 'CP',
+        pciPricesEndpoint: 'pci-prices',
+        productPricesEndpoint: 'product-prices'
     },
 });
 
@@ -74,3 +76,19 @@ export const getAuthorizationRoleHierarchy = () => {
 
     return authorizationRoleHierarchy;
 };
+
+export const getPriceSourceName = (key) => {
+    const priceSourceNameMap = {
+        0: "No price calculated",
+        30: "Primary Price Rule",
+        40: "Company Default Price Rule",
+        45: "Customer's Default Price Rule",
+        50: "Min Rule",
+        52: "Hand Price",
+        61: "Guranteed Price Agreement",
+        70: "Substitutoin Price",
+        96: "Exceprtions",
+        97: "Price Advisor"
+    }
+    return priceSourceNameMap[key];
+}
