@@ -35,7 +35,7 @@ app.options('/*', (req, res) => {
     res.send(HttpStatus.OK);
 });
 
-// app.use(authMiddleware);
+app.use(authMiddleware);
 
 app.use('/v1/pci-bff/', router);
 

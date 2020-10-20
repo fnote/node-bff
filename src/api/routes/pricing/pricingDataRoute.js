@@ -16,8 +16,7 @@ export default () => {
 
     cloudPricingRouter.post('/pricing-data', async (req, res) => {
         try {
-            // const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
-            const isAuthorized = true;
+            const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
             if (isAuthorized) {
                 const responseData = await AggregatedPricingDataService.getAggregatedPricingData(req);
                 res.status(HttpStatus.OK).send(responseData);
