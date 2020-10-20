@@ -28,7 +28,7 @@ export const getAuthConfig = () => ({
         authCookieName1: 'PCI-ELBAuthSessionCookie-0',
         authCookieName2: 'PCI-ELBAuthSessionCookie-1',
         loginRedirectionUrl: `${process.env.FRONTEND_URL}`,
-        logoutRedirectionUrl: `https://${process.env.COGNITO_AUTH_URL}/logout?client_id=${process.env.COGNITO_APP_CLIENT_ID}&logout_uri=https://google.com`,
+        logoutRedirectionUrl: `https://${process.env.COGNITO_AUTH_URL}/logout?client_id=${process.env.COGNITO_APP_CLIENT_ID}&logout_uri=${process.env.CLOUDFRONT_URL}`,
 
     },
 });
