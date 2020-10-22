@@ -17,9 +17,14 @@ export default () => {
     cloudPricingRouter.post('/pricing-data', async (req, res) => {
         try {
             const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
+            // TODO: @sanjayaa see whether we need to set headers manually here
+            //res.header('Access-Control-Allow-Origin', 'http://cp-cloud-pci-exe.prcp-np.us-east-1.aws.sysco.net')
+
             if (isAuthorized) {
                 const responseData = await AggregatedPricingDataService.getAggregatedPricingData(req);
-                res.status(HttpStatus.OK).send(responseData);
+                logger.debug("Success response received");
+                res.status(HttpStatus.OK)
+                    .send(responseData);
             } else {
                 res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized',
                     'User is not authorized to perform this action in the requested opco',
