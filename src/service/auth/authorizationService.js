@@ -53,7 +53,7 @@ class AuthorizationService {
             return this.generatePricingTransformationEnabledAllBusinessUnit();
         } else if (!opcoAttributeBunit || !userRole) {
             // If AD opco attribute or user role is null or empty, then he should not have access to any opco
-            logger.info(`User's opco attribute or user role is empty so given access to no opco`);
+            logger.info(`User's opco attribute [${opcoAttributeBunit}] or user role [${userRole}] is empty so given access to no opco`);
             return []
         } else {
             const matchedValidBusinessUnitList =
@@ -83,23 +83,24 @@ class AuthorizationService {
     }
 
     isAuthorizedRequest = (req, res) => {
+        logger.info("Authenticating request");
         const {authResponse} = res.locals;
         const requestedBunit = req.body.businessUnitNumber;
         const userDetailsData = authResponse.userDetailsData;
 
         if (userDetailsData && Object.keys(userDetailsData).length > 0) {
             const authorizedBunitListForTheUser = userDetailsData.authorizedBunitList;
-            const filteredOutBunits = this.matchedValidBusinessUnitFromGivenList(requestedBunit, authorizedBunitListForTheUser)
+            const filteredOutBunits = this.matchedValidBusinessUnitFromGivenList(requestedBunit, authorizedBunitListForTheUser);
             if (filteredOutBunits.length > 0) {
-                logger.info(`User's requested opco: ${requestedBunit} matched with his authorized opcos, so request is authorized`);
+                logger.info(`User's requested opco: [${requestedBunit}] matched with his authorized opcos, so request is authorized`);
                 return true;
             }
-            logger.info(`User's requested opco: ${requestedBunit} does nt match with his authorized opcos: ${authorizedBunitListForTheUser},
+            logger.info(`User's requested opco: [${requestedBunit}] does not match with his authorized opcos: [${authorizedBunitListForTheUser}],
              so request is NOT authorized`);
         }
-        logger.info(`User details data is empty for the request: ${req}, so request is NOT authorized`);
+        logger.info(`User details data is empty for the request: [${req}], so request is NOT authorized`);
         return false;
-    }
+    };
 
     getTheRoleWithHighestAuthority = (rolesArray) => {
         const authorizationRoleHierarchy = getAuthorizationRoleHierarchy();
