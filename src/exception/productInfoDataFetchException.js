@@ -4,7 +4,7 @@
  * @author: cwic0864 on 07/08/20
  * */
 export default class ProductInfoDataFetchException extends Error {
-    constructor(error, errorMessage) {
+    constructor(error, errorMessage, errorCode) {
         super(error.toString());
         Error.captureStackTrace(this, this.constructor);
 
@@ -13,6 +13,7 @@ export default class ProductInfoDataFetchException extends Error {
 
         this.stack = error.stack;
         this.errorDetails.message = errorMessage;
+        this.errorCode = errorCode;
     }
 
     getStatus() {

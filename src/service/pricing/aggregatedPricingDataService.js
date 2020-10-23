@@ -9,9 +9,11 @@ import ProductInfoService from '../productInfo/productInfoService';
 import { pricingDataReqBody } from '../../validator/schema';
 import logger from '../../util/logger';
 import InvalidRequestException from '../../exception/invalidRequestException';
+import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetchException';
 import * as HttpStatus from 'http-status-codes';
 import { ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY } from '../../util/constants';
 import { getPriceSourceName } from '../../config/configs';
+import { PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE, PCI_PRICE_DATA_FETCH_ERROR_CODE, PRODUCT_PRICE_DATA_FETCH_ERROR_CODE } from '../../exception/exceptionCodes';
 
 class AggregatedPricingDataService {
 
@@ -52,6 +54,34 @@ class AggregatedPricingDataService {
         return getPriceSourceName(pciPricesPayload.products[0].priceSource);
     }
 
+    /**
+     * This function process the status section of CP request when the status code is 200
+     * for errornous scenatios
+     * @param  {} productPricePayload
+     * @param  {} pciPricePayload
+     */
+    _checkCPResponseErrorStatus(productPricePayload, pciPricePayload) {
+        let productPayloadStatus = productPricePayload.products[0].statuses;
+        let pciPayloadStatus = pciPricePayload.products[0].statuses;
+        if (productPayloadStatus.length) {
+            const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint, ${productPayloadStatus[0].message}`;
+            logger.error(`${errorMessage}`);
+            throw new CloudPricingDataFetchException(
+                errorMessage,
+                productPayloadStatus[0].message,
+                PRODUCT_PRICE_DATA_FETCH_ERROR_CODE
+            );
+        } else if (pciPayloadStatus.length) {
+            const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint, ${pciPayloadStatus[0].message}`;
+            logger.error(`${errorMessage}`);
+            throw new CloudPricingDataFetchException(
+                errorMessage,
+                pciPayloadStatus[0].message,
+                PCI_PRICE_DATA_FETCH_ERROR_CODE
+            );
+        }
+    }
+
     async getAggregatedPricingData(req) {
 
         const requestBody = req.body;
@@ -61,6 +91,7 @@ class AggregatedPricingDataService {
             throw new InvalidRequestException(
                 ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
+                PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE
             );
         }
 
@@ -79,14 +110,20 @@ class AggregatedPricingDataService {
             .then(([cloudPricingPCIResponse, cloudPricingProductPricesResponse, itemCallResponse]) => {
 
                 let finalResponse = {};
+                let productPricePayload = cloudPricingProductPricesResponse.data;
+                let pciPricePayload = cloudPricingPCIResponse.data;
+                let itemInfoPayload = itemCallResponse.data;
 
+                // validate CP responses
+                this._checkCPResponseErrorStatus(productPricePayload, pciPricePayload);
                 // select tiers from product-prices and selection applicable tier
-                const modifiedCloudPricingProductPricesResponse = this._getApplicableTier(requestBody, cloudPricingProductPricesResponse.data)
+                const modifiedCloudPricingProductPricesResponse = this._getApplicableTier(requestBody, productPricePayload)
                 //select price source name
-                const priceSourceName = this._getPriceSourceName(cloudPricingPCIResponse.data)
+                const priceSourceName = this._getPriceSourceName(pciPricePayload)
 
                 // filtering item info data
-                const { id, name, pack, size, brandId, brand, stockIndicator, averageWeight, catchWeightIndicator, split, shipSplitOnly } = itemCallResponse.data;
+                const { id, name, pack, size, brandId, brand, stockIndicator, averageWeight,
+                    catchWeightIndicator, split, shipSplitOnly } = itemInfoPayload;
                 const filteredItemPayload = {}
                 filteredItemPayload["id"] = id;
                 filteredItemPayload["name"] = name;
@@ -101,7 +138,7 @@ class AggregatedPricingDataService {
                 filteredItemPayload["shipSplitOnly"] = shipSplitOnly;
 
                 // filtering root level attributes in pci-prices data
-                const { businessUnitNumber, customerAccount, customerType, priceRequestDate, requestStatuses } = cloudPricingPCIResponse.data;
+                const { businessUnitNumber, customerAccount, customerType, priceRequestDate, requestStatuses } = pciPricePayload;
                 finalResponse["businessUnitNumber"] = businessUnitNumber;
                 finalResponse["customerAccount"] = customerAccount;
                 finalResponse["customerType"] = customerType;
@@ -109,8 +146,14 @@ class AggregatedPricingDataService {
                 finalResponse["requestStatuses"] = requestStatuses;
 
                 // building product section
-                finalResponse["product"] = { ...filteredItemPayload, "priceSourceName": priceSourceName, ...cloudPricingPCIResponse.data.products[0], "volumePricingTiers": [...modifiedCloudPricingProductPricesResponse.products[0].volumePricingTiers] }
+                finalResponse["product"] = {
+                    ...filteredItemPayload, "priceSourceName": priceSourceName, ...pciPricePayload.products[0],
+                    "volumePricingTiers": [...modifiedCloudPricingProductPricesResponse.products[0].volumePricingTiers]
+                }
                 return finalResponse;
+            })
+            .catch(err => {
+                throw err;
             });
     }
 }

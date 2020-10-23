@@ -19,7 +19,7 @@ export function createSuccessResponse(data, message) {
     };
 }
 
-export function createErrorResponse(status, message, error, cause) {
+export function createErrorResponse(status, message, error, cause, errorCode) {
     const errorResponse = {
         status: status || ERROR,
         message: message || 'Internal server error',
@@ -27,6 +27,10 @@ export function createErrorResponse(status, message, error, cause) {
 
     if (cause || error) {
         errorResponse.cause = cause || (error.errorDetails ? error.errorDetails.message : error);
+    }
+
+    if( errorCode ) {
+        errorResponse.errorCode = errorCode;
     }
     return errorResponse;
 }

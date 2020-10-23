@@ -9,6 +9,7 @@ import {httpClient} from '../../httpClient/httpClient';
 import logger from '../../util/logger';
 import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetchException';
 import {HTTP_POST} from '../../util/constants';
+import { PCI_PRICE_DATA_FETCH_ERROR_CODE, PRODUCT_PRICE_DATA_FETCH_ERROR_CODE } from '../../exception/exceptionCodes';
 
 class CloudPricingDataService {
     constructor() {
@@ -44,6 +45,7 @@ class CloudPricingDataService {
             throw new CloudPricingDataFetchException(
                 errorMessage,
                 e.message,
+                PRODUCT_PRICE_DATA_FETCH_ERROR_CODE
             );
         }
     }
@@ -76,6 +78,7 @@ class CloudPricingDataService {
             throw new CloudPricingDataFetchException(
                 errorMessage,
                 e.message,
+                PCI_PRICE_DATA_FETCH_ERROR_CODE
             );
         }
     }

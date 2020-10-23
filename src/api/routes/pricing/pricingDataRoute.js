@@ -10,6 +10,7 @@ import AggregatedPricingDataService from '../../../service/pricing/aggregatedPri
 import logger from '../../../util/logger';
 import {createErrorResponse} from '../../../mapper/responseMapper';
 import AuthorizationService from '../../../service/auth/authorizationService';
+import { PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE, PCI_PRICE_DATA_FETCH_ERROR_CODE, PRODUCT_PRICE_DATA_FETCH_ERROR_CODE, PRODUCT_INFO_DATA_FETCH_ERROR_CODE } from '../../../exception/exceptionCodes';
 
 export default () => {
     const cloudPricingRouter = new Router({mergeParams: true});
@@ -32,9 +33,21 @@ export default () => {
             }
         } catch (error) {
             const errMessage = 'Error occurred in getting pricing related data';
-            logger.error(`${errMessage}: ${error} cause: ${error.stack}`);
-            res.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .send(createErrorResponse(null, errMessage, error, null));
+            logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
+            let httpStatusCode;
+            switch (error.errorCode) {
+                case PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE:
+                case PCI_PRICE_DATA_FETCH_ERROR_CODE:
+                case PRODUCT_PRICE_DATA_FETCH_ERROR_CODE:
+                case PRODUCT_INFO_DATA_FETCH_ERROR_CODE:
+                    httpStatusCode = HttpStatus.BAD_REQUEST;
+                    break;
+                default:
+                    httpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+                    break;
+            }
+            res.status(httpStatusCode)
+                .send(createErrorResponse(null, errMessage, error, null, error.errorCode));
         }
     });
     return cloudPricingRouter;

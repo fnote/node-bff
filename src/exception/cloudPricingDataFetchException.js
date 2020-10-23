@@ -4,7 +4,7 @@
  * @author: adis0892 on 03/08/20
  * */
 export default class CloudPricingDataFetchException extends Error {
-    constructor(error, cause) {
+    constructor(error, cause, errorCode) {
         super(error.toString());
         Error.captureStackTrace(this, this.constructor);
 
@@ -13,6 +13,7 @@ export default class CloudPricingDataFetchException extends Error {
 
         this.cause = cause;
         this.errorDetails.message = error;
+        this.errorCode = errorCode;
     }
 
     getStatus() {
