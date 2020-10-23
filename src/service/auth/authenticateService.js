@@ -33,7 +33,7 @@ class AuthenticateService {
             if (!accessToken) {
                 let errorMessage = 'Access token is missing from header';
                 logger.error(errorMessage);
-                return this.sendUnauthenticatedErrorResponse(res, errorMessage);
+                return this.sendUnauthenticatedErrorResponse(errorMessage);
             }
 
             if (!this.pems || Object.keys(this.pems).length === 0) {
@@ -61,7 +61,7 @@ class AuthenticateService {
         } catch (e) {
             let errorMessage = `Unexpected error occurred while validating the token`;
             logger.error(`${errorMessage}: ${e} stacktrace: ${e.stackTrace}`);
-            return this.sendUnauthenticatedErrorResponse(res, errorMessage);
+            return this.sendUnauthenticatedErrorResponse(errorMessage);
         }
     }
 
@@ -71,21 +71,21 @@ class AuthenticateService {
 
         if (!decodedJwt) {
             errorMessage = 'Not a valid JWT token';
-            return this.sendUnauthenticatedErrorResponse(res, errorMessage)
+            return this.sendUnauthenticatedErrorResponse(errorMessage)
         }
 
         // Fail if token is not from the matching User Pool
         if (decodedJwt.payload.iss !== this.authConfig.CONFIG.authTokenIssuer) {
             errorMessage = 'The issuer of the token is invalid';
             logger.error(errorMessage);
-            return this.sendUnauthenticatedErrorResponse(res, errorMessage);
+            return this.sendUnauthenticatedErrorResponse(errorMessage);
         }
 
         //Reject the jwt if it's not an 'Access Token'
         if (decodedJwt.payload.token_use !== 'access') {
             errorMessage = 'Token is not an access token';
             logger.error(errorMessage);
-            return this.sendUnauthenticatedErrorResponse(res, errorMessage);
+            return this.sendUnauthenticatedErrorResponse(errorMessage);
         }
 
         let kid = decodedJwt.header.kid;
@@ -93,7 +93,7 @@ class AuthenticateService {
         let pem = pems[kid];
         if (!pem) {
             logger.error('No pem could be found for the given kid', kid);
-            return this.sendUnauthenticatedErrorResponse(res, 'Invalid access token')
+            return this.sendUnauthenticatedErrorResponse('Invalid access token')
         }
 
         let returnObj = unauthenticatedReturn;
@@ -102,7 +102,7 @@ class AuthenticateService {
             if (err) {
                 logger.error(`Token was failed to be verified with error: ${err}`);
                 const cause = err.message || 'Token was failed to be verified';
-                returnObj = this.sendUnauthenticatedErrorResponse(res, cause);
+                returnObj = this.sendUnauthenticatedErrorResponse(cause);
             } else {
                 const principalId = payload.sub;
                 if (principalId) {
@@ -114,14 +114,14 @@ class AuthenticateService {
 
                 } else {
                     logger.error(`After token verification principal id: ${principalId} is not present`);
-                    returnObj = this.sendUnauthenticatedErrorResponse(res, 'Required variables for authentication are invalid');
+                    returnObj = this.sendUnauthenticatedErrorResponse('Required variables for authentication are invalid');
                 }
             }
         });
         return returnObj;
     }
 
-    sendUnauthenticatedErrorResponse = (res, cause) => {
+    sendUnauthenticatedErrorResponse = (cause) => {
         return {
             authenticated: false,
             username: null,
@@ -150,8 +150,7 @@ class AuthenticateService {
                         logger.error(`Authorized OPCO value given in the auth token is not in the expected format: ${locale}.
                          So error occurred while processing: ${e}, stacktrace: ${e.stack}`);
 
-                        return this.sendUnauthenticatedErrorResponse(res,
-                            'Authorized OPCO given in the authentication token is invalid');
+                        return this.sendUnauthenticatedErrorResponse('Authorized OPCO given in the authentication token is invalid');
                     }
 
                     let authorizedBunitList;
@@ -212,13 +211,12 @@ class AuthenticateService {
                     };
                 } else {
                     logger.error(`Username in the auth token is not in the expected format: ${username}`);
-                    return this.sendUnauthenticatedErrorResponse(res,
-                        'Username given in the authentication token is invalid');
+                    return this.sendUnauthenticatedErrorResponse('Username given in the authentication token is invalid');
 
                 }
             } else {
                 logger.error(`Username is not present in the auth token`);
-                return this.sendUnauthenticatedErrorResponse(res, 'Username is not present in the auth token');
+                return this.sendUnauthenticatedErrorResponse('Username is not present in the auth token');
             }
         }
     }
