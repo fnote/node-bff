@@ -14,7 +14,6 @@ export function handleError(err, req, res) {
     logger.error(`Unhandled error occurred: ${err}, stacktrace: ${err.stack}`);
     const {cause, message} = err;
     if (req.url === LOGIN_URL) {
-        console.log('Redirecting......')
         res.locals.authResponse = AuthenticateService.sendUnauthenticatedErrorResponse(message);
         res.redirect(`${authConfig.CONFIG.loginRedirectionUrl}?login=error`);
     } else {

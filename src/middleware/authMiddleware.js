@@ -29,7 +29,6 @@ export async function authMiddleware(req, res, next) {
                 res.locals.authResponse = AuthenticateService.sendUnauthenticatedErrorResponse(errMessage);
                 next();
             } else {
-
                 res.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .send(createErrorResponse(null, errMessage, error, null));
             }
