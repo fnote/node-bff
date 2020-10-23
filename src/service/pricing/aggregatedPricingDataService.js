@@ -82,6 +82,39 @@ class AggregatedPricingDataService {
         }
     }
 
+    /**
+     * This function filters required data from itemInfo response
+     * @param  {} itemInfoPayload
+     */
+    _filterItemInfoData(itemInfoPayload){
+        const { id, name, pack, size, brandId, brand, stockIndicator, averageWeight,
+            catchWeightIndicator, split, shipSplitOnly } = itemInfoPayload;
+        const filteredItemPayload = {}
+        filteredItemPayload["id"] = id;
+        filteredItemPayload["name"] = name;
+        filteredItemPayload["pack"] = pack;
+        filteredItemPayload["size"] = size;
+        filteredItemPayload["brandId"] = brandId;
+        filteredItemPayload["brand"] = brand;
+        filteredItemPayload["stockIndicator"] = stockIndicator;
+        filteredItemPayload["averageWeight"] = averageWeight;
+        filteredItemPayload["catchWeightIndicator"] = catchWeightIndicator;
+        filteredItemPayload["split"] = split;
+        filteredItemPayload["shipSplitOnly"] = shipSplitOnly;
+        return filteredItemPayload;
+    }
+
+    _filterRootLevelPCIPricePayloadData(pciPricePayload){
+        const { businessUnitNumber, customerAccount, customerType, priceRequestDate, requestStatuses } = pciPricePayload;
+        let rootLevelData = {};
+        rootLevelData["businessUnitNumber"] = businessUnitNumber;
+        rootLevelData["customerAccount"] = customerAccount;
+        rootLevelData["customerType"] = customerType;
+        rootLevelData["priceRequestDate"] = priceRequestDate;
+        rootLevelData["requestStatuses"] = requestStatuses;
+        return rootLevelData;
+    }
+
     async getAggregatedPricingData(req) {
 
         const requestBody = req.body;
@@ -116,35 +149,21 @@ class AggregatedPricingDataService {
 
                 // validate CP responses
                 this._checkCPResponseErrorStatus(productPricePayload, pciPricePayload);
+
                 // select tiers from product-prices and selection applicable tier
                 const modifiedCloudPricingProductPricesResponse = this._getApplicableTier(requestBody, productPricePayload)
+
                 //select price source name
                 const priceSourceName = this._getPriceSourceName(pciPricePayload)
 
                 // filtering item info data
-                const { id, name, pack, size, brandId, brand, stockIndicator, averageWeight,
-                    catchWeightIndicator, split, shipSplitOnly } = itemInfoPayload;
-                const filteredItemPayload = {}
-                filteredItemPayload["id"] = id;
-                filteredItemPayload["name"] = name;
-                filteredItemPayload["pack"] = pack;
-                filteredItemPayload["size"] = size;
-                filteredItemPayload["brandId"] = brandId;
-                filteredItemPayload["brand"] = brand;
-                filteredItemPayload["stockIndicator"] = stockIndicator;
-                filteredItemPayload["averageWeight"] = averageWeight;
-                filteredItemPayload["catchWeightIndicator"] = catchWeightIndicator;
-                filteredItemPayload["split"] = split;
-                filteredItemPayload["shipSplitOnly"] = shipSplitOnly;
+                const filteredItemPayload = this._filterItemInfoData(itemInfoPayload)
 
                 // filtering root level attributes in pci-prices data
-                const { businessUnitNumber, customerAccount, customerType, priceRequestDate, requestStatuses } = pciPricePayload;
-                finalResponse["businessUnitNumber"] = businessUnitNumber;
-                finalResponse["customerAccount"] = customerAccount;
-                finalResponse["customerType"] = customerType;
-                finalResponse["priceRequestDate"] = priceRequestDate;
-                finalResponse["requestStatuses"] = requestStatuses;
-
+                const rootLevelData = this._filterRootLevelPCIPricePayloadData(pciPricePayload)
+                
+                // add root level data to final response
+                finalResponse = { ...rootLevelData }
                 // building product section
                 finalResponse["product"] = {
                     ...filteredItemPayload, "priceSourceName": priceSourceName, ...pciPricePayload.products[0],
