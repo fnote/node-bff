@@ -201,7 +201,7 @@ class AuthenticateService {
                     Last name: ${userDetailsData.lastName} Username: ${userDetailsData.username}
                      Email: ${userDetailsData.email}`);
 
-                    logger.info(`User is identified with a job title: ${userDetailsData.jobTitle}`);
+                    logger.info(`User is identified with a job title: ${userDetailsData.jobTitle} and role: ${selectedUserRole}`);
 
                     return {
                         authenticated: true,
