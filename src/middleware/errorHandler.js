@@ -7,6 +7,7 @@ import {ERROR, LOGIN_URL} from '../util/constants';
 import logger from '../util/logger';
 import {INTERNAL_SERVER_ERROR} from "http-status-codes";
 import {getAuthConfig} from '../config/configs';
+
 const authConfig = getAuthConfig();
 
 export function handleError(err, req, res) {
