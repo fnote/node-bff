@@ -4,6 +4,7 @@
  * @author: gkar5861 on 19/06/20
  * */
 import {ERROR, SUCCESS} from '../util/constants';
+import {INTERNAL_SERVER_ERROR_CODE} from '../exception/exceptionCodes'
 
 export function createSuccessResponse(data, message) {
     if (data === undefined) {
@@ -29,8 +30,7 @@ export function createErrorResponse(status, message, error, cause, errorCode) {
         errorResponse.cause = cause || (error.errorDetails ? error.errorDetails.message : error);
     }
 
-    if( errorCode ) {
-        errorResponse.errorCode = errorCode;
-    }
+    errorResponse.errorCode = errorCode || INTERNAL_SERVER_ERROR_CODE;
+    
     return errorResponse;
 }

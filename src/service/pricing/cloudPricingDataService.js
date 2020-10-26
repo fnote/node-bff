@@ -40,8 +40,8 @@ class CloudPricingDataService {
                 HTTP_POST, reqUrl, body, headers,
             );
         } catch (e) {
-            const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint ${reqUrl}`;
-            logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
+            const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint`;
+            logger.error(`${errorMessage} ${reqUrl} due to: ${e}, stacktrace: ${e.stack}`);
             throw new CloudPricingDataFetchException(
                 errorMessage,
                 e.message,
@@ -73,8 +73,8 @@ class CloudPricingDataService {
                 HTTP_POST, reqUrl, body, headers,
             );
         } catch (e) {
-            const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint ${reqUrl}`;
-            logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
+            const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint`;
+            logger.error(`${errorMessage} ${reqUrl} due to: ${e}, stacktrace: ${e.stack}`);
             throw new CloudPricingDataFetchException(
                 errorMessage,
                 e.message,
