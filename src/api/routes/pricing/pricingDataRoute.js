@@ -10,7 +10,10 @@ import AggregatedPricingDataService from '../../../service/pricing/aggregatedPri
 import logger from '../../../util/logger';
 import {createErrorResponse} from '../../../mapper/responseMapper';
 import AuthorizationService from '../../../service/auth/authorizationService';
-import { PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE, PCI_PRICE_DATA_FETCH_ERROR_CODE, PRODUCT_PRICE_DATA_FETCH_ERROR_CODE, PRODUCT_INFO_DATA_FETCH_ERROR_CODE } from '../../../exception/exceptionCodes';
+import {
+    PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE, PCI_PRICE_DATA_FETCH_ERROR_CODE,
+    PRODUCT_PRICE_DATA_FETCH_ERROR_CODE, PRODUCT_INFO_DATA_FETCH_ERROR_CODE
+} from '../../../exception/exceptionCodes';
 
 export default () => {
     const cloudPricingRouter = new Router({mergeParams: true});

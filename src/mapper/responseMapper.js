@@ -4,7 +4,7 @@
  * @author: gkar5861 on 19/06/20
  * */
 import {ERROR, SUCCESS} from '../util/constants';
-import {INTERNAL_SERVER_ERROR_CODE} from '../exception/exceptionCodes'
+import { INTERNAL_SERVER_ERROR_CODE } from '../exception/exceptionCodes'
 
 export function createSuccessResponse(data, message) {
     if (data === undefined) {

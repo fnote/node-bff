@@ -13,7 +13,10 @@ import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetc
 import * as HttpStatus from 'http-status-codes';
 import { ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY } from '../../util/constants';
 import { getPriceSourceName } from '../../config/configs';
-import { PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE, PCI_PRICE_DATA_FETCH_ERROR_CODE, PRODUCT_PRICE_DATA_FETCH_ERROR_CODE } from '../../exception/exceptionCodes';
+import {
+    PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE, PCI_PRICE_DATA_FETCH_ERROR_CODE,
+    PRODUCT_PRICE_DATA_FETCH_ERROR_CODE
+} from '../../exception/exceptionCodes';
 
 class AggregatedPricingDataService {
 
@@ -134,7 +137,6 @@ class AggregatedPricingDataService {
             req.body.businessUnitNumber, req.body.product.supc,
         );
 
-        // TODO @sanjayaa catch below
         return Promise.all([
             cloudPricingPCIDataCall,
             cloudPricingProductPricesDataCall,
@@ -147,13 +149,13 @@ class AggregatedPricingDataService {
                 let pciPricePayload = cloudPricingPCIResponse.data;
                 let itemInfoPayload = itemCallResponse.data;
 
-                // validate CP responses
+                // validating CP responses
                 this._checkCPResponseErrorStatus(productPricePayload, pciPricePayload);
 
-                // select tiers from product-prices and selection applicable tier
+                // selecting tiers from product-prices and tag applicable tier
                 const modifiedCloudPricingProductPricesResponse = this._getApplicableTier(requestBody, productPricePayload)
 
-                //select price source name
+                //selecting price source name
                 const priceSourceName = this._getPriceSourceName(pciPricePayload)
 
                 // filtering item info data
@@ -162,7 +164,7 @@ class AggregatedPricingDataService {
                 // filtering root level attributes in pci-prices data
                 const rootLevelData = this._filterRootLevelPCIPricePayloadData(pciPricePayload)
                 
-                // add root level data to final response
+                // adding root level data to final response
                 finalResponse = { ...rootLevelData }
                 // building product section
                 finalResponse["product"] = {
@@ -172,7 +174,7 @@ class AggregatedPricingDataService {
                 return finalResponse;
             })
             .catch(err => {
-                logger.error(`Error occurred in getAggregatedPricingData: ${err}`);
+                logger.error(`Error occurred in while processing pricing data in getAggregatedPricingData: ${err}`);
                 throw err;
             });
     }
