@@ -79,14 +79,14 @@ export const getAuthorizationRoleHierarchy = () => {
 
 export const getPriceSourceName = (key) => {
     const priceSourceNameMap = {
-        30: "Primary Price Rule",
-        40: "Company Default Price Rule",
-        45: "Customer's Default Price Rule",
-        50: "Min Price",
+        30: "Price Rule",
+        40: "Co Default",
+        45: "PR Default",
+        50: "Min Rule",
         52: "Hand Price",
-        61: "Guaranteed Price Agreement",
-        70: "Substitution Price",
-        96: "Exceptions",
+        61: "GTD Price",
+        70: "Substitution",
+        96: "Exception",
         97: "Price Advisor"
     }
     return priceSourceNameMap[key];
