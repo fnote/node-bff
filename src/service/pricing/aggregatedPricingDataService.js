@@ -172,6 +172,7 @@ class AggregatedPricingDataService {
                 return finalResponse;
             })
             .catch(err => {
+                logger.error(`Error occurred in getAggregatedPricingData: ${err}`);
                 throw err;
             });
     }
