@@ -130,7 +130,7 @@ class AggregatedPricingDataService {
                 PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE
             );
         }
-
+        
         const cloudPricingPCIDataCall = CloudPricingDataService.getCloudPricingPCIData(req);
         const cloudPricingProductPricesDataCall = CloudPricingDataService.getCloudPricingData(req);
         const itemInfoDataCall = ProductInfoService.getProductInfo(
@@ -148,7 +148,6 @@ class AggregatedPricingDataService {
                 let productPricePayload = cloudPricingProductPricesResponse.data;
                 let pciPricePayload = cloudPricingPCIResponse.data;
                 let itemInfoPayload = itemCallResponse.data;
-
                 // validating CP responses
                 this._checkCPResponseErrorStatus(productPricePayload, pciPricePayload);
 

@@ -5,6 +5,7 @@
  * */
 import {ERROR, SUCCESS} from '../../util/constants';
 import {createErrorResponse, createSuccessResponse} from '../responseMapper';
+import { INTERNAL_SERVER_ERROR_CODE } from '../../exception/exceptionCodes'
 
 const message = 'message';
 
@@ -57,6 +58,7 @@ describe('Response Mapper', () => {
                 },
             },
             message,
+            "errorCode": INTERNAL_SERVER_ERROR_CODE,
         };
         const res = createErrorResponse(error, message);
         expect(res).toEqual(errorResponseWithCause);
@@ -72,6 +74,7 @@ describe('Response Mapper', () => {
                 message: 'cause',
             },
             message,
+            "errorCode": INTERNAL_SERVER_ERROR_CODE,
         };
 
         const res = createErrorResponse(error, message);
@@ -82,6 +85,7 @@ describe('Response Mapper', () => {
         const errorResponseWithoutCause = {
             status: ERROR,
             message,
+            "errorCode": INTERNAL_SERVER_ERROR_CODE,
         };
 
         const res = createErrorResponse(null, message);

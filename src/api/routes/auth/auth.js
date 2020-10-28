@@ -8,6 +8,7 @@ import {getAuthConfig} from '../../../config/configs';
 import logger from '../../../util/logger';
 import * as HttpStatus from "http-status-codes";
 import {createErrorResponse} from "../../../mapper/responseMapper";
+import { USER_UNAUTHORIZED_ERROR_CODE } from '../../../exception/exceptionCodes';
 
 export default () => {
     const AuthRouter = new Router({mergeParams: true});
@@ -43,13 +44,13 @@ export default () => {
                 res.status(HttpStatus.OK).send(userDetailsData);
             } else {
                 res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized', 'User cannot be authenticated',
-                    null, 'User details are not present'));
+                    null, 'User details are not present', USER_UNAUTHORIZED_ERROR_CODE));
             }
 
         } else {
             const cause = authResponse ? authResponse.cause : null
             res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized', 'User cannot be authenticated',
-                null, cause));
+                null, cause, USER_UNAUTHORIZED_ERROR_CODE));
         }
     });
 
