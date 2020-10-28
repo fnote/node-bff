@@ -24,8 +24,14 @@ export async function authMiddleware(req, res, next) {
         } catch (error) {
             const errMessage = 'Authorization interceptor failed';
             logger.error(`${errMessage}: ${error} cause: ${error.stack}`);
-            res.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .send(createErrorResponse(null, errMessage, error, null));
+
+            if(req.url === LOGIN_URL) {
+                res.locals.authResponse = AuthenticateService.sendUnauthenticatedErrorResponse(errMessage);
+                next();
+            } else {
+                res.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .send(createErrorResponse(null, errMessage, error, null));
+            }
         }
     } else {
         next();

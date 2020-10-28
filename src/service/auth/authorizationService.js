@@ -53,7 +53,7 @@ class AuthorizationService {
             return this.generatePricingTransformationEnabledAllBusinessUnit();
         } else if (!opcoAttributeBunit || !userRole) {
             // If AD opco attribute or user role is null or empty, then he should not have access to any opco
-            logger.info(`User's opco attribute or user role is empty so given access to no opco`);
+            logger.info(`User's opco attribute: ${opcoAttributeBunit} or user role: ${userRole} is empty so giving access to no opco`);
             return []
         } else {
             const matchedValidBusinessUnitList =
@@ -66,6 +66,7 @@ class AuthorizationService {
 
                 if (authorizedPricingTransformationEnabledBusinessUnitList.length > 0) {
                     // Opco attribute matches one of the opcos and also is a pricing transformation enabled opco then return that opco
+                    logger.info(`User's opco: ${opcoAttributeBunit} matches one of the pricing transformation enabled opco then giving access to that opco`);
                     return authorizedPricingTransformationEnabledBusinessUnitList
                 } else {
                     // Opco attribute matches one of the opcos but is not a pricing transformation enabled opcos
@@ -77,6 +78,7 @@ class AuthorizationService {
                 // Opco attribute does not match to one of Sysco opcos, so it should be something like 000 (Corporate) or 440 (SBS)
                 // so then give access to all opcos
                 // In future, if we can identify what exactly these values can be, then can do a separate filtering
+                logger.info(`User's opco: ${opcoAttributeBunit} does not match to one of Sysco opcos but a specific value, so giving access to all opcos`);
                 return this.generatePricingTransformationEnabledAllBusinessUnit();
             }
         }
@@ -94,10 +96,11 @@ class AuthorizationService {
                 logger.info(`User's requested opco: ${requestedBunit} matched with his authorized opcos, so request is authorized`);
                 return true;
             }
-            logger.info(`User's requested opco: ${requestedBunit} does nt match with his authorized opcos: ${authorizedBunitListForTheUser},
+            logger.warn(`User's requested opco: ${requestedBunit} does not match with his authorized opcos: ${authorizedBunitListForTheUser},
              so request is NOT authorized`);
+        } else {
+            logger.warn(`User details data is empty for the request, so it is NOT authorized`);
         }
-        logger.info(`User details data is empty for the request: ${req}, so request is NOT authorized`);
         return false;
     }
 

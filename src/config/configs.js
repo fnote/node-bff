@@ -1,13 +1,6 @@
 import {
     ROLE_APP_ADMIN,
-    ROLE_CFO,
-    ROLE_DDS_ADMIN,
-    ROLE_DRM,
-    ROLE_DSM,
-    ROLE_GENERAL_USER,
-    ROLE_RSM,
-    ROLE_VP_MERCHANDISING,
-    ROLE_VP_SALES
+    ROLE_GENERAL_USER
 } from "../util/constants";
 
 export default function getBatchAPIConfigs() {
@@ -64,13 +57,6 @@ export const getAuthorizationRoleHierarchy = () => {
 
     authorizationRoleHierarchy[ROLE_APP_ADMIN] = 1;
     authorizationRoleHierarchy[ROLE_GENERAL_USER] = 2;
-    authorizationRoleHierarchy[ROLE_DDS_ADMIN] = 3;
-    authorizationRoleHierarchy[ROLE_VP_MERCHANDISING] = 4;
-    authorizationRoleHierarchy[ROLE_CFO] = 5;
-    authorizationRoleHierarchy[ROLE_VP_SALES] = 6;
-    authorizationRoleHierarchy[ROLE_DRM] = 7;
-    authorizationRoleHierarchy[ROLE_RSM] = 8;
-    authorizationRoleHierarchy[ROLE_DSM] = 9;
 
     return authorizationRoleHierarchy;
 };

@@ -3,7 +3,7 @@
  *
  * @author: gkar5861 on 23/06/20
  * */
-import {ERROR} from '../../util/constants';
+import {ERROR, LOGIN_URL} from '../../util/constants';
 import {handleError} from '../errorHandler';
 import {INTERNAL_SERVER_ERROR} from "http-status-codes";
 
@@ -23,14 +23,29 @@ describe('Error Handler', () => {
         };
 
         const jsonObj = jest.fn();
+        const requestPassed = {};
+
         const responsePassed = {
             status: jest.fn(() => ({
                 json: jsonObj,
             })),
         };
 
-        handleError(error, responsePassed);
+        handleError(error, requestPassed, responsePassed);
         expect(responsePassed.status).toHaveBeenCalledWith(errorType);
         expect(jsonObj).toHaveBeenCalledWith(response2);
+    });
+
+    test('should redirect when url is login url', async () => {
+        const requestPassed = {
+            url: LOGIN_URL
+        };
+
+        const responsePassed = {
+            redirect: jest.fn(),
+        };
+
+        handleError(error, requestPassed, responsePassed);
+        expect(responsePassed.redirect.mock.calls.length).toEqual(1)
     });
 });
