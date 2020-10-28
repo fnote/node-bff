@@ -10,13 +10,7 @@ import {jest} from "@jest/globals";
 import BusinessUnitDao from '../../dao/businessUnitDao'
 import {
     ROLE_APP_ADMIN,
-    ROLE_CFO,
-    ROLE_DRM,
-    ROLE_DSM,
     ROLE_GENERAL_USER,
-    ROLE_RSM,
-    ROLE_VP_MERCHANDISING,
-    ROLE_VP_SALES
 } from "../../util/constants";
 
 const OTHER_ROLE = 'otherRole'
@@ -391,15 +385,9 @@ describe('Auth Service', () => {
     });
 
     test('should send ROLE_GENERAL_USER when passed other roles is less priority in the hierarchy', async () => {
-        const rolesArrayFromUser = [ROLE_CFO, ROLE_GENERAL_USER, ROLE_DSM, ROLE_DRM];
+        const rolesArrayFromUser = [ROLE_GENERAL_USER, OTHER_ROLE];
         const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser);
         expect(selectedRole).toEqual(ROLE_GENERAL_USER);
-    });
-
-    test('should send ROLE_VP_MERCHANDISING when passed other roles is less priority in the hierarchy', async () => {
-        const rolesArrayFromUser = [ROLE_DSM, ROLE_VP_SALES, ROLE_DRM, ROLE_CFO, ROLE_RSM, ROLE_VP_MERCHANDISING];
-        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser);
-        expect(selectedRole).toEqual(ROLE_VP_MERCHANDISING);
     });
 
     test('should send an empty role when no role array is passed', async () => {

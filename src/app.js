@@ -36,7 +36,7 @@ app.use('/v1/pci-bff/', router);
 
 // error handling middleware
 app.use((err, req, res, next) => {
-    handleError(err, res);
+    handleError(err, req, res);
 });
 
 exports.serverlessApp = serverless(app);
