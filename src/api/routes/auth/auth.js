@@ -18,11 +18,11 @@ export default () => {
         if (authResponse && authResponse.authenticated) {
             const {username} = authResponse;
             logger.debug(`User: ${username} is being redirected after the login`);
-            res.redirect(`${authConfig.CONFIG.loginRedirectionUrl}?username=${username}`);
+            res.redirect(authConfig.CONFIG.loginRedirectionUrl);
         } else {
             const cause = authResponse ? authResponse.cause : 'No auth response';
             logger.error(`User authentication failed, so redirecting user back to login page. cause: ${cause}`);
-            res.redirect(`${authConfig.CONFIG.loginRedirectionUrl}?login=error`);
+            res.redirect(authConfig.CONFIG.loginRedirectionUrl);
         }
     });
 
