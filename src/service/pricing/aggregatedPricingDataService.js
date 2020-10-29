@@ -66,7 +66,7 @@ class AggregatedPricingDataService {
     _checkCPResponseErrorStatus(productPricePayload, pciPricePayload) {
         let productPayloadStatus = productPricePayload.products[0].statuses;
         let pciPayloadStatus = pciPricePayload.products[0].statuses;
-        if (productPayloadStatus.length && productPayloadStatus[0].state == "CRITICAL") {
+        if (productPayloadStatus.length && productPayloadStatus[0].state === "CRITICAL") {
             const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint, ${productPayloadStatus[0].message}`;
             logger.error(`${errorMessage}`);
             throw new CloudPricingDataFetchException(
@@ -74,7 +74,7 @@ class AggregatedPricingDataService {
                 productPayloadStatus[0].message,
                 PRODUCT_PRICE_DATA_FETCH_ERROR_CODE
             );
-        } else if (pciPayloadStatus.length && productPayloadStatus[0].state == "CRITICAL") {
+        } else if (pciPayloadStatus.length && productPayloadStatus[0].state === "CRITICAL") {
             const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint, ${pciPayloadStatus[0].message}`;
             logger.error(`${errorMessage}`);
             throw new CloudPricingDataFetchException(
@@ -130,7 +130,7 @@ class AggregatedPricingDataService {
                 PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE
             );
         }
-        
+
         const cloudPricingPCIDataCall = CloudPricingDataService.getCloudPricingPCIData(req);
         const cloudPricingProductPricesDataCall = CloudPricingDataService.getCloudPricingData(req);
         const itemInfoDataCall = ProductInfoService.getProductInfo(
@@ -162,7 +162,7 @@ class AggregatedPricingDataService {
 
                 // filtering root level attributes in pci-prices data
                 const rootLevelData = this._filterRootLevelPCIPricePayloadData(pciPricePayload)
-                
+
                 // adding root level data to final response
                 finalResponse = { ...rootLevelData }
                 // building product section
