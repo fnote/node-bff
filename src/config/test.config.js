@@ -11,6 +11,11 @@ export const productInfoMockResponse = {
         size: 'HEAVY',
         brandId: 'IBP',
         brand: 'IOWA BEEF PROCESSORS',
+        stockIndicator: "N",
+        averageWeight: 30,
+        catchWeightIndicator: "N",
+        split: "N",
+        shipSplitOnly: "N",
     },
 };
 
@@ -29,19 +34,121 @@ export const cloudPricingMockResponse = {
     requestStatuses: [],
     products: [
         {
-            supc: '7203474',
-            splitIndicator: ' ',
-            unitsPerCase: 4,
-            perWeightFlag: false,
-            averageNetWeight: 40.0000,
-            suggestedPrice: 75.75,
-            grossPrice: 78.09,
-            unitPrice: 75.75,
-            netPrice: 75.75,
+            "supc": "7203474",
+            "splitFlag": true,
+            "shipSplitsOnlyFlag": true,
+            "unitsPerCase": 12,
+            "perWeightFlag": false,
+            "averageNetWeight": 23.5000,
+            "grossPrice": 2.61,
+            "customerReferencePrice": 2.61,
+            "customerPrequalifiedPrice": 2.61,
+            "unitPrice": 23.18,
+            "netPrice": 23.22,
+            "agreementIndicators": [],
+            "priceSource": 96,
+            "minPrice": 0,
+            "minHandlingFlag": "",
+            "grossCommissionBasis": 2.55,
+            "handPricingAllowedFlag": false,
+            "statuses": [],
+            "priceRule": {
+                "name": "NEWTRS",
+                "baseValue": 2.55,
+                "factorCalcMethod": "MGN",
+                "factorSign": "+",
+                "factorValue": 2.0000
+            },
+            "agreements": [
+                {
+                    "id": "195950",
+                    "type": "BDEP",
+                    "applicationCode": "L",
+                    "description": "PRICING BOTTLE DEPOSIT TEST",
+                    "priceAdjustment": 0.04,
+                    "priceAdjustmentCode": "C",
+                    "rebateBasis": "DC",
+                    "methodCode": "OFF INVOICE LINE",
+                    "effectiveFrom": "20200915",
+                    "effectiveTo": "20201231"
+                }
+            ],
+            "exception": {
+                "id": "100",
+                "price": 23.180,
+                "effectiveFrom": "20200818",
+                "effectiveTo": "20201030"
+            },
+            "discounts": [],
+            "volumePricingTiers": []
         },
-    ],
+    ]
 };
 
+export const cloudPCIPricingMockResponse = {
+    "businessUnitNumber": "068",
+    "customerAccount": "758026",
+    "customerType": "TRS",
+    "priceRequestDate": "20201026",
+    "requestStatuses": [],
+    "products": [
+        {
+            "supc": "7203474",
+            "splitFlag": true,
+            "shipSplitsOnlyFlag": true,
+            "priceZoneId": 0,
+            "quantity": 12,
+            "unitsPerCase": 12,
+            "perWeightFlag": false,
+            "averageNetWeight": 23.5000,
+            "grossPrice": 2.61,
+            "referencePriceRoundingAdjustment": 0,
+            "customerReferencePrice": 2.61,
+            "customerPrequalifiedPrice": 2.61,
+            "unitPrice": 23.18,
+            "netPrice": 23.22,
+            "agreementIndicators": [],
+            "priceSource": 96,
+            "minPrice": 0,
+            "minHandlingFlag": "",
+            "grossCommissionBasis": 2.55,
+            "handPricingAllowedFlag": false,
+            "originalSupc": null,
+            "subReasonCode": null,
+            "orderPrice": null,
+            "orderPriceType": null,
+            "statuses": [],
+            "priceRule": {
+                "name": "NEWTRS",
+                "baseValue": 2.55,
+                "factorCalcMethod": "MGN",
+                "factorSign": "+",
+                "factorValue": 2.0000
+            },
+            "agreements": [
+                {
+                    "id": "195950",
+                    "type": "BDEP",
+                    "applicationCode": "L",
+                    "description": "PRICING BOTTLE DEPOSIT TEST",
+                    "priceAdjustment": 0.04,
+                    "priceAdjustmentCode": "C",
+                    "rebateBasis": "DC",
+                    "methodCode": "OFF INVOICE LINE",
+                    "effectiveFrom": "20200915",
+                    "effectiveTo": "20201231"
+                }
+            ],
+            "exception": {
+                "id": "100",
+                "price": 23.180,
+                "effectiveFrom": "20200818",
+                "effectiveTo": "20201030"
+            },
+            "discounts": []
+        }
+    ]
+}
 export const cloudPricingMockRequest = {
     body: {
         businessUnitNumber: '068',
@@ -68,7 +175,7 @@ export const cloudPricingMockRequestForErrorScenario = {
     },
 };
 
-export const pricingDataMockRequest = {
+export const cloudPricingDataMockRequest = {
     businessUnitNumber: '068',
     customerAccount: '758028',
     priceRequestDate: '20200605',
@@ -77,6 +184,19 @@ export const pricingDataMockRequest = {
             supc: '7203474', splitFlag: false, quantity: 1,
         },
     ],
+};
+
+export const pricingDataMockRequest = {
+    "body": {
+        businessUnitNumber: '068',
+        customerAccount: '758028',
+        priceRequestDate: '20200605',
+        requestedQuantity: 3,
+        product: {
+            supc: "7203474",
+            splitFlag: false
+        }
+    }
 };
 
 export const PricingDataMockResponse = {
@@ -208,5 +328,6 @@ export const pricingDataMockRequestThrowErrorForCloudPricingCall = {
 export const pricingDataMockResponseThrowErrorForCloudPricingCall = {
     status: 'error',
     message: 'Error occurred in getting pricing related data',
-    cause: 'Failed to fetch data from Cloud Pricing Endpoint',
+    cause: {},
+    errorCode: 4000
 };

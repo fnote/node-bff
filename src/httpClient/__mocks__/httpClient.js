@@ -5,15 +5,17 @@
  * */
 
 import {
+    pricingDataMockRequest,
     cloudPricingMockRequest,
     cloudPricingMockRequestForErrorScenario,
     cloudPricingMockResponse,
     cloudPricingMockResponseForAggregatedErrorPricingCall,
     cloudPricingMockResponseForAggregatedPricingCall,
-    pricingDataMockRequest,
+    cloudPricingDataMockRequest,
     pricingDataMockRequestForErrorOnCloudPricingCall,
     pricingDataMockRequestThrowErrorForCloudPricingCall,
     productInfoMockResponse,
+    cloudPCIPricingMockResponse
 } from '../../config/test.config';
 import HttpClientException from '../../exception/httpClientException';
 import {HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
@@ -60,7 +62,15 @@ class HttpClient {
             },
 
         };
-
+        if (JSON.stringify(data) === JSON.stringify({"businessUnitNumber":"069","customerAccount":"758028","priceRequestDate":"20200605","products":[{"supc":"7203474","splitFlag":false}]})) {
+            return { data2: cloudPricingMockResponse };
+        }
+        if (JSON.stringify(data) === JSON.stringify({"businessUnitNumber":"068","customerAccount":"758028","priceRequestDate":"20200605","products":[{"supc":"7203474","splitFlag":false}]})) {
+            return { data: cloudPricingMockResponse };
+        }
+        if (JSON.stringify(data) === JSON.stringify({ "businessUnitNumber": "068", "customerAccount": "758028", "priceRequestDate": "20200605", "products": [{ "supc": "7203474", "splitFlag": false, "quantity": "3" }] })) {
+            return { data: cloudPCIPricingMockResponse };
+        }
         if (JSON.stringify(data) === JSON.stringify(batchApiMockRequestBody)) {
             return batchApiMockResponse;
         }
@@ -77,7 +87,7 @@ class HttpClient {
             .stringify(cloudPricingMockRequestForErrorScenario.body)) {
             throw new Error('test-error');
         } else if (JSON.stringify(data) === JSON
-            .stringify(pricingDataMockRequest)) {
+            .stringify(cloudPricingDataMockRequest)) {
             return cloudPricingMockResponseForAggregatedPricingCall;
         } else if (JSON.stringify(data) === JSON
             .stringify(pricingDataMockRequestForErrorOnCloudPricingCall)) {

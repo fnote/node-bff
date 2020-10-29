@@ -6,6 +6,7 @@
 
 jest.mock('../../../middleware/authMiddleware');
 let {authMiddleware} = require('../../../middleware/authMiddleware');
+import { USER_UNAUTHORIZED_ERROR_CODE } from '../../../exception/exceptionCodes'
 
 import request from 'supertest';
 import * as HttpStatus from 'http-status-codes';
@@ -139,6 +140,7 @@ describe('routes: /auth', () => {
         const errorResponse = {
             "message": "User cannot be authenticated",
             "status": "Unauthorized",
+            "errorCode": USER_UNAUTHORIZED_ERROR_CODE
         }
 
         await request(app.app)
@@ -168,6 +170,7 @@ describe('routes: /auth', () => {
             "cause": "User details are not present",
             "message": "User cannot be authenticated",
             "status": "Unauthorized",
+            "errorCode": USER_UNAUTHORIZED_ERROR_CODE
         }
 
         await request(app.app)
@@ -196,6 +199,7 @@ describe('routes: /auth', () => {
             "cause": "User details are not present",
             "message": "User cannot be authenticated",
             "status": "Unauthorized",
+            "errorCode": USER_UNAUTHORIZED_ERROR_CODE
         }
 
         await request(app.app)
