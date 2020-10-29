@@ -32,7 +32,7 @@ class CloudPricingDataService {
             priceEngineType: this.cloudPricingConfig.CONFIG.priceEngineType,
         };
 
-        let reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl + this.cloudPricingConfig.CONFIG.productPricesEndpoint;
+        const reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl + this.cloudPricingConfig.CONFIG.productPricesEndpoint;
 
         try {
             return await httpClient.makeRequest(
@@ -65,7 +65,7 @@ class CloudPricingDataService {
             priceEngineType: this.cloudPricingConfig.CONFIG.priceEngineType,
         };
 
-        let reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl + this.cloudPricingConfig.CONFIG.pciPricesEndpoint;
+        const reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl + this.cloudPricingConfig.CONFIG.pciPricesEndpoint;
 
         try {
             return await httpClient.makeRequest(

@@ -27,8 +27,8 @@ class AggregatedPricingDataService {
      * @param {*} pciPricesPayload
      */
     _getApplicableTier(requestBody, pciPricesPayload) {
-        let qty = requestBody.requestedQuantity;
-        let volumenTiersList = pciPricesPayload.products[0].volumePricingTiers;
+        const qty = requestBody.requestedQuantity;
+        const volumenTiersList = pciPricesPayload.products[0].volumePricingTiers;
         let modifiedVolumeTierList = []
         if (volumenTiersList && Object.keys(volumenTiersList).length !== 0) {
             volumenTiersList.forEach(tier => {
@@ -64,8 +64,8 @@ class AggregatedPricingDataService {
      * @param  {} pciPricePayload
      */
     _checkCPResponseErrorStatus(productPricePayload, pciPricePayload) {
-        let productPayloadStatus = productPricePayload.products[0].statuses;
-        let pciPayloadStatus = pciPricePayload.products[0].statuses;
+        const productPayloadStatus = productPricePayload.products[0].statuses;
+        const pciPayloadStatus = pciPricePayload.products[0].statuses;
         if (productPayloadStatus.length && productPayloadStatus[0].state === "CRITICAL") {
             const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint, ${productPayloadStatus[0].message}`;
             logger.error(`${errorMessage}`);
@@ -145,9 +145,9 @@ class AggregatedPricingDataService {
             .then(([cloudPricingPCIResponse, cloudPricingProductPricesResponse, itemCallResponse]) => {
 
                 let finalResponse = {};
-                let productPricePayload = cloudPricingProductPricesResponse.data;
-                let pciPricePayload = cloudPricingPCIResponse.data;
-                let itemInfoPayload = itemCallResponse.data;
+                const productPricePayload = cloudPricingProductPricesResponse.data;
+                const pciPricePayload = cloudPricingPCIResponse.data;
+                const itemInfoPayload = itemCallResponse.data;
                 // validating CP responses
                 this._checkCPResponseErrorStatus(productPricePayload, pciPricePayload);
 
