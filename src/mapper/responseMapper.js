@@ -31,6 +31,6 @@ export function createErrorResponse(status, message, error, cause, errorCode) {
     }
 
     errorResponse.errorCode = errorCode || INTERNAL_SERVER_ERROR_CODE;
-    
+
     return errorResponse;
 }

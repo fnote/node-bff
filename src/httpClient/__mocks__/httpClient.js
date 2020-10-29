@@ -5,7 +5,8 @@
  * */
 
 import {
-    pricingDataMockRequest,
+    cloudPricingPCIMockRequest,
+    cloudPricingErrorMockRequest,
     cloudPricingMockRequest,
     cloudPricingMockRequestForErrorScenario,
     cloudPricingMockResponse,
@@ -62,13 +63,13 @@ class HttpClient {
             },
 
         };
-        if (JSON.stringify(data) === JSON.stringify({"businessUnitNumber":"069","customerAccount":"758028","priceRequestDate":"20200605","products":[{"supc":"7203474","splitFlag":false}]})) {
+        if (JSON.stringify(data) === JSON.stringify(cloudPricingErrorMockRequest.body)) {
             return { data2: cloudPricingMockResponse };
         }
-        if (JSON.stringify(data) === JSON.stringify({"businessUnitNumber":"068","customerAccount":"758028","priceRequestDate":"20200605","products":[{"supc":"7203474","splitFlag":false}]})) {
+        if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
             return { data: cloudPricingMockResponse };
         }
-        if (JSON.stringify(data) === JSON.stringify({ "businessUnitNumber": "068", "customerAccount": "758028", "priceRequestDate": "20200605", "products": [{ "supc": "7203474", "splitFlag": false, "quantity": "3" }] })) {
+        if (JSON.stringify(data) === JSON.stringify(cloudPricingPCIMockRequest.body)) {
             return { data: cloudPCIPricingMockResponse };
         }
         if (JSON.stringify(data) === JSON.stringify(batchApiMockRequestBody)) {

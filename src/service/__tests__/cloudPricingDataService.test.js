@@ -7,7 +7,6 @@
 import {jest} from '@jest/globals';
 import CloudPricingDataService from '../pricing/cloudPricingDataService';
 import {
-    cloudPricingMockRequest,
     pricingDataMockRequest,
     cloudPricingMockRequestForErrorScenario,
     cloudPricingMockResponse,
