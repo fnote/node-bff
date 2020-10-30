@@ -4,19 +4,18 @@
  * @author: adis0892 on 03/08/20
  * */
 
-import {Router} from 'express';
+import { Router } from 'express';
 import * as HttpStatus from 'http-status-codes';
 import AggregatedPricingDataService from '../../../service/pricing/aggregatedPricingDataService';
 import logger from '../../../util/logger';
-import {createErrorResponse} from '../../../mapper/responseMapper';
+import { createErrorResponse } from '../../../mapper/responseMapper';
 import AuthorizationService from '../../../service/auth/authorizationService';
-import {
-    PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE, PCI_PRICE_DATA_FETCH_ERROR_CODE,
-    PRODUCT_PRICE_DATA_FETCH_ERROR_CODE, PRODUCT_INFO_DATA_FETCH_ERROR_CODE
-} from '../../../exception/exceptionCodes';
+import CloudPricingDataFetchException from '../../../exception/cloudPricingDataFetchException';
+import InvalidRequestException from '../../../exception/invalidRequestException';
+import ProductInfoDataFetchException from '../../../exception/productInfoDataFetchException';
 
 export default () => {
-    const cloudPricingRouter = new Router({mergeParams: true});
+    const cloudPricingRouter = new Router({ mergeParams: true });
 
     cloudPricingRouter.post('/pricing-data', async (req, res) => {
         try {
@@ -36,16 +35,12 @@ export default () => {
             const errMessage = 'Error occurred in getting pricing related data';
             logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
             let httpStatusCode;
-            switch (error.errorCode) {
-                case PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE:
-                case PCI_PRICE_DATA_FETCH_ERROR_CODE:
-                case PRODUCT_PRICE_DATA_FETCH_ERROR_CODE:
-                case PRODUCT_INFO_DATA_FETCH_ERROR_CODE:
-                    httpStatusCode = HttpStatus.BAD_REQUEST;
-                    break;
-                default:
-                    httpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-                    break;
+            if (error instanceof CloudPricingDataFetchException ||
+                error instanceof ProductInfoDataFetchException ||
+                error instanceof InvalidRequestException) {
+                httpStatusCode = HttpStatus.BAD_REQUEST;
+            } else {
+                httpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
             }
             res.status(httpStatusCode)
                 .send(createErrorResponse(null, errMessage, error, null, error.errorCode));
