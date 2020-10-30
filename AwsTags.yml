@@ -49,6 +49,23 @@ exe:
   'Platform': 'Pricing Platform'
   'Component': 'Cloud PCI Application BFF'
 
+  stg:
+    'Environment': 'Staging'
+    'EnvironmentShort': 'STG'
+    'Technical:ApplicationName': 'Cloud Pricing'
+    'Technical:ApplicationID': 'APP-001151'
+    'Technical:PlatformOwner': 'krishan.senevirathne@sysco.com'
+    'Technical:Environment': 'STG'
+    'Technical:ApplicationSubName': 'Cloud PCI Application BFF'
+    'Technical:ApplicationRole': 'Target Group'
+    'SupportEmail': '000-BT-PricingPlatform@Corp.sysco.com'
+    'Approver': 'villanueva.loi@corp.sysco.com'
+    'PO_Number': '7000002358'
+    'Project_ID': 'BT.001176'
+    '2WTAGGER': 'team-managed'
+    'Platform': 'Pricing Platform'
+    'Component': 'Cloud PCI Application BFF'
+
 prod:
   'Environment': 'Production'
   'EnvironmentShort': 'PROD'
