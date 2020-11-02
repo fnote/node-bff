@@ -120,7 +120,7 @@ class AggregatedPricingDataService {
         const requestBody = req.body;
         const { error } = pricingDataReqBody.validate(requestBody);
         if (error) {
-            logger.error(`Request body validation failed in get aggregatedPricingData: ${JSON.stringify(requestBody)}`);
+            logger.error(`Request body validation failed in getting aggregated pricing data: ${JSON.stringify(requestBody)}`);
             throw new InvalidRequestException(
                 ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
@@ -170,7 +170,7 @@ class AggregatedPricingDataService {
                 return finalResponse;
             })
             .catch(err => {
-                logger.error(`Error occurred in while processing pricing data in getAggregatedPricingData: ${err}`);
+                logger.error(`Error occurred in while processing aggregated pricing data: ${err}`);
                 throw err;
             });
     }
