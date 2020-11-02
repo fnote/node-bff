@@ -13,10 +13,7 @@ import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetc
 import * as HttpStatus from 'http-status-codes';
 import { ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY } from '../../util/constants';
 import { getPriceSourceName } from '../../config/configs';
-import {
-    PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE, PCI_PRICE_DATA_FETCH_ERROR_CODE,
-    PRODUCT_PRICE_DATA_FETCH_ERROR_CODE
-} from '../../exception/exceptionCodes';
+import { PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE } from '../../exception/exceptionCodes';
 
 class AggregatedPricingDataService {
 
@@ -72,15 +69,15 @@ class AggregatedPricingDataService {
             throw new CloudPricingDataFetchException(
                 errorMessage,
                 productPayloadStatus[0].message,
-                PRODUCT_PRICE_DATA_FETCH_ERROR_CODE
+                productPayloadStatus[0].code
             );
-        } else if (pciPayloadStatus.length && productPayloadStatus[0].state === "CRITICAL") {
+        } else if (pciPayloadStatus.length && pciPayloadStatus[0].state === "CRITICAL") {
             const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint, ${pciPayloadStatus[0].message}`;
             logger.error(`${errorMessage}`);
             throw new CloudPricingDataFetchException(
                 errorMessage,
                 pciPayloadStatus[0].message,
-                PCI_PRICE_DATA_FETCH_ERROR_CODE
+                pciPayloadStatus[0].code
             );
         }
     }
@@ -123,7 +120,7 @@ class AggregatedPricingDataService {
         const requestBody = req.body;
         const { error } = pricingDataReqBody.validate(requestBody);
         if (error) {
-            logger.error(`Request body validation failed in getAggregatedPricingData: ${requestBody}`);
+            logger.error(`Request body validation failed in getting aggregated pricing data: ${JSON.stringify(requestBody)}`);
             throw new InvalidRequestException(
                 ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
@@ -173,7 +170,7 @@ class AggregatedPricingDataService {
                 return finalResponse;
             })
             .catch(err => {
-                logger.error(`Error occurred in while processing pricing data in getAggregatedPricingData: ${err}`);
+                logger.error(`Error occurred in while processing aggregated pricing data: ${err}`);
                 throw err;
             });
     }

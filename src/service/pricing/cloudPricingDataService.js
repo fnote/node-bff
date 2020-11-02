@@ -9,7 +9,6 @@ import {httpClient} from '../../httpClient/httpClient';
 import logger from '../../util/logger';
 import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetchException';
 import { HTTP_POST, ERROR_IN_FETCHING_CLOUD_PRICING_DATA, APPLICATION_JSON } from '../../util/constants';
-import { PCI_PRICE_DATA_FETCH_ERROR_CODE, PRODUCT_PRICE_DATA_FETCH_ERROR_CODE } from '../../exception/exceptionCodes';
 
 class CloudPricingDataService {
     constructor() {
@@ -33,20 +32,7 @@ class CloudPricingDataService {
         };
 
         const reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl + this.cloudPricingConfig.CONFIG.productPricesEndpoint;
-
-        try {
-            return await httpClient.makeRequest(
-                HTTP_POST, reqUrl, body, headers,
-            );
-        } catch (e) {
-            const errorMessage = ERROR_IN_FETCHING_CLOUD_PRICING_DATA;
-            logger.error(`${errorMessage} ${reqUrl} due to: ${e}, stacktrace: ${e.stack}`);
-            throw new CloudPricingDataFetchException(
-                errorMessage,
-                e.message,
-                PRODUCT_PRICE_DATA_FETCH_ERROR_CODE
-            );
-        }
+        return this._sendRequest(reqUrl, headers, body);
     }
 
     async getCloudPricingPCIData(req) {
@@ -67,17 +53,23 @@ class CloudPricingDataService {
 
         const reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl + this.cloudPricingConfig.CONFIG.pciPricesEndpoint;
 
+        return this._sendRequest(reqUrl, headers, body);
+    }
+
+    async _sendRequest(reqUrl, headers, body) {
         try {
             return await httpClient.makeRequest(
                 HTTP_POST, reqUrl, body, headers,
             );
         } catch (e) {
-            const errorMessage = ERROR_IN_FETCHING_CLOUD_PRICING_DATA;
+            const specificErrorMessage = e.errorDetails.response.data.message;
+            const errorMessage = `${ERROR_IN_FETCHING_CLOUD_PRICING_DATA}, ${specificErrorMessage}`;
             logger.error(`${errorMessage} ${reqUrl} due to: ${e}, stacktrace: ${e.stack}`);
+            const cpErrorCode = e.errorDetails.response.data.code;
             throw new CloudPricingDataFetchException(
                 errorMessage,
                 e.message,
-                PCI_PRICE_DATA_FETCH_ERROR_CODE
+                cpErrorCode
             );
         }
     }
