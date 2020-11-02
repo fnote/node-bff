@@ -71,7 +71,7 @@ class AggregatedPricingDataService {
                 productPayloadStatus[0].message,
                 productPayloadStatus[0].code
             );
-        } else if (pciPayloadStatus.length && productPayloadStatus[0].state === "CRITICAL") {
+        } else if (pciPayloadStatus.length && pciPayloadStatus[0].state === "CRITICAL") {
             const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint, ${pciPayloadStatus[0].message}`;
             logger.error(`${errorMessage}`);
             throw new CloudPricingDataFetchException(
