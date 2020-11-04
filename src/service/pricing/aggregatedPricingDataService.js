@@ -3,7 +3,7 @@
  *
  * @author: adis0892 on 03/08/20
  * */
-import _ from 'lodash';
+import { get } from 'lodash';
 import CloudPricingDataService from './cloudPricingDataService';
 import ProductInfoService from '../productInfo/productInfoService';
 import { pricingDataReqBody } from '../../validator/schema';
@@ -25,7 +25,7 @@ class AggregatedPricingDataService {
      */
     _getApplicableTier(requestBody, pciPricesPayload) {
         const qty = requestBody.requestedQuantity;
-        const volumenTiersList = _.get(pciPricesPayload, 'products[0].volumePricingTiers', undefined);
+        const volumenTiersList = get(pciPricesPayload, 'products[0].volumePricingTiers', undefined);
         let modifiedVolumeTierList = []
         if (volumenTiersList && Object.keys(volumenTiersList).length !== 0) {
             volumenTiersList.forEach(tier => {
@@ -51,7 +51,7 @@ class AggregatedPricingDataService {
     }
 
     _getPriceSourceName(pciPricesPayload) {
-        const priceSource = _.get(pciPricesPayload, 'products[0].priceSource', 0)
+        const priceSource = get(pciPricesPayload, 'products[0].priceSource', 0)
         return getPriceSourceName(priceSource);
     }
 
@@ -62,8 +62,8 @@ class AggregatedPricingDataService {
      * @param  {} pciPricePayload
      */
     _checkCPResponseErrorStatus(productPricePayload, pciPricePayload) {
-        const productPayloadStatus = _.get(productPricePayload, 'products[0].statuses', []);
-        const pciPayloadStatus = _.get(pciPricePayload, 'products[0].statuses', []);
+        const productPayloadStatus = get(productPricePayload, 'products[0].statuses', []);
+        const pciPayloadStatus = get(pciPricePayload, 'products[0].statuses', []);
         if (productPayloadStatus.length && productPayloadStatus[0].state === CRITICAL) {
             const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint, ${productPayloadStatus[0].message}`;
             logger.error(`${errorMessage}`);
@@ -151,7 +151,7 @@ class AggregatedPricingDataService {
 
                 // selecting tiers from product-prices and tag applicable tier
                 const modifiedCloudPricingProductPricesResponse = this._getApplicableTier(requestBody, productPricePayload)
-                const modifiedVolumeTiers = _.get(modifiedCloudPricingProductPricesResponse, 'products[0].volumePricingTiers', []);
+                const modifiedVolumeTiers = get(modifiedCloudPricingProductPricesResponse, 'products[0].volumePricingTiers', []);
 
                 //selecting price source name
                 const priceSourceName = this._getPriceSourceName(pciPricePayload)
