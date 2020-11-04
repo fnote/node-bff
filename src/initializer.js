@@ -1,7 +1,7 @@
 import {loadSsmConfigs} from './service/aws/ssmService';
 import {getAccessToken} from './util/accessTokenGenerator';
 import logger from './util/logger';
-import AuthorizationService from "./service/auth/authorizationService";
+import AuthorizationService from './service/auth/authorizationService';
 
 /**
  * Lambda initializer for hot starts

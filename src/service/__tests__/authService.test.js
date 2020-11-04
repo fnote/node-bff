@@ -18,11 +18,10 @@ const authConfig = getAuthConfig();
 const tokenName = authConfig.CONFIG.authTokenHeaderAttribute;
 const userClaim = authConfig.CONFIG.userClaimHeaderAttribute;
 
-
 const mockRequest = {
     headers: {
         [tokenName]: 'access-token',
-        [userClaim]: 'user-claim-first.second'
+        [userClaim]: 'user-claim-first.second',
     },
 };
 
@@ -42,32 +41,31 @@ const mockResponse = {
     },
 };
 
-
 const authenticatedMockResponse = {
-    "authenticated": true,
-    "cause": null,
-    "username": "username",
-    "userDetailsData": {
-        "authorizedBunitList": [
+    authenticated: true,
+    cause: null,
+    username: 'username',
+    userDetailsData: {
+        authorizedBunitList: [
             {
                 bunit_id: '001',
                 bunit_name: 'Sysco Jackson',
-                periscope_on: 'Y'
+                periscope_on: 'Y',
             },
             {
                 bunit_id: '003',
                 bunit_name: 'Sysco Jacksonville',
-                periscope_on: 'Y'
+                periscope_on: 'Y',
             },
         ],
-        "email": "firstName.secondName@syscolabs.com",
-        "firstName": "firstName",
-        "jobTitle": "jobTitle",
-        "lastName": "secondName",
-        "username": "username",
-        "role": "appadmin"
+        email: 'firstName.secondName@syscolabs.com',
+        firstName: 'firstName',
+        jobTitle: 'jobTitle',
+        lastName: 'secondName',
+        username: 'username',
+        role: 'appadmin',
     },
-}
+};
 
 jest.mock('../../config/configs', () => ({
     getAuthConfig: () => ({
@@ -82,34 +80,30 @@ jest.mock('../../config/configs', () => ({
 }));
 
 jest.mock('../auth/authorizationService', () => ({
-    getAuthorizedBusinessUnits: () => {
-        return [
+    getAuthorizedBusinessUnits: () => [
             {
                 bunit_id: '001',
                 bunit_name: 'Sysco Jackson',
-                periscope_on: 'Y'
+                periscope_on: 'Y',
             },
             {
                 bunit_id: '003',
                 bunit_name: 'Sysco Jacksonville',
-                periscope_on: 'Y'
+                periscope_on: 'Y',
             },
-        ]
-    },
+        ],
 
 }));
 
-JSON.parse = jest.fn().mockImplementationOnce(() => {
-    return {
-        'username': 'AD_username',
-        "profile": "appadmin",
-        "locale": "341 - Sysco Labs",
-        "given_name": "firstName",
-        "family_name": "secondName",
-        "email": "firstName.secondName@syscolabs.com",
-        "zoneinfo": "jobTitle"
-    }
-});
+JSON.parse = jest.fn().mockImplementationOnce(() => ({
+        username: 'AD_username',
+        profile: 'appadmin',
+        locale: '341 - Sysco Labs',
+        given_name: 'firstName',
+        family_name: 'secondName',
+        email: 'firstName.secondName@syscolabs.com',
+        zoneinfo: 'jobTitle',
+    }));
 
 jwkToPem.mockReturnValueOnce('pems2')
     .mockReturnValueOnce('pems1');
@@ -143,10 +137,10 @@ describe('Auth Service', () => {
         const response = await AuthenticateService
             .prepareToValidateToken(mockRequestWithoutToken, mockResponse);
         const unauthenticatedReturn = {
-            "authenticated": false,
-            "cause": "Access token is missing from header",
-            "username": null,
-        }
+            authenticated: false,
+            cause: 'Access token is missing from header',
+            username: null,
+        };
         expect(response).toEqual(unauthenticatedReturn);
     });
 
@@ -154,10 +148,10 @@ describe('Auth Service', () => {
         jwt.decode.mockReturnValue(null);
         const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         const unauthenticatedReturn = {
-            "authenticated": false,
-            "cause": "Not a valid JWT token",
-            "username": null,
-        }
+            authenticated: false,
+            cause: 'Not a valid JWT token',
+            username: null,
+        };
         expect(response).toEqual(unauthenticatedReturn);
     });
 
@@ -174,10 +168,10 @@ describe('Auth Service', () => {
 
         const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         const unauthenticatedReturn = {
-            "authenticated": false,
-            "cause": "The issuer of the token is invalid",
-            "username": null,
-        }
+            authenticated: false,
+            cause: 'The issuer of the token is invalid',
+            username: null,
+        };
         expect(response).toEqual(unauthenticatedReturn);
     });
 
@@ -194,10 +188,10 @@ describe('Auth Service', () => {
 
         const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         const unauthenticatedReturn = {
-            "authenticated": false,
-            "cause": "Token is not an access token",
-            "username": null,
-        }
+            authenticated: false,
+            cause: 'Token is not an access token',
+            username: null,
+        };
         expect(response).toEqual(unauthenticatedReturn);
     });
 
@@ -214,10 +208,10 @@ describe('Auth Service', () => {
 
         const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         const unauthenticatedReturn = {
-            "authenticated": false,
-            "cause": "Invalid access token",
-            "username": null,
-        }
+            authenticated: false,
+            cause: 'Invalid access token',
+            username: null,
+        };
         expect(response).toEqual(unauthenticatedReturn);
     });
 
@@ -240,10 +234,10 @@ describe('Auth Service', () => {
 
         const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         const unauthenticatedReturn = {
-            "authenticated": false,
-            "cause": "Token was failed to be verified",
-            "username": null,
-        }
+            authenticated: false,
+            cause: 'Token was failed to be verified',
+            username: null,
+        };
         expect(response).toEqual(unauthenticatedReturn);
     });
 
@@ -268,10 +262,10 @@ describe('Auth Service', () => {
 
         const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         const unauthenticatedReturn = {
-            "authenticated": false,
-            "cause": "Required variables for authentication are invalid",
-            "username": null,
-        }
+            authenticated: false,
+            cause: 'Required variables for authentication are invalid',
+            username: null,
+        };
         expect(response).toEqual(unauthenticatedReturn);
     });
 
@@ -292,10 +286,10 @@ describe('Auth Service', () => {
 
         const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         const unauthenticatedReturn = {
-            "authenticated": false,
-            "cause": "Unexpected error occurred while validating the token",
-            "username": null,
-        }
+            authenticated: false,
+            cause: 'Unexpected error occurred while validating the token',
+            username: null,
+        };
         expect(response).toEqual(unauthenticatedReturn);
     });
 });

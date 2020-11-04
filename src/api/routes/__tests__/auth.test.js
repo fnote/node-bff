@@ -4,26 +4,26 @@
  * @author: adis0892 on 28/07/20
  * */
 
-jest.mock('../../../middleware/authMiddleware');
-let {authMiddleware} = require('../../../middleware/authMiddleware');
-import { USER_UNAUTHORIZED_ERROR_CODE } from '../../../exception/exceptionCodes'
-
 import request from 'supertest';
 import * as HttpStatus from 'http-status-codes';
 import {jest} from '@jest/globals';
+import { USER_UNAUTHORIZED_ERROR_CODE } from '../../../exception/exceptionCodes';
 import app from '../../../app';
 
+jest.mock('../../../middleware/authMiddleware');
+const {authMiddleware} = require('../../../middleware/authMiddleware');
+
 const userDetailsMockResponse = {
-    "authorizedBunitList": [
-        "001",
-        "002",
+    authorizedBunitList: [
+        '001',
+        '002',
     ],
-    "email": "firstName.secondName@syscolabs.com",
-    "firstName": "firstName",
-    "jobTitle": "jobTitle",
-    "lastName": "secondName",
-    "username": "username"
-}
+    email: 'firstName.secondName@syscolabs.com',
+    firstName: 'firstName',
+    jobTitle: 'jobTitle',
+    lastName: 'secondName',
+    username: 'username',
+};
 
 jest.mock('../../../initializer', () => ({
     initializer: (req, res, next) => next(),
@@ -35,10 +35,10 @@ describe('routes: /auth', () => {
     test('get /login should redirect the user when authentication happens', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
-                "authenticated": true,
-                "cause": null,
-            }
-            next()
+                authenticated: true,
+                cause: null,
+            };
+            next();
         });
 
         await request(app.app)
@@ -51,15 +51,13 @@ describe('routes: /auth', () => {
     });
 
     test('get /login should redirect the user when authentication happens even when authenticate: false', async () => {
-
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
-                "authenticated": false,
-                "cause": null,
-                "username": "username",
-            }
-            next()
-
+                authenticated: false,
+                cause: null,
+                username: 'username',
+            };
+            next();
         });
 
         await request(app.app)
@@ -74,11 +72,10 @@ describe('routes: /auth', () => {
     test('get /logout should redirect user to the screen after logout', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
-                "authenticated": true,
-                "cause": null,
-            }
-            next()
-
+                authenticated: true,
+                cause: null,
+            };
+            next();
         });
 
         await request(app.app)
@@ -93,26 +90,24 @@ describe('routes: /auth', () => {
     });
 
     test('get /user-details should send successful response when auth response is successful', async () => {
-
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
-                "authenticated": true,
-                "cause": null,
-                "username": "username",
-                "userDetailsData": {
-                    "authorizedBunitList": [
-                        "001",
-                        "002",
+                authenticated: true,
+                cause: null,
+                username: 'username',
+                userDetailsData: {
+                    authorizedBunitList: [
+                        '001',
+                        '002',
                     ],
-                    "email": "firstName.secondName@syscolabs.com",
-                    "firstName": "firstName",
-                    "jobTitle": "jobTitle",
-                    "lastName": "secondName",
-                    "username": "username"
+                    email: 'firstName.secondName@syscolabs.com',
+                    firstName: 'firstName',
+                    jobTitle: 'jobTitle',
+                    lastName: 'secondName',
+                    username: 'username',
                 },
-            }
-            next()
-
+            };
+            next();
         });
 
         await request(app.app)
@@ -126,22 +121,20 @@ describe('routes: /auth', () => {
     });
 
     test('get /user-details should send unauthorized response when auth response send "authenticated": false', async () => {
-
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
-                "authenticated": false,
-                "cause": null,
-                "username": "username",
-            }
-            next()
-
+                authenticated: false,
+                cause: null,
+                username: 'username',
+            };
+            next();
         });
 
         const errorResponse = {
-            "message": "User cannot be authenticated",
-            "status": "Unauthorized",
-            "errorCode": USER_UNAUTHORIZED_ERROR_CODE
-        }
+            message: 'User cannot be authenticated',
+            status: 'Unauthorized',
+            errorCode: USER_UNAUTHORIZED_ERROR_CODE,
+        };
 
         await request(app.app)
             .get('/v1/pci-bff/auth/user-details')
@@ -154,24 +147,22 @@ describe('routes: /auth', () => {
     });
 
     test('get /user-details should send unauthorized response when auth response send userDetailsData empty', async () => {
-
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
-                "authenticated": true,
-                "cause": null,
-                "username": "username",
-                "userDetailsData": {},
-            }
-            next()
-
+                authenticated: true,
+                cause: null,
+                username: 'username',
+                userDetailsData: {},
+            };
+            next();
         });
 
         const errorResponse = {
-            "cause": "User details are not present",
-            "message": "User cannot be authenticated",
-            "status": "Unauthorized",
-            "errorCode": USER_UNAUTHORIZED_ERROR_CODE
-        }
+            cause: 'User details are not present',
+            message: 'User cannot be authenticated',
+            status: 'Unauthorized',
+            errorCode: USER_UNAUTHORIZED_ERROR_CODE,
+        };
 
         await request(app.app)
             .get('/v1/pci-bff/auth/user-details')
@@ -183,24 +174,23 @@ describe('routes: /auth', () => {
             });
     });
 
-    test('get /user-details should send unauthorized response when auth response send userDetailsData is not defined', async () => {
-
-        authMiddleware.mockImplementationOnce((req, res, next) => {
-            res.locals.authResponse = {
-                "authenticated": true,
-                "cause": null,
-                "username": "username",
-            }
-            next()
-
-        });
+    test('get /user-details should send unauthorized response when auth response send userDetailsData is not defined',
+        async () => {
+            authMiddleware.mockImplementationOnce((req, res, next) => {
+                res.locals.authResponse = {
+                    authenticated: true,
+                    cause: null,
+                    username: 'username',
+                };
+                next();
+            });
 
         const errorResponse = {
-            "cause": "User details are not present",
-            "message": "User cannot be authenticated",
-            "status": "Unauthorized",
-            "errorCode": USER_UNAUTHORIZED_ERROR_CODE
-        }
+            cause: 'User details are not present',
+            message: 'User cannot be authenticated',
+            status: 'Unauthorized',
+            errorCode: USER_UNAUTHORIZED_ERROR_CODE,
+        };
 
         await request(app.app)
             .get('/v1/pci-bff/auth/user-details')

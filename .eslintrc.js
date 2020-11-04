@@ -6,7 +6,16 @@ module.exports = {
   },
   rules: {
     quotes: [2, 'single', { avoidEscape: true }],
-    'no-unused-vars': ['error', { gsIgnorePattern: 'next' }],
+    'max-len': ['error', {
+      code: 150,
+      ignoreUrls: true,
+      ignoreTemplateLiterals: true,
+      ignoreComments: true,
+    }],
+    'no-param-reassign': ['error', { props: false }],
+    'no-unused-vars': ['error', { argsIgnorePattern: 'next' }],
+    'import/no-named-as-default': 'off',
+    'import/no-named-as-default-member': 'off',
     'consistent-return': 'off',
     'class-methods-use-this': 'off',
     'import/prefer-default-export': 'off',
@@ -26,4 +35,5 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
+  parser: 'babel-eslint',
 };

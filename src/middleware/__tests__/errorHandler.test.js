@@ -3,9 +3,9 @@
  *
  * @author: gkar5861 on 23/06/20
  * */
+import {INTERNAL_SERVER_ERROR} from 'http-status-codes';
 import {ERROR, LOGIN_URL} from '../../util/constants';
 import {handleError} from '../errorHandler';
-import {INTERNAL_SERVER_ERROR} from "http-status-codes";
 
 const message = 'message';
 const errorType = INTERNAL_SERVER_ERROR;
@@ -17,7 +17,7 @@ const error = {
 describe('Error Handler', () => {
     test('should return error response as status error', async () => {
         const response2 = {
-            "cause": undefined,
+            cause: undefined,
             status: ERROR,
             message,
         };
@@ -38,7 +38,7 @@ describe('Error Handler', () => {
 
     test('should redirect when url is login url', async () => {
         const requestPassed = {
-            url: LOGIN_URL
+            url: LOGIN_URL,
         };
 
         const responsePassed = {
@@ -46,6 +46,6 @@ describe('Error Handler', () => {
         };
 
         handleError(error, requestPassed, responsePassed);
-        expect(responsePassed.redirect.mock.calls.length).toEqual(1)
+        expect(responsePassed.redirect.mock.calls.length).toEqual(1);
     });
 });

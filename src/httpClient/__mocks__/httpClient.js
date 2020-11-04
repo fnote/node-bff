@@ -16,7 +16,7 @@ import {
     pricingDataMockRequestForErrorOnCloudPricingCall,
     pricingDataMockRequestThrowErrorForCloudPricingCall,
     productInfoMockResponse,
-    cloudPCIPricingMockResponse
+    cloudPCIPricingMockResponse,
 } from '../../config/test.config';
 import HttpClientException from '../../exception/httpClientException';
 import {HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';

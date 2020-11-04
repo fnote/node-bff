@@ -26,9 +26,7 @@ jest.mock('../../../initializer', () => ({
 }));
 
 jest.mock('../../../service/auth/authorizationService', () => ({
-    isAuthorizedRequest: () => {
-        return true;
-    },
+    isAuthorizedRequest: () => true,
 
 }));
 

@@ -4,10 +4,10 @@
  * @author: adis0892 on 18/07/20
  * */
 import {Router} from 'express';
+import * as HttpStatus from 'http-status-codes';
 import {getAuthConfig} from '../../../config/configs';
 import logger from '../../../util/logger';
-import * as HttpStatus from "http-status-codes";
-import {createErrorResponse} from "../../../mapper/responseMapper";
+import {createErrorResponse} from '../../../mapper/responseMapper';
 import { USER_UNAUTHORIZED_ERROR_CODE } from '../../../exception/exceptionCodes';
 
 export default () => {
@@ -35,7 +35,6 @@ export default () => {
     });
 
     AuthRouter.get('/user-details', (req, res) => {
-
         const {authResponse} = res.locals;
         if (authResponse && authResponse.authenticated) {
             const {userDetailsData} = authResponse;
@@ -46,9 +45,8 @@ export default () => {
                 res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized', 'User cannot be authenticated',
                     null, 'User details are not present', USER_UNAUTHORIZED_ERROR_CODE));
             }
-
         } else {
-            const cause = authResponse ? authResponse.cause : null
+            const cause = authResponse ? authResponse.cause : null;
             res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized', 'User cannot be authenticated',
                 null, cause, USER_UNAUTHORIZED_ERROR_CODE));
         }

@@ -1,5 +1,4 @@
 export default class DatabaseException extends Error {
-
     constructor(error, cause) {
         super(error.toString());
         Error.captureStackTrace(this, this.constructor);

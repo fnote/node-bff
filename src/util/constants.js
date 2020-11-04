@@ -28,7 +28,8 @@ export const HTTP_CLIENT_ERROR_CODE_INTERNAL_SERVER_ERROR = 500;
 // errors
 export const ERROR_IN_GETTING_S3_INPUT_SIGNED_URL = 'Error in getting S3 input signed urls';
 export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL = 'Error in getting S3 output signed urls';
-export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_INVALID_SOURCE = 'Invalid source is passed in the url. Valid sources are input/output';
+export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_INVALID_SOURCE = `Invalid source is passed in the url. 
+Valid sources are input/output`;
 export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY = 'Unsupported request body';
 export const ERROR_IN_FETCHING_CLOUD_PRICING_DATA = 'Failed to fetch data from Cloud Pricing Endpoint';
 
