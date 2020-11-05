@@ -95,7 +95,7 @@ class AggregatedPricingDataService {
             id, name, pack, size, brandId, brand, stockIndicator, averageWeight,
             catchWeightIndicator, split, shipSplitOnly,
         } = itemInfoPayload;
-        const filteredItemPayload = {
+        return {
             id,
             name,
             pack,
@@ -108,21 +108,19 @@ class AggregatedPricingDataService {
             split,
             shipSplitOnly,
         };
-        return filteredItemPayload;
     }
 
     filterRootLevelPCIPricePayloadData(pciPricePayload) {
         const {
             businessUnitNumber, customerAccount, customerType, priceRequestDate, requestStatuses,
         } = pciPricePayload;
-        const rootLevelData = {
+        return {
             businessUnitNumber,
             customerAccount,
             customerType,
             priceRequestDate,
             requestStatuses,
         };
-        return rootLevelData;
     }
 
     async getAggregatedPricingData(req) {
