@@ -5,13 +5,16 @@
  * */
 
 import * as HttpStatus from 'http-status-codes';
+import { get } from 'lodash';
 import CloudPricingDataService from './cloudPricingDataService';
 import ProductInfoService from '../productInfo/productInfoService';
 import { pricingDataReqBody } from '../../validator/schema';
 import logger from '../../util/logger';
 import InvalidRequestException from '../../exception/invalidRequestException';
 import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetchException';
-import { ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY } from '../../util/constants';
+import {
+    ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY, BETWEEN, IS_APPLICABLE, CRITICAL,
+} from '../../util/constants';
 import { getPriceSourceName } from '../../config/configs';
 import { PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE } from '../../exception/exceptionCodes';
 
@@ -24,23 +27,23 @@ class AggregatedPricingDataService {
      */
     getApplicableTier(requestBody, pciPricesPayload) {
         const qty = requestBody.requestedQuantity;
-        const volumenTiersList = pciPricesPayload.products[0].volumePricingTiers;
+        const volumenTiersList = get(pciPricesPayload, 'products[0].volumePricingTiers', undefined);
         const modifiedVolumeTierList = [];
         if (volumenTiersList && Object.keys(volumenTiersList).length !== 0) {
             volumenTiersList.forEach((tier) => {
                 const { eligibility } = tier;
                 let modifiedTier = {};
-                if (eligibility.operator === 'Between') {
+                if (eligibility.operator === BETWEEN) {
                     if (eligibility.lowerBound <= qty && qty <= eligibility.upperBound) {
-                        modifiedTier = { ...tier, isApplicable: true };
+                        modifiedTier = { ...tier, [IS_APPLICABLE]: true };
                     } else {
-                        modifiedTier = { ...tier, isApplicable: false };
+                        modifiedTier = { ...tier, [IS_APPLICABLE]: false };
                     }
                 } else if (eligibility.operator === '>=') {
                     if (eligibility.lowerBound <= qty) {
-                        modifiedTier = { ...tier, isApplicable: true };
+                        modifiedTier = { ...tier, [IS_APPLICABLE]: true };
                     } else {
-                        modifiedTier = { ...tier, isApplicable: false };
+                        modifiedTier = { ...tier, [IS_APPLICABLE]: false };
                     }
                 }
                 modifiedVolumeTierList.push(modifiedTier);
@@ -51,7 +54,8 @@ class AggregatedPricingDataService {
     }
 
     getPriceSourceName(pciPricesPayload) {
-        return getPriceSourceName(pciPricesPayload.products[0].priceSource);
+        const priceSource = get(pciPricesPayload, 'products[0].priceSource', 0);
+        return getPriceSourceName(priceSource);
     }
 
     /**
@@ -61,9 +65,9 @@ class AggregatedPricingDataService {
      * @param  {} pciPricePayload
      */
     checkCPResponseErrorStatus(productPricePayload, pciPricePayload) {
-        const productPayloadStatus = productPricePayload.products[0].statuses;
-        const pciPayloadStatus = pciPricePayload.products[0].statuses;
-        if (productPayloadStatus.length && productPayloadStatus[0].state === 'CRITICAL') {
+        const productPayloadStatus = get(productPricePayload, 'products[0].statuses', []);
+        const pciPayloadStatus = get(pciPricePayload, 'products[0].statuses', []);
+        if (productPayloadStatus.length && productPayloadStatus[0].state === CRITICAL) {
             const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint, ${productPayloadStatus[0].message}`;
             logger.error(`${errorMessage}`);
             throw new CloudPricingDataFetchException(
@@ -71,7 +75,7 @@ class AggregatedPricingDataService {
                 productPayloadStatus[0].message,
                 productPayloadStatus[0].code,
             );
-        } else if (pciPayloadStatus.length && pciPayloadStatus[0].state === 'CRITICAL') {
+        } else if (pciPayloadStatus.length && pciPayloadStatus[0].state === CRITICAL) {
             const errorMessage = `Failed to fetch data from Cloud Pricing Endpoint, ${pciPayloadStatus[0].message}`;
             logger.error(`${errorMessage}`);
             throw new CloudPricingDataFetchException(
@@ -153,6 +157,7 @@ class AggregatedPricingDataService {
 
                 // selecting tiers from product-prices and tag applicable tier
                 const modifiedCloudPricingProductPricesResponse = this.getApplicableTier(requestBody, productPricePayload);
+                const modifiedVolumeTiers = get(modifiedCloudPricingProductPricesResponse, 'products[0].volumePricingTiers', []);
 
                 // selecting price source name
                 const priceSourceName = this.getPriceSourceName(pciPricePayload);
@@ -170,7 +175,7 @@ class AggregatedPricingDataService {
                     ...filteredItemPayload,
                     priceSourceName,
                     ...pciPricePayload.products[0],
-                    volumePricingTiers: [...modifiedCloudPricingProductPricesResponse.products[0].volumePricingTiers],
+                    volumePricingTiers: [...modifiedVolumeTiers],
                 };
                 return finalResponse;
             })

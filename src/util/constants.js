@@ -44,3 +44,8 @@ export const ROLE_APP_ADMIN = 'appadmin';
 export const ROLE_GENERAL_USER = 'generaluser';
 
 export const MAX_ROLE_HIERARCHY_NUMBER = 10000;
+
+// application constants
+export const BETWEEN = 'Between';
+export const CRITICAL = 'CRITICAL';
+export const IS_APPLICABLE = 'isApplicable';
