@@ -33,6 +33,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.4",
     "lambda-log": "^2.4.0",
+    "lodash": "^4.17.20",
     "morgan": "^1.10.0",
     "mysql2": "^2.1.0",
     "rotating-file-stream": "^2.1.1",
