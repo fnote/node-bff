@@ -277,6 +277,18 @@ export const cloudPricingMockRequestForErrorScenario = {
     },
 };
 
+export const cloudPricingMockRequestForErrorScenario2 = {
+    body: {
+        businessUnitNumber: '058',
+        customerAccount: '758028',
+        priceRequestDate: '20200605',
+        product: {
+            supc: '7203474', splitFlag: false,
+        },
+
+    },
+};
+
 export const cloudPricingDataMockRequest = {
     businessUnitNumber: '068',
     customerAccount: '758028',
@@ -432,4 +444,416 @@ export const pricingDataMockResponseThrowErrorForCloudPricingCall = {
     message: 'Error occurred in getting pricing related data',
     cause: {},
     errorCode: 4000
+};
+
+export const pricingDataMockRequest1 =
+{
+    "businessUnitNumber": "019",
+    "customerAccount": "622548",
+    "priceRequestDate": "20201020",
+    "requestedQuantity": 3,
+    "product": {
+        "supc": "3183792",
+        "splitFlag": false
+    }
+};
+
+export const pricingDataMockErrorRequest =
+{
+    "businessUnitNumber": "019",
+    "customerAccount": "622548",
+    "priceRequestDate": "20201020",
+    "requestedQuantity": "Blah",
+    "product": {
+        "supc": "3183792",
+        "splitFlag": false
+    }
+};
+
+export const pciPriceMockPayload = {
+    "businessUnitNumber": "019",
+    "customerAccount": "622548",
+    "priceRequestDate": "20201020",
+    "requestStatuses": [
+
+    ],
+    "products": [
+        {
+            "statuses": [],
+            "volumePricingTiers": [
+                {
+                    "customerPrequalifiedPrice": 22.24,
+                    "unitPrice": 22.24,
+                    "netPrice": 22.24,
+                    "eligibility": {
+                        "operator": "Between",
+                        "lowerBound": 2,
+                        "upperBound": 5
+                    },
+                    "agreements": [
+
+                    ],
+                    "discounts": [
+                        {
+                            "id": "6463",
+                            "type": "PREQUALIFIED",
+                            "name": "CASE_VOLUME_DISCOUNT",
+                            "amountType": "Factor",
+                            "amount": 0.99,
+                            "priceAdjustment": -0.25,
+                            "effectiveFrom": "19000101",
+                            "effectiveTo": "21000101"
+                        }
+                    ]
+                },
+                {
+                    "customerPrequalifiedPrice": 22.24,
+                    "unitPrice": 22.24,
+                    "netPrice": 22.24,
+                    "eligibility": {
+                        "operator": "Between",
+                        "lowerBound": 6,
+                        "upperBound": 8
+                    },
+                    "agreements": [
+
+                    ],
+                    "discounts": [
+                        {
+                            "id": "6463",
+                            "type": "PREQUALIFIED",
+                            "name": "CASE_VOLUME_DISCOUNT",
+                            "amountType": "Factor",
+                            "amount": 0.99,
+                            "priceAdjustment": -0.25,
+                            "effectiveFrom": "19000101",
+                            "effectiveTo": "21000101"
+                        }
+                    ]
+                },
+                {
+                    "customerPrequalifiedPrice": 21.99,
+                    "unitPrice": 21.99,
+                    "netPrice": 21.99,
+                    "eligibility": {
+                        "operator": ">=",
+                        "lowerBound": 9
+                    },
+                    "agreements": [
+
+                    ],
+                    "discounts": [
+                        {
+                            "id": "6463",
+                            "type": "PREQUALIFIED",
+                            "name": "CASE_VOLUME_DISCOUNT",
+                            "amountType": "Factor",
+                            "amount": 0.98,
+                            "priceAdjustment": -0.5,
+                            "effectiveFrom": "19000101",
+                            "effectiveTo": "21000101"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+};
+
+export const pciPriceMockPayloadNoVolTiers = {
+    "businessUnitNumber": "019",
+    "customerAccount": "622548",
+    "priceRequestDate": "20201020",
+    "requestStatuses": [
+
+    ],
+    "products": [
+        {
+            "supc": "3183792",
+            "splitFlag": false,
+            "shipSplitsOnlyFlag": false,
+            "unitsPerCase": 6,
+            "perWeightFlag": false,
+            "averageNetWeight": 30,
+            "grossPrice": 26.3,
+            "customerReferencePrice": 24.99,
+            "customerPrequalifiedPrice": 22.49,
+            "unitPrice": 22.49,
+            "netPrice": 22.49,
+            "agreementIndicators": [
+
+            ],
+            "priceSource": 97,
+            "minPrice": 0,
+            "minHandlingFlag": "",
+            "grossCommissionBasis": 45.05,
+            "handPricingAllowedFlag": false,
+            "statuses": [
+
+            ],
+            "priceRule": null,
+            "agreements": [
+
+            ],
+            "exception": null,
+            "discounts": [
+                {
+                    "id": "50000",
+                    "type": "REFERENCE_PRICE",
+                    "name": "STRATEGIC_DISCOUNT",
+                    "amountType": "Factor",
+                    "amount": 0.95,
+                    "priceAdjustment": -1.32,
+                    "effectiveFrom": "19000101",
+                    "effectiveTo": "21000101"
+                },
+                {
+                    "id": "107",
+                    "type": "PREQUALIFIED",
+                    "name": "NEW_CUSTOMER_DISCOUNT",
+                    "amountType": "Factor",
+                    "amount": 0.9,
+                    "priceAdjustment": -2.5,
+                    "effectiveFrom": "19000101",
+                    "effectiveTo": "21000101"
+                }
+            ]
+        }
+    ]
+};
+
+export const pciModifiedPriceMockPayload1 = {
+    "businessUnitNumber": "019",
+    "customerAccount": "622548",
+    "priceRequestDate": "20201020",
+    "requestStatuses": [
+
+    ],
+    "products": [
+        {
+            "statuses": [],
+            "volumePricingTiers": [
+                {
+                    "customerPrequalifiedPrice": 22.24,
+                    "unitPrice": 22.24,
+                    "netPrice": 22.24,
+                    "eligibility": {
+                        "operator": "Between",
+                        "lowerBound": 2,
+                        "upperBound": 5
+                    },
+                    "agreements": [
+
+                    ],
+                    "discounts": [
+                        {
+                            "id": "6463",
+                            "type": "PREQUALIFIED",
+                            "name": "CASE_VOLUME_DISCOUNT",
+                            "amountType": "Factor",
+                            "amount": 0.99,
+                            "priceAdjustment": -0.25,
+                            "effectiveFrom": "19000101",
+                            "effectiveTo": "21000101"
+                        }
+                    ],
+                    "isApplicable": true
+                },
+                {
+                    "customerPrequalifiedPrice": 22.24,
+                    "unitPrice": 22.24,
+                    "netPrice": 22.24,
+                    "eligibility": {
+                        "operator": "Between",
+                        "lowerBound": 6,
+                        "upperBound": 8
+                    },
+                    "agreements": [
+
+                    ],
+                    "discounts": [
+                        {
+                            "id": "6463",
+                            "type": "PREQUALIFIED",
+                            "name": "CASE_VOLUME_DISCOUNT",
+                            "amountType": "Factor",
+                            "amount": 0.99,
+                            "priceAdjustment": -0.25,
+                            "effectiveFrom": "19000101",
+                            "effectiveTo": "21000101"
+                        }
+                    ],
+                    "isApplicable": false
+                },
+                {
+                    "customerPrequalifiedPrice": 21.99,
+                    "unitPrice": 21.99,
+                    "netPrice": 21.99,
+                    "eligibility": {
+                        "operator": ">=",
+                        "lowerBound": 9
+                    },
+                    "agreements": [
+
+                    ],
+                    "discounts": [
+                        {
+                            "id": "6463",
+                            "type": "PREQUALIFIED",
+                            "name": "CASE_VOLUME_DISCOUNT",
+                            "amountType": "Factor",
+                            "amount": 0.98,
+                            "priceAdjustment": -0.5,
+                            "effectiveFrom": "19000101",
+                            "effectiveTo": "21000101"
+                        }
+                    ],
+                    "isApplicable": false
+                }
+            ]
+        }
+    ]
+};
+
+export const pciModifiedPriceMockPayload2 = {
+    "businessUnitNumber": "019",
+    "customerAccount": "622548",
+    "priceRequestDate": "20201020",
+    "requestStatuses": [
+
+    ],
+    "products": [
+        {
+            "statuses": [],
+            "volumePricingTiers": [
+                {
+                    "customerPrequalifiedPrice": 22.24,
+                    "unitPrice": 22.24,
+                    "netPrice": 22.24,
+                    "eligibility": {
+                        "operator": "Between",
+                        "lowerBound": 2,
+                        "upperBound": 5
+                    },
+                    "agreements": [
+
+                    ],
+                    "discounts": [
+                        {
+                            "id": "6463",
+                            "type": "PREQUALIFIED",
+                            "name": "CASE_VOLUME_DISCOUNT",
+                            "amountType": "Factor",
+                            "amount": 0.99,
+                            "priceAdjustment": -0.25,
+                            "effectiveFrom": "19000101",
+                            "effectiveTo": "21000101"
+                        }
+                    ],
+                    "isApplicable": false
+                },
+                {
+                    "customerPrequalifiedPrice": 22.24,
+                    "unitPrice": 22.24,
+                    "netPrice": 22.24,
+                    "eligibility": {
+                        "operator": "Between",
+                        "lowerBound": 6,
+                        "upperBound": 8
+                    },
+                    "agreements": [
+
+                    ],
+                    "discounts": [
+                        {
+                            "id": "6463",
+                            "type": "PREQUALIFIED",
+                            "name": "CASE_VOLUME_DISCOUNT",
+                            "amountType": "Factor",
+                            "amount": 0.99,
+                            "priceAdjustment": -0.25,
+                            "effectiveFrom": "19000101",
+                            "effectiveTo": "21000101"
+                        }
+                    ],
+                    "isApplicable": false
+                },
+                {
+                    "customerPrequalifiedPrice": 21.99,
+                    "unitPrice": 21.99,
+                    "netPrice": 21.99,
+                    "eligibility": {
+                        "operator": ">=",
+                        "lowerBound": 9
+                    },
+                    "agreements": [
+
+                    ],
+                    "discounts": [
+                        {
+                            "id": "6463",
+                            "type": "PREQUALIFIED",
+                            "name": "CASE_VOLUME_DISCOUNT",
+                            "amountType": "Factor",
+                            "amount": 0.98,
+                            "priceAdjustment": -0.5,
+                            "effectiveFrom": "19000101",
+                            "effectiveTo": "21000101"
+                        }
+                    ],
+                    "isApplicable": true
+                }
+            ]
+        }
+    ]
+};
+
+export const mockPCIPricingErrorResponse = {
+    "businessUnitNumber": "019",
+    "customerAccount": "622548",
+    "priceRequestDate": "20201020",
+    "requestStatuses": [
+
+    ],
+    "products": [
+        {
+            "statuses": [
+                {
+                    "code": "801",
+                    "state": "CRITICAL",
+                    "message": "Product not found PCI Pricing"
+                },
+                {
+                    "code": "802",
+                    "state": "INFO",
+                    "message": "Some warning msg PCI Pricing"
+                }
+            ]
+        }
+    ]
+};
+
+export const mockProductPricingErrorResponse = {
+    "businessUnitNumber": "019",
+    "customerAccount": "622548",
+    "priceRequestDate": "20201020",
+    "requestStatuses": [
+
+    ],
+    "products": [
+        {
+            "statuses": [
+                {
+                    "code": "101",
+                    "state": "CRITICAL",
+                    "message": "Product not found Product Pricing"
+                },
+                {
+                    "code": "102",
+                    "state": "INFO",
+                    "message": "Some warning msg Product Pricing"
+                }
+            ]
+        }
+    ]
 };

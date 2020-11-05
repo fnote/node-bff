@@ -86,7 +86,13 @@ class HttpClient {
         }
         if (JSON.stringify(data) === JSON
             .stringify(cloudPricingMockRequestForErrorScenario.body)) {
-            throw new Error('test-error');
+            throw new HttpClientException({
+                response: {
+                    data: { message: "HTTP_CLIENT_EXCEPTION", code: 222 },
+                    status: "error satatus",
+                    headers: "error headers"
+                }
+            });
         } else if (JSON.stringify(data) === JSON
             .stringify(cloudPricingDataMockRequest)) {
             return cloudPricingMockResponseForAggregatedPricingCall;
