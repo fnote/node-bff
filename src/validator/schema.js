@@ -21,6 +21,6 @@ export const pricingDataReqBody = Joi.object({
         supc: Joi.string()
             .alphanum()
             .required(),
-        splitFlag: Joi.boolean()
+        splitFlag: Joi.boolean(),
     }),
-})
+});

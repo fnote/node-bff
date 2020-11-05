@@ -21,7 +21,7 @@ class CloudPricingDataService {
             customerAccount: `${req.body.customerAccount}`,
             priceRequestDate: `${req.body.priceRequestDate}`,
             products: [
-                { ...req.body.product }
+                { ...req.body.product },
             ],
         };
         const headers = {
@@ -31,8 +31,9 @@ class CloudPricingDataService {
             priceEngineType: this.cloudPricingConfig.CONFIG.priceEngineType,
         };
 
-        const reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl + this.cloudPricingConfig.CONFIG.productPricesEndpoint;
-        return this._sendRequest(reqUrl, headers, body);
+        const reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl
+            + this.cloudPricingConfig.CONFIG.productPricesEndpoint;
+        return this.sendRequest(reqUrl, headers, body);
     }
 
     async getCloudPricingPCIData(req) {
@@ -41,7 +42,7 @@ class CloudPricingDataService {
             customerAccount: `${req.body.customerAccount}`,
             priceRequestDate: `${req.body.priceRequestDate}`,
             products: [
-                { ...req.body.product, quantity: `${req.body.requestedQuantity}` }
+                { ...req.body.product, quantity: `${req.body.requestedQuantity}` },
             ],
         };
         const headers = {
@@ -53,10 +54,10 @@ class CloudPricingDataService {
 
         const reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl + this.cloudPricingConfig.CONFIG.pciPricesEndpoint;
 
-        return this._sendRequest(reqUrl, headers, body);
+        return this.sendRequest(reqUrl, headers, body);
     }
 
-    async _sendRequest(reqUrl, headers, body) {
+    async sendRequest(reqUrl, headers, body) {
         try {
             return await httpClient.makeRequest(
                 HTTP_POST, reqUrl, body, headers,
@@ -69,7 +70,7 @@ class CloudPricingDataService {
             throw new CloudPricingDataFetchException(
                 errorMessage,
                 e.message,
-                cpErrorCode
+                cpErrorCode,
             );
         }
     }

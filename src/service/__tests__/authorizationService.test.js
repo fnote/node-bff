@@ -3,28 +3,28 @@
  *
  * @author: adis0892 on 02/08/20
  * */
-jest.mock('../../dao/businessUnitDao');
-
+import {jest} from '@jest/globals';
 import AuthorizationService from '../auth/authorizationService';
-import {jest} from "@jest/globals";
-import BusinessUnitDao from '../../dao/businessUnitDao'
+import BusinessUnitDao from '../../dao/businessUnitDao';
 import {
     ROLE_APP_ADMIN,
     ROLE_GENERAL_USER,
-} from "../../util/constants";
+} from '../../util/constants';
 
-const OTHER_ROLE = 'otherRole'
+jest.mock('../../dao/businessUnitDao');
+
+const OTHER_ROLE = 'otherRole';
 
 const bUnitDetailForOpco001 = {
     bunit_id: '001',
     bunit_name: 'Sysco Jackson',
-    periscope_on: 'Y'
+    periscope_on: 'Y',
 };
 
 const bUnitDetailForOpco003 = {
     bunit_id: '003',
     bunit_name: 'Sysco Jacksonville',
-    periscope_on: 'Y'
+    periscope_on: 'Y',
 };
 
 const bUnitDetailsArray = [
@@ -33,7 +33,7 @@ const bUnitDetailsArray = [
     {
         bunit_id: '002',
         bunit_name: 'Sysco Atlanta',
-        periscope_on: 'N'
+        periscope_on: 'N',
     },
 
     bUnitDetailForOpco003,
@@ -41,36 +41,35 @@ const bUnitDetailsArray = [
     {
         bunit_id: '004',
         bunit_name: 'Sysco Central California',
-        periscope_on: 'N'
+        periscope_on: 'N',
     },
     {
         bunit_id: '005',
         bunit_name: 'Sysco Intermountain',
-        periscope_on: 'N'
-    }
+        periscope_on: 'N',
+    },
 ];
 
 describe('Auth Service', () => {
-    test('should send the bunit array of the given bunit when the passed bunit matches with one in the passed bunit details array', async () => {
+    test('should send the bunit array when the passed bunit matches with one in the passed bunit details array',
+        async () => {
+            const filteredArray = AuthorizationService.matchedValidBusinessUnitFromGivenList('001', bUnitDetailsArray);
+            expect(filteredArray).toEqual([bUnitDetailForOpco001]);
+        });
 
-        const filteredArray = AuthorizationService.matchedValidBusinessUnitFromGivenList('001', bUnitDetailsArray);
-        expect(filteredArray).toEqual([bUnitDetailForOpco001]);
-    });
-
-    test('should send an empty array when the passed bunit does not match with one in the passed bunit details array', async () => {
-
-        const filteredArray = AuthorizationService.matchedValidBusinessUnitFromGivenList('900', bUnitDetailsArray);
-        expect(filteredArray).toEqual([]);
-    });
+    test('should send an empty array when the passed bunit does not match with one in the passed bunit details array',
+        async () => {
+            const filteredArray = AuthorizationService.matchedValidBusinessUnitFromGivenList('900', bUnitDetailsArray);
+            expect(filteredArray).toEqual([]);
+        });
 
     test('should send an empty array when the passed bunit details is empty', async () => {
-
         const filteredArray = AuthorizationService.matchedValidBusinessUnitFromGivenList('001', []);
         expect(filteredArray).toEqual([]);
     });
 
-    test('should send the bunit array of the given bunit when the passed bunit matches one bunit that has periscope_on as Y ' +
-        'and is in the bunit details array', async () => {
+    test('should send the bunit array of the given bunit when the passed bunit matches one bunit that has periscope_on as Y '
+        + 'and is in the bunit details array', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
         await AuthorizationService.loadBusinessUnitDetails();
@@ -79,14 +78,15 @@ describe('Auth Service', () => {
         expect(filteredArray).toEqual([bUnitDetailForOpco001]);
     });
 
-    test('should send an empty array when the passed bunit has periscope_on as N although it is in the bunit details array', async () => {
-        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
+    test('should send an empty array when the passed bunit has periscope_on as N although it is in the bunit details array',
+        async () => {
+            BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
-        await AuthorizationService.loadBusinessUnitDetails();
+            await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = AuthorizationService.matchedPricingTransformationEnabledBusinessUnit('002');
-        expect(filteredArray).toEqual([]);
-    });
+            const filteredArray = AuthorizationService.matchedPricingTransformationEnabledBusinessUnit('002');
+            expect(filteredArray).toEqual([]);
+        });
 
     test('should send an empty array when the passed bunit does not match a bunit in the bunit details array', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
@@ -106,33 +106,35 @@ describe('Auth Service', () => {
         expect(filteredArray).toEqual([]);
     });
 
-    test('should send the bunit array of that have periscope_on as Y when called generatePricingTransformationEnabledAllBusinessUnit', async () => {
-        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
+    test('should send the bunit array where periscope_on as Y',
+        async () => {
+            BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
-        await AuthorizationService.loadBusinessUnitDetails();
+            await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit();
-        expect(filteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
-    });
+            const filteredArray = AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit();
+            expect(filteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
+        });
 
-    test('should send an empty array when all bunits have periscope_on as N when called generatePricingTransformationEnabledAllBusinessUnit', async () => {
-        const bUnitDetailsArrayWithNoPerisoceOnYes = [
-            {
-                bunit_id: '002',
-                bunit_name: 'Sysco Atlanta',
-                periscope_on: 'N'
-            },
-            {
-                bunit_id: '004',
-                bunit_name: 'Sysco Central California',
-                periscope_on: 'N'
-            },
-            {
-                bunit_id: '005',
-                bunit_name: 'Sysco Intermountain',
-                periscope_on: 'N'
-            }
-        ]
+    test('should send an empty array when all bunits have periscope_on as N',
+        async () => {
+            const bUnitDetailsArrayWithNoPerisoceOnYes = [
+                {
+                    bunit_id: '002',
+                    bunit_name: 'Sysco Atlanta',
+                    periscope_on: 'N',
+                },
+                {
+                    bunit_id: '004',
+                    bunit_name: 'Sysco Central California',
+                    periscope_on: 'N',
+                },
+                {
+                    bunit_id: '005',
+                    bunit_name: 'Sysco Intermountain',
+                    periscope_on: 'N',
+                },
+        ];
 
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArrayWithNoPerisoceOnYes);
 
@@ -151,23 +153,25 @@ describe('Auth Service', () => {
         expect(filteredArray).toEqual([]);
     });
 
-    test('should send the bunit array of that have periscope_on as Y when called with user role: ROLE_APP_ADMIN', async () => {
-        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
+    test('should send the bunit array of that have periscope_on as Y when called with user role: ROLE_APP_ADMIN',
+        async () => {
+            BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
-        await AuthorizationService.loadBusinessUnitDetails();
+            await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = AuthorizationService.getAuthorizedBusinessUnits('001', ROLE_APP_ADMIN);
-        expect(filteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
-    });
+            const filteredArray = AuthorizationService.getAuthorizedBusinessUnits('001', ROLE_APP_ADMIN);
+            expect(filteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
+        });
 
-    test('should send the bunit array of that have periscope_on as Y when called with user role: ROLE_GENERAL_USER', async () => {
-        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
+    test('should send the bunit array of that have periscope_on as Y when called with user role: ROLE_GENERAL_USER',
+        async () => {
+            BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
-        await AuthorizationService.loadBusinessUnitDetails();
+            await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = AuthorizationService.getAuthorizedBusinessUnits('001', ROLE_GENERAL_USER);
-        expect(filteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
-    });
+            const filteredArray = AuthorizationService.getAuthorizedBusinessUnits('001', ROLE_GENERAL_USER);
+            expect(filteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
+        });
 
     test('should send an empty array when opcoAtrribute is passed as null', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
@@ -187,8 +191,8 @@ describe('Auth Service', () => {
         expect(filteredArray).toEqual([]);
     });
 
-    test('should send the bunit array with opco details of users authorized opoco when opcoAtrribute has a matching value ' +
-        'that satisfies the authorization condition: one matching opco and it is periscope_on Y', async () => {
+    test('should send the bunit array with opco details of users authorized opoco when opcoAtrribute has a matching value '
+        + 'that satisfies the authorization condition: one matching opco and it is periscope_on Y', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
         await AuthorizationService.loadBusinessUnitDetails();
@@ -197,17 +201,18 @@ describe('Auth Service', () => {
         expect(filteredArray).toEqual([bUnitDetailForOpco001]);
     });
 
-    test('should send an empty array even though the passed bunit it a matching one to the list of bunit but is not periscope_on N', async () => {
-        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
+    test('should send an empty array when passed bunit it a matching one to the list of bunit but is not periscope_on N',
+        async () => {
+            BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
-        await AuthorizationService.loadBusinessUnitDetails();
+            await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = AuthorizationService.getAuthorizedBusinessUnits('005', OTHER_ROLE);
-        expect(filteredArray).toEqual([]);
-    });
+            const filteredArray = AuthorizationService.getAuthorizedBusinessUnits('005', OTHER_ROLE);
+            expect(filteredArray).toEqual([]);
+        });
 
-    test('should send all the periscope_on Y bunit when the passed opco does not match one of the given bunit details array ' +
-        'because it would be an indicator like 000: corporate, 341: sysco labs', async () => {
+    test('should send all the periscope_on Y bunit when the passed opco does not match one of the given bunit details array '
+        + 'because it would be an indicator like 000: corporate, 341: sysco labs', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
         await AuthorizationService.loadBusinessUnitDetails();
@@ -221,34 +226,34 @@ describe('Auth Service', () => {
 
         const req = {
             body: {
-                businessUnitNumber: '001'
-            }
+                businessUnitNumber: '001',
+            },
         };
 
         const res = {
             locals: {
                 authResponse: {
                     userDetailsData: {
-                        "authorizedBunitList": [
+                        authorizedBunitList: [
                             {
                                 bunit_id: '001',
                                 bunit_name: 'Sysco Jackson',
-                                periscope_on: 'Y'
+                                periscope_on: 'Y',
                             },
                             {
                                 bunit_id: '003',
                                 bunit_name: 'Sysco Jacksonville',
-                                periscope_on: 'Y'
+                                periscope_on: 'Y',
                             },
                         ],
-                        "email": "firstName.secondName@syscolabs.com",
-                        "firstName": "firstName",
-                        "jobTitle": "jobTitle",
-                        "lastName": "secondName",
-                        "username": "username"
-                    }
-                }
-            }
+                        email: 'firstName.secondName@syscolabs.com',
+                        firstName: 'firstName',
+                        jobTitle: 'jobTitle',
+                        lastName: 'secondName',
+                        username: 'username',
+                    },
+                },
+            },
         };
 
         await AuthorizationService.loadBusinessUnitDetails();
@@ -262,34 +267,34 @@ describe('Auth Service', () => {
 
         const req = {
             body: {
-                businessUnitNumber: '005'
-            }
+                businessUnitNumber: '005',
+            },
         };
 
         const res = {
             locals: {
                 authResponse: {
                     userDetailsData: {
-                        "authorizedBunitList": [
+                        authorizedBunitList: [
                             {
                                 bunit_id: '001',
                                 bunit_name: 'Sysco Jackson',
-                                periscope_on: 'Y'
+                                periscope_on: 'Y',
                             },
                             {
                                 bunit_id: '003',
                                 bunit_name: 'Sysco Jacksonville',
-                                periscope_on: 'Y'
+                                periscope_on: 'Y',
                             },
                         ],
-                        "email": "firstName.secondName@syscolabs.com",
-                        "firstName": "firstName",
-                        "jobTitle": "jobTitle",
-                        "lastName": "secondName",
-                        "username": "username"
-                    }
-                }
-            }
+                        email: 'firstName.secondName@syscolabs.com',
+                        firstName: 'firstName',
+                        jobTitle: 'jobTitle',
+                        lastName: 'secondName',
+                        username: 'username',
+                    },
+                },
+            },
         };
 
         await AuthorizationService.loadBusinessUnitDetails();
@@ -303,14 +308,14 @@ describe('Auth Service', () => {
 
         const req = {
             body: {
-                businessUnitNumber: '005'
-            }
+                businessUnitNumber: '005',
+            },
         };
 
         const res = {
             locals: {
-                authResponse: {}
-            }
+                authResponse: {},
+            },
         };
 
         await AuthorizationService.loadBusinessUnitDetails();
@@ -324,23 +329,23 @@ describe('Auth Service', () => {
 
         const req = {
             body: {
-                businessUnitNumber: '005'
-            }
+                businessUnitNumber: '005',
+            },
         };
 
         const res = {
             locals: {
                 authResponse: {
                     userDetailsData: {
-                        "authorizedBunitList": [],
-                        "email": "firstName.secondName@syscolabs.com",
-                        "firstName": "firstName",
-                        "jobTitle": "jobTitle",
-                        "lastName": "secondName",
-                        "username": "username"
-                    }
-                }
-            }
+                        authorizedBunitList: [],
+                        email: 'firstName.secondName@syscolabs.com',
+                        firstName: 'firstName',
+                        jobTitle: 'jobTitle',
+                        lastName: 'secondName',
+                        username: 'username',
+                    },
+                },
+            },
         };
 
         await AuthorizationService.loadBusinessUnitDetails();
@@ -354,22 +359,22 @@ describe('Auth Service', () => {
 
         const req = {
             body: {
-                businessUnitNumber: '005'
-            }
+                businessUnitNumber: '005',
+            },
         };
 
         const res = {
             locals: {
                 authResponse: {
                     userDetailsData: {
-                        "email": "firstName.secondName@syscolabs.com",
-                        "firstName": "firstName",
-                        "jobTitle": "jobTitle",
-                        "lastName": "secondName",
-                        "username": "username"
-                    }
-                }
-            }
+                        email: 'firstName.secondName@syscolabs.com',
+                        firstName: 'firstName',
+                        jobTitle: 'jobTitle',
+                        lastName: 'secondName',
+                        username: 'username',
+                    },
+                },
+            },
         };
 
         await AuthorizationService.loadBusinessUnitDetails();

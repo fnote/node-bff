@@ -15,7 +15,7 @@ import {
     pricingDataMockResponseThrowErrorForCloudPricingCall,
 } from '../../../config/test.config';
 import { ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY } from '../../../util/constants';
-import { PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE } from '../../../exception/exceptionCodes'
+import { PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE } from '../../../exception/exceptionCodes';
 
 jest.mock('../../../httpClient/httpClient');
 jest.mock('../../../util/accessTokenGenerator');
@@ -28,9 +28,7 @@ jest.mock('../../../initializer', () => ({
 }));
 
 jest.mock('../../../service/auth/authorizationService', () => ({
-    isAuthorizedRequest: () => {
-        return true;
-    },
+    isAuthorizedRequest: () => true,
 
 }));
 

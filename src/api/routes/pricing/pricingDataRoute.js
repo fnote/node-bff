@@ -23,7 +23,7 @@ export default () => {
 
             if (isAuthorized) {
                 const responseData = await AggregatedPricingDataService.getAggregatedPricingData(req);
-                logger.debug("Success response received");
+                logger.debug('Success response received');
                 res.status(HttpStatus.OK)
                     .send(responseData);
             } else {
@@ -35,9 +35,9 @@ export default () => {
             const errMessage = 'Error occurred in getting pricing related data';
             logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
             let httpStatusCode;
-            if (error instanceof CloudPricingDataFetchException ||
-                error instanceof ProductInfoDataFetchException ||
-                error instanceof InvalidRequestException) {
+            if (error instanceof CloudPricingDataFetchException
+                || error instanceof ProductInfoDataFetchException
+                || error instanceof InvalidRequestException) {
                 httpStatusCode = HttpStatus.BAD_REQUEST;
             } else {
                 httpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;

@@ -6,7 +6,7 @@
 
 import {jest} from '@jest/globals';
 import ProductInfoService from '../productInfo/productInfoService';
-import {productInfoMockResponse,} from '../../config/test.config';
+import {productInfoMockResponse} from '../../config/test.config';
 import ProductInfoDataFetchException from '../../exception/productInfoDataFetchException';
 
 jest.mock('../../httpClient/httpClient');

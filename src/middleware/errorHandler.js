@@ -3,9 +3,9 @@
  *
  * @author: gkar5861 on 04/06/20
  * */
+import {INTERNAL_SERVER_ERROR} from 'http-status-codes';
 import {ERROR, LOGIN_URL} from '../util/constants';
 import logger from '../util/logger';
-import {INTERNAL_SERVER_ERROR} from "http-status-codes";
 import {getAuthConfig} from '../config/configs';
 
 const authConfig = getAuthConfig();
@@ -19,7 +19,7 @@ export function handleError(err, req, res) {
         res.status(INTERNAL_SERVER_ERROR).json({
             status: ERROR,
             message,
-            cause
+            cause,
         });
     }
 }

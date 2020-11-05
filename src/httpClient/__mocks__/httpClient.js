@@ -16,7 +16,7 @@ import {
     pricingDataMockRequestForErrorOnCloudPricingCall,
     pricingDataMockRequestThrowErrorForCloudPricingCall,
     productInfoMockResponse,
-    cloudPCIPricingMockResponse
+    cloudPCIPricingMockResponse,
 } from '../../config/test.config';
 import HttpClientException from '../../exception/httpClientException';
 import {HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
@@ -88,10 +88,10 @@ class HttpClient {
             .stringify(cloudPricingMockRequestForErrorScenario.body)) {
             throw new HttpClientException({
                 response: {
-                    data: { message: "HTTP_CLIENT_EXCEPTION", code: 222 },
-                    status: "error satatus",
-                    headers: "error headers"
-                }
+                    data: { message: 'HTTP_CLIENT_EXCEPTION', code: 222 },
+                    status: 'error satatus',
+                    headers: 'error headers',
+                },
             });
         } else if (JSON.stringify(data) === JSON
             .stringify(cloudPricingDataMockRequest)) {

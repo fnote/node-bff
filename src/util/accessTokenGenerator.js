@@ -39,7 +39,8 @@ export const getAccessToken = async (expired = false) => {
                 const oldAccessToken = authorizationToken;
                 authorizationToken = `${res.data.token_type} ${res.data.access_token}`;
                 expiredIn = res.data.expires_in;
-                logger.info(`new access token generated | Old token: ${oldAccessToken} | New token: ${authorizationToken}`, API_CENTRAL_NEW_ACCESS_TOKEN);
+                logger.info(`new access token generated | Old token: ${oldAccessToken} 
+                    | New token: ${authorizationToken}`, API_CENTRAL_NEW_ACCESS_TOKEN);
             }
         }
         return authorizationToken;

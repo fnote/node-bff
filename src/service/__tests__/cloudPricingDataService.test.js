@@ -15,8 +15,6 @@ import {
 
 jest.mock('../../httpClient/httpClient');
 
-const mockResponse = {};
-
 describe('Cloud Pricing Data Service', () => {
     test('should generate the correct response from getCloudPricingData when flow is correct', async () => {
         const response = await CloudPricingDataService

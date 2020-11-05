@@ -1,7 +1,7 @@
 import {
     ROLE_APP_ADMIN,
-    ROLE_GENERAL_USER
-} from "../util/constants";
+    ROLE_GENERAL_USER,
+} from '../util/constants';
 
 export default function getBatchAPIConfigs() {
     return {
@@ -32,7 +32,7 @@ export const getCloudPricingConfig = () => ({
         clientId: 'Cloud-PCI',
         priceEngineType: 'CP',
         pciPricesEndpoint: 'pci-prices',
-        productPricesEndpoint: 'product-prices'
+        productPricesEndpoint: 'product-prices',
     },
 });
 
@@ -55,7 +55,7 @@ export const getSSMlConfig = () => ({
 });
 
 export const getAuthorizationRoleHierarchy = () => {
-    const authorizationRoleHierarchy = {}
+    const authorizationRoleHierarchy = {};
 
     authorizationRoleHierarchy[ROLE_APP_ADMIN] = 1;
     authorizationRoleHierarchy[ROLE_GENERAL_USER] = 2;
@@ -65,15 +65,15 @@ export const getAuthorizationRoleHierarchy = () => {
 
 export const getPriceSourceName = (key) => {
     const priceSourceNameMap = {
-        30: "Price Rule",
-        40: "Co Default",
-        45: "PR Default",
-        50: "Min Rule",
-        52: "Hand Price",
-        61: "GTD Price",
-        70: "Substitution",
-        96: "Exception",
-        97: "Price Advisor"
-    }
+        30: 'Price Rule',
+        40: 'Co Default',
+        45: 'PR Default',
+        50: 'Min Rule',
+        52: 'Hand Price',
+        61: 'GTD Price',
+        70: 'Substitution',
+        96: 'Exception',
+        97: 'Price Advisor',
+    };
     return priceSourceNameMap[key];
-}
+};
