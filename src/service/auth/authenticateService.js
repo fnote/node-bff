@@ -53,7 +53,7 @@ class AuthenticateService {
                     this.pems[keyId] = jwkToPem(jwk);
                 }
                 return this.validateToken(this.pems, accessToken, req, res);
-            } 
+            }
                 return this.validateToken(this.pems, accessToken, req, res);
         } catch (e) {
             const errorMessage = 'Unexpected error occurred while validating the token';
@@ -201,10 +201,10 @@ class AuthenticateService {
                         cause: null,
                         userDetailsData,
                     };
-                } 
+                }
                     logger.error(`Username in the auth token is not in the expected format: ${username}`);
                     return this.sendUnauthenticatedErrorResponse('Username given in the authentication token is invalid');
-            } 
+            }
                 logger.error('Username is not present in the auth token');
                 return this.sendUnauthenticatedErrorResponse('Username is not present in the auth token');
         }

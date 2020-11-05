@@ -20,7 +20,7 @@ module.exports = {
     'class-methods-use-this': 'off',
     'import/prefer-default-export': 'off',
     indent: 'off',
-    'no-trailing-spaces': 'off',
+    'no-trailing-spaces': 'error',
     'object-curly-spacing': 'off',
   },
   extends: [

@@ -95,18 +95,19 @@ class AggregatedPricingDataService {
             id, name, pack, size, brandId, brand, stockIndicator, averageWeight,
             catchWeightIndicator, split, shipSplitOnly,
         } = itemInfoPayload;
-        const filteredItemPayload = {};
-        filteredItemPayload.id = id;
-        filteredItemPayload.name = name;
-        filteredItemPayload.pack = pack;
-        filteredItemPayload.size = size;
-        filteredItemPayload.brandId = brandId;
-        filteredItemPayload.brand = brand;
-        filteredItemPayload.stockIndicator = stockIndicator;
-        filteredItemPayload.averageWeight = averageWeight;
-        filteredItemPayload.catchWeightIndicator = catchWeightIndicator;
-        filteredItemPayload.split = split;
-        filteredItemPayload.shipSplitOnly = shipSplitOnly;
+        const filteredItemPayload = {
+            id,
+            name,
+            pack,
+            size,
+            brandId,
+            brand,
+            stockIndicator,
+            averageWeight,
+            catchWeightIndicator,
+            split,
+            shipSplitOnly,
+        };
         return filteredItemPayload;
     }
 
@@ -114,12 +115,13 @@ class AggregatedPricingDataService {
         const {
             businessUnitNumber, customerAccount, customerType, priceRequestDate, requestStatuses,
         } = pciPricePayload;
-        const rootLevelData = {};
-        rootLevelData.businessUnitNumber = businessUnitNumber;
-        rootLevelData.customerAccount = customerAccount;
-        rootLevelData.customerType = customerType;
-        rootLevelData.priceRequestDate = priceRequestDate;
-        rootLevelData.requestStatuses = requestStatuses;
+        const rootLevelData = {
+            businessUnitNumber,
+            customerAccount,
+            customerType,
+            priceRequestDate,
+            requestStatuses,
+        };
         return rootLevelData;
     }
 
@@ -127,8 +129,7 @@ class AggregatedPricingDataService {
         const requestBody = req.body;
         const { error } = pricingDataReqBody.validate(requestBody);
         if (error) {
-            logger.error(`Request body validation failed in getting aggregated pricing data: 
-                ${JSON.stringify(requestBody)}`);
+            logger.error(`Request body validation failed in getting aggregated pricing data: ${JSON.stringify(requestBody)}`);
             throw new InvalidRequestException(
                 ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,

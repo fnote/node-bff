@@ -19,7 +19,7 @@ class AuthorizationService {
     matchedValidBusinessUnitFromGivenList = (bUnit, bUnitDetailsList) => {
         if (bUnitDetailsList) {
             return bUnitDetailsList.filter((bUnitDetails) => bUnit === bUnitDetails.bunit_id);
-        } 
+        }
             return [];
     }
 
@@ -34,7 +34,7 @@ class AuthorizationService {
     generatePricingTransformationEnabledAllBusinessUnit = () => {
         if (this.businessUnitDetailsArray) {
             return this.businessUnitDetailsArray.filter((bUnitDetails) => bUnitDetails.periscope_on === 'Y');
-        } 
+        }
             return [];
     }
 
@@ -48,7 +48,7 @@ class AuthorizationService {
             // If AD opco attribute or user role is null or empty, then he should not have access to any opco
             logger.info(`User's opco attribute: ${opcoAttributeBunit} or user role: ${userRole} is empty so giving access to no opco`);
             return [];
-        } 
+        }
             const matchedValidBusinessUnitList = this.matchedValidBusinessUnitFromGivenList(opcoAttributeBunit, this.businessUnitDetailsArray);
 
             if (matchedValidBusinessUnitList.length > 0) {
@@ -58,12 +58,12 @@ class AuthorizationService {
                     // Opco attribute matches one of the opcos and also is a pricing transformation enabled opco then return that opco
                     logger.info(`User's opco: ${opcoAttributeBunit} matches one of the pricing transformation enabled opco then giving access to that opco`);
                     return authorizedPricingTransformationEnabledBunitList;
-                } 
+                }
                     // Opco attribute matches one of the opcos but is not a pricing transformation enabled opcos
                     // so then he has access to no matching opco
                     logger.info(`User's opco: ${opcoAttributeBunit} does not match with pricing transformation enabled opcos, so giving access to no opco`);
                     return [];
-            } 
+            }
                 // Opco attribute does not match to one of Sysco opcos, so it should be something like 000 (Corporate) or 440 (SBS)
                 // so then give access to all opcos
                 // In future, if we can identify what exactly these values can be, then can do a separate filtering
