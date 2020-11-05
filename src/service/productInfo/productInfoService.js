@@ -8,7 +8,7 @@ import {getProductInfoApiConfig} from '../../config/configs';
 import ApiCentralClient from '../../httpClient/apiCentralClient';
 import logger from '../../util/logger';
 import ProductInfoDataFetchException from '../../exception/productInfoDataFetchException';
-
+import { PRODUCT_INFO_DATA_FETCH_ERROR_CODE } from '../../exception/exceptionCodes';
 class ProductInfoService {
     constructor() {
         this.procdutInfoApiConfig = getProductInfoApiConfig();
@@ -25,6 +25,7 @@ class ProductInfoService {
             throw new ProductInfoDataFetchException(
                 e,
                 errorMessage,
+                PRODUCT_INFO_DATA_FETCH_ERROR_CODE
             );
         }
     }

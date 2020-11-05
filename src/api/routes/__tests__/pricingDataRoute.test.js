@@ -10,8 +10,8 @@ import {jest} from '@jest/globals';
 import app from '../../../app';
 import {
     pricingDataMockRequest,
-    pricingDataMockRequestThrowErrorForCloudPricingCall,
-    PricingDataMockResponse,
+    cloudPricingErrorMockRequest,
+    aggregatedPricingMockResponst,
     pricingDataMockResponseThrowErrorForCloudPricingCall,
 } from '../../../config/test.config';
 
@@ -37,15 +37,12 @@ describe('routes: /pricing-data', () => {
         jest.setTimeout(100000);
         await request(app.app)
             .post('/v1/pci-bff/pricing/pricing-data')
-            .send(pricingDataMockRequest)
+            .send(pricingDataMockRequest.body)
             .set('Accept', 'application/json')
             .then((res) => {
                 expect(res.status).toEqual(HttpStatus.OK);
                 expect(res.body).toBeDefined();
-                expect(res.body).toEqual(PricingDataMockResponse);
-                expect(res.body.cloudPricingResponse.cloudPricingResponseStatus)
-                    .toEqual(HttpStatus.OK);
-                expect(res.body.itemInfoResponse.itemInfoResponseStatus).toEqual(HttpStatus.OK);
+                expect(res.body).toEqual(aggregatedPricingMockResponst);
             });
     });
 
@@ -53,7 +50,7 @@ describe('routes: /pricing-data', () => {
         jest.setTimeout(100000);
         const res = await request(app.app)
             .post('/v1/pci-bff/pricing/pricing-data')
-            .send(pricingDataMockRequestThrowErrorForCloudPricingCall)
+            .send(cloudPricingErrorMockRequest.body)
             .set('Accept', 'application/json');
 
         expect(res.body).toEqual(pricingDataMockResponseThrowErrorForCloudPricingCall);

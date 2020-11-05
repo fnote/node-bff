@@ -4,7 +4,7 @@
  * @author: gkar5861 on 22/06/20
  * */
 export default class InvalidRequestException extends Error {
-    constructor(error, errorStatus) {
+    constructor(error, errorStatus, errorCode) {
         super(error.toString());
         this.name = this.constructor.name;
         this.errorDetails = {};
@@ -13,6 +13,7 @@ export default class InvalidRequestException extends Error {
         };
 
         this.errorDetails.message = error;
+        this.errorCode = errorCode;
     }
 
     getStatus() {

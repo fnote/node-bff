@@ -5,15 +5,18 @@
  * */
 
 import {
+    cloudPricingPCIMockRequest,
+    cloudPricingErrorMockRequest,
     cloudPricingMockRequest,
     cloudPricingMockRequestForErrorScenario,
     cloudPricingMockResponse,
     cloudPricingMockResponseForAggregatedErrorPricingCall,
     cloudPricingMockResponseForAggregatedPricingCall,
-    pricingDataMockRequest,
+    cloudPricingDataMockRequest,
     pricingDataMockRequestForErrorOnCloudPricingCall,
     pricingDataMockRequestThrowErrorForCloudPricingCall,
     productInfoMockResponse,
+    cloudPCIPricingMockResponse
 } from '../../config/test.config';
 import HttpClientException from '../../exception/httpClientException';
 import {HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
@@ -60,7 +63,15 @@ class HttpClient {
             },
 
         };
-
+        if (JSON.stringify(data) === JSON.stringify(cloudPricingErrorMockRequest.body)) {
+            return { data2: cloudPricingMockResponse };
+        }
+        if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
+            return { data: cloudPricingMockResponse };
+        }
+        if (JSON.stringify(data) === JSON.stringify(cloudPricingPCIMockRequest.body)) {
+            return { data: cloudPCIPricingMockResponse };
+        }
         if (JSON.stringify(data) === JSON.stringify(batchApiMockRequestBody)) {
             return batchApiMockResponse;
         }
@@ -77,7 +88,7 @@ class HttpClient {
             .stringify(cloudPricingMockRequestForErrorScenario.body)) {
             throw new Error('test-error');
         } else if (JSON.stringify(data) === JSON
-            .stringify(pricingDataMockRequest)) {
+            .stringify(cloudPricingDataMockRequest)) {
             return cloudPricingMockResponseForAggregatedPricingCall;
         } else if (JSON.stringify(data) === JSON
             .stringify(pricingDataMockRequestForErrorOnCloudPricingCall)) {

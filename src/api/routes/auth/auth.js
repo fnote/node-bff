@@ -8,6 +8,7 @@ import {getAuthConfig} from '../../../config/configs';
 import logger from '../../../util/logger';
 import * as HttpStatus from "http-status-codes";
 import {createErrorResponse} from "../../../mapper/responseMapper";
+import { USER_UNAUTHORIZED_ERROR_CODE } from '../../../exception/exceptionCodes';
 
 export default () => {
     const AuthRouter = new Router({mergeParams: true});
@@ -18,11 +19,11 @@ export default () => {
         if (authResponse && authResponse.authenticated) {
             const {username} = authResponse;
             logger.debug(`User: ${username} is being redirected after the login`);
-            res.redirect(`${authConfig.CONFIG.loginRedirectionUrl}?username=${username}`);
+            res.redirect(authConfig.CONFIG.loginRedirectionUrl);
         } else {
             const cause = authResponse ? authResponse.cause : 'No auth response';
             logger.error(`User authentication failed, so redirecting user back to login page. cause: ${cause}`);
-            res.redirect(`${authConfig.CONFIG.loginRedirectionUrl}?login=error`);
+            res.redirect(authConfig.CONFIG.loginRedirectionUrl);
         }
     });
 
@@ -43,13 +44,13 @@ export default () => {
                 res.status(HttpStatus.OK).send(userDetailsData);
             } else {
                 res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized', 'User cannot be authenticated',
-                    null, 'User details are not present'));
+                    null, 'User details are not present', USER_UNAUTHORIZED_ERROR_CODE));
             }
 
         } else {
             const cause = authResponse ? authResponse.cause : null
             res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized', 'User cannot be authenticated',
-                null, cause));
+                null, cause, USER_UNAUTHORIZED_ERROR_CODE));
         }
     });
 

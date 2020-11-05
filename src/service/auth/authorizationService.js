@@ -85,15 +85,16 @@ class AuthorizationService {
     }
 
     isAuthorizedRequest = (req, res) => {
+        logger.info("Authenticating request");
         const {authResponse} = res.locals;
         const requestedBunit = req.body.businessUnitNumber;
         const userDetailsData = authResponse.userDetailsData;
 
         if (userDetailsData && Object.keys(userDetailsData).length > 0) {
             const authorizedBunitListForTheUser = userDetailsData.authorizedBunitList;
-            const filteredOutBunits = this.matchedValidBusinessUnitFromGivenList(requestedBunit, authorizedBunitListForTheUser)
+            const filteredOutBunits = this.matchedValidBusinessUnitFromGivenList(requestedBunit, authorizedBunitListForTheUser);
             if (filteredOutBunits.length > 0) {
-                logger.info(`User's requested opco: ${requestedBunit} matched with his authorized opcos, so request is authorized`);
+                logger.info(`User's requested opco: [${requestedBunit}] matched with his authorized opcos, so request is authorized`);
                 return true;
             }
             logger.warn(`User's requested opco: ${requestedBunit} does not match with his authorized opcos: ${authorizedBunitListForTheUser},
@@ -102,7 +103,7 @@ class AuthorizationService {
             logger.warn(`User details data is empty for the request, so it is NOT authorized`);
         }
         return false;
-    }
+    };
 
     getTheRoleWithHighestAuthority = (rolesArray) => {
         const authorizationRoleHierarchy = getAuthorizationRoleHierarchy();

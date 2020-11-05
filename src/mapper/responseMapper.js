@@ -4,6 +4,7 @@
  * @author: gkar5861 on 19/06/20
  * */
 import {ERROR, SUCCESS} from '../util/constants';
+import { INTERNAL_SERVER_ERROR_CODE } from '../exception/exceptionCodes'
 
 export function createSuccessResponse(data, message) {
     if (data === undefined) {
@@ -19,7 +20,7 @@ export function createSuccessResponse(data, message) {
     };
 }
 
-export function createErrorResponse(status, message, error, cause) {
+export function createErrorResponse(status, message, error, cause, errorCode) {
     const errorResponse = {
         status: status || ERROR,
         message: message || 'Internal server error',
@@ -28,5 +29,8 @@ export function createErrorResponse(status, message, error, cause) {
     if (cause || error) {
         errorResponse.cause = cause || (error.errorDetails ? error.errorDetails.message : error);
     }
+
+    errorResponse.errorCode = errorCode || INTERNAL_SERVER_ERROR_CODE;
+
     return errorResponse;
 }
