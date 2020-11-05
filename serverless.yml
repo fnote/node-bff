@@ -17,11 +17,13 @@ custom:
     local: LOCAL
     dev: DEV
     exe: EXE
+    stg: STG
     prod: PROD
   deploymentBucket:
     local: local
     dev: ${ssm:/CP/CLOUD-PCI/DEV/DEPLOYMENTBUCKET}
     exe: ${ssm:/CP/CLOUD-PCI/EXE/DEPLOYMENTBUCKET}
+    stg: ${ssm:/CP/CLOUD-PCI/STG/DEPLOYMENTBUCKET}
     prod: ${ssm:/CP/CLOUD-PCI/PROD/DEPLOYMENTBUCKET}
 
 provider:

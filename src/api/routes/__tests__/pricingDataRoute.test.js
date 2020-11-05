@@ -14,6 +14,8 @@ import {
     aggregatedPricingMockResponst,
     pricingDataMockResponseThrowErrorForCloudPricingCall,
 } from '../../../config/test.config';
+import { ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY } from '../../../util/constants';
+import { PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE } from '../../../exception/exceptionCodes'
 
 jest.mock('../../../httpClient/httpClient');
 jest.mock('../../../util/accessTokenGenerator');
@@ -43,6 +45,18 @@ describe('routes: /pricing-data', () => {
                 expect(res.body).toEqual(aggregatedPricingMockResponst);
             });
     });
+
+    test('get /pricing-data should return error when an invalid content type is sent',
+        async () => {
+            jest.setTimeout(100000);
+            const res = await request(app.app)
+                .post('/v1/pci-bff/pricing/pricing-data')
+                .send({})
+                .set('Accept', 'application/something');
+            expect(res.body.cause).toEqual(ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY);
+            expect(res.body.errorCode).toEqual(PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE);
+            expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+        });
 
     test('get /pricing-data should return error response when the pricing call catches an error', async () => {
         jest.setTimeout(100000);
