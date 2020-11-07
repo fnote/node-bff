@@ -37,7 +37,7 @@
     "morgan": "^1.10.0",
     "mysql2": "^2.1.0",
     "rotating-file-stream": "^2.1.1",
-    "serverless-http": "^2.5.0",
+    "serverless-http": "2.5.0",
     "source-map-support": "^0.5.19",
     "uuid": "^8.2.0",
     "winston": "^3.2.1"
