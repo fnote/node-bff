@@ -13,6 +13,8 @@ import AuthorizationService from '../../../service/auth/authorizationService';
 import CloudPricingDataFetchException from '../../../exception/cloudPricingDataFetchException';
 import InvalidRequestException from '../../../exception/invalidRequestException';
 import ProductInfoDataFetchException from '../../../exception/productInfoDataFetchException';
+import { CORRELATION_ID_HEADER } from '../../../util/constants';
+import { getCorrelationId } from '../../../util/correlationIdGenerator';
 
 export default () => {
     const cloudPricingRouter = new Router({ mergeParams: true });
@@ -23,7 +25,8 @@ export default () => {
 
             if (isAuthorized) {
                 const responseData = await AggregatedPricingDataService.getAggregatedPricingData(req);
-                logger.debug('Success response received');
+                logger.info(`Success pricing data response received: ${JSON.stringify(responseData)}`);
+                res.set(CORRELATION_ID_HEADER, getCorrelationId());
                 res.status(HttpStatus.OK)
                     .send(responseData);
             } else {
@@ -42,6 +45,7 @@ export default () => {
             } else {
                 httpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
             }
+            res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(httpStatusCode)
                 .send(createErrorResponse(null, errMessage, error, null, error.errorCode));
         }

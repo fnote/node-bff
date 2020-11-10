@@ -124,6 +124,7 @@ class AggregatedPricingDataService {
     }
 
     async getAggregatedPricingData(req) {
+        logger.info(`Received request body: ${JSON.stringify(req.body)}`);
         const requestBody = req.body;
         const { error } = pricingDataReqBody.validate(requestBody);
         if (error) {

@@ -11,8 +11,7 @@ import {API_CENTRAL_ACCESS_TOKEN_EXPIRED} from '../util/logCodes';
 import HttpClientException from '../exception/httpClientException';
 import {getAccessToken} from '../util/accessTokenGenerator';
 import logger from '../util/logger';
-
-const correlator = require('express-correlation-id');
+import { getCorrelationId } from '../util/correlationIdGenerator';
 
 class ApiCentral extends HttpClient {
     constructor() {
@@ -31,7 +30,7 @@ class ApiCentral extends HttpClient {
                         'Content-Type': 'application/json',
                         Accept: 'application/json',
                         'accept-encoding': 'gzip',
-                        'correlation-id': correlator.getId() || 'correlation id dropped from the bff',
+                        'correlation-id': getCorrelationId() || 'correlation id dropped from the bff',
                     };
                     return await this.apiCentralMakeRequest(
                         method, url, null, headers, pageNumber, pageSize,
@@ -53,7 +52,7 @@ class ApiCentral extends HttpClient {
                         'Content-Type': 'application/json',
                         Accept: 'application/json',
                         'accept-encoding': 'gzip',
-                        'correlation-id': correlator.getId() || 'correlation id dropped from the bff',
+                        'correlation-id': getCorrelationId() || 'correlation id dropped from the bff',
                     };
                     return await this.apiCentralMakeRequest(
                         method, url, data, headers, pageNumber, pageSize,

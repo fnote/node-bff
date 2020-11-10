@@ -12,13 +12,13 @@ import router from './api';
 import {handleError} from './middleware/errorHandler';
 import {authMiddleware} from './middleware/authMiddleware';
 import {initializer} from './initializer';
-
-const correlator = require('express-correlation-id');
+import { CORRELATION_ID_HEADER } from './util/constants';
+import { correlatorMiddleware } from './util/correlationIdGenerator';
 
 const app = express();
 
-// generate correlation id
-app.use(correlator());
+// middleware to set a correlation id per route in express
+app.use(correlatorMiddleware({ header: CORRELATION_ID_HEADER }));
 
 app.use(initializer);
 
