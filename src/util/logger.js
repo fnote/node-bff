@@ -1,5 +1,4 @@
 import winston from 'winston';
-import { v4 as uuidv4 } from 'uuid';
 import { getCorrelationId } from './correlationIdGenerator';
 
 class Logger {
@@ -24,8 +23,7 @@ class Logger {
     }
 
     error(err) {
-        const incidentId = uuidv4();
-        this.log.error(`Correlation Id: ${getCorrelationId()} Incident Id: ${incidentId} ${err.toString()}`);
+        this.log.error(`Correlation Id: ${getCorrelationId()} ${err.toString()}`);
     }
 
     debug(message) {
