@@ -7,6 +7,7 @@ import {
     pricingDataMockRequest1, pricingDataMockErrorRequest, pciPriceMockPayload, pciPriceMockPayloadNoVolTiers,
     pciModifiedPriceMockPayload1, pciModifiedPriceMockPayload2, mockPCIPricingErrorResponse, mockProductPricingErrorResponse,
     pciPricesMockDataPriceSourceId,
+    pciModifiedPriceMockPayload3,
 } from '../../config/test.config';
 
 describe('Aggregated Pricing Data Service request validation', () => {
@@ -97,6 +98,11 @@ describe('Aggregated Pricing Data Service getApplicableTier', () => {
         const response = await AggregatedPricingDataService
             .getApplicableTier({ ...pricingDataMockRequest1, requestedQuantity: 9 }, pciPriceMockPayload);
         expect(response).toEqual(pciModifiedPriceMockPayload2);
+    });
+    test('should select applicable tier based on the quentity in greater or equal range', async () => {
+        const response = await AggregatedPricingDataService
+            .getApplicableTier({ ...pricingDataMockRequest1, requestedQuantity: 1 }, pciPriceMockPayload);
+        expect(response).toEqual(pciModifiedPriceMockPayload3);
     });
     test('should return the same payload if volumeTiers are not available', async () => {
         const response = await AggregatedPricingDataService

@@ -807,6 +807,99 @@ export const pciModifiedPriceMockPayload2 = {
     ],
 };
 
+export const pciModifiedPriceMockPayload3 = {
+    businessUnitNumber: '019',
+    customerAccount: '622548',
+    priceRequestDate: '20201020',
+    requestStatuses: [
+
+    ],
+    products: [
+        {
+            statuses: [],
+            volumePricingTiers: [
+                {
+                    customerPrequalifiedPrice: 22.24,
+                    unitPrice: 22.24,
+                    netPrice: 22.24,
+                    eligibility: {
+                        operator: 'Between',
+                        lowerBound: 2,
+                        upperBound: 5,
+                    },
+                    agreements: [
+
+                    ],
+                    discounts: [
+                        {
+                            id: '6463',
+                            type: 'PREQUALIFIED',
+                            name: 'CASE_VOLUME_DISCOUNT',
+                            amountType: 'Factor',
+                            amount: 0.99,
+                            priceAdjustment: -0.25,
+                            effectiveFrom: '19000101',
+                            effectiveTo: '21000101',
+                        },
+                    ],
+                    isApplicable: false,
+                },
+                {
+                    customerPrequalifiedPrice: 22.24,
+                    unitPrice: 22.24,
+                    netPrice: 22.24,
+                    eligibility: {
+                        operator: 'Between',
+                        lowerBound: 6,
+                        upperBound: 8,
+                    },
+                    agreements: [
+
+                    ],
+                    discounts: [
+                        {
+                            id: '6463',
+                            type: 'PREQUALIFIED',
+                            name: 'CASE_VOLUME_DISCOUNT',
+                            amountType: 'Factor',
+                            amount: 0.99,
+                            priceAdjustment: -0.25,
+                            effectiveFrom: '19000101',
+                            effectiveTo: '21000101',
+                        },
+                    ],
+                    isApplicable: false,
+                },
+                {
+                    customerPrequalifiedPrice: 21.99,
+                    unitPrice: 21.99,
+                    netPrice: 21.99,
+                    eligibility: {
+                        operator: '>=',
+                        lowerBound: 9,
+                    },
+                    agreements: [
+
+                    ],
+                    discounts: [
+                        {
+                            id: '6463',
+                            type: 'PREQUALIFIED',
+                            name: 'CASE_VOLUME_DISCOUNT',
+                            amountType: 'Factor',
+                            amount: 0.98,
+                            priceAdjustment: -0.5,
+                            effectiveFrom: '19000101',
+                            effectiveTo: '21000101',
+                        },
+                    ],
+                    isApplicable: false,
+                },
+            ],
+        },
+    ],
+};
+
 export const mockPCIPricingErrorResponse = {
     businessUnitNumber: '019',
     customerAccount: '622548',
