@@ -12,13 +12,13 @@ import router from './api';
 import {handleError} from './middleware/errorHandler';
 import {authMiddleware} from './middleware/authMiddleware';
 import {initializer} from './initializer';
-
-const correlator = require('express-correlation-id');
+import { CORRELATION_ID_HEADER } from './util/constants';
+import { correlatorMiddleware } from './util/correlationIdGenerator';
 
 const app = express();
 
-// generate correlation id
-app.use(correlator());
+// middleware to set a correlation id per route in express
+app.use(correlatorMiddleware({ header: CORRELATION_ID_HEADER }));
 
 app.use(initializer);
 
@@ -26,7 +26,7 @@ app.use(initializer);
 morgan.token('correlationId', (req) => req.correlationId());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
-app.use(cors({credentials: true, origin: true}));
+app.use(cors({ credentials: true, origin: true, exposedHeaders: [CORRELATION_ID_HEADER] }));
 
 app.use(bodyParser.json());
 

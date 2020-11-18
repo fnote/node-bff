@@ -1,7 +1,5 @@
 import winston from 'winston';
-import {v4 as uuidv4} from 'uuid';
-
-const correlator = require('express-correlation-id');
+import { getCorrelationId } from './correlationIdGenerator';
 
 class Logger {
     constructor() {
@@ -17,7 +15,7 @@ class Logger {
     }
 
     info(message) {
-        this.log.info(message);
+        this.log.info(`Correlation Id: ${getCorrelationId()} ${message}`);
     }
 
     warn(message) {
@@ -25,9 +23,7 @@ class Logger {
     }
 
     error(err) {
-        const incidentId = uuidv4();
-        const correlationId = correlator.getId();
-        this.log.error(`Correlation Id: ${correlationId} Incident Id: ${incidentId} ${err.toString()}`);
+        this.log.error(`Correlation Id: ${getCorrelationId()} ${err.toString()}`);
     }
 
     debug(message) {

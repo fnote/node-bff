@@ -19,8 +19,9 @@ export const FILE_SOURCE_OUTPUT = 'output';
 export const HTTP_GET = 'GET';
 export const HTTP_POST = 'POST';
 
-// HTTP req metadata
+// HTTP req/res metadata
 export const APPLICATION_JSON = 'application/json';
+export const CORRELATION_ID_HEADER = 'X-Syy-Correlation-Id';
 
 // http error codes
 export const HTTP_CLIENT_ERROR_CODE_INTERNAL_SERVER_ERROR = 500;

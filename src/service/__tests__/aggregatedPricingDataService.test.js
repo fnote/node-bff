@@ -6,6 +6,8 @@ import {PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE} from '../../exception/exception
 import {
     pricingDataMockRequest1, pricingDataMockErrorRequest, pciPriceMockPayload, pciPriceMockPayloadNoVolTiers,
     pciModifiedPriceMockPayload1, pciModifiedPriceMockPayload2, mockPCIPricingErrorResponse, mockProductPricingErrorResponse,
+    pciPricesMockDataPriceSourceId,
+    pciModifiedPriceMockPayload3,
 } from '../../config/test.config';
 
 describe('Aggregated Pricing Data Service request validation', () => {
@@ -21,6 +23,71 @@ describe('Aggregated Pricing Data Service request validation', () => {
     });
 });
 
+describe('Aggregated Pricing Data Service price source name selection', () => {
+    test('should return correct price source name for the given price source Id', async () => {
+        const priceSourceName = AggregatedPricingDataService.getPriceSourceName(
+            { ...pciPricesMockDataPriceSourceId, products: [{ ...pciPricesMockDataPriceSourceId.products[0], priceSource: 97 }] },
+        );
+        expect(priceSourceName).toEqual('Price Advisor');
+    });
+
+    test('should return correct price source name for the given price source Id', async () => {
+        const priceSourceName = AggregatedPricingDataService.getPriceSourceName(
+            { ...pciPricesMockDataPriceSourceId, products: [{ ...pciPricesMockDataPriceSourceId.products[0], priceSource: 30 }] },
+        );
+        expect(priceSourceName).toEqual('Price Rule');
+    });
+
+    test('should return correct price source name for the given price source Id', async () => {
+        const priceSourceName = AggregatedPricingDataService.getPriceSourceName(
+            { ...pciPricesMockDataPriceSourceId, products: [{ ...pciPricesMockDataPriceSourceId.products[0], priceSource: 40 }] },
+        );
+        expect(priceSourceName).toEqual('Co Default');
+    });
+
+    test('should return correct price source name for the given price source Id', async () => {
+        const priceSourceName = AggregatedPricingDataService.getPriceSourceName(
+            { ...pciPricesMockDataPriceSourceId, products: [{ ...pciPricesMockDataPriceSourceId.products[0], priceSource: 45 }] },
+        );
+        expect(priceSourceName).toEqual('PR Default');
+    });
+
+    test('should return correct price source name for the given price source Id', async () => {
+        const priceSourceName = AggregatedPricingDataService.getPriceSourceName(
+            { ...pciPricesMockDataPriceSourceId, products: [{ ...pciPricesMockDataPriceSourceId.products[0], priceSource: 50 }] },
+        );
+        expect(priceSourceName).toEqual('Min Rule');
+    });
+
+    test('should return correct price source name for the given price source Id', async () => {
+        const priceSourceName = AggregatedPricingDataService.getPriceSourceName(
+            { ...pciPricesMockDataPriceSourceId, products: [{ ...pciPricesMockDataPriceSourceId.products[0], priceSource: 52 }] },
+        );
+        expect(priceSourceName).toEqual('Hand Price');
+    });
+
+    test('should return correct price source name for the given price source Id', async () => {
+        const priceSourceName = AggregatedPricingDataService.getPriceSourceName(
+            { ...pciPricesMockDataPriceSourceId, products: [{ ...pciPricesMockDataPriceSourceId.products[0], priceSource: 61 }] },
+        );
+        expect(priceSourceName).toEqual('GTD Price');
+    });
+
+    test('should return correct price source name for the given price source Id', async () => {
+        const priceSourceName = AggregatedPricingDataService.getPriceSourceName(
+            { ...pciPricesMockDataPriceSourceId, products: [{ ...pciPricesMockDataPriceSourceId.products[0], priceSource: 70 }] },
+        );
+        expect(priceSourceName).toEqual('Substitution');
+    });
+
+    test('should return correct price source name for the given price source Id', async () => {
+        const priceSourceName = AggregatedPricingDataService.getPriceSourceName(
+            { ...pciPricesMockDataPriceSourceId, products: [{ ...pciPricesMockDataPriceSourceId.products[0], priceSource: 96 }] },
+        );
+        expect(priceSourceName).toEqual('Exception');
+    });
+});
+
 describe('Aggregated Pricing Data Service getApplicableTier', () => {
     test('should select applicable tier based on the quentity in between range', async () => {
         const response = await AggregatedPricingDataService
@@ -31,6 +98,11 @@ describe('Aggregated Pricing Data Service getApplicableTier', () => {
         const response = await AggregatedPricingDataService
             .getApplicableTier({ ...pricingDataMockRequest1, requestedQuantity: 9 }, pciPriceMockPayload);
         expect(response).toEqual(pciModifiedPriceMockPayload2);
+    });
+    test('should select applicable tier based on the quentity in greater or equal range', async () => {
+        const response = await AggregatedPricingDataService
+            .getApplicableTier({ ...pricingDataMockRequest1, requestedQuantity: 1 }, pciPriceMockPayload);
+        expect(response).toEqual(pciModifiedPriceMockPayload3);
     });
     test('should return the same payload if volumeTiers are not available', async () => {
         const response = await AggregatedPricingDataService

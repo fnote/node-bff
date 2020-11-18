@@ -8,7 +8,11 @@ import {getCloudPricingConfig} from '../../config/configs';
 import {httpClient} from '../../httpClient/httpClient';
 import logger from '../../util/logger';
 import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetchException';
-import { HTTP_POST, ERROR_IN_FETCHING_CLOUD_PRICING_DATA, APPLICATION_JSON } from '../../util/constants';
+import { getCorrelationId } from '../../util/correlationIdGenerator';
+import {
+    HTTP_POST, ERROR_IN_FETCHING_CLOUD_PRICING_DATA,
+    APPLICATION_JSON, CORRELATION_ID_HEADER,
+} from '../../util/constants';
 
 class CloudPricingDataService {
     constructor() {
@@ -29,6 +33,7 @@ class CloudPricingDataService {
             Accept: APPLICATION_JSON,
             clientID: this.cloudPricingConfig.CONFIG.clientId,
             priceEngineType: this.cloudPricingConfig.CONFIG.priceEngineType,
+            [CORRELATION_ID_HEADER]: getCorrelationId(),
         };
 
         const reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl
@@ -50,6 +55,7 @@ class CloudPricingDataService {
             Accept: APPLICATION_JSON,
             clientID: this.cloudPricingConfig.CONFIG.clientId,
             priceEngineType: this.cloudPricingConfig.CONFIG.priceEngineType,
+            [CORRELATION_ID_HEADER]: getCorrelationId(),
         };
 
         const reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl + this.cloudPricingConfig.CONFIG.pciPricesEndpoint;

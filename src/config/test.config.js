@@ -807,6 +807,99 @@ export const pciModifiedPriceMockPayload2 = {
     ],
 };
 
+export const pciModifiedPriceMockPayload3 = {
+    businessUnitNumber: '019',
+    customerAccount: '622548',
+    priceRequestDate: '20201020',
+    requestStatuses: [
+
+    ],
+    products: [
+        {
+            statuses: [],
+            volumePricingTiers: [
+                {
+                    customerPrequalifiedPrice: 22.24,
+                    unitPrice: 22.24,
+                    netPrice: 22.24,
+                    eligibility: {
+                        operator: 'Between',
+                        lowerBound: 2,
+                        upperBound: 5,
+                    },
+                    agreements: [
+
+                    ],
+                    discounts: [
+                        {
+                            id: '6463',
+                            type: 'PREQUALIFIED',
+                            name: 'CASE_VOLUME_DISCOUNT',
+                            amountType: 'Factor',
+                            amount: 0.99,
+                            priceAdjustment: -0.25,
+                            effectiveFrom: '19000101',
+                            effectiveTo: '21000101',
+                        },
+                    ],
+                    isApplicable: false,
+                },
+                {
+                    customerPrequalifiedPrice: 22.24,
+                    unitPrice: 22.24,
+                    netPrice: 22.24,
+                    eligibility: {
+                        operator: 'Between',
+                        lowerBound: 6,
+                        upperBound: 8,
+                    },
+                    agreements: [
+
+                    ],
+                    discounts: [
+                        {
+                            id: '6463',
+                            type: 'PREQUALIFIED',
+                            name: 'CASE_VOLUME_DISCOUNT',
+                            amountType: 'Factor',
+                            amount: 0.99,
+                            priceAdjustment: -0.25,
+                            effectiveFrom: '19000101',
+                            effectiveTo: '21000101',
+                        },
+                    ],
+                    isApplicable: false,
+                },
+                {
+                    customerPrequalifiedPrice: 21.99,
+                    unitPrice: 21.99,
+                    netPrice: 21.99,
+                    eligibility: {
+                        operator: '>=',
+                        lowerBound: 9,
+                    },
+                    agreements: [
+
+                    ],
+                    discounts: [
+                        {
+                            id: '6463',
+                            type: 'PREQUALIFIED',
+                            name: 'CASE_VOLUME_DISCOUNT',
+                            amountType: 'Factor',
+                            amount: 0.98,
+                            priceAdjustment: -0.5,
+                            effectiveFrom: '19000101',
+                            effectiveTo: '21000101',
+                        },
+                    ],
+                    isApplicable: false,
+                },
+            ],
+        },
+    ],
+};
+
 export const mockPCIPricingErrorResponse = {
     businessUnitNumber: '019',
     customerAccount: '622548',
@@ -851,6 +944,84 @@ export const mockProductPricingErrorResponse = {
                     code: '102',
                     state: 'INFO',
                     message: 'Some warning msg Product Pricing',
+                },
+            ],
+        },
+    ],
+};
+
+export const pciPricesMockDataPriceSourceId = {
+    businessUnitNumber: '019',
+    customerAccount: '622548',
+    customerType: 'TRS',
+    priceRequestDate: '20201112',
+    requestStatuses: [],
+    products: [
+        {
+            supc: '0059420',
+            splitFlag: false,
+            shipSplitsOnlyFlag: false,
+            priceZoneId: 4,
+            quantity: 12,
+            unitsPerCase: 6,
+            perWeightFlag: false,
+            averageNetWeight: 23.4000,
+            grossPrice: 993.90,
+            referencePriceRoundingAdjustment: 0.05,
+            customerReferencePrice: 944.25,
+            customerPrequalifiedPrice: 830.93,
+            unitPrice: 830.93,
+            netPrice: 830.93,
+            agreementIndicators: [],
+            priceSource: 97,
+            minPrice: 0,
+            minHandlingFlag: '',
+            grossCommissionBasis: 0,
+            handPricingAllowedFlag: false,
+            originalSupc: null,
+            subReasonCode: null,
+            orderPrice: null,
+            orderPriceType: null,
+            statuses: [
+                {
+                    code: 216,
+                    state: 'INFO',
+                    message: 'Invalid base value for the commission base.',
+                },
+            ],
+            priceRule: null,
+            agreements: [],
+            exception: null,
+            discounts: [
+                {
+                    id: '50000',
+                    type: 'REFERENCE_PRICE',
+                    name: 'STRATEGIC_DISCOUNT',
+                    amountType: 'Factor',
+                    amount: 0.95,
+                    priceAdjustment: -49.70,
+                    effectiveFrom: '19000101',
+                    effectiveTo: '21000101',
+                },
+                {
+                    id: '107',
+                    type: 'PREQUALIFIED',
+                    name: 'NEW_CUSTOMER_DISCOUNT',
+                    amountType: 'Factor',
+                    amount: 0.9,
+                    priceAdjustment: -94.43,
+                    effectiveFrom: '19000101',
+                    effectiveTo: '21000101',
+                },
+                {
+                    id: '6463',
+                    type: 'PREQUALIFIED',
+                    name: 'CASE_VOLUME_DISCOUNT',
+                    amountType: 'Factor',
+                    amount: 0.98,
+                    priceAdjustment: -18.89,
+                    effectiveFrom: '19000101',
+                    effectiveTo: '21000101',
                 },
             ],
         },
