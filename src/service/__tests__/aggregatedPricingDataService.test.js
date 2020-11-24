@@ -1,7 +1,7 @@
 import AggregatedPricingDataService from '../pricing/aggregatedPricingDataService';
 import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetchException';
 import InvalidRequestException from '../../exception/invalidRequestException';
-import { ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY } from '../../util/constants';
+import { UNSUPPORTED_REQUEST_BODY } from '../../util/constants';
 import {PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE} from '../../exception/exceptionCodes';
 import {
     pricingDataMockRequest1, pricingDataMockErrorRequest, pciPriceMockPayload, pciPriceMockPayloadNoVolTiers,
@@ -17,7 +17,7 @@ describe('Aggregated Pricing Data Service request validation', () => {
                 .getAggregatedPricingData({body: pricingDataMockErrorRequest});
         } catch (e) {
             expect(e.name).toEqual(InvalidRequestException.name);
-            expect(e.errorDetails.message).toEqual(ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY);
+            expect(e.errorDetails.message).toEqual(UNSUPPORTED_REQUEST_BODY);
             expect(e.errorCode).toEqual(PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE);
         }
     });

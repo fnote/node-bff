@@ -18,6 +18,7 @@ export const FILE_SOURCE_OUTPUT = 'output';
 // http methods
 export const HTTP_GET = 'GET';
 export const HTTP_POST = 'POST';
+export const HTTP_DELETE = 'DELETE';
 
 // HTTP req/res metadata
 export const APPLICATION_JSON = 'application/json';
@@ -29,9 +30,10 @@ export const HTTP_CLIENT_ERROR_CODE_INTERNAL_SERVER_ERROR = 500;
 // errors
 export const ERROR_IN_GETTING_S3_INPUT_SIGNED_URL = 'Error in getting S3 input signed urls';
 export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL = 'Error in getting S3 output signed urls';
-export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_INVALID_SOURCE = `Invalid source is passed in the url. 
-Valid sources are input/output`;
-export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY = 'Unsupported request body';
+export const INVALID_S3_BUCKET_SOURCE = `Invalid source is passed in the url. Valid sources are input/output`;
+export const ERROR_IN_GETTING_S3_FILES = 'Error occurred while getting S3 files';
+export const ERROR_IN_GETTING_S3_DELETING_FILES = 'Error occurred when deleting S3 files';
+export const UNSUPPORTED_REQUEST_BODY = 'Unsupported request body';
 export const ERROR_IN_FETCHING_CLOUD_PRICING_DATA = 'Failed to fetch data from Cloud Pricing Endpoint';
 
 // whitelisted url paths
@@ -50,3 +52,6 @@ export const MAX_ROLE_HIERARCHY_NUMBER = 10000;
 export const BETWEEN = 'Between';
 export const CRITICAL = 'CRITICAL';
 export const IS_APPLICABLE = 'isApplicable';
+
+// Constant char
+export const URL_SEPARATOR = '/';

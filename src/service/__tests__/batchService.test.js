@@ -6,7 +6,7 @@
 import * as HttpStatus from 'http-status-codes';
 import BatchService from '../batch/batchService';
 import InvalidRequestException from '../../exception/invalidRequestException';
-import {ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY} from '../../util/constants';
+import {UNSUPPORTED_REQUEST_BODY} from '../../util/constants';
 
 jest.mock('../../httpClient/httpClient');
 
@@ -45,7 +45,7 @@ describe('Batch Service', () => {
         const emptyRequestBody = {};
         await expect(BatchService.generateInputSignUrl(emptyRequestBody)).rejects
             .toThrowError(new InvalidRequestException(
-                ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
+                UNSUPPORTED_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
             ));
     });
@@ -54,7 +54,7 @@ describe('Batch Service', () => {
         const invalidRequestBody = {filenames: ''};
         await expect(BatchService.generateInputSignUrl(invalidRequestBody)).rejects
             .toThrowError(new InvalidRequestException(
-                ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
+                UNSUPPORTED_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
             ));
     });

@@ -1,5 +1,6 @@
 const GET = 'get';
 const POST = 'post';
+const DELETE = 'delete';
 const version = '/v1';
 const appName = '/pci-bff';
 
@@ -7,6 +8,9 @@ const routes = [
   { path: '/', method: GET },
   { path: '/support/healthcheck', method: GET},
   { path: '/batch/signed-url/{source}', method: POST },
+  { path: '/batch/files/{source}', method: GET },
+  { path: '/batch/files/{source}/{prefix}', method: GET },
+  { path: '/batch/files/{source}', method: DELETE },
   { path: '/auth/login', method: GET },
   { path: '/auth/logout', method: GET },
   { path: '/auth/user-details', method: GET },

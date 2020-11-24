@@ -4,7 +4,11 @@
  * @author: gkar5861 on 22/06/20
  * */
 import * as HttpStatus from 'http-status-codes';
-import {ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY} from '../util/constants';
+import {
+    UNSUPPORTED_REQUEST_BODY,
+    FILE_SOURCE_INPUT,
+    FILE_SOURCE_OUTPUT, INVALID_S3_BUCKET_SOURCE
+} from '../util/constants';
 import logger from '../util/logger';
 import InvalidRequestException from '../exception/invalidRequestException';
 
@@ -13,11 +17,21 @@ const isEmpty = (obj) => Object.keys(obj).length === 0;
 const isUndefinedFields = (obj) => Object.entries(obj)
     .some(([k, v]) => !k || !v || typeof v === 'undefined' || v === '');
 
-export default function validateRequestBody(requestBody) {
+export const validateRequestBody = (requestBody) => {
     if (isEmpty(requestBody) || isUndefinedFields(requestBody)) {
         logger.error(`Request body validation failed: ${requestBody}`);
         throw new InvalidRequestException(
-            ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
+            UNSUPPORTED_REQUEST_BODY,
+            HttpStatus.BAD_REQUEST,
+        );
+    }
+}
+
+export const validateSource = (source) => {
+    if (!(source === FILE_SOURCE_INPUT || source === FILE_SOURCE_OUTPUT)) {
+        logger.error(`S3 source validation failed: ${source}`);
+        throw new InvalidRequestException(
+            INVALID_S3_BUCKET_SOURCE,
             HttpStatus.BAD_REQUEST,
         );
     }

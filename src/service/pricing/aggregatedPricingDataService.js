@@ -13,7 +13,7 @@ import logger from '../../util/logger';
 import InvalidRequestException from '../../exception/invalidRequestException';
 import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetchException';
 import {
-    ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY, BETWEEN, IS_APPLICABLE, CRITICAL,
+    UNSUPPORTED_REQUEST_BODY, BETWEEN, IS_APPLICABLE, CRITICAL,
 } from '../../util/constants';
 import { getPriceSourceName } from '../../config/configs';
 import { PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE } from '../../exception/exceptionCodes';
@@ -130,7 +130,7 @@ class AggregatedPricingDataService {
         if (error) {
             logger.error(`Request body validation failed in getting aggregated pricing data: ${JSON.stringify(requestBody)}`);
             throw new InvalidRequestException(
-                ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
+                UNSUPPORTED_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
                 PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE,
             );

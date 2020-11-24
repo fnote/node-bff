@@ -8,12 +8,7 @@ import request from 'supertest';
 import * as HttpStatus from 'http-status-codes';
 import {jest} from '@jest/globals';
 import app from '../../../app';
-import {
-    ERROR,
-    ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_INVALID_SOURCE,
-    ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
-    SUCCESS,
-} from '../../../util/constants';
+import {ERROR, INVALID_S3_BUCKET_SOURCE, SUCCESS, UNSUPPORTED_REQUEST_BODY,} from '../../../util/constants';
 
 jest.mock('../../../httpClient/httpClient');
 
@@ -75,7 +70,7 @@ describe('routes: /batch', () => {
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
         expect(response.body.status).toEqual(ERROR);
-        expect(response.body.cause).toEqual(ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_INVALID_SOURCE);
+        expect(response.body.cause).toEqual(INVALID_S3_BUCKET_SOURCE);
     });
 
     test('post /batch/signed-url/{source} should throw exception when request body is invalid', async () => {
@@ -87,6 +82,6 @@ describe('routes: /batch', () => {
         expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
         expect(response.body.status).toEqual(ERROR);
         expect(response.body.cause)
-            .toEqual(ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY);
+            .toEqual(UNSUPPORTED_REQUEST_BODY);
     });
 });

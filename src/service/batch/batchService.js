@@ -5,9 +5,9 @@
  * */
 import logger from '../../util/logger';
 import {httpClient} from '../../httpClient/httpClient';
-import {HTTP_POST} from '../../util/constants';
+import {HTTP_DELETE, HTTP_GET, HTTP_POST, URL_SEPARATOR} from '../../util/constants';
 import getBatchAPIConfigs from '../../config/configs';
-import validateRequestBody from '../../validator/validateRequestBody';
+import {validateRequestBody, validateSource} from '../../validator/validateRequest';
 
 class BatchService {
     constructor() {
@@ -33,6 +33,34 @@ class BatchService {
         const url = this.config.api.getOutputSignedUrl;
         const response = await httpClient.makeRequest(HTTP_POST, url, request);
         logger.debug(`Generated output signed urls response:: ${response}`);
+        return response;
+    }
+
+    async getFiles(source) {
+        validateSource(source);
+        const url = `${this.config.api.batchBaseUrl}${source}`;
+        const response = await httpClient.makeRequest(HTTP_GET, url);
+        logger.debug(`Generated file list response:: ${response}`);
+        return response;
+    }
+
+    async getFilesByPrefix(source, prefix) {
+        validateSource(source);
+        const url = `${this.config.api.batchBaseUrl}${source}${URL_SEPARATOR}${prefix}`;
+        const response = await httpClient.makeRequest(HTTP_GET, url);
+        logger.debug(`Generated file list by prefix:: ${response}`);
+        return response;
+    }
+
+    async deleteFiles(source, requestBody) {
+        validateSource(source);
+        validateRequestBody(requestBody);
+        const request = {
+            fileNames: requestBody.fileNames,
+        };
+        const url = `${this.config.api.batchBaseUrl}${source}`;
+        const response = await httpClient.makeRequest(HTTP_DELETE, url, request);
+        logger.debug(`Generated deleted file list response:: ${response}`);
         return response;
     }
 }
