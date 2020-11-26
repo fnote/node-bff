@@ -23,4 +23,9 @@ export const pricingDataReqBody = Joi.object({
             .required(),
         splitFlag: Joi.boolean(),
     }),
+
+    orderPrice: Joi.number(),
+
+    orderPriceType: Joi.string()
+
 });

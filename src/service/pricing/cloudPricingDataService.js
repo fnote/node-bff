@@ -11,7 +11,7 @@ import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetc
 import { getCorrelationId } from '../../util/correlationIdGenerator';
 import {
     HTTP_POST, ERROR_IN_FETCHING_CLOUD_PRICING_DATA,
-    APPLICATION_JSON, CORRELATION_ID_HEADER,
+    APPLICATION_JSON, CORRELATION_ID_HEADER, ORDER_PRICE_TYPE_HAND
 } from '../../util/constants';
 
 class CloudPricingDataService {
@@ -50,6 +50,12 @@ class CloudPricingDataService {
                 { ...req.body.product, quantity: `${req.body.requestedQuantity}` },
             ],
         };
+
+        if(req.orderPrice) {
+            body.orderPrice = req.orderPrice;
+            body.orderPriceType = req.orderPriceType ? req.orderPriceType : ORDER_PRICE_TYPE_HAND
+        }
+
         const headers = {
             'Content-type': APPLICATION_JSON,
             Accept: APPLICATION_JSON,
