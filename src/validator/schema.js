@@ -26,7 +26,7 @@ export const pricingDataReqBody = Joi.object({
 
         orderPrice: Joi.number(),
 
-        orderPriceType: Joi.string()
+        orderPriceType: Joi.string(),
     }),
 
 });
