@@ -18,6 +18,7 @@ class BatchService {
         validateRequestBody(requestBody);
         const request = {
             fileNames: requestBody.fileNames,
+            contentType: requestBody.contentType
         };
         const url = this.config.api.getInputSignedUrl;
         const response = await httpClient.makeRequest(HTTP_POST, url, request);

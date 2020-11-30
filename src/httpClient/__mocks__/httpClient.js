@@ -17,29 +17,14 @@ import {
     pricingDataMockRequestThrowErrorForCloudPricingCall,
     productInfoMockResponse,
     cloudPCIPricingMockResponse,
+    mockResponseFileList,
+    mockRequestSignedUrl,
+    mockResponseSignedUrl,
+    mockErrorRequestSignedUrl,
 } from '../../config/test.config';
 import HttpClientException from '../../exception/httpClientException';
-import {HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
-
-const batchApiMockRequestBody = {
-    fileNames: [
-        'fileName1',
-        'fileName2',
-    ],
-};
-
-const batchApiMockResponse = {
-    data: [
-        {
-            fileName: 'fileName1',
-            putUrl: 'https://batch-output.s3.amazonaws.com/fileName1?AWSAccessKeyId=ASIAQRLXWZJ',
-        },
-        {
-            fileName: 'fileName2',
-            putUrl: 'https://batch-output.s3.amazonaws.com/fileName2?AWSAccessKeyId=ASIAQRLXWZJ',
-        },
-    ],
-};
+import {BATCH_API_DATA_FETCH_ERROR_CODE, HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
+import {HTTP_DELETE, HTTP_GET, HTTP_POST} from "../../util/constants";
 
 class HttpClient {
     async makeRequest(method, URL, data) {
@@ -63,6 +48,28 @@ class HttpClient {
             },
 
         };
+        if (URL.includes('/batch/files/signed-url/') && method ===HTTP_POST
+            && JSON.stringify(data) === JSON.stringify(mockRequestSignedUrl)) {
+            return mockResponseSignedUrl;
+        }
+        if (URL.includes('/batch/files/signed-url/') && method ===HTTP_POST
+            && JSON.stringify(data) === JSON.stringify(mockErrorRequestSignedUrl)) {
+            throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
+        }
+        if (URL.includes('/batch/files/output/ERR') && method === HTTP_GET) {
+            throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
+        }
+        if (URL.includes('/batch/files/output') && method === HTTP_GET) {
+            return mockResponseFileList;
+        }
+        if (URL.includes('/batch/files/output') && method ===HTTP_DELETE
+            && JSON.stringify(data) === JSON.stringify(mockRequestSignedUrl)) {
+            return mockResponseSignedUrl;
+        }
+        if (URL.includes('/batch/files/output') && method ===HTTP_DELETE
+            && JSON.stringify(data) === JSON.stringify(mockErrorRequestSignedUrl)) {
+            throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
+        }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingErrorMockRequest.body)) {
             return { data2: cloudPricingMockResponse };
         }
@@ -71,9 +78,6 @@ class HttpClient {
         }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingPCIMockRequest.body)) {
             return { data: cloudPCIPricingMockResponse };
-        }
-        if (JSON.stringify(data) === JSON.stringify(batchApiMockRequestBody)) {
-            return batchApiMockResponse;
         }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
             return cloudPricingMockResponse;
@@ -89,7 +93,7 @@ class HttpClient {
             throw new HttpClientException({
                 response: {
                     data: { message: 'HTTP_CLIENT_EXCEPTION', code: 222 },
-                    status: 'error satatus',
+                    status: 'error status',
                     headers: 'error headers',
                 },
             });

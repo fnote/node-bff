@@ -1027,3 +1027,59 @@ export const pciPricesMockDataPriceSourceId = {
         },
     ],
 };
+
+export const mockRequestSignedUrl = {
+    fileNames: [
+        'fileName1',
+        'fileName2',
+    ],
+};
+
+export const mockErrorRequestSignedUrl = {
+    fileNames: [
+        'error_fileName1'
+    ],
+};
+
+export const mockResponseSignedUrl = {
+    "data": {
+        "status": "success",
+        "message": null,
+        "data": [
+            {
+                fileName: 'fileName1',
+                putUrl: 'https://batch-output.s3.amazonaws.com/fileName1?AWSAccessKeyId=ASIAQRLXWZJ',
+            },
+            {
+                fileName: 'fileName2',
+                putUrl: 'https://batch-output.s3.amazonaws.com/fileName2?AWSAccessKeyId=ASIAQRLXWZJ',
+            },
+        ]}
+};
+
+export const mockResponseFileList = {
+    "data": {
+        "status": "success",
+        "message": null,
+        "data": [
+            {
+                "fileName": "DevTestSplit_076_20200626_C.txt",
+                "date": "2020-11-24T01:27:08.000Z",
+                "size": 809,
+                "owner": {
+                    "DisplayName": "AWS_ACCT_SyscoGo-016",
+                    "ID": "00669e0e1bbd0cbe09dada2537d2e918c6acf90c8d3619a1065d7735f7cf6b82"
+                }
+            },
+            {
+                "fileName": "DevTest1_006_20200616_C.txt",
+                "date": "2020-11-24T01:27:13.000Z",
+                "size": 369244,
+                "owner": {
+                    "DisplayName": "AWS_ACCT_SyscoGo-016",
+                    "ID": "00669e0e1bbd0cbe09dada2537d2e918c6acf90c8d3619a1065d7735f7cf6b82"
+                }
+            }
+        ]
+    }
+};

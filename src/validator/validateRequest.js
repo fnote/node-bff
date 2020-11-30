@@ -11,6 +11,7 @@ import {
 } from '../util/constants';
 import logger from '../util/logger';
 import InvalidRequestException from '../exception/invalidRequestException';
+import {INVALID_REQUEST_BODY, INVALID_S3_SOURCE} from "../exception/exceptionCodes";
 
 const isEmpty = (obj) => Object.keys(obj).length === 0;
 
@@ -23,6 +24,7 @@ export const validateRequestBody = (requestBody) => {
         throw new InvalidRequestException(
             UNSUPPORTED_REQUEST_BODY,
             HttpStatus.BAD_REQUEST,
+            INVALID_REQUEST_BODY
         );
     }
 }
@@ -33,6 +35,7 @@ export const validateSource = (source) => {
         throw new InvalidRequestException(
             INVALID_S3_BUCKET_SOURCE,
             HttpStatus.BAD_REQUEST,
+            INVALID_S3_SOURCE
         );
     }
 }

@@ -7,38 +7,21 @@ import * as HttpStatus from 'http-status-codes';
 import BatchService from '../batch/batchService';
 import InvalidRequestException from '../../exception/invalidRequestException';
 import {UNSUPPORTED_REQUEST_BODY} from '../../util/constants';
+import {mockRequestSignedUrl, mockResponseFileList, mockResponseSignedUrl} from "../../config/test.config";
 
 jest.mock('../../httpClient/httpClient');
 
-const mockRequestBody = {
-    fileNames: [
-        'fileName1',
-        'fileName2',
-    ],
-};
 
-const mockResponse = {
-    data: [
-        {
-            fileName: 'fileName1',
-            putUrl: 'https://batch-output.s3.amazonaws.com/fileName1?AWSAccessKeyId=ASIAQRLXWZJ',
-        },
-        {
-            fileName: 'fileName2',
-            putUrl: 'https://batch-output.s3.amazonaws.com/fileName2?AWSAccessKeyId=ASIAQRLXWZJ',
-        },
-    ],
-};
 
 describe('Batch Service', () => {
     test('should generate input signed urls  when the request body is valid', async () => {
-        const response = await BatchService.generateInputSignUrl(mockRequestBody);
-        expect(response).toEqual(mockResponse);
+        const response = await BatchService.generateInputSignUrl(mockRequestSignedUrl);
+        expect(response).toEqual(mockResponseSignedUrl);
     });
 
     test('should generate output signed urls when the request body is valid', async () => {
-        const response = await BatchService.generateOutputSignUrl(mockRequestBody);
-        expect(response).toEqual(mockResponse);
+        const response = await BatchService.generateOutputSignUrl(mockRequestSignedUrl);
+        expect(response).toEqual(mockResponseSignedUrl);
     });
 
     test('should throw exception  when the request body is empty', async () => {
@@ -58,4 +41,20 @@ describe('Batch Service', () => {
                 HttpStatus.BAD_REQUEST,
             ));
     });
+
+    test('should generate list of files  when the source is valid', async () => {
+        const response = await BatchService.getFiles("output");
+        expect(response).toEqual(mockResponseFileList);
+    });
+
+    test('should generate list of files  when the source is valid and prefix is given', async () => {
+        const response = await BatchService.getFilesByPrefix("output", "REV");
+        expect(response).toEqual(mockResponseFileList);
+    });
+
+    test('should delete files  when the pass the file list', async () => {
+        const response = await BatchService.deleteFiles("output", mockRequestSignedUrl);
+        expect(response).toEqual(mockResponseSignedUrl);
+    });
+
 });
