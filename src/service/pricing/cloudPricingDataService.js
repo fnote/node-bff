@@ -42,19 +42,24 @@ class CloudPricingDataService {
     }
 
     async getCloudPricingPCIData(req) {
+        const reqBody = req.body;
+
         const body = {
-            businessUnitNumber: `${req.body.businessUnitNumber}`,
-            customerAccount: `${req.body.customerAccount}`,
-            priceRequestDate: `${req.body.priceRequestDate}`,
-            products: [
-                { ...req.body.product, quantity: `${req.body.requestedQuantity}` },
-            ],
+            businessUnitNumber: `${reqBody.businessUnitNumber}`,
+            customerAccount: `${reqBody.customerAccount}`,
+            priceRequestDate: `${reqBody.priceRequestDate}`
         };
 
-        if(req.orderPrice) {
-            body.orderPrice = req.orderPrice;
-            body.orderPriceType = req.orderPriceType ? req.orderPriceType : ORDER_PRICE_TYPE_HAND
+        const product = { ...reqBody.product, quantity: `${reqBody.requestedQuantity}` };
+
+        if(reqBody.orderPrice) {
+            product.orderPrice = reqBody.orderPrice;
+            product.orderPriceType = reqBody.orderPriceType ? reqBody.orderPriceType : ORDER_PRICE_TYPE_HAND
         }
+
+        body.products = [product];
+
+        logger.debug("Request to PCI-Prices: " + JSON.stringify(body));
 
         const headers = {
             'Content-type': APPLICATION_JSON,
