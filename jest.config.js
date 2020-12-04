@@ -1,3 +1,5 @@
+const qCenterIntegrator = require.resolve('jest-qcenter-integrator');
+
 module.exports = {
   name: 'cloud-pci-bff',
   verbose: true,
@@ -20,4 +22,16 @@ module.exports = {
     '\\.js$': '<rootDir>/node_modules/babel-jest',
   },
   setupFilesAfterEnv: ['./jest.setup.js'],
+  reporters: ['default',
+    [qCenterIntegrator,
+      {
+        release: 'CloudPCI_REG_BUILD',
+        project: 'Cloud PCI',
+        env: 'EXE',
+        module: 'CLOUD_PCI_UNIT',
+        feature: 'UNIT_TESTS_BFF',
+        updateDashboard: true,
+      },
+    ],
+  ],
 };
