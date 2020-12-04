@@ -30,7 +30,7 @@ module.exports = {
         env: process.env.QC_ENV || 'EXE',
         module: 'CLOUD_PCI_UNIT',
         feature: 'UNIT_TESTS_BFF',
-        updateDashboard: process.env.QC_SUBMIT && process.env.QC_SUBMIT === 'true' || false,
+        updateDashboard: (process.env.QC_SUBMIT && process.env.QC_SUBMIT === 'true') || false,
       },
     ],
   ],
