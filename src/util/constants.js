@@ -50,3 +50,6 @@ export const MAX_ROLE_HIERARCHY_NUMBER = 10000;
 export const BETWEEN = 'Between';
 export const CRITICAL = 'CRITICAL';
 export const IS_APPLICABLE = 'isApplicable';
+
+// misc
+export const ORDER_PRICE_TYPE_HAND = 'H';

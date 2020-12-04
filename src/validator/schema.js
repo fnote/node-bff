@@ -21,6 +21,12 @@ export const pricingDataReqBody = Joi.object({
         supc: Joi.string()
             .alphanum()
             .required(),
+
         splitFlag: Joi.boolean(),
+
+        orderPrice: Joi.number(),
+
+        orderPriceType: Joi.string(),
     }),
+
 });
