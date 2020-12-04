@@ -5,13 +5,41 @@
  * */
 import logger from '../../util/logger';
 import {httpClient} from '../../httpClient/httpClient';
-import {HTTP_DELETE, HTTP_GET, HTTP_POST, URL_SEPARATOR} from '../../util/constants';
+import {
+    ERROR_FILE,
+    ERROR_FILE_EXTENSION, FILE_ERROR,
+    FILE_SUCCESS,
+    HTTP_DELETE,
+    HTTP_GET,
+    HTTP_POST,
+    URL_SEPARATOR
+} from '../../util/constants';
 import getBatchAPIConfigs from '../../config/configs';
 import {validateRequestBody, validateSource} from '../../validator/validateRequest';
 
 class BatchService {
     constructor() {
         this.config = getBatchAPIConfigs();
+    }
+
+    filePreprocessing = (responseData) => {
+        let filesWithErrorNames = responseData.data.data ? responseData.data.data : [];
+
+        filesWithErrorNames.forEach((file, index) => {
+            file.action = FILE_SUCCESS;
+            if (file.fileName.endsWith(ERROR_FILE_EXTENSION)) {
+                file.action = FILE_ERROR;
+                const originalFilename = file.fileName.replace(ERROR_FILE_EXTENSION, "")
+                file.fileName = file.fileName.replace(ERROR_FILE, "")
+                filesWithErrorNames = filesWithErrorNames.filter(otherFile => {
+                    return (!otherFile.fileName.startsWith(originalFilename) ||
+                        (otherFile.fileName.startsWith(originalFilename) && otherFile.action === FILE_ERROR));
+                });
+            }
+        })
+
+        responseData.data.data = filesWithErrorNames.sort((f1, f2) => new Date(f1.date) - new Date(f2.date));
+        return responseData;
     }
 
     async generateInputSignUrl(requestBody) {
@@ -40,7 +68,8 @@ class BatchService {
     async getFiles(source) {
         validateSource(source);
         const url = `${this.config.api.batchBaseUrl}${source}`;
-        const response = await httpClient.makeRequest(HTTP_GET, url);
+        let response = await httpClient.makeRequest(HTTP_GET, url);
+        response = this.filePreprocessing(response);
         logger.debug(`Generated file list response:: ${response}`);
         return response;
     }
@@ -48,7 +77,8 @@ class BatchService {
     async getFilesByPrefix(source, prefix) {
         validateSource(source);
         const url = `${this.config.api.batchBaseUrl}${source}${URL_SEPARATOR}${prefix}`;
-        const response = await httpClient.makeRequest(HTTP_GET, url);
+        let response = await httpClient.makeRequest(HTTP_GET, url);
+        response = this.filePreprocessing(response);
         logger.debug(`Generated file list by prefix:: ${response}`);
         return response;
     }

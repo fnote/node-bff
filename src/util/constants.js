@@ -53,5 +53,11 @@ export const BETWEEN = 'Between';
 export const CRITICAL = 'CRITICAL';
 export const IS_APPLICABLE = 'isApplicable';
 
+// file states
+export const ERROR_FILE_EXTENSION = "_errors.txt"
+export const ERROR_FILE = "_errors"
+export const FILE_ERROR = 'error'
+export const FILE_SUCCESS = 'success'
+
 // Constant char
 export const URL_SEPARATOR = '/';

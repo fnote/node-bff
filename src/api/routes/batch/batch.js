@@ -51,8 +51,6 @@ export default () => {
         const {source} = req.params;
         try {
             const responseData = await BatchService.getFiles(source);
-            responseData.data.data = responseData.data.data ?
-                responseData.data.data.sort((f1, f2) => new Date(f1.date) - new Date(f2.date)) : responseData.data.data
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
         } catch (error) {
@@ -71,8 +69,6 @@ export default () => {
         const {prefix} = req.params;
         try {
             const responseData = await BatchService.getFilesByPrefix(source, prefix);
-            responseData.data.data = responseData.data.data ?
-                responseData.data.data.sort((f1, f2) => new Date(f1.date) - new Date(f2.date)) : responseData.data.data
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
         } catch (error) {
