@@ -29,6 +29,7 @@ class BatchService {
             file.action = FILE_SUCCESS;
             if (file.fileName.endsWith(ERROR_FILE_EXTENSION)) {
                 file.action = FILE_ERROR;
+                file.minorErrorFileName = file.fileName;
                 const originalFilename = file.fileName.replace(ERROR_FILE_EXTENSION, "")
                 file.fileName = file.fileName.replace(ERROR_FILE, "")
                 filesWithErrorNames = filesWithErrorNames.filter(otherFile => {
@@ -36,7 +37,7 @@ class BatchService {
                         (otherFile.fileName.startsWith(originalFilename) && otherFile.action === FILE_ERROR));
                 });
             }
-        })
+        });
 
         responseData.data.data = filesWithErrorNames.sort((f1, f2) => new Date(f1.date) - new Date(f2.date));
         return responseData;
