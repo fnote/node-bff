@@ -16,6 +16,7 @@ describe('Cloud Pricing Data Service', () => {
     test('should generate the correct response when flow is correct', async () => {
         const response = await ProductInfoService
             .getProductInfo('068', '7203474');
+        console.log(response);
         expect(response).toEqual(productInfoMockResponse);
     });
 

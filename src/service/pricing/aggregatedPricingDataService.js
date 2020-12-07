@@ -8,6 +8,7 @@ import * as HttpStatus from 'http-status-codes';
 import { get } from 'lodash';
 import CloudPricingDataService from './cloudPricingDataService';
 import ProductInfoService from '../productInfo/productInfoService';
+import CustomerInfoService from '../customerInfo/customerInfoService';
 import { pricingDataReqBody } from '../../validator/schema';
 import logger from '../../util/logger';
 import InvalidRequestException from '../../exception/invalidRequestException';
@@ -110,6 +111,15 @@ class AggregatedPricingDataService {
         };
     }
 
+    filterCustomerInfoData(customerInfoPayload) {
+        const {
+            name,
+        } = customerInfoPayload;
+        return {
+            customerName: name,
+        };
+    }
+
     filterRootLevelPCIPricePayloadData(pciPricePayload) {
         const {
             businessUnitNumber, customerAccount, customerType, priceRequestDate, requestStatuses,
@@ -141,17 +151,22 @@ class AggregatedPricingDataService {
         const itemInfoDataCall = ProductInfoService.getProductInfo(
             req.body.businessUnitNumber, req.body.product.supc,
         );
+        const customerInfoDataCall = CustomerInfoService.getCustomerInfo(
+            req.body.businessUnitNumber, req.body.customerAccount,
+        );
 
         return Promise.all([
             cloudPricingPCIDataCall,
             cloudPricingProductPricesDataCall,
             itemInfoDataCall,
+            customerInfoDataCall,
         ])
-            .then(([cloudPricingPCIResponse, cloudPricingProductPricesResponse, itemCallResponse]) => {
+            .then(([cloudPricingPCIResponse, cloudPricingProductPricesResponse, itemCallResponse, customerCallResponse]) => {
                 let finalResponse = {};
                 const productPricePayload = cloudPricingProductPricesResponse.data;
                 const pciPricePayload = cloudPricingPCIResponse.data;
                 const itemInfoPayload = itemCallResponse.data;
+                const customerInfoPayload = customerCallResponse.data;
                 // validating CP responses
                 this.checkCPResponseErrorStatus(productPricePayload, pciPricePayload);
 
@@ -165,11 +180,13 @@ class AggregatedPricingDataService {
                 // filtering item info data
                 const filteredItemPayload = this.filterItemInfoData(itemInfoPayload);
 
+                const filteredCustomerPayload = this.filterCustomerInfoData(customerInfoPayload);
+
                 // filtering root level attributes in pci-prices data
                 const rootLevelData = this.filterRootLevelPCIPricePayloadData(pciPricePayload);
 
                 // adding root level data to final response
-                finalResponse = { ...rootLevelData };
+                finalResponse = { ...rootLevelData, ...filteredCustomerPayload,};
                 // building product section
                 finalResponse.product = {
                     ...filteredItemPayload,

@@ -42,6 +42,12 @@ export const getProductInfoApiConfig = () => ({
     },
 });
 
+export const getCustomerInfoApiConfig = () => ({
+    CONFIG: {
+        customerInfoApiUrl: `${process.env.API_CENTRAL_BASE_URL}/sm/customer/1.0.0`,
+    },
+});
+
 export const getApiCentralConfig = () => ({
     CONFIG: {
         apiCentralBaseUrl: process.env.API_CENTRAL_BASE_URL,
