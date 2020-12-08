@@ -1,7 +1,7 @@
 /**
- * Customized Exception Class for Product Info fetch
+ * Customized Exception Class for Customer Info fetch
  *
- * @author: cwic0864 on 07/08/20
+ * @author: sthe3935 on 07/12/20
  * */
 export default class CustomerInfoDataFetchException extends Error {
     constructor(error, errorMessage, errorCode) {

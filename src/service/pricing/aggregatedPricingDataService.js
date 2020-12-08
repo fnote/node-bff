@@ -186,7 +186,7 @@ class AggregatedPricingDataService {
                 const rootLevelData = this.filterRootLevelPCIPricePayloadData(pciPricePayload);
 
                 // adding root level data to final response
-                finalResponse = { ...rootLevelData, ...filteredCustomerPayload,};
+                finalResponse = { ...rootLevelData, ...filteredCustomerPayload, };
                 // building product section
                 finalResponse.product = {
                     ...filteredItemPayload,
