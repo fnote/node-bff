@@ -67,11 +67,9 @@ class HttpClient {
             return { data2: cloudPricingMockResponse };
         }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
-            console.log('yesss.............1....................');
             return { data: cloudPricingMockResponse };
         }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingPCIMockRequest.body)) {
-            console.log('yesss..........2.......................');
             return { data: cloudPCIPricingMockResponse };
         }
         if (JSON.stringify(data) === JSON.stringify(batchApiMockRequestBody)) {
