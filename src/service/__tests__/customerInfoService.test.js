@@ -11,7 +11,6 @@ import CustomerInfoDataFetchException from '../../exception/customerInfoDataFetc
 
 jest.mock('../../httpClient/httpClient');
 jest.mock('../../util/accessTokenGenerator');
-// jest.mock('../../../service/pricing/aggregatedPricingDataService');
 
 describe('Cloud Pricing Data Service', () => {
     test('should generate the correct response when flow is correct', async () => {
