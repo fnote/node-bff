@@ -15,10 +15,10 @@ class CustomerInfoService {
         this.customerInfoApiConfig = getCustomerInfoApiConfig();
     }
 
-    async getCustomerInfo(businessUnit, supc) {
+    async getCustomerInfo(businessUnit, customerAccount) {
         try {
             return await ApiCentralClient.get(
-                this.generateCustomerInfoRequestUrl(businessUnit, supc),
+                this.generateCustomerInfoRequestUrl(businessUnit, customerAccount),
             );
         } catch (e) {
             const errorMessage = 'Failed to fetch data from Customer Info API';
@@ -31,8 +31,8 @@ class CustomerInfoService {
         }
     }
 
-    generateCustomerInfoRequestUrl(businessUnit, supc) {
-        return `${this.customerInfoApiConfig.CONFIG.customerInfoApiUrl}/opcos/${businessUnit}/customers/${supc}`;
+    generateCustomerInfoRequestUrl(businessUnit, customerAccount) {
+        return `${this.customerInfoApiConfig.CONFIG.customerInfoApiUrl}/opcos/${businessUnit}/customers/${customerAccount}`;
     }
 }
 
