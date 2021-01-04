@@ -61,3 +61,6 @@ export const FILE_SUCCESS = 'success'
 
 // Constant char
 export const URL_SEPARATOR = '/';
+
+// misc
+export const ORDER_PRICE_TYPE_HAND = 'H';

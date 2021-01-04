@@ -17,6 +17,7 @@ import {
     pricingDataMockRequestThrowErrorForCloudPricingCall,
     productInfoMockResponse,
     cloudPCIPricingMockResponse,
+    customerInfoMockResponse,
     mockResponseFileList,
     mockRequestSignedUrl,
     mockResponseSignedUrl,
@@ -84,6 +85,12 @@ class HttpClient {
         }
         if (URL.includes('/opcos/068/products/7203474')) {
             return productInfoMockResponse;
+        }
+        if (URL.includes('/opcos/068/customers/758028')) {
+            return customerInfoMockResponse;
+        }
+        if (URL.includes('/opcos/019/customers/622548')) {
+            return customerInfoMockResponse;
         }
         if (URL.includes('/opcos/999/products/9999999')) {
             throw new HttpClientException('Http client exception', HTTP_CLIENT_EXCEPTION);

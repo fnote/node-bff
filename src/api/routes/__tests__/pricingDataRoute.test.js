@@ -29,7 +29,6 @@ jest.mock('../../../initializer', () => ({
 
 jest.mock('../../../service/auth/authorizationService', () => ({
     isAuthorizedRequest: () => true,
-
 }));
 
 describe('routes: /pricing-data', () => {

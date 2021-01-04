@@ -15,6 +15,7 @@ import InvalidRequestException from '../../../exception/invalidRequestException'
 import ProductInfoDataFetchException from '../../../exception/productInfoDataFetchException';
 import {CORRELATION_ID_HEADER} from '../../../util/constants';
 import {getCorrelationId} from '../../../util/correlationIdGenerator';
+import CustomerInfoDataFetchException from '../../../exception/customerInfoDataFetchException';
 
 export default () => {
     const cloudPricingRouter = new Router({mergeParams: true});
@@ -40,7 +41,8 @@ export default () => {
             let httpStatusCode;
             if (error instanceof CloudPricingDataFetchException
                 || error instanceof ProductInfoDataFetchException
-                || error instanceof InvalidRequestException) {
+                || error instanceof InvalidRequestException
+                || error instanceof CustomerInfoDataFetchException) {
                 httpStatusCode = HttpStatus.BAD_REQUEST;
             } else {
                 httpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
