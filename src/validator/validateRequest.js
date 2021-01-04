@@ -19,7 +19,7 @@ const isUndefinedFields = (obj) => Object.entries(obj)
     .some(([k, v]) => !k || !v || typeof v === 'undefined' || v === '');
 
 export const validateRequestBody = (requestBody) => {
-    if (isEmpty(requestBody) || isUndefinedFields(requestBody)) {
+    if (isEmpty(requestBody) || isUndefinedFields(requestBody) || !requestBody.fileNames) {
         logger.error(`Request body validation failed: ${requestBody}`);
         throw new InvalidRequestException(
             UNSUPPORTED_REQUEST_BODY,

@@ -7,7 +7,12 @@ import * as HttpStatus from 'http-status-codes';
 import BatchService from '../batch/batchService';
 import InvalidRequestException from '../../exception/invalidRequestException';
 import {UNSUPPORTED_REQUEST_BODY} from '../../util/constants';
-import {mockRequestSignedUrl, mockResponseFileList, mockResponseSignedUrl} from "../../config/test.config";
+import {
+    mockErrorResponse, mockErrorResponseFromS3,
+    mockRequestSignedUrl,
+    mockResponseFileList,
+    mockResponseSignedUrl
+} from "../../config/test.config";
 
 jest.mock('../../httpClient/httpClient');
 
@@ -55,6 +60,11 @@ describe('Batch Service', () => {
     test('should delete files  when the pass the file list', async () => {
         const response = await BatchService.deleteFiles("output", mockRequestSignedUrl);
         expect(response).toEqual(mockResponseSignedUrl);
+    });
+
+    test('should rename the file minor error file to original name', async () => {
+        const response = await BatchService.filePreprocessing(mockErrorResponseFromS3);
+        expect(response).toEqual(mockErrorResponse);
     });
 
 });

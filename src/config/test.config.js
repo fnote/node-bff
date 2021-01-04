@@ -1041,6 +1041,32 @@ export const mockErrorRequestSignedUrl = {
     ],
 };
 
+export const mockErrorResponseFromS3 = {
+    "data": {
+        "status": "success",
+        "message": null,
+        "data": [
+            {
+                fileName: 'fileName3_errors.txt',
+                putUrl: 'https://batch-output.s3.amazonaws.com/fileName1?AWSAccessKeyId=ASIAQRLXWZJ',
+            }
+        ]}
+};
+
+export const mockErrorResponse = {
+    "data": {
+        "status": "success",
+        "message": null,
+        "data": [
+            {
+                fileName: 'fileName3.txt',
+                putUrl: 'https://batch-output.s3.amazonaws.com/fileName1?AWSAccessKeyId=ASIAQRLXWZJ',
+                action: 'error',
+                minorErrorFileName: 'fileName3_errors.txt'
+            }
+        ]}
+};
+
 export const mockResponseSignedUrl = {
     "data": {
         "status": "success",

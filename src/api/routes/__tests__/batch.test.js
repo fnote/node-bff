@@ -27,14 +27,10 @@ import {
     mockResponseSignedUrl
 } from "../../../config/test.config";
 
-jest.mock('../../../httpClient/httpClient');
+jest.mock('../../../middleware/authMiddleware');
+const {authMiddleware} = require('../../../middleware/authMiddleware');
 
-jest.mock('../../../middleware/authMiddleware', () => ({
-    authMiddleware: (req, res, next) => next(),
-}));
-jest.mock('../../../initializer', () => ({
-    initializer: (req, res, next) => next(),
-}));
+jest.mock('../../../httpClient/httpClient');
 
 jest.mock('../../../initializer', () => ({
     initializer: (req, res, next) => next(),
@@ -42,6 +38,25 @@ jest.mock('../../../initializer', () => ({
 
 describe('routes: /batch', () => {
     test('post /batch/signed-url/{source} should return write signed-urls when the source is input', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            res.locals.authResponse = {
+                authenticated: true,
+                cause: null,
+                username: 'username',
+                userDetailsData: {
+                    authorizedBunitList: [
+                        '001',
+                        '002',
+                    ],
+                    email: 'firstName.secondName@syscolabs.com',
+                    firstName: 'firstName',
+                    jobTitle: 'jobTitle',
+                    lastName: 'secondName',
+                    username: 'username',
+                },
+            };
+            next();
+        });
         const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/input')
             .send(mockRequestSignedUrl)
@@ -54,6 +69,9 @@ describe('routes: /batch', () => {
     });
 
     test('post /batch/signed-url/{source} should return read signed-urls when the source is output', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
         const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/output')
             .send(mockRequestSignedUrl)
@@ -66,6 +84,25 @@ describe('routes: /batch', () => {
     });
 
     test('post /batch/signed-url/{source} should throw exception when client error', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            res.locals.authResponse = {
+                authenticated: true,
+                cause: null,
+                username: 'username',
+                userDetailsData: {
+                    authorizedBunitList: [
+                        '001',
+                        '002',
+                    ],
+                    email: 'firstName.secondName@syscolabs.com',
+                    firstName: 'firstName',
+                    jobTitle: 'jobTitle',
+                    lastName: 'secondName',
+                    username: 'username',
+                },
+            };
+            next();
+        });
         const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/input')
             .send(mockErrorRequestSignedUrl)
@@ -76,6 +113,9 @@ describe('routes: /batch', () => {
     });
 
     test('post /batch/signed-url/{source} should throw exception when the source is invalid', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
         const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/invalid')
             .send(mockRequestSignedUrl)
@@ -88,6 +128,25 @@ describe('routes: /batch', () => {
     });
 
     test('post /batch/signed-url/{source} should throw exception when request body is invalid', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            res.locals.authResponse = {
+                authenticated: true,
+                cause: null,
+                username: 'username',
+                userDetailsData: {
+                    authorizedBunitList: [
+                        '001',
+                        '002',
+                    ],
+                    email: 'firstName.secondName@syscolabs.com',
+                    firstName: 'firstName',
+                    jobTitle: 'jobTitle',
+                    lastName: 'secondName',
+                    username: 'username',
+                },
+            };
+            next();
+        });
         const invalidRequestBody = {};
         const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/input')
@@ -102,6 +161,9 @@ describe('routes: /batch', () => {
     });
 
     test('get /batch/files/{source} should return file list when no errors', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
         const response = await request(app.app)
             .get('/v1/pci-bff/batch/files/output')
             .set('Accept', 'application/json');
@@ -112,6 +174,9 @@ describe('routes: /batch', () => {
     });
 
     test('get /batch/files/{source} should throw exception when the source is invalid', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
         const response = await request(app.app)
             .get('/v1/pci-bff/batch/files/invalid')
             .set('Accept', 'application/json');
@@ -123,6 +188,9 @@ describe('routes: /batch', () => {
     });
 
     test('get /batch/files/{source}/{prefix} should return file list with given prefix', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
         const response = await request(app.app)
             .get('/v1/pci-bff/batch/files/output/REV')
             .set('Accept', 'application/json');
@@ -134,6 +202,9 @@ describe('routes: /batch', () => {
     });
 
     test('get /batch/files/{source}/{prefix} should throw exception when the source is invalid', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
         const response = await request(app.app)
             .get('/v1/pci-bff/batch/files/invalid/REV')
             .set('Accept', 'application/json');
@@ -145,6 +216,9 @@ describe('routes: /batch', () => {
     });
 
     test('get /batch/signed-url/{source} should throw exception when client error', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
         const response = await request(app.app)
             .get('/v1/pci-bff/batch/files/output/ERR')
             .set('Accept', 'application/json');
@@ -155,6 +229,9 @@ describe('routes: /batch', () => {
     });
 
     test('delete /batch/files/{source} should delete file list when no errors', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
         const response = await request(app.app)
             .delete('/v1/pci-bff/batch/files/output')
             .send(mockRequestSignedUrl)
@@ -167,6 +244,9 @@ describe('routes: /batch', () => {
     });
 
     test('delete /batch/signed-url/{source} should throw exception when client error', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
         const response = await request(app.app)
             .delete('/v1/pci-bff/batch/files/output')
             .send(mockErrorRequestSignedUrl)
@@ -178,6 +258,9 @@ describe('routes: /batch', () => {
     });
 
     test('delete /batch/files/{source} should throw exception when the source is invalid', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
         const response = await request(app.app)
             .delete('/v1/pci-bff/batch/files/invalid')
             .send(mockRequestSignedUrl)
@@ -190,6 +273,9 @@ describe('routes: /batch', () => {
     });
 
     test('delete /batch/files/{source} should throw exception when request body is invalid', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
         const invalidRequestBody = {};
         const response = await request(app.app)
             .delete('/v1/pci-bff/batch/files/input')

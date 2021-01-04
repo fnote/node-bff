@@ -29,6 +29,11 @@ export default () => {
             validateSource(source);
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             if (source === FILE_SOURCE_INPUT) {
+                const {authResponse} = res.locals;
+                const {userDetailsData} = authResponse;
+                console.log('userDetails:', JSON.stringify(userDetailsData));
+                req.body.submittedUser = userDetailsData.username;
+                req.body.authorizedBunitList = userDetailsData.authorizedBunitList;
                 const responseData = await BatchService.generateInputSignUrl(req.body);
                 res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
             } else {
