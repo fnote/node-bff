@@ -8,8 +8,10 @@ import BatchService from '../batch/batchService';
 import InvalidRequestException from '../../exception/invalidRequestException';
 import {UNSUPPORTED_REQUEST_BODY} from '../../util/constants';
 import {
-    mockErrorResponse, mockErrorResponseFromS3,
-    mockRequestSignedUrl,
+    mockBatchApiRequest,
+    mockErrorResponse,
+    mockErrorResponseFromS3,
+    mockRequestOutputSignedUrl,
     mockResponseFileList,
     mockResponseSignedUrl
 } from "../../config/test.config";
@@ -20,12 +22,12 @@ jest.mock('../../httpClient/httpClient');
 
 describe('Batch Service', () => {
     test('should generate input signed urls  when the request body is valid', async () => {
-        const response = await BatchService.generateInputSignUrl(mockRequestSignedUrl);
+        const response = await BatchService.generateInputSignUrl(mockBatchApiRequest);
         expect(response).toEqual(mockResponseSignedUrl);
     });
 
     test('should generate output signed urls when the request body is valid', async () => {
-        const response = await BatchService.generateOutputSignUrl(mockRequestSignedUrl);
+        const response = await BatchService.generateOutputSignUrl(mockRequestOutputSignedUrl);
         expect(response).toEqual(mockResponseSignedUrl);
     });
 
@@ -58,7 +60,7 @@ describe('Batch Service', () => {
     });
 
     test('should delete files  when the pass the file list', async () => {
-        const response = await BatchService.deleteFiles("output", mockRequestSignedUrl);
+        const response = await BatchService.deleteFiles("output", mockRequestOutputSignedUrl);
         expect(response).toEqual(mockResponseSignedUrl);
     });
 

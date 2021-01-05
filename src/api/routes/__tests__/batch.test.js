@@ -21,8 +21,10 @@ import {
     INVALID_S3_SOURCE
 } from "../../../exception/exceptionCodes";
 import {
+    mockErrorDeleteRequestSignedUrl,
     mockErrorRequestSignedUrl,
-    mockRequestSignedUrl,
+    mockRequestInputSignedUrl,
+    mockRequestOutputSignedUrl,
     mockResponseFileList,
     mockResponseSignedUrl
 } from "../../../config/test.config";
@@ -52,14 +54,14 @@ describe('routes: /batch', () => {
                     firstName: 'firstName',
                     jobTitle: 'jobTitle',
                     lastName: 'secondName',
-                    username: 'username',
+                    username: 'first1234',
                 },
             };
             next();
         });
         const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/input')
-            .send(mockRequestSignedUrl)
+            .send(mockRequestInputSignedUrl)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.OK);
         expect(response.headers[CORRELATION_ID_HEADER]);
@@ -74,7 +76,7 @@ describe('routes: /batch', () => {
         });
         const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/output')
-            .send(mockRequestSignedUrl)
+            .send(mockRequestOutputSignedUrl)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.OK);
         expect(response.headers[CORRELATION_ID_HEADER]);
@@ -98,7 +100,7 @@ describe('routes: /batch', () => {
                     firstName: 'firstName',
                     jobTitle: 'jobTitle',
                     lastName: 'secondName',
-                    username: 'username',
+                    username: 'first1234',
                 },
             };
             next();
@@ -118,7 +120,7 @@ describe('routes: /batch', () => {
         });
         const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/invalid')
-            .send(mockRequestSignedUrl)
+            .send(mockRequestOutputSignedUrl)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
         expect(response.headers[CORRELATION_ID_HEADER]);
@@ -142,12 +144,14 @@ describe('routes: /batch', () => {
                     firstName: 'firstName',
                     jobTitle: 'jobTitle',
                     lastName: 'secondName',
-                    username: 'username',
+                    username: 'first1234',
                 },
             };
             next();
         });
-        const invalidRequestBody = {};
+        const invalidRequestBody = {
+            fileNames: []
+        };
         const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/input')
             .send(invalidRequestBody)
@@ -234,7 +238,7 @@ describe('routes: /batch', () => {
         });
         const response = await request(app.app)
             .delete('/v1/pci-bff/batch/files/output')
-            .send(mockRequestSignedUrl)
+            .send(mockRequestOutputSignedUrl)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.OK);
         expect(response.headers[CORRELATION_ID_HEADER]);
@@ -249,7 +253,7 @@ describe('routes: /batch', () => {
         });
         const response = await request(app.app)
             .delete('/v1/pci-bff/batch/files/output')
-            .send(mockErrorRequestSignedUrl)
+            .send(mockErrorDeleteRequestSignedUrl)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
         expect(response.headers[CORRELATION_ID_HEADER]);
@@ -263,7 +267,7 @@ describe('routes: /batch', () => {
         });
         const response = await request(app.app)
             .delete('/v1/pci-bff/batch/files/invalid')
-            .send(mockRequestSignedUrl)
+            .send(mockRequestOutputSignedUrl)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
         expect(response.headers[CORRELATION_ID_HEADER]);

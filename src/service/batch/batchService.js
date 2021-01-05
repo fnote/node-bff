@@ -7,7 +7,8 @@ import logger from '../../util/logger';
 import {httpClient} from '../../httpClient/httpClient';
 import {
     ERROR_FILE,
-    ERROR_FILE_EXTENSION, FILE_ERROR,
+    ERROR_FILE_EXTENSION,
+    FILE_ERROR,
     FILE_SUCCESS,
     HTTP_DELETE,
     HTTP_GET,
@@ -47,7 +48,9 @@ class BatchService {
         validateRequestBody(requestBody);
         const request = {
             fileNames: requestBody.fileNames,
-            contentType: requestBody.contentType
+            contentType: requestBody.contentType,
+            submittedUser: requestBody.submittedUser,
+            authorizedBunitList: requestBody.authorizedBunitList
         };
         const url = this.config.api.getInputSignedUrl;
         const response = await httpClient.makeRequest(HTTP_POST, url, request);

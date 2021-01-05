@@ -5,23 +5,25 @@
  * */
 
 import {
-    cloudPricingPCIMockRequest,
+    cloudPCIPricingMockResponse,
+    cloudPricingDataMockRequest,
     cloudPricingErrorMockRequest,
     cloudPricingMockRequest,
     cloudPricingMockRequestForErrorScenario,
     cloudPricingMockResponse,
     cloudPricingMockResponseForAggregatedErrorPricingCall,
     cloudPricingMockResponseForAggregatedPricingCall,
-    cloudPricingDataMockRequest,
+    cloudPricingPCIMockRequest,
+    customerInfoMockResponse,
+    mockBatchApiRequest,
+    mockErrorBatchApiRequest,
+    mockErrorDeleteRequestSignedUrl,
+    mockRequestOutputSignedUrl,
+    mockResponseFileList,
+    mockResponseSignedUrl,
     pricingDataMockRequestForErrorOnCloudPricingCall,
     pricingDataMockRequestThrowErrorForCloudPricingCall,
     productInfoMockResponse,
-    cloudPCIPricingMockResponse,
-    customerInfoMockResponse,
-    mockResponseFileList,
-    mockRequestSignedUrl,
-    mockResponseSignedUrl,
-    mockErrorRequestSignedUrl,
 } from '../../config/test.config';
 import HttpClientException from '../../exception/httpClientException';
 import {BATCH_API_DATA_FETCH_ERROR_CODE, HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
@@ -49,12 +51,16 @@ class HttpClient {
             },
 
         };
-        if (URL.includes('/batch/files/signed-url/') && method ===HTTP_POST
-            && JSON.stringify(data) === JSON.stringify(mockRequestSignedUrl)) {
+        if (URL.includes('/batch/files/signed-url/input') && method === HTTP_POST
+            && JSON.stringify(data) === JSON.stringify(mockBatchApiRequest)) {
             return mockResponseSignedUrl;
         }
-        if (URL.includes('/batch/files/signed-url/') && method ===HTTP_POST
-            && JSON.stringify(data) === JSON.stringify(mockErrorRequestSignedUrl)) {
+        if (URL.includes('/batch/files/signed-url/output') && method === HTTP_POST
+            && JSON.stringify(data) === JSON.stringify(mockRequestOutputSignedUrl)) {
+            return mockResponseSignedUrl;
+        }
+        if (URL.includes('/batch/files/signed-url/') && method === HTTP_POST
+            && JSON.stringify(data) === JSON.stringify(mockErrorBatchApiRequest)) {
             throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
         }
         if (URL.includes('/batch/files/output/ERR') && method === HTTP_GET) {
@@ -63,16 +69,16 @@ class HttpClient {
         if (URL.includes('/batch/files/output') && method === HTTP_GET) {
             return mockResponseFileList;
         }
-        if (URL.includes('/batch/files/output') && method ===HTTP_DELETE
-            && JSON.stringify(data) === JSON.stringify(mockRequestSignedUrl)) {
+        if (URL.includes('/batch/files/output') && method === HTTP_DELETE
+            && JSON.stringify(data) === JSON.stringify(mockRequestOutputSignedUrl)) {
             return mockResponseSignedUrl;
         }
-        if (URL.includes('/batch/files/output') && method ===HTTP_DELETE
-            && JSON.stringify(data) === JSON.stringify(mockErrorRequestSignedUrl)) {
+        if (URL.includes('/batch/files/output') && method === HTTP_DELETE
+            && JSON.stringify(data) === JSON.stringify(mockErrorDeleteRequestSignedUrl)) {
             throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
         }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingErrorMockRequest.body)) {
-            return { data2: cloudPricingMockResponse };
+            return {data2: cloudPricingMockResponse};
         }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
             return { data: cloudPricingMockResponse };

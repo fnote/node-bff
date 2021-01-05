@@ -1109,17 +1109,55 @@ export const pciPricesMockDataPriceSourceId = {
     ],
 };
 
-export const mockRequestSignedUrl = {
+export const mockRequestInputSignedUrl = {
     fileNames: [
         'fileName1',
         'fileName2',
     ],
+    contentType: 'text/plain'
+
+};
+
+export const mockRequestOutputSignedUrl = {
+    fileNames: [
+        'fileName1',
+        'fileName2',
+    ],
+
+};
+
+export const mockBatchApiRequest = {
+    fileNames: [
+        'fileName1',
+        'fileName2',
+    ],
+    contentType: 'text/plain',
+    submittedUser: 'first1234',
+    authorizedBunitList: ["001", "002"]
+
 };
 
 export const mockErrorRequestSignedUrl = {
     fileNames: [
         'error_fileName1'
     ],
+    contentType: 'text/plain'
+};
+
+export const mockErrorDeleteRequestSignedUrl = {
+    fileNames: [
+        'error_fileName1'
+    ]
+};
+
+export const mockErrorBatchApiRequest = {
+    fileNames: [
+        'error_fileName1'
+    ],
+    contentType: 'text/plain',
+    submittedUser: 'first1234',
+    authorizedBunitList: ["001", "002"]
+
 };
 
 export const mockErrorResponseFromS3 = {
