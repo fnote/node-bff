@@ -41,14 +41,16 @@ class AuthorizationService {
     matchedBatchEnabledBusinessUnit = (bUnit) => {
         if (this.businessUnitDetailsArray) {
             return this.businessUnitDetailsArray.filter((bUnitDetails) => bUnit === bUnitDetails.bunit_id
-                && bUnitDetails.batch_on === 'Y');
+                && bUnitDetails.batch_on === 'Y')
+                .map(bUnitDetails => bUnitDetails.bunit_id);
         }
         return [];
     }
 
     generateBatchEnabledAllBusinessUnit = () => {
         if (this.businessUnitDetailsArray) {
-            return this.businessUnitDetailsArray.filter((bUnitDetails) => bUnitDetails.batch_on === 'Y');
+            return this.businessUnitDetailsArray.filter((bUnitDetails) => bUnitDetails.batch_on === 'Y')
+                .map(bUnitDetails => bUnitDetails.bunit_id);
         }
         return [];
     }
