@@ -13,42 +13,61 @@ import {
     ERROR_IN_GETTING_S3_FILES,
     ERROR_IN_GETTING_S3_INPUT_SIGNED_URL,
     ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL,
-    FILE_SOURCE_INPUT,
 } from '../../../util/constants';
 import BatchService from '../../../service/batch/batchService';
 import {BATCH_API_DATA_FETCH_ERROR_CODE} from "../../../exception/exceptionCodes";
-import {validateSource} from "../../../validator/validateRequest";
 import {getCorrelationId} from "../../../util/correlationIdGenerator";
 
 export default () => {
     const batchRouter = new Router({mergeParams: true});
 
-    batchRouter.post('/signed-url/:source', async (req, res) => {
-        const {source} = req.params;
+    /**
+     * Get write signed urls for input bucket
+     */
+    batchRouter.post('/signed-url/input', async (req, res) => {
         try {
-            validateSource(source);
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
-            if (source === FILE_SOURCE_INPUT) {
-                const {authResponse} = res.locals;
-                const {userDetailsData} = authResponse;
-                console.log('userDetails:', JSON.stringify(userDetailsData));
-                req.body.submittedUser = userDetailsData.username;
-                req.body.authorizedBunitList = userDetailsData.authorizedBunitList;
-                const responseData = await BatchService.generateInputSignUrl(req.body);
-                res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
-            } else {
-                const responseData = await BatchService.generateOutputSignUrl(req.body);
-                res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
-            }
+
+            const {authResponse} = res.locals;
+            const {userDetailsData} = authResponse;
+            console.log('userDetails:', JSON.stringify(userDetailsData));
+            req.body.userId = userDetailsData.username;
+            req.body.authorizedBunitList = userDetailsData.authorizedBatchEnabledBunitList;
+
+            const responseData = await BatchService.generateInputSignUrl(req.body);
+            res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
+
         } catch (error) {
             logger.error(`Error occurred in getting signed urls. Error: ${error}`);
-            const errMessage = source === FILE_SOURCE_INPUT ? ERROR_IN_GETTING_S3_INPUT_SIGNED_URL
-                : ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL;
             const httpStatus = error.getStatus();
             const errorCode = error.getErrorCode() ? error.getErrorCode() : BATCH_API_DATA_FETCH_ERROR_CODE;
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(httpStatus !== -1 ? httpStatus : HttpStatus.INTERNAL_SERVER_ERROR)
-                .send(createErrorResponse(null, errMessage, error, null, errorCode));
+                .send(createErrorResponse(null, ERROR_IN_GETTING_S3_INPUT_SIGNED_URL, error, null, errorCode));
+        }
+    });
+
+    /**
+     * Get read signed urls for output bucket
+     */
+    batchRouter.post('/signed-url/output', async (req, res) => {
+        try {
+            res.set(CORRELATION_ID_HEADER, getCorrelationId());
+
+            const {authResponse} = res.locals;
+            const {userDetailsData} = authResponse;
+            req.body.userId = userDetailsData.username;
+
+            const responseData = await BatchService.generateOutputSignUrl(req.body);
+            res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
+
+        } catch (error) {
+            logger.error(`Error occurred in getting signed urls. Error: ${error}`);
+            const httpStatus = error.getStatus();
+            const errorCode = error.getErrorCode() ? error.getErrorCode() : BATCH_API_DATA_FETCH_ERROR_CODE;
+            res.set(CORRELATION_ID_HEADER, getCorrelationId());
+            res.status(httpStatus !== -1 ? httpStatus : HttpStatus.INTERNAL_SERVER_ERROR)
+                .send(createErrorResponse(null, ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL, error, null, errorCode));
         }
     });
 

@@ -15,7 +15,8 @@ import {
     cloudPricingMockResponseForAggregatedPricingCall,
     cloudPricingPCIMockRequest,
     customerInfoMockResponse,
-    mockBatchApiRequest,
+    mockBatchApiInputUrlRequest,
+    mockBatchApiOutputUrlRequest,
     mockErrorBatchApiRequest,
     mockErrorDeleteRequestSignedUrl,
     mockRequestOutputSignedUrl,
@@ -52,11 +53,11 @@ class HttpClient {
 
         };
         if (URL.includes('/batch/files/signed-url/input') && method === HTTP_POST
-            && JSON.stringify(data) === JSON.stringify(mockBatchApiRequest)) {
+            && JSON.stringify(data) === JSON.stringify(mockBatchApiInputUrlRequest)) {
             return mockResponseSignedUrl;
         }
         if (URL.includes('/batch/files/signed-url/output') && method === HTTP_POST
-            && JSON.stringify(data) === JSON.stringify(mockRequestOutputSignedUrl)) {
+            && JSON.stringify(data) === JSON.stringify(mockBatchApiOutputUrlRequest)) {
             return mockResponseSignedUrl;
         }
         if (URL.includes('/batch/files/signed-url/') && method === HTTP_POST

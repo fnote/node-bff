@@ -1115,7 +1115,6 @@ export const mockRequestInputSignedUrl = {
         'fileName2',
     ],
     contentType: 'text/plain'
-
 };
 
 export const mockRequestOutputSignedUrl = {
@@ -1123,18 +1122,24 @@ export const mockRequestOutputSignedUrl = {
         'fileName1',
         'fileName2',
     ],
-
 };
 
-export const mockBatchApiRequest = {
+export const mockBatchApiInputUrlRequest = {
     fileNames: [
         'fileName1',
         'fileName2',
     ],
     contentType: 'text/plain',
-    submittedUser: 'first1234',
+    userId: 'first1234',
     authorizedBunitList: ["001", "002"]
+};
 
+export const mockBatchApiOutputUrlRequest = {
+    fileNames: [
+        'fileName1',
+        'fileName2',
+    ],
+    userId: 'first1234',
 };
 
 export const mockErrorRequestSignedUrl = {
@@ -1144,20 +1149,20 @@ export const mockErrorRequestSignedUrl = {
     contentType: 'text/plain'
 };
 
-export const mockErrorDeleteRequestSignedUrl = {
-    fileNames: [
-        'error_fileName1'
-    ]
-};
-
 export const mockErrorBatchApiRequest = {
     fileNames: [
         'error_fileName1'
     ],
     contentType: 'text/plain',
-    submittedUser: 'first1234',
+    userId: 'first1234',
     authorizedBunitList: ["001", "002"]
 
+};
+
+export const mockErrorDeleteRequestSignedUrl = {
+    fileNames: [
+        'error_fileName1'
+    ]
 };
 
 export const mockErrorResponseFromS3 = {

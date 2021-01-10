@@ -49,7 +49,7 @@ class BatchService {
         const request = {
             fileNames: requestBody.fileNames,
             contentType: requestBody.contentType,
-            submittedUser: requestBody.submittedUser,
+            userId: requestBody.userId,
             authorizedBunitList: requestBody.authorizedBunitList
         };
         const url = this.config.api.getInputSignedUrl;
@@ -62,6 +62,7 @@ class BatchService {
         validateRequestBody(requestBody);
         const request = {
             fileNames: requestBody.fileNames,
+            userId: requestBody.userId,
         };
         const url = this.config.api.getOutputSignedUrl;
         const response = await httpClient.makeRequest(HTTP_POST, url, request);

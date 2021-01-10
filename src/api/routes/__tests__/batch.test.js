@@ -39,17 +39,15 @@ jest.mock('../../../initializer', () => ({
 }));
 
 describe('routes: /batch', () => {
-    test('post /batch/signed-url/{source} should return write signed-urls when the source is input', async () => {
+    test('post /batch/signed-url/input should return write signed-urls when the source is input', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
                 authenticated: true,
                 cause: null,
                 username: 'username',
                 userDetailsData: {
-                    authorizedBunitList: [
-                        '001',
-                        '002',
-                    ],
+                    authorizedPricingTransformationEnabledBunitList: ['019'],
+                    authorizedBatchEnabledBunitList: ['001', '002'],
                     email: 'firstName.secondName@syscolabs.com',
                     firstName: 'firstName',
                     jobTitle: 'jobTitle',
@@ -70,8 +68,22 @@ describe('routes: /batch', () => {
         expect(response.body.data).toEqual(mockResponseSignedUrl.data.data);
     });
 
-    test('post /batch/signed-url/{source} should return read signed-urls when the source is output', async () => {
+    test('post /batch/signed-url/output should return read signed-urls when the source is output', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
+            res.locals.authResponse = {
+                authenticated: true,
+                cause: null,
+                username: 'username',
+                userDetailsData: {
+                    authorizedPricingTransformationEnabledBunitList: ['019'],
+                    authorizedBatchEnabledBunitList: ['001', '002'],
+                    email: 'firstName.secondName@syscolabs.com',
+                    firstName: 'firstName',
+                    jobTitle: 'jobTitle',
+                    lastName: 'secondName',
+                    username: 'first1234',
+                },
+            };
             next();
         });
         const response = await request(app.app)
@@ -85,17 +97,15 @@ describe('routes: /batch', () => {
         expect(response.body.data).toEqual(mockResponseSignedUrl.data.data);
     });
 
-    test('post /batch/signed-url/{source} should throw exception when client error', async () => {
+    test('post /batch/signed-url/input should throw exception when client error', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
                 authenticated: true,
                 cause: null,
                 username: 'username',
                 userDetailsData: {
-                    authorizedBunitList: [
-                        '001',
-                        '002',
-                    ],
+                    authorizedPricingTransformationEnabledBunitList: ['019'],
+                    authorizedBatchEnabledBunitList: ['001', '002'],
                     email: 'firstName.secondName@syscolabs.com',
                     firstName: 'firstName',
                     jobTitle: 'jobTitle',
@@ -114,32 +124,15 @@ describe('routes: /batch', () => {
         expect(response.body.errorCode).toEqual(BATCH_API_DATA_FETCH_ERROR_CODE);
     });
 
-    test('post /batch/signed-url/{source} should throw exception when the source is invalid', async () => {
-        authMiddleware.mockImplementationOnce((req, res, next) => {
-            next();
-        });
-        const response = await request(app.app)
-            .post('/v1/pci-bff/batch/signed-url/invalid')
-            .send(mockRequestOutputSignedUrl)
-            .set('Accept', 'application/json');
-        expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
-        expect(response.headers[CORRELATION_ID_HEADER]);
-        expect(response.body.status).toEqual(ERROR);
-        expect(response.body.errorCode).toEqual(INVALID_S3_SOURCE);
-        expect(response.body.cause).toEqual(INVALID_S3_BUCKET_SOURCE);
-    });
-
-    test('post /batch/signed-url/{source} should throw exception when request body is invalid', async () => {
+    test('post /batch/signed-url/input should throw exception when request body is invalid', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
                 authenticated: true,
                 cause: null,
                 username: 'username',
                 userDetailsData: {
-                    authorizedBunitList: [
-                        '001',
-                        '002',
-                    ],
+                    authorizedPricingTransformationEnabledBunitList: ['019'],
+                    authorizedBatchEnabledBunitList: ['001', '002'],
                     email: 'firstName.secondName@syscolabs.com',
                     firstName: 'firstName',
                     jobTitle: 'jobTitle',

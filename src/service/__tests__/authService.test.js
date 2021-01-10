@@ -41,23 +41,27 @@ const mockResponse = {
     },
 };
 
+const authorizedPricingTransformationEnabledBunitList = [
+    {
+        bunit_id: '001',
+        bunit_name: 'Sysco Jackson',
+        periscope_on: 'Y',
+    },
+    {
+        bunit_id: '003',
+        bunit_name: 'Sysco Jacksonville',
+        periscope_on: 'Y',
+    },
+];
+const authorizedBatchEnabledBunitList = ['001', '002'];
+
 const authenticatedMockResponse = {
     authenticated: true,
     cause: null,
     username: 'username',
     userDetailsData: {
-        authorizedBunitList: [
-            {
-                bunit_id: '001',
-                bunit_name: 'Sysco Jackson',
-                periscope_on: 'Y',
-            },
-            {
-                bunit_id: '003',
-                bunit_name: 'Sysco Jacksonville',
-                periscope_on: 'Y',
-            },
-        ],
+        authorizedPricingTransformationEnabledBunitList: authorizedPricingTransformationEnabledBunitList,
+        authorizedBatchEnabledBunitList: authorizedBatchEnabledBunitList,
         email: 'firstName.secondName@syscolabs.com',
         firstName: 'firstName',
         jobTitle: 'jobTitle',
@@ -80,7 +84,8 @@ jest.mock('../../config/configs', () => ({
 }));
 
 jest.mock('../auth/authorizationService', () => ({
-    getAuthorizedBusinessUnits: () => [
+    getAuthorizedBusinessUnits: () => ({
+        authorizedPricingTransformationEnabledBunitList: [
             {
                 bunit_id: '001',
                 bunit_name: 'Sysco Jackson',
@@ -92,6 +97,8 @@ jest.mock('../auth/authorizationService', () => ({
                 periscope_on: 'Y',
             },
         ],
+        authorizedBatchEnabledBunitList: ['001', '002']
+    })
 
 }));
 

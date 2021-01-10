@@ -7,7 +7,8 @@ const appName = '/pci-bff';
 const routes = [
   { path: '/', method: GET },
   { path: '/support/healthcheck', method: GET},
-  { path: '/batch/signed-url/{source}', method: POST },
+  { path: '/batch/signed-url/input', method: POST },
+  { path: '/batch/signed-url/output', method: POST },
   { path: '/batch/files/{source}', method: GET },
   { path: '/batch/files/{source}/{prefix}', method: GET },
   { path: '/batch/files/{source}', method: DELETE },

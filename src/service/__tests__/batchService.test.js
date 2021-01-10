@@ -8,7 +8,8 @@ import BatchService from '../batch/batchService';
 import InvalidRequestException from '../../exception/invalidRequestException';
 import {UNSUPPORTED_REQUEST_BODY} from '../../util/constants';
 import {
-    mockBatchApiRequest,
+    mockBatchApiInputUrlRequest,
+    mockBatchApiOutputUrlRequest,
     mockErrorResponse,
     mockErrorResponseFromS3,
     mockRequestOutputSignedUrl,
@@ -22,12 +23,12 @@ jest.mock('../../httpClient/httpClient');
 
 describe('Batch Service', () => {
     test('should generate input signed urls  when the request body is valid', async () => {
-        const response = await BatchService.generateInputSignUrl(mockBatchApiRequest);
+        const response = await BatchService.generateInputSignUrl(mockBatchApiInputUrlRequest);
         expect(response).toEqual(mockResponseSignedUrl);
     });
 
     test('should generate output signed urls when the request body is valid', async () => {
-        const response = await BatchService.generateOutputSignUrl(mockRequestOutputSignedUrl);
+        const response = await BatchService.generateOutputSignUrl(mockBatchApiOutputUrlRequest);
         expect(response).toEqual(mockResponseSignedUrl);
     });
 

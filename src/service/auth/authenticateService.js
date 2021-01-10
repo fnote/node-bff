@@ -147,11 +147,13 @@ class AuthenticateService {
                         return this.sendUnauthenticatedErrorResponse('Authorized OPCO given in the authentication token is invalid');
                     }
 
-                    let authorizedBunitList;
+                    let authorizedPricingTransformationEnabledBunitList;
+                    let authorizedBatchEnabledBunitList;
                     let selectedUserRole;
                     if (Number.isNaN(opcoParsed)) {
                         logger.warn(`User's opco attribute: ${opcoParsed} is not numeric parsable, so returning empty set of authorized opco list`);
-                        authorizedBunitList = [];
+                        authorizedPricingTransformationEnabledBunitList = [];
+                        authorizedBatchEnabledBunitList = [];
                     } else {
                         // User roles can come in two formats
                         // If it's single role: it'll come like a string "rsm"
@@ -175,12 +177,14 @@ class AuthenticateService {
                             logger.error(`Error in parsing the user role value: ${userRoles}`);
                             selectedUserRole = userRoles;
                         }
-                        authorizedBunitList = AuthorizationService
-                            .getAuthorizedBusinessUnits(opcoString, selectedUserRole);
+                        const authorizedBunitList = AuthorizationService.getAuthorizedBusinessUnits(opcoString, selectedUserRole);
+                        authorizedPricingTransformationEnabledBunitList = authorizedBunitList.authorizedPricingTransformationEnabledBunitList;
+                        authorizedBatchEnabledBunitList = authorizedBunitList.authorizedBatchEnabledBunitList;
                     }
 
                     const userDetailsData = {
-                        authorizedBunitList,
+                        authorizedPricingTransformationEnabledBunitList,
+                        authorizedBatchEnabledBunitList,
                         firstName: decodedPayloadFromJwt.given_name,
                         lastName: decodedPayloadFromJwt.family_name,
                         username,
