@@ -42,7 +42,7 @@ describe('Batch Service', () => {
     });
 
     test('should throw exception  when the request body is invalid', async () => {
-        const invalidRequestBody = {filenames: ''};
+        const invalidRequestBody = {};
         await expect(BatchService.generateInputSignUrl(invalidRequestBody)).rejects
             .toThrowError(new InvalidRequestException(
                 UNSUPPORTED_REQUEST_BODY,

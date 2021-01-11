@@ -16,7 +16,14 @@ import {
     URL_SEPARATOR
 } from '../../util/constants';
 import getBatchAPIConfigs from '../../config/configs';
-import {validateRequestBody, validateSource} from '../../validator/validateRequest';
+import {
+    isEmptyRequestBody,
+    validateRequestBody,
+    validateRequestContentType,
+    validateRequestFileNames,
+    validateSource,
+    validateUserId
+} from '../../validator/validateRequest';
 
 class BatchService {
     constructor() {
@@ -45,7 +52,10 @@ class BatchService {
     }
 
     async generateInputSignUrl(requestBody) {
-        validateRequestBody(requestBody);
+        isEmptyRequestBody(requestBody);
+        validateRequestFileNames(requestBody.fileNames);
+        validateRequestContentType(requestBody.contentType);
+        validateUserId(requestBody.userId);
         const request = {
             fileNames: requestBody.fileNames,
             contentType: requestBody.contentType,
@@ -59,7 +69,9 @@ class BatchService {
     }
 
     async generateOutputSignUrl(requestBody) {
-        validateRequestBody(requestBody);
+        isEmptyRequestBody(requestBody);
+        validateRequestFileNames(requestBody.fileNames);
+        validateUserId(requestBody.userId);
         const request = {
             fileNames: requestBody.fileNames,
             userId: requestBody.userId,

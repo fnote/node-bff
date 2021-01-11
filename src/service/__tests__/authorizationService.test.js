@@ -81,7 +81,7 @@ describe('Auth Service', () => {
         const pricingTransformationFilteredArray = AuthorizationService.matchedPricingTransformationEnabledBusinessUnit('001');
         const batchFilteredArray = AuthorizationService.matchedBatchEnabledBusinessUnit('001');
         expect(pricingTransformationFilteredArray).toEqual([bUnitDetailForOpco001]);
-        expect(batchFilteredArray).toEqual([bUnitDetailForOpco001]);
+        expect(batchFilteredArray).toEqual(['001']);
     });
 
     test('should send an empty array when the passed bunit has periscope_on as N and batch_on as N although ' +
@@ -136,7 +136,7 @@ describe('Auth Service', () => {
             await AuthorizationService.loadBusinessUnitDetails();
 
             const filteredArray = AuthorizationService.generateBatchEnabledAllBusinessUnit();
-            expect(filteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003, bUnitDetailForOpco005]);
+            expect(filteredArray).toEqual(['001', '003', '005']);
         });
 
     test('should send an empty array when all bunits have periscope_on as N',
@@ -187,7 +187,7 @@ describe('Auth Service', () => {
             const batchFilteredArray = filteredArray.authorizedBatchEnabledBunitList;
 
             expect(pricingTransformationFilteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
-            expect(batchFilteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003, bUnitDetailForOpco005]);
+            expect(batchFilteredArray).toEqual(['001', '003', '005']);
         });
 
     test('should send the bunit array of that have periscope_on and batch_on as Y when called with user role: ROLE_GENERAL_USER',
@@ -201,7 +201,7 @@ describe('Auth Service', () => {
             const batchFilteredArray = filteredArray.authorizedBatchEnabledBunitList;
 
             expect(pricingTransformationFilteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
-            expect(batchFilteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003, bUnitDetailForOpco005]);
+            expect(batchFilteredArray).toEqual(['001', '003', '005']);
         });
 
     test('should send an empty array when opcoAtrribute is passed as null', async () => {
@@ -240,7 +240,7 @@ describe('Auth Service', () => {
         const pricingTransformationFilteredArray = filteredArray.authorizedPricingTransformationEnabledBunitList;
         const batchFilteredArray = filteredArray.authorizedBatchEnabledBunitList;
         expect(pricingTransformationFilteredArray).toEqual([bUnitDetailForOpco001]);
-        expect(batchFilteredArray).toEqual([bUnitDetailForOpco001]);
+        expect(batchFilteredArray).toEqual(['001']);
 
     });
 
@@ -269,7 +269,7 @@ describe('Auth Service', () => {
             const pricingTransformationFilteredArray = filteredArray.authorizedPricingTransformationEnabledBunitList;
             const batchFilteredArray = filteredArray.authorizedBatchEnabledBunitList;
             expect(pricingTransformationFilteredArray).toEqual([]);
-            expect(batchFilteredArray).toEqual([bUnitDetailForOpco005]);
+            expect(batchFilteredArray).toEqual(['005']);
         });
 
     test('should send all the periscope_on Y bunit when the passed opco does not match one of the given bunit details array '
@@ -282,7 +282,7 @@ describe('Auth Service', () => {
         const pricingTransformationFilteredArray = filteredArray.authorizedPricingTransformationEnabledBunitList;
         const batchFilteredArray = filteredArray.authorizedBatchEnabledBunitList;
         expect(pricingTransformationFilteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
-        expect(batchFilteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003, bUnitDetailForOpco005]);
+        expect(batchFilteredArray).toEqual(['001', '003', '005']);
     });
 
     test('should send isAuthorized as true when user requested for an opco that he is authorized to', async () => {

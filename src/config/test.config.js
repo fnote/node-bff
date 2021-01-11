@@ -1130,7 +1130,7 @@ export const mockBatchApiInputUrlRequest = {
         'fileName2',
     ],
     contentType: 'text/plain',
-    userId: 'first1234',
+    userId: 'test1234',
     authorizedBunitList: ["001", "002"]
 };
 
@@ -1139,7 +1139,7 @@ export const mockBatchApiOutputUrlRequest = {
         'fileName1',
         'fileName2',
     ],
-    userId: 'first1234',
+    userId: 'test1234',
 };
 
 export const mockErrorRequestSignedUrl = {
@@ -1154,7 +1154,7 @@ export const mockErrorBatchApiRequest = {
         'error_fileName1'
     ],
     contentType: 'text/plain',
-    userId: 'first1234',
+    userId: 'test1234',
     authorizedBunitList: ["001", "002"]
 
 };

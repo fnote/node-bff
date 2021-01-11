@@ -11,12 +11,14 @@ import app from '../../../app';
 import {
     CORRELATION_ID_HEADER,
     ERROR,
+    INVALID_FILENAMES,
     INVALID_S3_BUCKET_SOURCE,
     SUCCESS,
     UNSUPPORTED_REQUEST_BODY,
 } from '../../../util/constants';
 import {
     BATCH_API_DATA_FETCH_ERROR_CODE,
+    INVALID_FILENAMES_CODE,
     INVALID_REQUEST_BODY,
     INVALID_S3_SOURCE
 } from "../../../exception/exceptionCodes";
@@ -52,7 +54,7 @@ describe('routes: /batch', () => {
                     firstName: 'firstName',
                     jobTitle: 'jobTitle',
                     lastName: 'secondName',
-                    username: 'first1234',
+                    username: 'test1234',
                 },
             };
             next();
@@ -81,7 +83,7 @@ describe('routes: /batch', () => {
                     firstName: 'firstName',
                     jobTitle: 'jobTitle',
                     lastName: 'secondName',
-                    username: 'first1234',
+                    username: 'test1234',
                 },
             };
             next();
@@ -110,7 +112,7 @@ describe('routes: /batch', () => {
                     firstName: 'firstName',
                     jobTitle: 'jobTitle',
                     lastName: 'secondName',
-                    username: 'first1234',
+                    username: 'test1234',
                 },
             };
             next();
@@ -137,7 +139,7 @@ describe('routes: /batch', () => {
                     firstName: 'firstName',
                     jobTitle: 'jobTitle',
                     lastName: 'secondName',
-                    username: 'first1234',
+                    username: 'test1234',
                 },
             };
             next();
@@ -152,9 +154,9 @@ describe('routes: /batch', () => {
         expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
         expect(response.headers[CORRELATION_ID_HEADER]);
         expect(response.body.status).toEqual(ERROR);
-        expect(response.body.errorCode).toEqual(INVALID_REQUEST_BODY);
+        expect(response.body.errorCode).toEqual(INVALID_FILENAMES_CODE);
         expect(response.body.cause)
-            .toEqual(UNSUPPORTED_REQUEST_BODY);
+            .toEqual(INVALID_FILENAMES);
     });
 
     test('get /batch/files/{source} should return file list when no errors', async () => {
