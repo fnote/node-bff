@@ -30,13 +30,11 @@ export const getAccessToken = async (expired = false) => {
              */
             if (isExpired()) {
                 const headers = {
-                    Authorization: `Basic dmlYZHdWYnJZSFUxaWpNSEdaaHJvWXRMSUhSa3V3QUs6UmhseFpZcTZGM0pWUDdsMA==`,
+                    Authorization: `Basic ${await getSsmConfig('ApiCentralAuthorizationToken')}`,
                     Accept: 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded',
                 };
                 const requestBody = 'grant_type=client_credentials';
-
-                // ${await getSsmConfig('ApiCentralAuthorizationToken')}
 
                 const res = await httpClient.makeRequest('post', URL, requestBody, headers);
                 tokenGeneratedAt = Date.now();
