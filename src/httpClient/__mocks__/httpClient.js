@@ -16,7 +16,7 @@ import {
     pricingDataMockRequestForErrorOnCloudPricingCall,
     pricingDataMockRequestThrowErrorForCloudPricingCall,
     productInfoMockResponse,
-    cloudPCIPricingMockResponse,
+    cloudPCIPricingMockResponse, customerInfoMockResponse,
 } from '../../config/test.config';
 import HttpClientException from '../../exception/httpClientException';
 import {HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
@@ -80,6 +80,12 @@ class HttpClient {
         }
         if (URL.includes('/opcos/068/products/7203474')) {
             return productInfoMockResponse;
+        }
+        if (URL.includes('/opcos/068/customers/758028')) {
+            return customerInfoMockResponse;
+        }
+        if (URL.includes('/opcos/019/customers/622548')) {
+            return customerInfoMockResponse;
         }
         if (URL.includes('/opcos/999/products/9999999')) {
             throw new HttpClientException('Http client exception', HTTP_CLIENT_EXCEPTION);
