@@ -35,7 +35,6 @@ export const ERROR_IN_GETTING_S3_FILES = 'Error occurred while getting S3 files'
 export const ERROR_IN_GETTING_S3_DELETING_FILES = 'Error occurred when deleting S3 files';
 export const UNSUPPORTED_REQUEST_BODY = 'Unsupported request body';
 export const INVALID_FILENAMES = 'Invalid/Unsupported Filenames format in the request';
-export const INVALID_CONTENT_TYPE = 'Invalid Content-Type in the request';
 export const INVALID_USERID = 'Invalid userId in the request';
 export const ERROR_IN_FETCHING_CLOUD_PRICING_DATA = 'Failed to fetch data from Cloud Pricing Endpoint';
 

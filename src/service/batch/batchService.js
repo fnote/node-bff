@@ -12,18 +12,10 @@ import {
     FILE_SUCCESS,
     HTTP_DELETE,
     HTTP_GET,
-    HTTP_POST,
-    URL_SEPARATOR
+    HTTP_POST
 } from '../../util/constants';
 import getBatchAPIConfigs from '../../config/configs';
-import {
-    isEmptyRequestBody,
-    validateRequestBody,
-    validateRequestContentType,
-    validateRequestFileNames,
-    validateSource,
-    validateUserId
-} from '../../validator/validateRequest';
+import {isEmptyRequestBody, validateRequestFileNames, validateUserId} from '../../validator/validateRequest';
 
 class BatchService {
     constructor() {
@@ -54,7 +46,6 @@ class BatchService {
     async generateInputSignUrl(requestBody) {
         isEmptyRequestBody(requestBody);
         validateRequestFileNames(requestBody.fileNames);
-        validateRequestContentType(requestBody.contentType);
         validateUserId(requestBody.userId);
         const request = {
             fileNames: requestBody.fileNames,
@@ -82,32 +73,19 @@ class BatchService {
         return response;
     }
 
-    async getFiles(source) {
-        validateSource(source);
-        const url = `${this.config.api.batchBaseUrl}${source}`;
+    async getBatchJobs(userId, queryParamsString) {
+        validateUserId(userId);
+        const url = `${this.config.api.batchBaseUrl}${userId}${this.config.api.jobRoute}${queryParamsString}`;
         let response = await httpClient.makeRequest(HTTP_GET, url);
         response = this.filePreprocessing(response);
         logger.debug(`Generated file list response:: ${response}`);
         return response;
     }
 
-    async getFilesByPrefix(source, prefix) {
-        validateSource(source);
-        const url = `${this.config.api.batchBaseUrl}${source}${URL_SEPARATOR}${prefix}`;
-        let response = await httpClient.makeRequest(HTTP_GET, url);
-        response = this.filePreprocessing(response);
-        logger.debug(`Generated file list by prefix:: ${response}`);
-        return response;
-    }
-
-    async deleteFiles(source, requestBody) {
-        validateSource(source);
-        validateRequestBody(requestBody);
-        const request = {
-            fileNames: requestBody.fileNames,
-        };
-        const url = `${this.config.api.batchBaseUrl}${source}`;
-        const response = await httpClient.makeRequest(HTTP_DELETE, url, request);
+    async deleteJob(userId, jobId) {
+        validateUserId(userId);
+        const url = `${this.config.api.batchBaseUrl}${userId}${this.config.api.jobRouteWithPathDelimiter}${jobId}`;
+        const response = await httpClient.makeRequest(HTTP_DELETE, url);
         logger.debug(`Generated deleted file list response:: ${response}`);
         return response;
     }

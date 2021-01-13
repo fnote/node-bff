@@ -18,8 +18,6 @@ import {
     mockBatchApiInputUrlRequest,
     mockBatchApiOutputUrlRequest,
     mockErrorBatchApiRequest,
-    mockErrorDeleteRequestSignedUrl,
-    mockRequestOutputSignedUrl,
     mockResponseFileList,
     mockResponseSignedUrl,
     pricingDataMockRequestForErrorOnCloudPricingCall,
@@ -64,18 +62,13 @@ class HttpClient {
             && JSON.stringify(data) === JSON.stringify(mockErrorBatchApiRequest)) {
             throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
         }
-        if (URL.includes('/batch/files/output/ERR') && method === HTTP_GET) {
-            throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
-        }
-        if (URL.includes('/batch/files/output') && method === HTTP_GET) {
+        if (URL.includes('/batch/users/test1234/jobs?pageSize=,offSet="",searchQuery=""') && method === HTTP_GET) {
             return mockResponseFileList;
         }
-        if (URL.includes('/batch/files/output') && method === HTTP_DELETE
-            && JSON.stringify(data) === JSON.stringify(mockRequestOutputSignedUrl)) {
+        if (URL.includes('/batch/users/test1234/jobs/11112222') && method === HTTP_DELETE) {
             return mockResponseSignedUrl;
         }
-        if (URL.includes('/batch/files/output') && method === HTTP_DELETE
-            && JSON.stringify(data) === JSON.stringify(mockErrorDeleteRequestSignedUrl)) {
+        if (URL.includes('/batch/users/test12345/jobs/11112222') && method === HTTP_DELETE) {
             throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
         }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingErrorMockRequest.body)) {

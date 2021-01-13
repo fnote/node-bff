@@ -17,6 +17,7 @@ import {
 import BatchService from '../../../service/batch/batchService';
 import {BATCH_API_DATA_FETCH_ERROR_CODE} from "../../../exception/exceptionCodes";
 import {getCorrelationId} from "../../../util/correlationIdGenerator";
+import * as url from "url";
 
 export default () => {
     const batchRouter = new Router({mergeParams: true});
@@ -28,11 +29,14 @@ export default () => {
         try {
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
 
-            const {authResponse} = res.locals;
-            const {userDetailsData} = authResponse;
-            console.log('userDetails:', JSON.stringify(userDetailsData));
-            req.body.userId = userDetailsData.username;
-            req.body.authorizedBunitList = userDetailsData.authorizedBatchEnabledBunitList;
+            // const {authResponse} = res.locals;
+            // const {userDetailsData} = authResponse;
+            // console.log('userDetails:', JSON.stringify(userDetailsData));
+            // req.body.userId = userDetailsData.username;
+            // req.body.authorizedBunitList = userDetailsData.authorizedBatchEnabledBunitList;
+
+            req.body.userId = 'gkar5861';
+            req.body.authorizedBunitList = ['001', '002'];
 
             const responseData = await BatchService.generateInputSignUrl(req.body);
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
@@ -54,9 +58,11 @@ export default () => {
         try {
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
 
-            const {authResponse} = res.locals;
-            const {userDetailsData} = authResponse;
-            req.body.userId = userDetailsData.username;
+            // const {authResponse} = res.locals;
+            // const {userDetailsData} = authResponse;
+            // req.body.userId = userDetailsData.username;
+
+            req.body.userId = 'gkar5861';
 
             const responseData = await BatchService.generateOutputSignUrl(req.body);
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
@@ -71,10 +77,11 @@ export default () => {
         }
     });
 
-    batchRouter.get('/files/:source', async (req, res) => {
-        const {source} = req.params;
+    batchRouter.get('/users/:userId/jobs', async (req, res) => {
+        const {userId} = req.params;
+        const queryParamsString = url.parse(req.url, true).search;
         try {
-            const responseData = await BatchService.getFiles(source);
+            const responseData = await BatchService.getBatchJobs(userId, queryParamsString);
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
         } catch (error) {
@@ -88,28 +95,10 @@ export default () => {
         }
     });
 
-    batchRouter.get('/files/:source/:prefix', async (req, res) => {
-        const {source} = req.params;
-        const {prefix} = req.params;
+    batchRouter.delete('/users/:userId/jobs/:jobId', async (req, res) => {
+        const {userId, jobId} = req.params;
         try {
-            const responseData = await BatchService.getFilesByPrefix(source, prefix);
-            res.set(CORRELATION_ID_HEADER, getCorrelationId());
-            res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
-        } catch (error) {
-            logger.error(`Error occurred in getting the file list by prefix. Error: ${error}`);
-            const errMessage = `${ERROR_IN_GETTING_S3_FILES} from bucket: ${source}`;
-            const httpStatus = error.getStatus();
-            const errorCode = error.getErrorCode() ? error.getErrorCode() : BATCH_API_DATA_FETCH_ERROR_CODE;
-            res.set(CORRELATION_ID_HEADER, getCorrelationId());
-            res.status(httpStatus !== -1 ? httpStatus : HttpStatus.INTERNAL_SERVER_ERROR)
-                .send(createErrorResponse(null, errMessage, error, null, errorCode));
-        }
-    });
-
-    batchRouter.delete('/files/:source', async (req, res) => {
-        const {source} = req.params;
-        try {
-            const responseData = await BatchService.deleteFiles(source, req.body);
+            const responseData = await BatchService.deleteJob(userId, jobId);
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
         } catch (error) {

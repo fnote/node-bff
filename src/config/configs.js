@@ -1,14 +1,13 @@
-import {
-    ROLE_APP_ADMIN,
-    ROLE_GENERAL_USER,
-} from '../util/constants';
+import {ROLE_APP_ADMIN, ROLE_GENERAL_USER,} from '../util/constants';
 
 export default function getBatchAPIConfigs() {
     return {
         api: {
             getInputSignedUrl: `${process.env.BATCH_API}/v1/batch/files/signed-url/input`,
             getOutputSignedUrl: `${process.env.BATCH_API}/v1/batch/files/signed-url/output`,
-            batchBaseUrl: `${process.env.BATCH_API}/v1/batch/files/`,
+            batchBaseUrl: `${process.env.BATCH_API}/v1/batch/users/`,
+            jobRoute: '/jobs',
+            jobRouteWithPathDelimiter: '/jobs/',
         },
     };
 }

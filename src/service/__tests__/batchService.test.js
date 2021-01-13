@@ -12,7 +12,6 @@ import {
     mockBatchApiOutputUrlRequest,
     mockErrorResponse,
     mockErrorResponseFromS3,
-    mockRequestOutputSignedUrl,
     mockResponseFileList,
     mockResponseSignedUrl
 } from "../../config/test.config";
@@ -51,17 +50,12 @@ describe('Batch Service', () => {
     });
 
     test('should generate list of files  when the source is valid', async () => {
-        const response = await BatchService.getFiles("output");
-        expect(response).toEqual(mockResponseFileList);
-    });
-
-    test('should generate list of files  when the source is valid and prefix is given', async () => {
-        const response = await BatchService.getFilesByPrefix("output", "REV");
+        const response = await BatchService.getBatchJobs('test1234', 'pageSize=,offSet="",searchQuery=""');
         expect(response).toEqual(mockResponseFileList);
     });
 
     test('should delete files  when the pass the file list', async () => {
-        const response = await BatchService.deleteFiles("output", mockRequestOutputSignedUrl);
+        const response = await BatchService.deleteJob('test1234', '11112222');
         expect(response).toEqual(mockResponseSignedUrl);
     });
 

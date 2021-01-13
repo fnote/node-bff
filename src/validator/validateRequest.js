@@ -4,24 +4,10 @@
  * @author: gkar5861 on 22/06/20
  * */
 import * as HttpStatus from 'http-status-codes';
-import {
-    FILE_SOURCE_INPUT,
-    FILE_SOURCE_OUTPUT,
-    INVALID_CONTENT_TYPE,
-    INVALID_FILENAMES,
-    INVALID_S3_BUCKET_SOURCE,
-    INVALID_USERID,
-    UNSUPPORTED_REQUEST_BODY
-} from '../util/constants';
+import {INVALID_FILENAMES, INVALID_USERID, UNSUPPORTED_REQUEST_BODY} from '../util/constants';
 import logger from '../util/logger';
 import InvalidRequestException from '../exception/invalidRequestException';
-import {
-    INVALID_CONTENT_TYPE_CODE,
-    INVALID_FILENAMES_CODE,
-    INVALID_REQUEST_BODY,
-    INVALID_S3_SOURCE,
-    INVALID_USERID_CODE
-} from "../exception/exceptionCodes";
+import {INVALID_FILENAMES_CODE, INVALID_REQUEST_BODY, INVALID_USERID_CODE} from "../exception/exceptionCodes";
 
 const isEmpty = (obj) => Object.keys(obj).length === 0;
 
@@ -65,26 +51,6 @@ export const validateRequestFileNames = (fileNames) => {
 }
 
 /**
- * Validate file content type
- * */
-export const validateRequestContentType = (contentType) => {
-    const acceptableTypes = ['', 'text/plain', 'text/csv',
-        'application/vnd.ms-excel',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-
-    if (contentType === undefined || !acceptableTypes.includes(contentType)) {
-        logger.error(`Content type validation failed: ${contentType}`);
-        throw new InvalidRequestException(
-            INVALID_CONTENT_TYPE,
-            HttpStatus.BAD_REQUEST,
-            INVALID_CONTENT_TYPE_CODE
-        );
-    }
-}
-
-/**
  * Validate userId in the request
  * */
 export const validateUserId = (userId) => {
@@ -98,13 +64,3 @@ export const validateUserId = (userId) => {
     }
 }
 
-export const validateSource = (source) => {
-    if (!(source === FILE_SOURCE_INPUT || source === FILE_SOURCE_OUTPUT)) {
-        logger.error(`S3 source validation failed: ${source}`);
-        throw new InvalidRequestException(
-            INVALID_S3_BUCKET_SOURCE,
-            HttpStatus.BAD_REQUEST,
-            INVALID_S3_SOURCE
-        );
-    }
-}

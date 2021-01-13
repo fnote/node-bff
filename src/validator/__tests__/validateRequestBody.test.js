@@ -5,30 +5,11 @@
  * */
 
 import * as HttpStatus from 'http-status-codes';
-import {
-    validateRequestBody,
-    validateRequestContentType,
-    validateRequestFileNames,
-    validateSource,
-    validateUserId
-} from '../validateRequest';
+import {validateRequestBody, validateRequestFileNames, validateUserId} from '../validateRequest';
 import InvalidRequestException from '../../exception/invalidRequestException';
-import {
-    FILE_SOURCE_INPUT,
-    FILE_SOURCE_OUTPUT,
-    INVALID_CONTENT_TYPE,
-    INVALID_FILENAMES,
-    INVALID_S3_BUCKET_SOURCE,
-    INVALID_USERID,
-    UNSUPPORTED_REQUEST_BODY
-} from '../../util/constants';
+import {INVALID_FILENAMES, INVALID_USERID, UNSUPPORTED_REQUEST_BODY} from '../../util/constants';
 import {describe, test} from "@jest/globals";
-import {
-    INVALID_CONTENT_TYPE_CODE,
-    INVALID_FILENAMES_CODE,
-    INVALID_REQUEST_BODY,
-    INVALID_USERID_CODE
-} from "../../exception/exceptionCodes";
+import {INVALID_FILENAMES_CODE, INVALID_REQUEST_BODY, INVALID_USERID_CODE} from "../../exception/exceptionCodes";
 
 const validRequestBody = {
     fileNames: [
@@ -137,15 +118,6 @@ describe('Request Body Validator', () => {
             ));
     });
 
-    test('should throw InvalidRequestException when the content type is png', async () => {
-        expect(() => validateRequestContentType(inValidContentTypeRequestBody))
-            .toThrowError(new InvalidRequestException(
-                INVALID_CONTENT_TYPE,
-                HttpStatus.BAD_REQUEST,
-                INVALID_CONTENT_TYPE_CODE
-            ));
-    });
-
     test('should throw InvalidRequestException when the userId is null', async () => {
         expect(() => validateUserId(inValidUserIdRequestBody1))
             .toThrowError(new InvalidRequestException(
@@ -161,29 +133,6 @@ describe('Request Body Validator', () => {
                 INVALID_USERID,
                 HttpStatus.BAD_REQUEST,
                 INVALID_USERID_CODE
-            ));
-    });
-    test('should not throw InvalidRequestException when the given source is input', async () => {
-        expect(() => validateSource(FILE_SOURCE_INPUT)).not
-            .toThrowError(new InvalidRequestException(
-                INVALID_S3_BUCKET_SOURCE,
-                HttpStatus.BAD_REQUEST,
-            ));
-    });
-
-    test('should not throw InvalidRequestException when the given source is output', async () => {
-        expect(() => validateSource(FILE_SOURCE_OUTPUT)).not
-            .toThrowError(new InvalidRequestException(
-                INVALID_S3_BUCKET_SOURCE,
-                HttpStatus.BAD_REQUEST,
-            ));
-    });
-
-    test('should throw InvalidRequestException when the given source is not input/output', async () => {
-        expect(() => validateSource("error"))
-            .toThrowError(new InvalidRequestException(
-                INVALID_S3_BUCKET_SOURCE,
-                HttpStatus.BAD_REQUEST,
             ));
     });
 });

@@ -186,34 +186,6 @@ describe('routes: /batch', () => {
         expect(response.body.cause).toEqual(INVALID_S3_BUCKET_SOURCE);
     });
 
-    test('get /batch/files/{source}/{prefix} should return file list with given prefix', async () => {
-        authMiddleware.mockImplementationOnce((req, res, next) => {
-            next();
-        });
-        const response = await request(app.app)
-            .get('/v1/pci-bff/batch/files/output/REV')
-            .set('Accept', 'application/json');
-        expect(response.status).toEqual(HttpStatus.OK);
-        expect(response.headers[CORRELATION_ID_HEADER]);
-        expect(response.body).toBeDefined();
-        expect(response.body.status).toEqual(SUCCESS);
-        expect(response.body.data).toEqual(mockResponseFileList.data.data);
-    });
-
-    test('get /batch/files/{source}/{prefix} should throw exception when the source is invalid', async () => {
-        authMiddleware.mockImplementationOnce((req, res, next) => {
-            next();
-        });
-        const response = await request(app.app)
-            .get('/v1/pci-bff/batch/files/invalid/REV')
-            .set('Accept', 'application/json');
-        expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
-        expect(response.headers[CORRELATION_ID_HEADER]);
-        expect(response.body.status).toEqual(ERROR);
-        expect(response.body.errorCode).toEqual(INVALID_S3_SOURCE);
-        expect(response.body.cause).toEqual(INVALID_S3_BUCKET_SOURCE);
-    });
-
     test('get /batch/signed-url/{source} should throw exception when client error', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
             next();
