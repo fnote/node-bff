@@ -20,16 +20,16 @@ import {
 import {
     BATCH_API_DATA_FETCH_ERROR_CODE,
     EMPTY_REQUEST_BODY_CODE,
-    INVALID_REQUEST_BODY_CODE
-} from "../../../exception/exceptionCodes";
+    INVALID_REQUEST_BODY_CODE,
+} from '../../../exception/exceptionCodes';
 import {
     mockErrorRequestSignedUrl,
     mockRequestDownloadSignedUrl,
     mockRequestUploadSignedUrl,
     mockResponseDeleteJob,
     mockResponseJobList,
-    mockResponseSignedUrl
-} from "../../../config/test.config";
+    mockResponseSignedUrl,
+} from '../../../config/test.config';
 
 jest.mock('../../../middleware/authMiddleware');
 const {authMiddleware} = require('../../../middleware/authMiddleware');
@@ -175,7 +175,7 @@ describe('routes: /batch', () => {
             next();
         });
         const invalidRequestBody = {
-            fileNames: ''
+            fileNames: '',
         };
         const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/output')
@@ -243,5 +243,4 @@ describe('routes: /batch', () => {
         expect(response.body.errorCode).toEqual(BATCH_API_DATA_FETCH_ERROR_CODE);
         expect(response.body.message).toEqual(ERROR_IN_DELETING_BATCH_JOBS);
     });
-
 });

@@ -30,7 +30,7 @@ export const HTTP_CLIENT_ERROR_CODE_INTERNAL_SERVER_ERROR = 500;
 // errors
 export const ERROR_IN_GETTING_S3_INPUT_SIGNED_URL = 'Error in getting S3 file upload signed urls';
 export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL = 'Error in getting S3 file download signed urls';
-export const INVALID_S3_BUCKET_SOURCE = `Invalid source is passed in the url. Valid sources are input/output`;
+export const INVALID_S3_BUCKET_SOURCE = 'Invalid source is passed in the url. Valid sources are input/output';
 export const ERROR_IN_GETTING_BATCH_JOBS = 'Error occurred while retrieving batch job details';
 export const ERROR_IN_DELETING_BATCH_JOBS = 'Error occurred while deleting a batch job';
 export const INVALID_REQUEST_BODY = 'Invalid/ Unsupported request body';
@@ -57,10 +57,10 @@ export const CRITICAL = 'CRITICAL';
 export const IS_APPLICABLE = 'isApplicable';
 
 // file states
-export const ERROR_FILE_EXTENSION = "_errors.txt"
-export const ERROR_FILE = "_errors"
-export const FILE_ERROR = 'error'
-export const FILE_SUCCESS = 'success'
+export const ERROR_FILE_EXTENSION = '_errors.txt';
+export const ERROR_FILE = '_errors';
+export const FILE_ERROR = 'error';
+export const FILE_SUCCESS = 'success';
 
 // Constant char
 export const URL_SEPARATOR = '/';

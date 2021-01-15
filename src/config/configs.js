@@ -1,4 +1,4 @@
-import {ROLE_APP_ADMIN, ROLE_GENERAL_USER,} from '../util/constants';
+import {ROLE_APP_ADMIN, ROLE_GENERAL_USER} from '../util/constants';
 
 export default function getBatchAPIConfigs() {
     return {

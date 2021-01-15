@@ -5,6 +5,7 @@
  * */
 import {Router} from 'express';
 import * as HttpStatus from 'http-status-codes';
+import * as url from 'url';
 import {createErrorResponse, createSuccessResponse} from '../../../mapper/responseMapper';
 import logger from '../../../util/logger';
 import {
@@ -15,10 +16,9 @@ import {
     ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL,
 } from '../../../util/constants';
 import BatchService from '../../../service/batch/batchService';
-import {BATCH_API_DATA_FETCH_ERROR_CODE} from "../../../exception/exceptionCodes";
-import {getCorrelationId} from "../../../util/correlationIdGenerator";
-import * as url from "url";
-import {isEmptyRequestBody, validateRequestBody} from "../../../validator/validateRequest";
+import {BATCH_API_DATA_FETCH_ERROR_CODE} from '../../../exception/exceptionCodes';
+import {getCorrelationId} from '../../../util/correlationIdGenerator';
+import {isEmptyRequestBody, validateRequestBody} from '../../../validator/validateRequest';
 
 export default () => {
     const batchRouter = new Router({mergeParams: true});
@@ -37,12 +37,8 @@ export default () => {
             req.body.userId = userDetailsData.username;
             req.body.authorizedBunitList = userDetailsData.authorizedBatchEnabledBunitList;
 
-            // req.body.userId = 'gkar5861';
-            // req.body.authorizedBunitList = ['001', '002'];
-
             const responseData = await BatchService.generateFileUploadSignedUrl(req.body);
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
-
         } catch (error) {
             logger.error(`Error occurred in getting write signed urls. Error: ${error}`);
             const httpStatus = error.getStatus();
@@ -66,11 +62,8 @@ export default () => {
             const {userDetailsData} = authResponse;
             req.body.userId = userDetailsData.username;
 
-            // req.body.userId = 'gkar5861';
-
             const responseData = await BatchService.generateFileDownloadSignedUrl(req.body);
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
-
         } catch (error) {
             logger.error(`Error occurred in getting signed urls. Error: ${error}`);
             const httpStatus = error.getStatus();

@@ -60,8 +60,8 @@ const authenticatedMockResponse = {
     cause: null,
     username: 'username',
     userDetailsData: {
-        authorizedPricingTransformationEnabledBunitList: authorizedPricingTransformationEnabledBunitList,
-        authorizedBatchEnabledBunitList: authorizedBatchEnabledBunitList,
+        authorizedPricingTransformationEnabledBunitList,
+        authorizedBatchEnabledBunitList,
         email: 'firstName.secondName@syscolabs.com',
         firstName: 'firstName',
         jobTitle: 'jobTitle',
@@ -97,8 +97,8 @@ jest.mock('../auth/authorizationService', () => ({
                 periscope_on: 'Y',
             },
         ],
-        authorizedBatchEnabledBunitList: ['001', '002']
-    })
+        authorizedBatchEnabledBunitList: ['001', '002'],
+    }),
 
 }));
 

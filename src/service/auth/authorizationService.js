@@ -42,7 +42,7 @@ class AuthorizationService {
         if (this.businessUnitDetailsArray) {
             return this.businessUnitDetailsArray.filter((bUnitDetails) => bUnit === bUnitDetails.bunit_id
                 && bUnitDetails.batch_on === 'Y')
-                .map(bUnitDetails => bUnitDetails.bunit_id);
+                .map((bUnitDetails) => bUnitDetails.bunit_id);
         }
         return [];
     }
@@ -50,20 +50,19 @@ class AuthorizationService {
     generateBatchEnabledAllBusinessUnit = () => {
         if (this.businessUnitDetailsArray) {
             return this.businessUnitDetailsArray.filter((bUnitDetails) => bUnitDetails.batch_on === 'Y')
-                .map(bUnitDetails => bUnitDetails.bunit_id);
+                .map((bUnitDetails) => bUnitDetails.bunit_id);
         }
         return [];
     }
 
     getAuthorizedBusinessUnits = (opcoAttributeBunit, userRole) => {
-        let authorizedBunitList = {};
+        const authorizedBunitList = {};
         authorizedBunitList.authorizedPricingTransformationEnabledBunitList = [];
         authorizedBunitList.authorizedBatchEnabledBunitList = [];
         if (userRole === ROLE_APP_ADMIN || userRole === ROLE_GENERAL_USER) {
             // If these user roles, they should have access to all opcos
             logger.info(`User because of his user role: ${userRole} is given access to all opcos`);
-            authorizedBunitList.authorizedPricingTransformationEnabledBunitList =
-                this.generatePricingTransformationEnabledAllBusinessUnit();
+            authorizedBunitList.authorizedPricingTransformationEnabledBunitList = this.generatePricingTransformationEnabledAllBusinessUnit();
             authorizedBunitList.authorizedBatchEnabledBunitList = this.generateBatchEnabledAllBusinessUnit();
             return authorizedBunitList;
         }
@@ -75,17 +74,19 @@ class AuthorizationService {
         const matchedValidBusinessUnitList = this.matchedValidBusinessUnitFromGivenList(opcoAttributeBunit, this.businessUnitDetailsArray);
 
         if (matchedValidBusinessUnitList.length > 0) {
-            authorizedBunitList.authorizedPricingTransformationEnabledBunitList = this.matchedPricingTransformationEnabledBusinessUnit(opcoAttributeBunit);
-            authorizedBunitList.authorizedBatchEnabledBunitList = this.matchedBatchEnabledBusinessUnit(opcoAttributeBunit);
+            authorizedBunitList.authorizedPricingTransformationEnabledBunitList =
+                this.matchedPricingTransformationEnabledBusinessUnit(opcoAttributeBunit);
+            authorizedBunitList.authorizedBatchEnabledBunitList =
+                this.matchedBatchEnabledBusinessUnit(opcoAttributeBunit);
 
-            if (authorizedBunitList.authorizedPricingTransformationEnabledBunitList.length === 0 &&
-                authorizedBunitList.authorizedBatchEnabledBunitList.length === 0) {
+            if (authorizedBunitList.authorizedPricingTransformationEnabledBunitList.length === 0
+                && authorizedBunitList.authorizedBatchEnabledBunitList.length === 0) {
                 // Opco attribute matches one of the opcos but is not a pricing transformation enabled opco or batch enabled opco
                 // so then he has access to no matching opco
                 logger.info(`User's opco: ${opcoAttributeBunit} does not match with pricing transformation/ batch enabled opcos, 
                     so giving access to no opco`);
                 return authorizedBunitList;
-            } else {
+            }
                 if (authorizedBunitList.authorizedPricingTransformationEnabledBunitList.length > 0) {
                     // Opco attribute matches one of the opcos and also is a pricing transformation enabled opco then return that opco
                     logger.info(`User's opco: ${opcoAttributeBunit} matches one of the pricing transformation enabled opco then giving access to that opco`);
@@ -103,14 +104,12 @@ class AuthorizationService {
                     so giving access to no batch enabled opco`);
                 }
                 return authorizedBunitList;
-            }
         }
         // Opco attribute does not match to one of Sysco opcos, so it should be something like 000 (Corporate) or 440 (SBS)
         // so then give access to all opcos
         // In future, if we can identify what exactly these values can be, then can do a separate filtering
         logger.info(`User's opco: ${opcoAttributeBunit} does not match to one of Sysco opcos but a specific value, so giving access to all opcos`);
-        authorizedBunitList.authorizedPricingTransformationEnabledBunitList =
-            this.generatePricingTransformationEnabledAllBusinessUnit();
+        authorizedBunitList.authorizedPricingTransformationEnabledBunitList = this.generatePricingTransformationEnabledAllBusinessUnit();
         authorizedBunitList.authorizedBatchEnabledBunitList = this.generateBatchEnabledAllBusinessUnit();
         return authorizedBunitList;
     }

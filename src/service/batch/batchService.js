@@ -18,7 +18,7 @@ class BatchService {
             fileNames: requestBody.fileNames,
             contentType: requestBody.contentType,
             userId: requestBody.userId,
-            authorizedBunitList: requestBody.authorizedBunitList
+            authorizedBunitList: requestBody.authorizedBunitList,
         };
         const url = this.config.api.getInputSignedUrl;
         const response = await httpClient.makeRequest(HTTP_POST, url, request);
@@ -42,7 +42,7 @@ class BatchService {
         if (queryParamsString) {
             url = url.concat(queryParamsString);
         }
-        let response = await httpClient.makeRequest(HTTP_GET, url);
+        const response = await httpClient.makeRequest(HTTP_GET, url);
         logger.debug(`Generated list job details response:: ${response}`);
         return response;
     }

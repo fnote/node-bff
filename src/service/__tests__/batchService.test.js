@@ -3,21 +3,16 @@
  *
  * @author: gkar5861 on 22/06/20
  * */
-import * as HttpStatus from 'http-status-codes';
 import BatchService from '../batch/batchService';
-import InvalidRequestException from '../../exception/invalidRequestException';
-import {EMPTY_REQUEST_BODY, INVALID_REQUEST_BODY} from '../../util/constants';
 import {
     mockBatchApiDownloadUrlRequest,
     mockBatchApiUploadUrlRequest,
     mockResponseDeleteJob,
     mockResponseJobList,
-    mockResponseSignedUrl
-} from "../../config/test.config";
+    mockResponseSignedUrl,
+} from '../../config/test.config';
 
 jest.mock('../../httpClient/httpClient');
-
-
 
 describe('Batch Service', () => {
     test('generateFileUploadSignedUrl should generate write signed urls  when the request body is valid', async () => {
@@ -39,5 +34,4 @@ describe('Batch Service', () => {
         const response = await BatchService.deleteJob('test1234', '11112222');
         expect(response).toEqual(mockResponseDeleteJob);
     });
-
 });

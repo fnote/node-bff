@@ -13,7 +13,9 @@ import {pricingDataReqBody} from '../../validator/schema';
 import logger from '../../util/logger';
 import InvalidRequestException from '../../exception/invalidRequestException';
 import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetchException';
-import {BETWEEN, CRITICAL, INVALID_REQUEST_BODY, IS_APPLICABLE,} from '../../util/constants';
+import {
+BETWEEN, CRITICAL, INVALID_REQUEST_BODY, IS_APPLICABLE,
+} from '../../util/constants';
 import {getPriceSourceName} from '../../config/configs';
 import {PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE} from '../../exception/exceptionCodes';
 
@@ -184,7 +186,7 @@ class AggregatedPricingDataService {
                 const rootLevelData = this.filterRootLevelPCIPricePayloadData(pciPricePayload);
 
                 // adding root level data to final response
-                finalResponse = { ...rootLevelData, ...filteredCustomerPayload, };
+                finalResponse = { ...rootLevelData, ...filteredCustomerPayload };
                 // building product section
                 finalResponse.product = {
                     ...filteredItemPayload,

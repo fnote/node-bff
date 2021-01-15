@@ -5,11 +5,11 @@
  * */
 
 import * as HttpStatus from 'http-status-codes';
+import {describe, test} from '@jest/globals';
 import {isEmptyRequestBody, validateRequestBody} from '../validateRequest';
 import InvalidRequestException from '../../exception/invalidRequestException';
 import {EMPTY_REQUEST_BODY, INVALID_REQUEST_BODY} from '../../util/constants';
-import {describe, test} from "@jest/globals";
-import {EMPTY_REQUEST_BODY_CODE, INVALID_REQUEST_BODY_CODE} from "../../exception/exceptionCodes";
+import {EMPTY_REQUEST_BODY_CODE, INVALID_REQUEST_BODY_CODE} from '../../exception/exceptionCodes';
 
 const validRequestBody = {
     fileNames: [
@@ -18,7 +18,7 @@ const validRequestBody = {
     ],
     contentType: 'text/plain',
     userId: 'test1234',
-    authorizedBunitList: ['001', '002']
+    authorizedBunitList: ['001', '002'],
 };
 
 const emptyRequestBody = {};
@@ -27,18 +27,18 @@ const inValidRequestBody1 = {
     fileNames: '',
     contentType: 'text/plain',
     userId: 'test1234',
-    authorizedBunitList: ['001', '002']
+    authorizedBunitList: ['001', '002'],
 };
 
 const inValidRequestBody2 = {
     '': [
         'fileName1',
         'fileName2',
-    ], contentType: 'text/plain',
+    ],
+contentType: 'text/plain',
     userId: 'test1234',
-    authorizedBunitList: ['001', '002']
+    authorizedBunitList: ['001', '002'],
 };
-
 
 describe('Request Body Validator', () => {
     test('should return nothing when the request body is valid', async () => {
@@ -54,7 +54,7 @@ describe('Request Body Validator', () => {
             .toThrowError(new InvalidRequestException(
                 INVALID_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
-                INVALID_REQUEST_BODY_CODE
+                INVALID_REQUEST_BODY_CODE,
             ));
     });
 
@@ -63,7 +63,7 @@ describe('Request Body Validator', () => {
             .toThrowError(new InvalidRequestException(
                 INVALID_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
-                INVALID_REQUEST_BODY_CODE
+                INVALID_REQUEST_BODY_CODE,
             ));
     });
 
@@ -72,7 +72,7 @@ describe('Request Body Validator', () => {
             .toThrowError(new InvalidRequestException(
                 EMPTY_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
-                EMPTY_REQUEST_BODY_CODE
+                EMPTY_REQUEST_BODY_CODE,
             ));
     });
 
@@ -81,8 +81,7 @@ describe('Request Body Validator', () => {
             .toThrowError(new InvalidRequestException(
                 EMPTY_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
-                EMPTY_REQUEST_BODY_CODE
+                EMPTY_REQUEST_BODY_CODE,
             ));
     });
-
 });

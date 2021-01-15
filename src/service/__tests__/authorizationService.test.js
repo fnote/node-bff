@@ -6,7 +6,7 @@
 import {jest} from '@jest/globals';
 import AuthorizationService from '../auth/authorizationService';
 import BusinessUnitDao from '../../dao/businessUnitDao';
-import {ROLE_APP_ADMIN, ROLE_GENERAL_USER,} from '../../util/constants';
+import {ROLE_APP_ADMIN, ROLE_GENERAL_USER} from '../../util/constants';
 
 jest.mock('../../dao/businessUnitDao');
 
@@ -84,8 +84,8 @@ describe('Auth Service', () => {
         expect(batchFilteredArray).toEqual(['001']);
     });
 
-    test('should send an empty array when the passed bunit has periscope_on as N and batch_on as N although ' +
-        'it is in the bunit details array',
+    test('should send an empty array when the passed bunit has periscope_on as N and batch_on as N although '
+        + 'it is in the bunit details array',
         async () => {
             BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
@@ -241,7 +241,6 @@ describe('Auth Service', () => {
         const batchFilteredArray = filteredArray.authorizedBatchEnabledBunitList;
         expect(pricingTransformationFilteredArray).toEqual([bUnitDetailForOpco001]);
         expect(batchFilteredArray).toEqual(['001']);
-
     });
 
     test('should send the bunit array with no opco details of users authorized opoco when opcoAtrribute has a matching value '
@@ -255,11 +254,10 @@ describe('Auth Service', () => {
         const batchFilteredArray = filteredArray.authorizedBatchEnabledBunitList;
         expect(pricingTransformationFilteredArray).toEqual([]);
         expect(batchFilteredArray).toEqual([]);
-
     });
 
-    test('should send an empty array when passed bunit it a matching one to the list of bunit but is not periscope_on N' +
-        ' and batch_on Y',
+    test('should send an empty array when passed bunit it a matching one to the list of bunit but is not periscope_on N'
+        + ' and batch_on Y',
         async () => {
             BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
@@ -298,7 +296,7 @@ describe('Auth Service', () => {
             locals: {
                 authResponse: {
                     userDetailsData: {
-                        authorizedBunitList: [
+                        authorizedPricingTransformationEnabledBunitList: [
                             {
                                 bunit_id: '001',
                                 bunit_name: 'Sysco Jackson',
@@ -310,6 +308,7 @@ describe('Auth Service', () => {
                                 periscope_on: 'Y',
                             },
                         ],
+                        authorizedBatchEnabledBunitList: ['001', '002'],
                         email: 'firstName.secondName@syscolabs.com',
                         firstName: 'firstName',
                         jobTitle: 'jobTitle',
@@ -339,7 +338,7 @@ describe('Auth Service', () => {
             locals: {
                 authResponse: {
                     userDetailsData: {
-                        authorizedBunitList: [
+                        authorizedPricingTransformationEnabledBunitList: [
                             {
                                 bunit_id: '001',
                                 bunit_name: 'Sysco Jackson',
@@ -351,6 +350,7 @@ describe('Auth Service', () => {
                                 periscope_on: 'Y',
                             },
                         ],
+                        authorizedBatchEnabledBunitList: ['001', '002'],
                         email: 'firstName.secondName@syscolabs.com',
                         firstName: 'firstName',
                         jobTitle: 'jobTitle',
@@ -388,7 +388,7 @@ describe('Auth Service', () => {
         expect(isAuthorized).toEqual(false);
     });
 
-    test('should send isAuthorized as false when authorizedBunitList is empty in users auth response', async () => {
+    test('should send isAuthorized as false when authorizedPricingTransformationEnabledBunitList is empty in users auth response', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
         const req = {
@@ -401,7 +401,8 @@ describe('Auth Service', () => {
             locals: {
                 authResponse: {
                     userDetailsData: {
-                        authorizedBunitList: [],
+                        authorizedPricingTransformationEnabledBunitList: [],
+                        authorizedBatchEnabledBunitList: [],
                         email: 'firstName.secondName@syscolabs.com',
                         firstName: 'firstName',
                         jobTitle: 'jobTitle',
@@ -418,7 +419,7 @@ describe('Auth Service', () => {
         expect(isAuthorized).toEqual(false);
     });
 
-    test('should send isAuthorized as false when authorizedBunitList is not defined in users auth response', async () => {
+    test('should send isAuthorized as false when authorizedPricingTransformationEnabledBunitList is not defined in users auth response', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
 
         const req = {

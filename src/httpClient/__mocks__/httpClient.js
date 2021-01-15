@@ -4,6 +4,7 @@
  * @author: gkar5861 on 23/06/20
  * */
 
+import * as HttpStatus from 'http-status-codes';
 import {
     cloudPCIPricingMockResponse,
     cloudPricingDataMockRequest,
@@ -27,9 +28,8 @@ import {
 } from '../../config/test.config';
 import HttpClientException from '../../exception/httpClientException';
 import {BATCH_API_DATA_FETCH_ERROR_CODE, HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
-import {HTTP_DELETE, HTTP_GET, HTTP_POST} from "../../util/constants";
-import InvalidRequestException from "../../exception/invalidRequestException";
-import * as HttpStatus from "http-status-codes";
+import {HTTP_DELETE, HTTP_GET, HTTP_POST} from '../../util/constants';
+import InvalidRequestException from '../../exception/invalidRequestException';
 
 class HttpClient {
     async makeRequest(method, URL, data) {
