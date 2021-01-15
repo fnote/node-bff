@@ -18,6 +18,7 @@ import BatchService from '../../../service/batch/batchService';
 import {BATCH_API_DATA_FETCH_ERROR_CODE} from "../../../exception/exceptionCodes";
 import {getCorrelationId} from "../../../util/correlationIdGenerator";
 import * as url from "url";
+import {isEmptyRequestBody, validateRequestBody} from "../../../validator/validateRequest";
 
 export default () => {
     const batchRouter = new Router({mergeParams: true});
@@ -29,14 +30,15 @@ export default () => {
         try {
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
 
-            // const {authResponse} = res.locals;
-            // const {userDetailsData} = authResponse;
-            // console.log('userDetails:', JSON.stringify(userDetailsData));
-            // req.body.userId = userDetailsData.username;
-            // req.body.authorizedBunitList = userDetailsData.authorizedBatchEnabledBunitList;
+            isEmptyRequestBody(req.body);
 
-            req.body.userId = 'gkar5861';
-            req.body.authorizedBunitList = ['001', '002'];
+            const {authResponse} = res.locals;
+            const {userDetailsData} = authResponse;
+            req.body.userId = userDetailsData.username;
+            req.body.authorizedBunitList = userDetailsData.authorizedBatchEnabledBunitList;
+
+            // req.body.userId = 'gkar5861';
+            // req.body.authorizedBunitList = ['001', '002'];
 
             const responseData = await BatchService.generateFileUploadSignedUrl(req.body);
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
@@ -58,11 +60,13 @@ export default () => {
         try {
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
 
-            // const {authResponse} = res.locals;
-            // const {userDetailsData} = authResponse;
-            // req.body.userId = userDetailsData.username;
+            validateRequestBody(req.body);
 
-            req.body.userId = 'gkar5861';
+            const {authResponse} = res.locals;
+            const {userDetailsData} = authResponse;
+            req.body.userId = userDetailsData.username;
+
+            // req.body.userId = 'gkar5861';
 
             const responseData = await BatchService.generateFileDownloadSignedUrl(req.body);
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));

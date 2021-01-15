@@ -15,10 +15,11 @@ import {
     cloudPricingMockResponseForAggregatedPricingCall,
     cloudPricingPCIMockRequest,
     customerInfoMockResponse,
-    mockBatchApiInputUrlRequest,
-    mockBatchApiOutputUrlRequest,
+    mockBatchApiDownloadUrlRequest,
+    mockBatchApiUploadUrlRequest,
     mockErrorBatchApiRequest,
-    mockResponseFileList,
+    mockResponseDeleteJob,
+    mockResponseJobList,
     mockResponseSignedUrl,
     pricingDataMockRequestForErrorOnCloudPricingCall,
     pricingDataMockRequestThrowErrorForCloudPricingCall,
@@ -27,6 +28,8 @@ import {
 import HttpClientException from '../../exception/httpClientException';
 import {BATCH_API_DATA_FETCH_ERROR_CODE, HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
 import {HTTP_DELETE, HTTP_GET, HTTP_POST} from "../../util/constants";
+import InvalidRequestException from "../../exception/invalidRequestException";
+import * as HttpStatus from "http-status-codes";
 
 class HttpClient {
     async makeRequest(method, URL, data) {
@@ -51,25 +54,28 @@ class HttpClient {
 
         };
         if (URL.includes('/batch/files/signed-url/input') && method === HTTP_POST
-            && JSON.stringify(data) === JSON.stringify(mockBatchApiInputUrlRequest)) {
+            && JSON.stringify(data) === JSON.stringify(mockBatchApiUploadUrlRequest)) {
             return mockResponseSignedUrl;
         }
         if (URL.includes('/batch/files/signed-url/output') && method === HTTP_POST
-            && JSON.stringify(data) === JSON.stringify(mockBatchApiOutputUrlRequest)) {
+            && JSON.stringify(data) === JSON.stringify(mockBatchApiDownloadUrlRequest)) {
             return mockResponseSignedUrl;
         }
         if (URL.includes('/batch/files/signed-url/') && method === HTTP_POST
             && JSON.stringify(data) === JSON.stringify(mockErrorBatchApiRequest)) {
             throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
         }
-        if (URL.includes('/batch/users/test1234/jobs?pageSize=,offSet="",searchQuery=""') && method === HTTP_GET) {
-            return mockResponseFileList;
+        if (URL.includes('/batch/users/test1234/jobs?pageSize=10&offSet=10') && method === HTTP_GET) {
+            return mockResponseJobList;
+        }
+        if (URL.includes('/batch/users/test12345/jobs') && method === HTTP_GET) {
+            throw new InvalidRequestException('Bad request', HttpStatus.BAD_REQUEST, BATCH_API_DATA_FETCH_ERROR_CODE);
         }
         if (URL.includes('/batch/users/test1234/jobs/11112222') && method === HTTP_DELETE) {
-            return mockResponseSignedUrl;
+            return mockResponseDeleteJob;
         }
         if (URL.includes('/batch/users/test12345/jobs/11112222') && method === HTTP_DELETE) {
-            throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
+            throw new InvalidRequestException('Bad request', HttpStatus.BAD_REQUEST, BATCH_API_DATA_FETCH_ERROR_CODE);
         }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingErrorMockRequest.body)) {
             return {data2: cloudPricingMockResponse};

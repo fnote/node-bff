@@ -1,13 +1,19 @@
 import AggregatedPricingDataService from '../pricing/aggregatedPricingDataService';
 import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetchException';
 import InvalidRequestException from '../../exception/invalidRequestException';
-import { UNSUPPORTED_REQUEST_BODY } from '../../util/constants';
+import {INVALID_REQUEST_BODY} from '../../util/constants';
 import {PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE} from '../../exception/exceptionCodes';
 import {
-    pricingDataMockRequest1, pricingDataMockErrorRequest, pciPriceMockPayload, pciPriceMockPayloadNoVolTiers,
-    pciModifiedPriceMockPayload1, pciModifiedPriceMockPayload2, mockPCIPricingErrorResponse, mockProductPricingErrorResponse,
-    pciPricesMockDataPriceSourceId,
+    mockPCIPricingErrorResponse,
+    mockProductPricingErrorResponse,
+    pciModifiedPriceMockPayload1,
+    pciModifiedPriceMockPayload2,
     pciModifiedPriceMockPayload3,
+    pciPriceMockPayload,
+    pciPriceMockPayloadNoVolTiers,
+    pciPricesMockDataPriceSourceId,
+    pricingDataMockErrorRequest,
+    pricingDataMockRequest1,
 } from '../../config/test.config';
 
 describe('Aggregated Pricing Data Service request validation', () => {
@@ -17,7 +23,7 @@ describe('Aggregated Pricing Data Service request validation', () => {
                 .getAggregatedPricingData({body: pricingDataMockErrorRequest});
         } catch (e) {
             expect(e.name).toEqual(InvalidRequestException.name);
-            expect(e.errorDetails.message).toEqual(UNSUPPORTED_REQUEST_BODY);
+            expect(e.errorDetails.message).toEqual(INVALID_REQUEST_BODY);
             expect(e.errorCode).toEqual(PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE);
         }
     });

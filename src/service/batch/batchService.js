@@ -7,7 +7,6 @@ import logger from '../../util/logger';
 import {httpClient} from '../../httpClient/httpClient';
 import {HTTP_DELETE, HTTP_GET, HTTP_POST} from '../../util/constants';
 import getBatchAPIConfigs from '../../config/configs';
-import {isEmptyRequestBody, validateRequestFileNames, validateUserId} from '../../validator/validateRequest';
 
 class BatchService {
     constructor() {
@@ -15,9 +14,6 @@ class BatchService {
     }
 
     async generateFileUploadSignedUrl(requestBody) {
-        isEmptyRequestBody(requestBody);
-        validateRequestFileNames(requestBody.fileNames);
-        validateUserId(requestBody.userId);
         const request = {
             fileNames: requestBody.fileNames,
             contentType: requestBody.contentType,
@@ -31,9 +27,6 @@ class BatchService {
     }
 
     async generateFileDownloadSignedUrl(requestBody) {
-        isEmptyRequestBody(requestBody);
-        validateRequestFileNames(requestBody.fileNames);
-        validateUserId(requestBody.userId);
         const request = {
             fileNames: requestBody.fileNames,
             userId: requestBody.userId,
@@ -45,15 +38,16 @@ class BatchService {
     }
 
     async getBatchJobs(userId, queryParamsString) {
-        validateUserId(userId);
-        const url = `${this.config.api.batchBaseUrl}${userId}${this.config.api.jobRoute}${queryParamsString}`;
+        let url = `${this.config.api.batchBaseUrl}${userId}${this.config.api.jobRoute}`;
+        if (queryParamsString) {
+            url = url.concat(queryParamsString);
+        }
         let response = await httpClient.makeRequest(HTTP_GET, url);
         logger.debug(`Generated list job details response:: ${response}`);
         return response;
     }
 
     async deleteJob(userId, jobId) {
-        validateUserId(userId);
         const url = `${this.config.api.batchBaseUrl}${userId}${this.config.api.jobRouteWithPathDelimiter}${jobId}`;
         const response = await httpClient.makeRequest(HTTP_DELETE, url);
         logger.debug(`Generated delete batch job response:: ${response}`);

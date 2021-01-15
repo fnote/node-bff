@@ -10,24 +10,24 @@ import {jest} from '@jest/globals';
 import app from '../../../app';
 import {
     CORRELATION_ID_HEADER,
+    EMPTY_REQUEST_BODY,
     ERROR,
-    INVALID_FILENAMES,
-    INVALID_S3_BUCKET_SOURCE,
+    ERROR_IN_DELETING_BATCH_JOBS,
+    ERROR_IN_GETTING_BATCH_JOBS,
+    INVALID_REQUEST_BODY,
     SUCCESS,
-    UNSUPPORTED_REQUEST_BODY,
 } from '../../../util/constants';
 import {
     BATCH_API_DATA_FETCH_ERROR_CODE,
-    INVALID_FILENAMES_CODE,
-    INVALID_REQUEST_BODY,
-    INVALID_S3_SOURCE
+    EMPTY_REQUEST_BODY_CODE,
+    INVALID_REQUEST_BODY_CODE
 } from "../../../exception/exceptionCodes";
 import {
-    mockErrorDeleteRequestSignedUrl,
     mockErrorRequestSignedUrl,
-    mockRequestInputSignedUrl,
-    mockRequestOutputSignedUrl,
-    mockResponseFileList,
+    mockRequestDownloadSignedUrl,
+    mockRequestUploadSignedUrl,
+    mockResponseDeleteJob,
+    mockResponseJobList,
     mockResponseSignedUrl
 } from "../../../config/test.config";
 
@@ -61,7 +61,7 @@ describe('routes: /batch', () => {
         });
         const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/input')
-            .send(mockRequestInputSignedUrl)
+            .send(mockRequestUploadSignedUrl)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.OK);
         expect(response.headers[CORRELATION_ID_HEADER]);
@@ -90,7 +90,7 @@ describe('routes: /batch', () => {
         });
         const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/output')
-            .send(mockRequestOutputSignedUrl)
+            .send(mockRequestDownloadSignedUrl)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.OK);
         expect(response.headers[CORRELATION_ID_HEADER]);
@@ -144,9 +144,7 @@ describe('routes: /batch', () => {
             };
             next();
         });
-        const invalidRequestBody = {
-            fileNames: []
-        };
+        const invalidRequestBody = {};
         const response = await request(app.app)
             .post('/v1/pci-bff/batch/signed-url/input')
             .send(invalidRequestBody)
@@ -154,109 +152,96 @@ describe('routes: /batch', () => {
         expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
         expect(response.headers[CORRELATION_ID_HEADER]);
         expect(response.body.status).toEqual(ERROR);
-        expect(response.body.errorCode).toEqual(INVALID_FILENAMES_CODE);
-        expect(response.body.cause)
-            .toEqual(INVALID_FILENAMES);
+        expect(response.body.errorCode).toEqual(EMPTY_REQUEST_BODY_CODE);
+        expect(response.body.cause).toEqual(EMPTY_REQUEST_BODY);
     });
 
-    test('get /batch/files/{source} should return file list when no errors', async () => {
+    test('post /batch/signed-url/output should throw exception when request body is invalid', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
+            res.locals.authResponse = {
+                authenticated: true,
+                cause: null,
+                username: 'username',
+                userDetailsData: {
+                    authorizedPricingTransformationEnabledBunitList: ['019'],
+                    authorizedBatchEnabledBunitList: ['001', '002'],
+                    email: 'firstName.secondName@syscolabs.com',
+                    firstName: 'firstName',
+                    jobTitle: 'jobTitle',
+                    lastName: 'secondName',
+                    username: 'test1234',
+                },
+            };
             next();
         });
+        const invalidRequestBody = {
+            fileNames: ''
+        };
         const response = await request(app.app)
-            .get('/v1/pci-bff/batch/files/output')
-            .set('Accept', 'application/json');
-        expect(response.status).toEqual(HttpStatus.OK);
-        expect(response.body).toBeDefined();
-        expect(response.body.status).toEqual(SUCCESS);
-        expect(response.body.data).toEqual(mockResponseFileList.data.data);
-    });
-
-    test('get /batch/files/{source} should throw exception when the source is invalid', async () => {
-        authMiddleware.mockImplementationOnce((req, res, next) => {
-            next();
-        });
-        const response = await request(app.app)
-            .get('/v1/pci-bff/batch/files/invalid')
-            .set('Accept', 'application/json');
-        expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
-        expect(response.headers[CORRELATION_ID_HEADER]);
-        expect(response.body.status).toEqual(ERROR);
-        expect(response.body.errorCode).toEqual(INVALID_S3_SOURCE);
-        expect(response.body.cause).toEqual(INVALID_S3_BUCKET_SOURCE);
-    });
-
-    test('get /batch/signed-url/{source} should throw exception when client error', async () => {
-        authMiddleware.mockImplementationOnce((req, res, next) => {
-            next();
-        });
-        const response = await request(app.app)
-            .get('/v1/pci-bff/batch/files/output/ERR')
-            .set('Accept', 'application/json');
-        expect(response.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
-        expect(response.headers[CORRELATION_ID_HEADER]);
-        expect(response.body.status).toEqual(ERROR);
-        expect(response.body.errorCode).toEqual(BATCH_API_DATA_FETCH_ERROR_CODE);
-    });
-
-    test('delete /batch/files/{source} should delete file list when no errors', async () => {
-        authMiddleware.mockImplementationOnce((req, res, next) => {
-            next();
-        });
-        const response = await request(app.app)
-            .delete('/v1/pci-bff/batch/files/output')
-            .send(mockRequestOutputSignedUrl)
-            .set('Accept', 'application/json');
-        expect(response.status).toEqual(HttpStatus.OK);
-        expect(response.headers[CORRELATION_ID_HEADER]);
-        expect(response.body).toBeDefined();
-        expect(response.body.status).toEqual(SUCCESS);
-        expect(response.body.data).toEqual(mockResponseSignedUrl.data.data);
-    });
-
-    test('delete /batch/signed-url/{source} should throw exception when client error', async () => {
-        authMiddleware.mockImplementationOnce((req, res, next) => {
-            next();
-        });
-        const response = await request(app.app)
-            .delete('/v1/pci-bff/batch/files/output')
-            .send(mockErrorDeleteRequestSignedUrl)
-            .set('Accept', 'application/json');
-        expect(response.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
-        expect(response.headers[CORRELATION_ID_HEADER]);
-        expect(response.body.status).toEqual(ERROR);
-        expect(response.body.errorCode).toEqual(BATCH_API_DATA_FETCH_ERROR_CODE);
-    });
-
-    test('delete /batch/files/{source} should throw exception when the source is invalid', async () => {
-        authMiddleware.mockImplementationOnce((req, res, next) => {
-            next();
-        });
-        const response = await request(app.app)
-            .delete('/v1/pci-bff/batch/files/invalid')
-            .send(mockRequestOutputSignedUrl)
-            .set('Accept', 'application/json');
-        expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
-        expect(response.headers[CORRELATION_ID_HEADER]);
-        expect(response.body.status).toEqual(ERROR);
-        expect(response.body.errorCode).toEqual(INVALID_S3_SOURCE);
-        expect(response.body.cause).toEqual(INVALID_S3_BUCKET_SOURCE);
-    });
-
-    test('delete /batch/files/{source} should throw exception when request body is invalid', async () => {
-        authMiddleware.mockImplementationOnce((req, res, next) => {
-            next();
-        });
-        const invalidRequestBody = {};
-        const response = await request(app.app)
-            .delete('/v1/pci-bff/batch/files/input')
+            .post('/v1/pci-bff/batch/signed-url/output')
             .send(invalidRequestBody)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
         expect(response.headers[CORRELATION_ID_HEADER]);
         expect(response.body.status).toEqual(ERROR);
-        expect(response.body.errorCode).toEqual(INVALID_REQUEST_BODY);
-        expect(response.body.cause)
-            .toEqual(UNSUPPORTED_REQUEST_BODY);
+        expect(response.body.errorCode).toEqual(INVALID_REQUEST_BODY_CODE);
+        expect(response.body.cause).toEqual(INVALID_REQUEST_BODY);
     });
+
+    test('get /batch/users/{userId}/jobs should return batch job list when no errors', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
+        const response = await request(app.app)
+            .get('/v1/pci-bff/batch/users/test1234/jobs?pageSize=10&offSet=10')
+            .set('Accept', 'application/json');
+        expect(response.status).toEqual(HttpStatus.OK);
+        expect(response.body).toBeDefined();
+        expect(response.body.status).toEqual(SUCCESS);
+        expect(response.body.data).toEqual(mockResponseJobList.data.data);
+    });
+
+    test('get /batch/users/{userId}/jobs should throw exception when the userId is invalid', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
+        const response = await request(app.app)
+            .get('/v1/pci-bff/batch/users/test12345/jobs')
+            .set('Accept', 'application/json');
+        expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
+        expect(response.headers[CORRELATION_ID_HEADER]);
+        expect(response.body.status).toEqual(ERROR);
+        expect(response.body.errorCode).toEqual(BATCH_API_DATA_FETCH_ERROR_CODE);
+        expect(response.body.message).toEqual(ERROR_IN_GETTING_BATCH_JOBS);
+    });
+
+    test('delete /batch/users/{userId}/jobs/{jobId} should delete file list when no errors', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
+        const response = await request(app.app)
+            .delete('/v1/pci-bff/batch/users/test1234/jobs/11112222')
+            .send(mockRequestDownloadSignedUrl)
+            .set('Accept', 'application/json');
+        expect(response.status).toEqual(HttpStatus.OK);
+        expect(response.headers[CORRELATION_ID_HEADER]);
+        expect(response.body).toBeDefined();
+        expect(response.body.status).toEqual(SUCCESS);
+        expect(response.body.data).toEqual(mockResponseDeleteJob.data.data);
+    });
+
+    test('delete /batch/users/{userId}/jobs/{jobId} should throw exception when client error', async () => {
+        authMiddleware.mockImplementationOnce((req, res, next) => {
+            next();
+        });
+        const response = await request(app.app)
+            .delete('/v1/pci-bff/batch/users/test12345/jobs/11112222')
+            .set('Accept', 'application/json');
+        expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
+        expect(response.headers[CORRELATION_ID_HEADER]);
+        expect(response.body.status).toEqual(ERROR);
+        expect(response.body.errorCode).toEqual(BATCH_API_DATA_FETCH_ERROR_CODE);
+        expect(response.body.message).toEqual(ERROR_IN_DELETING_BATCH_JOBS);
+    });
+
 });

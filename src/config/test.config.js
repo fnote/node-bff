@@ -1109,7 +1109,7 @@ export const pciPricesMockDataPriceSourceId = {
     ],
 };
 
-export const mockRequestInputSignedUrl = {
+export const mockRequestUploadSignedUrl = {
     fileNames: [
         'fileName1',
         'fileName2',
@@ -1117,14 +1117,14 @@ export const mockRequestInputSignedUrl = {
     contentType: 'text/plain'
 };
 
-export const mockRequestOutputSignedUrl = {
+export const mockRequestDownloadSignedUrl = {
     fileNames: [
         'fileName1',
         'fileName2',
     ],
 };
 
-export const mockBatchApiInputUrlRequest = {
+export const mockBatchApiUploadUrlRequest = {
     fileNames: [
         'fileName1',
         'fileName2',
@@ -1134,7 +1134,7 @@ export const mockBatchApiInputUrlRequest = {
     authorizedBunitList: ["001", "002"]
 };
 
-export const mockBatchApiOutputUrlRequest = {
+export const mockBatchApiDownloadUrlRequest = {
     fileNames: [
         'fileName1',
         'fileName2',
@@ -1207,29 +1207,55 @@ export const mockResponseSignedUrl = {
         ]}
 };
 
-export const mockResponseFileList = {
+export const mockResponseJobList = {
     "data": {
         "status": "success",
         "message": null,
         "data": [
             {
-                "fileName": "DevTestSplit_076_20200626_C.txt",
-                "date": "2020-11-24T01:27:08.000Z",
-                "size": 809,
-                "owner": {
-                    "DisplayName": "AWS_ACCT_SyscoGo-016",
-                    "ID": "00669e0e1bbd0cbe09dada2537d2e918c6acf90c8d3619a1065d7735f7cf6b82"
-                }
+                "jobId": 44489,
+                "bunitId": "066",
+                "status": "PARTIALLY_COMPLETED",
+                "statusTime": "2021-01-14T14:42:33.000Z",
+                "startTime": "2021-01-14T14:42:13.000Z",
+                "endTime": "2021-01-14T14:42:33.000Z",
+                "fileName": "BPTestC04_066_000041_C.txt",
+                "submittedUser": "test1234",
+                "minorErrorFileName": "minor-errors/BPTestC04_066_000041_C_errors.txt"
             },
             {
-                "fileName": "DevTest1_006_20200616_C.txt",
-                "date": "2020-11-24T01:27:13.000Z",
-                "size": 369244,
-                "owner": {
-                    "DisplayName": "AWS_ACCT_SyscoGo-016",
-                    "ID": "00669e0e1bbd0cbe09dada2537d2e918c6acf90c8d3619a1065d7735f7cf6b82"
-                }
+                "jobId": 44242,
+                "bunitId": "000",
+                "status": "ERROR",
+                "statusTime": "2021-01-10T22:34:50.000Z",
+                "startTime": "2021-01-10T22:34:50.000Z",
+                "endTime": "2021-01-10T22:34:50.000Z",
+                "fileName": "CPPCI-DevTest2_999_20200622_C.txt",
+                "submittedUser": "test1234",
+                "minorErrorFileName": null
+            },
+            {
+                "jobId": 44504,
+                "bunitId": "066",
+                "status": "COMPLETED",
+                "statusTime": "2021-01-14T14:44:58.000Z",
+                "startTime": "2021-01-14T14:44:41.000Z",
+                "endTime": "2021-01-14T14:44:58.000Z",
+                "fileName": "TestC03_066_A.txt",
+                "submittedUser": "test1234",
+                "minorErrorFileName": null
             }
         ]
+    }
+};
+
+export const mockResponseDeleteJob = {
+    "data": {
+        "status": "success",
+        "message": null,
+        "data": {
+            userId: 'test1234',
+            jobId: '11112222'
+        }
     }
 };

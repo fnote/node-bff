@@ -5,19 +5,17 @@
  * */
 
 import * as HttpStatus from 'http-status-codes';
-import { get } from 'lodash';
+import {get} from 'lodash';
 import CloudPricingDataService from './cloudPricingDataService';
 import ProductInfoService from '../productInfo/productInfoService';
 import CustomerInfoService from '../customerInfo/customerInfoService';
-import { pricingDataReqBody } from '../../validator/schema';
+import {pricingDataReqBody} from '../../validator/schema';
 import logger from '../../util/logger';
 import InvalidRequestException from '../../exception/invalidRequestException';
 import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetchException';
-import {
-    UNSUPPORTED_REQUEST_BODY, BETWEEN, IS_APPLICABLE, CRITICAL,
-} from '../../util/constants';
-import { getPriceSourceName } from '../../config/configs';
-import { PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE } from '../../exception/exceptionCodes';
+import {BETWEEN, CRITICAL, INVALID_REQUEST_BODY, IS_APPLICABLE,} from '../../util/constants';
+import {getPriceSourceName} from '../../config/configs';
+import {PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE} from '../../exception/exceptionCodes';
 
 class AggregatedPricingDataService {
     /**
@@ -140,7 +138,7 @@ class AggregatedPricingDataService {
         if (error) {
             logger.error(`Request body validation failed in getting aggregated pricing data: ${JSON.stringify(requestBody)}`);
             throw new InvalidRequestException(
-                UNSUPPORTED_REQUEST_BODY,
+                INVALID_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
                 PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE,
             );

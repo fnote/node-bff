@@ -5,11 +5,11 @@
  * */
 
 import * as HttpStatus from 'http-status-codes';
-import {validateRequestBody, validateRequestFileNames, validateUserId} from '../validateRequest';
+import {isEmptyRequestBody, validateRequestBody} from '../validateRequest';
 import InvalidRequestException from '../../exception/invalidRequestException';
-import {INVALID_FILENAMES, INVALID_USERID, UNSUPPORTED_REQUEST_BODY} from '../../util/constants';
+import {EMPTY_REQUEST_BODY, INVALID_REQUEST_BODY} from '../../util/constants';
 import {describe, test} from "@jest/globals";
-import {INVALID_FILENAMES_CODE, INVALID_REQUEST_BODY, INVALID_USERID_CODE} from "../../exception/exceptionCodes";
+import {EMPTY_REQUEST_BODY_CODE, INVALID_REQUEST_BODY_CODE} from "../../exception/exceptionCodes";
 
 const validRequestBody = {
     fileNames: [
@@ -21,118 +21,68 @@ const validRequestBody = {
     authorizedBunitList: ['001', '002']
 };
 
-const inValidRequestBody = {};
+const emptyRequestBody = {};
 
-const inValidFileNamesRequestBody1 = {
+const inValidRequestBody1 = {
     fileNames: '',
     contentType: 'text/plain',
     userId: 'test1234',
     authorizedBunitList: ['001', '002']
 };
 
-const inValidFileNamesRequestBody2 = {
-    fileNames: [],
-    contentType: 'text/plain',
-    userId: 'test1234',
-    authorizedBunitList: ['001', '002']
-};
-const inValidFileNamesRequestBody3 = {
-    fileNames: {},
-    contentType: 'text/plain',
+const inValidRequestBody2 = {
+    '': [
+        'fileName1',
+        'fileName2',
+    ], contentType: 'text/plain',
     userId: 'test1234',
     authorizedBunitList: ['001', '002']
 };
 
-const inValidContentTypeRequestBody = {
-    fileNames: [
-        'fileName1',
-        'fileName2',
-    ],
-    contentType: 'image/png',
-    userId: 'test1234',
-    authorizedBunitList: ['001', '002']
-};
-
-const inValidUserIdRequestBody1 = {
-    fileNames: [
-        'fileName1',
-        'fileName2',
-    ],
-    contentType: 'text/plain',
-    userId: null,
-    authorizedBunitList: ['001', '002']
-};
-
-const inValidUserIdRequestBody2 = {
-    fileNames: [
-        'fileName1',
-        'fileName2',
-    ],
-    contentType: 'text/plain',
-    userId: 'test12345',
-    authorizedBunitList: ['001', '002']
-};
 
 describe('Request Body Validator', () => {
     test('should return nothing when the request body is valid', async () => {
         expect(() => validateRequestBody(validRequestBody)).not
             .toThrowError(new InvalidRequestException(
-                UNSUPPORTED_REQUEST_BODY,
+                INVALID_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
             ));
     });
 
     test('should throw InvalidRequestException when the request body is empty', async () => {
-        expect(() => validateRequestBody(inValidRequestBody))
+        expect(() => validateRequestBody(inValidRequestBody1))
             .toThrowError(new InvalidRequestException(
-                UNSUPPORTED_REQUEST_BODY,
+                INVALID_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
-                INVALID_REQUEST_BODY
+                INVALID_REQUEST_BODY_CODE
             ));
     });
 
-    test('should throw InvalidRequestException when the filenames is string', async () => {
-        expect(() => validateRequestFileNames(inValidFileNamesRequestBody1))
+    test('should throw InvalidRequestException when the request body is empty', async () => {
+        expect(() => validateRequestBody(inValidRequestBody2))
             .toThrowError(new InvalidRequestException(
-                INVALID_FILENAMES,
+                INVALID_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
-                INVALID_FILENAMES_CODE
+                INVALID_REQUEST_BODY_CODE
             ));
     });
 
-    test('should throw InvalidRequestException when the filenames is empty', async () => {
-        expect(() => validateRequestFileNames(inValidFileNamesRequestBody2))
+    test('should throw InvalidRequestException when the request body is empty', async () => {
+        expect(() => validateRequestBody(emptyRequestBody))
             .toThrowError(new InvalidRequestException(
-                INVALID_FILENAMES,
+                EMPTY_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
-                INVALID_FILENAMES_CODE
+                EMPTY_REQUEST_BODY_CODE
             ));
     });
 
-    test('should throw InvalidRequestException when the filenames is json', async () => {
-        expect(() => validateRequestFileNames(inValidFileNamesRequestBody3))
+    test('should throw InvalidRequestException when the request body is empty', async () => {
+        expect(() => isEmptyRequestBody(emptyRequestBody))
             .toThrowError(new InvalidRequestException(
-                INVALID_FILENAMES,
+                EMPTY_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
-                INVALID_FILENAMES_CODE
+                EMPTY_REQUEST_BODY_CODE
             ));
     });
 
-    test('should throw InvalidRequestException when the userId is null', async () => {
-        expect(() => validateUserId(inValidUserIdRequestBody1))
-            .toThrowError(new InvalidRequestException(
-                INVALID_USERID,
-                HttpStatus.BAD_REQUEST,
-                INVALID_USERID_CODE
-            ));
-    });
-
-    test('should throw InvalidRequestException when the userId is invalid', async () => {
-        expect(() => validateUserId(inValidUserIdRequestBody2))
-            .toThrowError(new InvalidRequestException(
-                INVALID_USERID,
-                HttpStatus.BAD_REQUEST,
-                INVALID_USERID_CODE
-            ));
-    });
 });
