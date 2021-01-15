@@ -9,8 +9,8 @@ import {createErrorResponse, createSuccessResponse} from '../../../mapper/respon
 import logger from '../../../util/logger';
 import {
     CORRELATION_ID_HEADER,
-    ERROR_IN_GETTING_S3_DELETING_FILES,
-    ERROR_IN_GETTING_S3_FILES,
+    ERROR_IN_DELETING_BATCH_JOBS,
+    ERROR_IN_GETTING_BATCH_JOBS,
     ERROR_IN_GETTING_S3_INPUT_SIGNED_URL,
     ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL,
 } from '../../../util/constants';
@@ -38,11 +38,11 @@ export default () => {
             req.body.userId = 'gkar5861';
             req.body.authorizedBunitList = ['001', '002'];
 
-            const responseData = await BatchService.generateInputSignUrl(req.body);
+            const responseData = await BatchService.generateFileUploadSignedUrl(req.body);
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
 
         } catch (error) {
-            logger.error(`Error occurred in getting signed urls. Error: ${error}`);
+            logger.error(`Error occurred in getting write signed urls. Error: ${error}`);
             const httpStatus = error.getStatus();
             const errorCode = error.getErrorCode() ? error.getErrorCode() : BATCH_API_DATA_FETCH_ERROR_CODE;
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
@@ -64,7 +64,7 @@ export default () => {
 
             req.body.userId = 'gkar5861';
 
-            const responseData = await BatchService.generateOutputSignUrl(req.body);
+            const responseData = await BatchService.generateFileDownloadSignedUrl(req.body);
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
 
         } catch (error) {
@@ -85,13 +85,12 @@ export default () => {
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
         } catch (error) {
-            logger.error(`Error occurred in getting the file list. Error: ${error}`);
-            const errMessage = `${ERROR_IN_GETTING_S3_FILES} from bucket: ${source}`;
+            logger.error(`Error occurred in retrieving batch job details of user: ${userId}. Error: ${error}`);
             const httpStatus = error.getStatus();
             const errorCode = error.getErrorCode() ? error.getErrorCode() : BATCH_API_DATA_FETCH_ERROR_CODE;
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(httpStatus !== -1 ? httpStatus : HttpStatus.INTERNAL_SERVER_ERROR)
-                .send(createErrorResponse(null, errMessage, error, null, errorCode));
+                .send(createErrorResponse(null, ERROR_IN_GETTING_BATCH_JOBS, error, null, errorCode));
         }
     });
 
@@ -102,13 +101,12 @@ export default () => {
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
         } catch (error) {
-            logger.error(`Error occurred in getting the file list. Error: ${error}`);
-            const errMessage = `${ERROR_IN_GETTING_S3_DELETING_FILES} from bucket: ${source}`;
+            logger.error(`Error occurred in deleting the batch job: ${jobId}. Error: ${error}`);
             const httpStatus = error.getStatus();
             const errorCode = error.getErrorCode() ? error.getErrorCode() : BATCH_API_DATA_FETCH_ERROR_CODE;
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(httpStatus !== -1 ? httpStatus : HttpStatus.INTERNAL_SERVER_ERROR)
-                .send(createErrorResponse(null, errMessage, error, null, errorCode));
+                .send(createErrorResponse(null, ERROR_IN_DELETING_BATCH_JOBS, error, null, errorCode));
         }
     });
 

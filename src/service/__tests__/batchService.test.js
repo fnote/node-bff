@@ -22,18 +22,18 @@ jest.mock('../../httpClient/httpClient');
 
 describe('Batch Service', () => {
     test('should generate input signed urls  when the request body is valid', async () => {
-        const response = await BatchService.generateInputSignUrl(mockBatchApiInputUrlRequest);
+        const response = await BatchService.generateFileUploadSignedUrl(mockBatchApiInputUrlRequest);
         expect(response).toEqual(mockResponseSignedUrl);
     });
 
     test('should generate output signed urls when the request body is valid', async () => {
-        const response = await BatchService.generateOutputSignUrl(mockBatchApiOutputUrlRequest);
+        const response = await BatchService.generateFileDownloadSignedUrl(mockBatchApiOutputUrlRequest);
         expect(response).toEqual(mockResponseSignedUrl);
     });
 
     test('should throw exception  when the request body is empty', async () => {
         const emptyRequestBody = {};
-        await expect(BatchService.generateInputSignUrl(emptyRequestBody)).rejects
+        await expect(BatchService.generateFileUploadSignedUrl(emptyRequestBody)).rejects
             .toThrowError(new InvalidRequestException(
                 UNSUPPORTED_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
@@ -42,7 +42,7 @@ describe('Batch Service', () => {
 
     test('should throw exception  when the request body is invalid', async () => {
         const invalidRequestBody = {};
-        await expect(BatchService.generateInputSignUrl(invalidRequestBody)).rejects
+        await expect(BatchService.generateFileUploadSignedUrl(invalidRequestBody)).rejects
             .toThrowError(new InvalidRequestException(
                 UNSUPPORTED_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,

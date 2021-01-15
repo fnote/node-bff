@@ -28,11 +28,11 @@ export const CORRELATION_ID_HEADER = 'X-Syy-Correlation-Id';
 export const HTTP_CLIENT_ERROR_CODE_INTERNAL_SERVER_ERROR = 500;
 
 // errors
-export const ERROR_IN_GETTING_S3_INPUT_SIGNED_URL = 'Error in getting S3 input signed urls';
-export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL = 'Error in getting S3 output signed urls';
+export const ERROR_IN_GETTING_S3_INPUT_SIGNED_URL = 'Error in getting S3 file upload signed urls';
+export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL = 'Error in getting S3 file download signed urls';
 export const INVALID_S3_BUCKET_SOURCE = `Invalid source is passed in the url. Valid sources are input/output`;
-export const ERROR_IN_GETTING_S3_FILES = 'Error occurred while getting S3 files';
-export const ERROR_IN_GETTING_S3_DELETING_FILES = 'Error occurred when deleting S3 files';
+export const ERROR_IN_GETTING_BATCH_JOBS = 'Error occurred while retrieving batch job details';
+export const ERROR_IN_DELETING_BATCH_JOBS = 'Error occurred while deleting a batch job';
 export const UNSUPPORTED_REQUEST_BODY = 'Unsupported request body';
 export const INVALID_FILENAMES = 'Invalid/Unsupported Filenames format in the request';
 export const INVALID_USERID = 'Invalid userId in the request';
