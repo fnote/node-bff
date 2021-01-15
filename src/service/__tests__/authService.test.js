@@ -102,15 +102,15 @@ jest.mock('../auth/authorizationService', () => ({
 
 }));
 
-JSON.parse = jest.fn().mockImplementationOnce(() => ({
-        username: 'AD_username',
-        profile: 'appadmin',
-        locale: '341 - Sysco Labs',
-        given_name: 'firstName',
-        family_name: 'secondName',
-        email: 'firstName.secondName@syscolabs.com',
-        zoneinfo: 'jobTitle',
-    }));
+JSON.parse = jest.fn().mockImplementation(() => ({
+    username: 'AD_username',
+    profile: 'appadmin',
+    locale: '341 - Sysco Labs',
+    given_name: 'firstName',
+    family_name: 'secondName',
+    email: 'firstName.secondName@syscolabs.com',
+    zoneinfo: 'jobTitle',
+}));
 
 jwkToPem.mockReturnValueOnce('pems2')
     .mockReturnValueOnce('pems1');
@@ -298,5 +298,216 @@ describe('Auth Service', () => {
             username: null,
         };
         expect(response).toEqual(unauthenticatedReturn);
+    });
+
+    test('should generate the empty business unit lists when token parsed opco is Nan', async () => {
+        JSON.parse = jest.fn().mockImplementationOnce(() => ({
+            username: 'AD_username',
+            profile: 'appadmin',
+            locale: ' - Sysco Labs',
+            given_name: 'firstName',
+            family_name: 'secondName',
+            email: 'firstName.secondName@syscolabs.com',
+            zoneinfo: 'jobTitle',
+        }));
+        jwt.decode.mockReturnValue({
+            payload: {
+                iss: 'testIssuer',
+                token_use: 'access',
+            },
+            header: {
+                kid: 'kid2',
+            },
+        });
+
+        const payload = {
+            sub: 'principal-id-001',
+            username: 'AD_username',
+        };
+
+        jwt.verify.mockImplementation((obj, pems, param, callback) => {
+            callback(null, payload);
+        });
+
+        const authenticatedResponseWithEmptyBunits = {
+            authenticated: true,
+            cause: null,
+            username: 'username',
+            userDetailsData: {
+                authorizedPricingTransformationEnabledBunitList: [],
+                authorizedBatchEnabledBunitList: [],
+                email: 'firstName.secondName@syscolabs.com',
+                firstName: 'firstName',
+                jobTitle: 'jobTitle',
+                lastName: 'secondName',
+                username: 'username',
+                role: undefined,
+            },
+        };
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
+        expect(response).toEqual(authenticatedResponseWithEmptyBunits);
+    });
+
+    test('should generate unauthorizedResponse when token parsed opco is null', async () => {
+        JSON.parse = jest.fn().mockImplementationOnce(() => ({
+            username: 'AD_username',
+            profile: 'appadmin',
+            locale: null,
+            given_name: 'firstName',
+            family_name: 'secondName',
+            email: 'firstName.secondName@syscolabs.com',
+            zoneinfo: 'jobTitle',
+        }));
+        jwt.decode.mockReturnValue({
+            payload: {
+                iss: 'testIssuer',
+                token_use: 'access',
+            },
+            header: {
+                kid: 'kid2',
+            },
+        });
+
+        const payload = {
+            sub: 'principal-id-001',
+            username: 'AD_username',
+        };
+
+        jwt.verify.mockImplementation((obj, pems, param, callback) => {
+            callback(null, payload);
+        });
+
+        const unauthenticatedReturn = {
+            authenticated: false,
+            cause: 'Authorized OPCO given in the authentication token is invalid',
+            username: null,
+        };
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
+        expect(response).toEqual(unauthenticatedReturn);
+    });
+
+    test('should generate unauthorizedResponse when token parsed username is empty', async () => {
+        JSON.parse = jest.fn().mockImplementationOnce(() => ({
+            username: '',
+            profile: 'appadmin',
+            locale: '341 - Sysco Labs',
+            given_name: 'firstName',
+            family_name: 'secondName',
+            email: 'firstName.secondName@syscolabs.com',
+            zoneinfo: 'jobTitle',
+        }));
+        jwt.decode.mockReturnValue({
+            payload: {
+                iss: 'testIssuer',
+                token_use: 'access',
+            },
+            header: {
+                kid: 'kid2',
+            },
+        });
+
+        const payload = {
+            sub: 'principal-id-001',
+            username: 'AD_username',
+        };
+
+        jwt.verify.mockImplementation((obj, pems, param, callback) => {
+            callback(null, payload);
+        });
+
+        const unauthenticatedReturn = {
+            authenticated: false,
+            cause: 'Username is not present in the auth token',
+            username: null,
+        };
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
+        expect(response).toEqual(unauthenticatedReturn);
+    });
+
+    test('should generate unauthorizedResponse when token parsed username is not valid', async () => {
+        JSON.parse = jest.fn().mockImplementationOnce(() => ({
+            username: 'username',
+            profile: 'appadmin',
+            locale: '341 - Sysco Labs',
+            given_name: 'firstName',
+            family_name: 'secondName',
+            email: 'firstName.secondName@syscolabs.com',
+            zoneinfo: 'jobTitle',
+        }));
+        jwt.decode.mockReturnValue({
+            payload: {
+                iss: 'testIssuer',
+                token_use: 'access',
+            },
+            header: {
+                kid: 'kid2',
+            },
+        });
+
+        const payload = {
+            sub: 'principal-id-001',
+            username: 'AD_username',
+        };
+
+        jwt.verify.mockImplementation((obj, pems, param, callback) => {
+            callback(null, payload);
+        });
+
+        const unauthenticatedReturn = {
+            authenticated: false,
+            cause: 'Username given in the authentication token is invalid',
+            username: null,
+        };
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
+        expect(response).toEqual(unauthenticatedReturn);
+    });
+
+    test('should generate authenticated with high profile when more user roles are passed', async () => {
+        JSON.parse = jest.fn().mockImplementationOnce(() => ({
+            username: 'AD_username',
+            profile: '[appadmin, generaluser]',
+            locale: '341 - Sysco Labs',
+            given_name: 'firstName',
+            family_name: 'secondName',
+            email: 'firstName.secondName@syscolabs.com',
+            zoneinfo: 'jobTitle',
+        }));
+        jwt.decode.mockReturnValue({
+            payload: {
+                iss: 'testIssuer',
+                token_use: 'access',
+            },
+            header: {
+                kid: 'kid2',
+            },
+        });
+
+        const payload = {
+            sub: 'principal-id-001',
+            username: 'AD_username',
+        };
+
+        jwt.verify.mockImplementation((obj, pems, param, callback) => {
+            callback(null, payload);
+        });
+
+        const authenticatedMockResponseWithHighProfile = {
+            authenticated: true,
+            cause: null,
+            username: 'username',
+            userDetailsData: {
+                authorizedPricingTransformationEnabledBunitList,
+                authorizedBatchEnabledBunitList,
+                email: 'firstName.secondName@syscolabs.com',
+                firstName: 'firstName',
+                jobTitle: 'jobTitle',
+                lastName: 'secondName',
+                username: 'username',
+                role: '[appadmin, generaluser]',
+            },
+        };
+
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
+        expect(response).toEqual(authenticatedMockResponseWithHighProfile);
     });
 });

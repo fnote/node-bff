@@ -26,6 +26,13 @@ const bUnitDetailForOpco003 = {
     batch_on: 'Y',
 };
 
+const bUnitDetailForOpco004 = {
+    bunit_id: '004',
+    bunit_name: 'Sysco Central California',
+    periscope_on: 'Y',
+    batch_on: 'N',
+};
+
 const bUnitDetailForOpco005 = {
     bunit_id: '005',
     bunit_name: 'Sysco Intermountain',
@@ -44,13 +51,7 @@ const bUnitDetailsArray = [
     },
 
     bUnitDetailForOpco003,
-
-    {
-        bunit_id: '004',
-        bunit_name: 'Sysco Central California',
-        periscope_on: 'N',
-        batch_on: 'N',
-    },
+    bUnitDetailForOpco004,
     bUnitDetailForOpco005,
 ];
 
@@ -126,7 +127,7 @@ describe('Auth Service', () => {
             await AuthorizationService.loadBusinessUnitDetails();
 
             const filteredArray = AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit();
-            expect(filteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
+            expect(filteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003, bUnitDetailForOpco004]);
         });
 
     test('should send the bunit array where batch_on as Y',
@@ -186,7 +187,7 @@ describe('Auth Service', () => {
             const pricingTransformationFilteredArray = filteredArray.authorizedPricingTransformationEnabledBunitList;
             const batchFilteredArray = filteredArray.authorizedBatchEnabledBunitList;
 
-            expect(pricingTransformationFilteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
+            expect(pricingTransformationFilteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003, bUnitDetailForOpco004]);
             expect(batchFilteredArray).toEqual(['001', '003', '005']);
         });
 
@@ -200,7 +201,7 @@ describe('Auth Service', () => {
             const pricingTransformationFilteredArray = filteredArray.authorizedPricingTransformationEnabledBunitList;
             const batchFilteredArray = filteredArray.authorizedBatchEnabledBunitList;
 
-            expect(pricingTransformationFilteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
+            expect(pricingTransformationFilteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003, bUnitDetailForOpco004]);
             expect(batchFilteredArray).toEqual(['001', '003', '005']);
         });
 
@@ -270,6 +271,20 @@ describe('Auth Service', () => {
             expect(batchFilteredArray).toEqual(['005']);
         });
 
+    test('should send an empty array when passed bunit it a matching one to the list of bunit but is not periscope_on Y'
+        + ' and batch_on N',
+        async () => {
+            BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
+
+            await AuthorizationService.loadBusinessUnitDetails();
+
+            const filteredArray = AuthorizationService.getAuthorizedBusinessUnits('004', OTHER_ROLE);
+            const pricingTransformationFilteredArray = filteredArray.authorizedPricingTransformationEnabledBunitList;
+            const batchFilteredArray = filteredArray.authorizedBatchEnabledBunitList;
+            expect(pricingTransformationFilteredArray).toEqual([bUnitDetailForOpco004]);
+            expect(batchFilteredArray).toEqual([]);
+        });
+
     test('should send all the periscope_on Y bunit when the passed opco does not match one of the given bunit details array '
         + 'because it would be an indicator like 000: corporate, 341: sysco labs', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArray);
@@ -279,7 +294,7 @@ describe('Auth Service', () => {
         const filteredArray = AuthorizationService.getAuthorizedBusinessUnits('341', OTHER_ROLE);
         const pricingTransformationFilteredArray = filteredArray.authorizedPricingTransformationEnabledBunitList;
         const batchFilteredArray = filteredArray.authorizedBatchEnabledBunitList;
-        expect(pricingTransformationFilteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003]);
+        expect(pricingTransformationFilteredArray).toEqual([bUnitDetailForOpco001, bUnitDetailForOpco003, bUnitDetailForOpco004]);
         expect(batchFilteredArray).toEqual(['001', '003', '005']);
     });
 
