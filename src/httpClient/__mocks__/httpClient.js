@@ -18,7 +18,8 @@ import {
     customerInfoMockResponse,
     mockBatchApiDownloadUrlRequest,
     mockBatchApiUploadUrlRequest,
-    mockErrorBatchApiRequest,
+    mockErrorBatchFileDownloadApiRequest,
+    mockErrorBatchFileUploadApiRequest,
     mockResponseDeleteJob,
     mockResponseJobList,
     mockResponseSignedUrl,
@@ -61,8 +62,12 @@ class HttpClient {
             && JSON.stringify(data) === JSON.stringify(mockBatchApiDownloadUrlRequest)) {
             return mockResponseSignedUrl;
         }
-        if (URL.includes('/batch/files/signed-url/') && method === HTTP_POST
-            && JSON.stringify(data) === JSON.stringify(mockErrorBatchApiRequest)) {
+        if (URL.includes('/batch/files/signed-url/input') && method === HTTP_POST
+            && JSON.stringify(data) === JSON.stringify(mockErrorBatchFileUploadApiRequest)) {
+            throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
+        }
+        if (URL.includes('/batch/files/signed-url/output') && method === HTTP_POST
+            && JSON.stringify(data) === JSON.stringify(mockErrorBatchFileDownloadApiRequest)) {
             throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
         }
         if (URL.includes('/batch/users/test1234/jobs?pageSize=10&offSet=10') && method === HTTP_GET) {
@@ -71,8 +76,14 @@ class HttpClient {
         if (URL.includes('/batch/users/test12345/jobs') && method === HTTP_GET) {
             throw new InvalidRequestException('Bad request', HttpStatus.BAD_REQUEST, BATCH_API_DATA_FETCH_ERROR_CODE);
         }
+        if (URL.includes('/batch/users/test1234/jobs?pageSize') && method === HTTP_GET) {
+            throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
+        }
         if (URL.includes('/batch/users/test1234/jobs/11112222') && method === HTTP_DELETE) {
             return mockResponseDeleteJob;
+        }
+        if (URL.includes('/batch/users/test1234/jobs/0') && method === HTTP_DELETE) {
+            throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
         }
         if (URL.includes('/batch/users/test12345/jobs/11112222') && method === HTTP_DELETE) {
             throw new InvalidRequestException('Bad request', HttpStatus.BAD_REQUEST, BATCH_API_DATA_FETCH_ERROR_CODE);
@@ -81,7 +92,7 @@ class HttpClient {
             return {data2: cloudPricingMockResponse};
         }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
-            return { data: cloudPricingMockResponse };
+            return {data: cloudPricingMockResponse};
         }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingPCIMockRequest.body)) {
             return { data: cloudPCIPricingMockResponse };

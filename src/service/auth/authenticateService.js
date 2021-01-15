@@ -54,7 +54,7 @@ class AuthenticateService {
                 }
                 return this.validateToken(this.pems, accessToken, req, res);
             }
-                return this.validateToken(this.pems, accessToken, req, res);
+            return this.validateToken(this.pems, accessToken, req, res);
         } catch (e) {
             const errorMessage = 'Unexpected error occurred while validating the token';
             logger.error(`${errorMessage}: ${e} stacktrace: ${e.stackTrace}`);
@@ -117,10 +117,10 @@ class AuthenticateService {
     }
 
     sendUnauthenticatedErrorResponse = (cause) => ({
-            authenticated: false,
-            username: null,
-            cause,
-        })
+        authenticated: false,
+        username: null,
+        cause,
+    })
 
     // eslint-disable-next-line no-unused-vars
     decodeUserClaimToken = (req, res) => {
@@ -206,11 +206,11 @@ class AuthenticateService {
                         userDetailsData,
                     };
                 }
-                    logger.error(`Username in the auth token is not in the expected format: ${username}`);
-                    return this.sendUnauthenticatedErrorResponse('Username given in the authentication token is invalid');
+                logger.error(`Username in the auth token is not in the expected format: ${username}`);
+                return this.sendUnauthenticatedErrorResponse('Username given in the authentication token is invalid');
             }
-                logger.error('Username is not present in the auth token');
-                return this.sendUnauthenticatedErrorResponse('Username is not present in the auth token');
+            logger.error('Username is not present in the auth token');
+            return this.sendUnauthenticatedErrorResponse('Username is not present in the auth token');
         }
     }
 }

@@ -1149,7 +1149,7 @@ export const mockErrorRequestSignedUrl = {
     contentType: 'text/plain',
 };
 
-export const mockErrorBatchApiRequest = {
+export const mockErrorBatchFileUploadApiRequest = {
     fileNames: [
         'error_fileName1',
     ],
@@ -1159,38 +1159,12 @@ export const mockErrorBatchApiRequest = {
 
 };
 
-export const mockErrorDeleteRequestSignedUrl = {
+export const mockErrorBatchFileDownloadApiRequest = {
     fileNames: [
         'error_fileName1',
     ],
-};
+    userId: 'test1234',
 
-export const mockErrorResponseFromS3 = {
-    data: {
-        status: 'success',
-        message: null,
-        data: [
-            {
-                fileName: 'fileName3_errors.txt',
-                putUrl: 'https://batch-output.s3.amazonaws.com/fileName1?AWSAccessKeyId=ASIAQRLXWZJ',
-            },
-        ],
-},
-};
-
-export const mockErrorResponse = {
-    data: {
-        status: 'success',
-        message: null,
-        data: [
-            {
-                fileName: 'fileName3.txt',
-                putUrl: 'https://batch-output.s3.amazonaws.com/fileName1?AWSAccessKeyId=ASIAQRLXWZJ',
-                action: 'error',
-                minorErrorFileName: 'fileName3_errors.txt',
-            },
-        ],
-},
 };
 
 export const mockResponseSignedUrl = {
