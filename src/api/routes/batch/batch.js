@@ -74,10 +74,17 @@ export default () => {
         }
     });
 
-    batchRouter.get('/users/:userId/jobs', async (req, res) => {
-        const {userId} = req.params;
-        const queryParamsString = url.parse(req.url, true).search;
+    batchRouter.get('/jobs', async (req, res) => {
+        res.set(CORRELATION_ID_HEADER, getCorrelationId());
+
+        let userId;
         try {
+            const {authResponse} = res.locals;
+            const {userDetailsData} = authResponse;
+            userId = userDetailsData.username;
+
+            const queryParamsString = url.parse(req.url, true).search;
+
             const responseData = await BatchService.getBatchJobs(userId, queryParamsString);
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
@@ -91,9 +98,17 @@ export default () => {
         }
     });
 
-    batchRouter.delete('/users/:userId/jobs/:jobId', async (req, res) => {
-        const {userId, jobId} = req.params;
+    batchRouter.delete('/jobs/:jobId', async (req, res) => {
+        res.set(CORRELATION_ID_HEADER, getCorrelationId());
+
+        let userId;
+        let jobId;
         try {
+            const {authResponse} = res.locals;
+            const {userDetailsData} = authResponse;
+            userId = userDetailsData.username;
+            jobId = req.params.jobId;
+
             const responseData = await BatchService.deleteJob(userId, jobId);
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(HttpStatus.OK).send(createSuccessResponse(responseData, null));
