@@ -74,10 +74,10 @@ class AuthorizationService {
         const matchedValidBusinessUnitList = this.matchedValidBusinessUnitFromGivenList(opcoAttributeBunit, this.businessUnitDetailsArray);
 
         if (matchedValidBusinessUnitList.length > 0) {
-            authorizedBunitList.authorizedPricingTransformationEnabledBunitList =
-                this.matchedPricingTransformationEnabledBusinessUnit(opcoAttributeBunit);
-            authorizedBunitList.authorizedBatchEnabledBunitList =
-                this.matchedBatchEnabledBusinessUnit(opcoAttributeBunit);
+            authorizedBunitList
+                .authorizedPricingTransformationEnabledBunitList = this.matchedPricingTransformationEnabledBusinessUnit(opcoAttributeBunit);
+            authorizedBunitList
+                .authorizedBatchEnabledBunitList = this.matchedBatchEnabledBusinessUnit(opcoAttributeBunit);
 
             if (authorizedBunitList.authorizedPricingTransformationEnabledBunitList.length === 0
                 && authorizedBunitList.authorizedBatchEnabledBunitList.length === 0) {

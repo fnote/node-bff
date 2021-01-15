@@ -215,12 +215,26 @@ describe('routes: /batch', () => {
         expect(response.body.cause).toEqual(INVALID_REQUEST_BODY);
     });
 
-    test('get /batch/users/{userId}/jobs should return batch job list when no errors', async () => {
+    test('get /batch/jobs should return batch job list when no errors', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
+            res.locals.authResponse = {
+                authenticated: true,
+                cause: null,
+                username: 'username',
+                userDetailsData: {
+                    authorizedPricingTransformationEnabledBunitList: ['019'],
+                    authorizedBatchEnabledBunitList: ['001', '002'],
+                    email: 'firstName.secondName@syscolabs.com',
+                    firstName: 'firstName',
+                    jobTitle: 'jobTitle',
+                    lastName: 'secondName',
+                    username: 'test1234',
+                },
+            };
             next();
         });
         const response = await request(app.app)
-            .get('/v1/pci-bff/batch/users/test1234/jobs?pageSize=10&offSet=10')
+            .get('/v1/pci-bff/batch/jobs?pageSize=10&offSet=10')
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.OK);
         expect(response.body).toBeDefined();
@@ -228,12 +242,26 @@ describe('routes: /batch', () => {
         expect(response.body.data).toEqual(mockResponseJobList.data.data);
     });
 
-    test('get /batch/users/{userId}/jobs should throw exception when the userId is invalid', async () => {
+    test('get /batch/jobs should throw exception when the userId is invalid', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
+            res.locals.authResponse = {
+                authenticated: true,
+                cause: null,
+                username: 'username',
+                userDetailsData: {
+                    authorizedPricingTransformationEnabledBunitList: ['019'],
+                    authorizedBatchEnabledBunitList: ['001', '002'],
+                    email: 'firstName.secondName@syscolabs.com',
+                    firstName: 'firstName',
+                    jobTitle: 'jobTitle',
+                    lastName: 'secondName',
+                    username: 'test12345',
+                },
+            };
             next();
         });
         const response = await request(app.app)
-            .get('/v1/pci-bff/batch/users/test12345/jobs')
+            .get('/v1/pci-bff/batch/jobs')
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
         expect(response.headers[CORRELATION_ID_HEADER]);
@@ -242,12 +270,26 @@ describe('routes: /batch', () => {
         expect(response.body.message).toEqual(ERROR_IN_GETTING_BATCH_JOBS);
     });
 
-    test('get /batch/users/{userId}/jobs should throw exception client error occurred', async () => {
+    test('get /batch/jobs should throw exception client error occurred', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
+            res.locals.authResponse = {
+                authenticated: true,
+                cause: null,
+                username: 'username',
+                userDetailsData: {
+                    authorizedPricingTransformationEnabledBunitList: ['019'],
+                    authorizedBatchEnabledBunitList: ['001', '002'],
+                    email: 'firstName.secondName@syscolabs.com',
+                    firstName: 'firstName',
+                    jobTitle: 'jobTitle',
+                    lastName: 'secondName',
+                    username: 'test1234',
+                },
+            };
             next();
         });
         const response = await request(app.app)
-            .get('/v1/pci-bff/batch/users/test1234/jobs?pageSize')
+            .get('/v1/pci-bff/batch/jobs?pageSize')
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
         expect(response.headers[CORRELATION_ID_HEADER]);
@@ -255,12 +297,26 @@ describe('routes: /batch', () => {
         expect(response.body.errorCode).toEqual(BATCH_API_DATA_FETCH_ERROR_CODE);
     });
 
-    test('delete /batch/users/{userId}/jobs/{jobId} should delete file list when no errors', async () => {
+    test('delete /batch/jobs/{jobId} should delete file list when no errors', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
+            res.locals.authResponse = {
+                authenticated: true,
+                cause: null,
+                username: 'username',
+                userDetailsData: {
+                    authorizedPricingTransformationEnabledBunitList: ['019'],
+                    authorizedBatchEnabledBunitList: ['001', '002'],
+                    email: 'firstName.secondName@syscolabs.com',
+                    firstName: 'firstName',
+                    jobTitle: 'jobTitle',
+                    lastName: 'secondName',
+                    username: 'test1234',
+                },
+            };
             next();
         });
         const response = await request(app.app)
-            .delete('/v1/pci-bff/batch/users/test1234/jobs/11112222')
+            .delete('/v1/pci-bff/batch/jobs/11112222')
             .send(mockRequestDownloadSignedUrl)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.OK);
@@ -270,12 +326,26 @@ describe('routes: /batch', () => {
         expect(response.body.data).toEqual(mockResponseDeleteJob.data.data);
     });
 
-    test('delete /batch/users/{userId}/jobs/{jobId} should throw exception when userId is invalid ', async () => {
+    test('delete /batch/jobs/{jobId} should throw exception when userId is invalid ', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
+            res.locals.authResponse = {
+                authenticated: true,
+                cause: null,
+                username: 'username',
+                userDetailsData: {
+                    authorizedPricingTransformationEnabledBunitList: ['019'],
+                    authorizedBatchEnabledBunitList: ['001', '002'],
+                    email: 'firstName.secondName@syscolabs.com',
+                    firstName: 'firstName',
+                    jobTitle: 'jobTitle',
+                    lastName: 'secondName',
+                    username: 'test12345',
+                },
+            };
             next();
         });
         const response = await request(app.app)
-            .delete('/v1/pci-bff/batch/users/test12345/jobs/11112222')
+            .delete('/v1/pci-bff/batch/jobs/11112222')
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
         expect(response.headers[CORRELATION_ID_HEADER]);
@@ -284,12 +354,26 @@ describe('routes: /batch', () => {
         expect(response.body.message).toEqual(ERROR_IN_DELETING_BATCH_JOBS);
     });
 
-    test('delete /batch/users/{userId}/jobs/{jobId} should throw exception when client error', async () => {
+    test('delete /batch/jobs/{jobId} should throw exception when client error', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
+            res.locals.authResponse = {
+                authenticated: true,
+                cause: null,
+                username: 'username',
+                userDetailsData: {
+                    authorizedPricingTransformationEnabledBunitList: ['019'],
+                    authorizedBatchEnabledBunitList: ['001', '002'],
+                    email: 'firstName.secondName@syscolabs.com',
+                    firstName: 'firstName',
+                    jobTitle: 'jobTitle',
+                    lastName: 'secondName',
+                    username: 'test1234',
+                },
+            };
             next();
         });
         const response = await request(app.app)
-            .delete('/v1/pci-bff/batch/users/test1234/jobs/0')
+            .delete('/v1/pci-bff/batch/jobs/0')
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
         expect(response.headers[CORRELATION_ID_HEADER]);
