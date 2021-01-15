@@ -122,7 +122,7 @@ class AuthorizationService {
         const {userDetailsData} = authResponse;
 
         if (userDetailsData && Object.keys(userDetailsData).length > 0) {
-            const authorizedBunitListForTheUser = userDetailsData.authorizedBunitList.authorizedPricingTransformationEnabledBunitList;
+            const authorizedBunitListForTheUser = userDetailsData.authorizedPricingTransformationEnabledBunitList;
             const filteredOutBunits = this.matchedValidBusinessUnitFromGivenList(requestedBunit, authorizedBunitListForTheUser);
             if (filteredOutBunits.length > 0) {
                 logger.info(`User's requested opco: [${requestedBunit}] matched with his authorized opcos, so request is authorized`);
