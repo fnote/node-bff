@@ -26,7 +26,7 @@ export default () => {
     /**
      * Get write signed urls for input bucket
      */
-    batchRouter.post('/signed-url/input', async (req, res) => {
+    batchRouter.post('/files/signed-url/input', async (req, res) => {
         try {
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
 
@@ -52,7 +52,7 @@ export default () => {
     /**
      * Get read signed urls for output bucket
      */
-    batchRouter.post('/signed-url/output', async (req, res) => {
+    batchRouter.post('/files/signed-url/output', async (req, res) => {
         try {
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
 
