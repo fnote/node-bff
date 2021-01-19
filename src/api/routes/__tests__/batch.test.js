@@ -41,7 +41,7 @@ jest.mock('../../../initializer', () => ({
 }));
 
 describe('routes: /batch', () => {
-    test('post /batch/signed-url/input should return write signed-urls when the source is input', async () => {
+    test('post /batch/files/signed-url/input should return write signed-urls when the source is input', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
                 authenticated: true,
@@ -60,7 +60,7 @@ describe('routes: /batch', () => {
             next();
         });
         const response = await request(app.app)
-            .post('/v1/pci-bff/batch/signed-url/input')
+            .post('/v1/pci-bff/batch/files/signed-url/input')
             .send(mockRequestUploadSignedUrl)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.OK);
@@ -70,7 +70,7 @@ describe('routes: /batch', () => {
         expect(response.body.data).toEqual(mockResponseSignedUrl.data.data);
     });
 
-    test('post /batch/signed-url/output should return read signed-urls when the source is output', async () => {
+    test('post /batch/files/signed-url/output should return read signed-urls when the source is output', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
                 authenticated: true,
@@ -89,7 +89,7 @@ describe('routes: /batch', () => {
             next();
         });
         const response = await request(app.app)
-            .post('/v1/pci-bff/batch/signed-url/output')
+            .post('/v1/pci-bff/batch/files/signed-url/output')
             .send(mockRequestDownloadSignedUrl)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.OK);
@@ -99,7 +99,7 @@ describe('routes: /batch', () => {
         expect(response.body.data).toEqual(mockResponseSignedUrl.data.data);
     });
 
-    test('post /batch/signed-url/input should throw exception when client error', async () => {
+    test('post /batch/files/signed-url/input should throw exception when client error', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
                 authenticated: true,
@@ -118,7 +118,7 @@ describe('routes: /batch', () => {
             next();
         });
         const response = await request(app.app)
-            .post('/v1/pci-bff/batch/signed-url/input')
+            .post('/v1/pci-bff/batch/files/signed-url/input')
             .send(mockErrorRequestSignedUrl)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -126,7 +126,7 @@ describe('routes: /batch', () => {
         expect(response.body.errorCode).toEqual(BATCH_API_DATA_FETCH_ERROR_CODE);
     });
 
-    test('post /batch/signed-url/output should throw exception when client error', async () => {
+    test('post /batch/files/signed-url/output should throw exception when client error', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
                 authenticated: true,
@@ -145,7 +145,7 @@ describe('routes: /batch', () => {
             next();
         });
         const response = await request(app.app)
-            .post('/v1/pci-bff/batch/signed-url/output')
+            .post('/v1/pci-bff/batch/files/signed-url/output')
             .send(mockErrorRequestSignedUrl)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -153,7 +153,7 @@ describe('routes: /batch', () => {
         expect(response.body.errorCode).toEqual(BATCH_API_DATA_FETCH_ERROR_CODE);
     });
 
-    test('post /batch/signed-url/input should throw exception when request body is invalid', async () => {
+    test('post /batch/files/signed-url/input should throw exception when request body is invalid', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
                 authenticated: true,
@@ -173,7 +173,7 @@ describe('routes: /batch', () => {
         });
         const invalidRequestBody = {};
         const response = await request(app.app)
-            .post('/v1/pci-bff/batch/signed-url/input')
+            .post('/v1/pci-bff/batch/files/signed-url/input')
             .send(invalidRequestBody)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
@@ -183,7 +183,7 @@ describe('routes: /batch', () => {
         expect(response.body.cause).toEqual(EMPTY_REQUEST_BODY);
     });
 
-    test('post /batch/signed-url/output should throw exception when request body is invalid', async () => {
+    test('post /batch/files/signed-url/output should throw exception when request body is invalid', async () => {
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
                 authenticated: true,
@@ -205,7 +205,7 @@ describe('routes: /batch', () => {
             fileNames: '',
         };
         const response = await request(app.app)
-            .post('/v1/pci-bff/batch/signed-url/output')
+            .post('/v1/pci-bff/batch/files/signed-url/output')
             .send(invalidRequestBody)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.BAD_REQUEST);
