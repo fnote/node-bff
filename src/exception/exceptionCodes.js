@@ -8,7 +8,6 @@ export const GENERAL_EXCEPTION = 4000;
 
 export const HTTP_CLIENT_EXCEPTION = 2000;
 export const API_CENTRAL_EXCEPTION = 2001;
-export const BATCH_ALB_EXCEPTION = 2002;
 
 /* Specific error codes */
 export const PCI_PRICE_DATA_FETCH_ERROR_CODE = 2020;
