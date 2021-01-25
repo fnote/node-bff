@@ -89,13 +89,13 @@ functions:
     events:
       - alb:
           listenerArn: !Ref LoadBalancerListenerHTTPS
-          priority: 4
+          priority: 2
           conditions:
             path: /v1/pci-bff/auth/login
           authorizer: 'cognitoLoginAuth'
       - alb:
           listenerArn: !Ref LoadBalancerListenerHTTPS
-          priority: 5
+          priority: 3
           conditions:
             path: /v1/*
           authorizer: 'cognitoAuth'
