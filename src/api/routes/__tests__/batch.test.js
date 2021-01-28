@@ -24,6 +24,7 @@ import {
 } from '../../../exception/exceptionCodes';
 import {
     mockErrorRequestSignedUrl,
+    mockErrorRequestUploadSignedUrl,
     mockRequestDownloadSignedUrl,
     mockRequestUploadSignedUrl,
     mockResponseDeleteJob,
@@ -119,7 +120,7 @@ describe('routes: /batch', () => {
         });
         const response = await request(app.app)
             .post('/v1/pci-bff/batch/files/signed-url/input')
-            .send(mockErrorRequestSignedUrl)
+            .send(mockErrorRequestUploadSignedUrl)
             .set('Accept', 'application/json');
         expect(response.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
         expect(response.body.status).toEqual(ERROR);

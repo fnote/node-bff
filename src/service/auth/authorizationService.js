@@ -84,8 +84,8 @@ class AuthorizationService {
                 && authorizedBunitList.authorizedBatchEnabledBunitList.length === 0) {
                 // Opco attribute matches one of the opcos but is not a pricing transformation enabled opco or batch enabled opco
                 // so then he has access to no matching opco
-                logger.info(`User's opco: ${opcoAttributeBunit}` +
-                    ` does not match with pricing transformation/ batch enabled opcos, so giving access to no opco`);
+                logger.info(`User's opco: ${opcoAttributeBunit}`
+                    + ' does not match with pricing transformation/ batch enabled opcos, so giving access to no opco');
                 return authorizedBunitList;
             }
                 if (authorizedBunitList.authorizedPricingTransformationEnabledBunitList.length > 0) {
@@ -93,8 +93,8 @@ class AuthorizationService {
                     logger.info(`User's opco: ${opcoAttributeBunit} matches one of the pricing transformation enabled opco then giving access to that opco`);
                 } else {
                     // Opco attribute matches one of the opcos but is not a pricing transformation enabled opco
-                    logger.info(`User's opco: ${opcoAttributeBunit}` +
-                    `does not match with pricing transformation enabled opcos, so giving access to no pricing transformation enabled opco`);
+                    logger.info(`User's opco: ${opcoAttributeBunit}`
+                        + 'does not match with pricing transformation enabled opcos, so giving access to no pricing transformation enabled opco');
                 }
                 if (authorizedBunitList.authorizedBatchEnabledBunitList.length > 0) {
                     // Opco attribute matches one of the opcos and also is a batch enabled opco then return that opco

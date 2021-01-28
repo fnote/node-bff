@@ -1111,10 +1111,9 @@ export const pciPricesMockDataPriceSourceId = {
 
 export const mockRequestUploadSignedUrl = {
     fileNames: [
-        'fileName1',
-        'fileName2',
+        {fileName: 'fileName1', contentType: ''},
+        {fileName: 'fileName2.txt', contentType: 'text/plain'},
     ],
-    contentType: 'text/plain',
 };
 
 export const mockRequestDownloadSignedUrl = {
@@ -1126,10 +1125,9 @@ export const mockRequestDownloadSignedUrl = {
 
 export const mockBatchApiUploadUrlRequest = {
     fileNames: [
-        'fileName1',
-        'fileName2',
+        {fileName: 'fileName1', contentType: ''},
+        {fileName: 'fileName2.txt', contentType: 'text/plain'},
     ],
-    contentType: 'text/plain',
     userId: 'test1234',
     authorizedBunitList: ['001', '002'],
 };
@@ -1146,14 +1144,18 @@ export const mockErrorRequestSignedUrl = {
     fileNames: [
         'error_fileName1',
     ],
-    contentType: 'text/plain',
+};
+
+export const mockErrorRequestUploadSignedUrl = {
+    fileNames: [
+        {fileName: 'error_fileName1', contentType: ''},
+    ],
 };
 
 export const mockErrorBatchFileUploadApiRequest = {
     fileNames: [
-        'error_fileName1',
+        {fileName: 'error_fileName1', contentType: ''},
     ],
-    contentType: 'text/plain',
     userId: 'test1234',
     authorizedBunitList: ['001', '002'],
 

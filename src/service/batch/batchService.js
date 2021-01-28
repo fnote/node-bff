@@ -16,7 +16,6 @@ class BatchService {
     async generateFileUploadSignedUrl(requestBody) {
         const request = {
             fileNames: requestBody.fileNames,
-            contentType: requestBody.contentType,
             userId: requestBody.userId,
             authorizedBunitList: requestBody.authorizedBunitList,
         };
