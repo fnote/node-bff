@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "serverless offline start --stage local --httpPort 4000 ",
-    "deploy": "serverless deploy -v --stage dev",
+    "deploy": "serverless deploy -v --stage exe",
     "package:dev": "serverless package --stage dev",
     "package:stg": "serverless package --stage stg",
     "package:exe": "serverless package --stage exe",
