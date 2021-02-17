@@ -9,4 +9,11 @@ export default class DatabaseException extends Error {
         this.cause = cause;
         this.errorDetails.message = error;
     }
+
+    getStatus() {
+        if (this.errorDetails.message) {
+            return this.errorDetails.message;
+        }
+        return -1;
+    }
 }
