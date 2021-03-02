@@ -4,6 +4,7 @@ import InvalidRequestException from '../../exception/invalidRequestException';
 import {INVALID_REQUEST_BODY} from '../../util/constants';
 import {PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE} from '../../exception/exceptionCodes';
 import {
+    mockModifiedVolumePricingTiers,
     mockPCIPricingErrorResponse,
     mockProductPricingErrorResponse,
     pciModifiedPriceMockPayload1,
@@ -137,5 +138,24 @@ describe('Aggregated Pricing Data Service checkCPResponseErrorStatus', () => {
             expect(e.errorDetails.message).toEqual('Failed to fetch data from Cloud Pricing Endpoint, Product not found PCI Pricing');
             expect(e.errorCode).toEqual('801');
         }
+    });
+});
+
+describe('Aggregated Pricing Data Service sort pricing tiers', () => {
+    test('should return sorted pricing tiers', async () => {
+        const sortedVolumeTierList = AggregatedPricingDataService.sortVolumeTierList(mockModifiedVolumePricingTiers);
+        expect(sortedVolumeTierList[0].eligibility.lowerBound).toBeLessThan(sortedVolumeTierList[1].eligibility.lowerBound);
+        expect(sortedVolumeTierList[0].eligibility.lowerBound).toBeLessThan(sortedVolumeTierList[2].eligibility.lowerBound);
+        expect(sortedVolumeTierList[1].eligibility.lowerBound).toBeLessThan(sortedVolumeTierList[2].eligibility.lowerBound);
+    });
+
+    test('should return undefined when empty list passed', async () => {
+        const sortedVolumeTierList = AggregatedPricingDataService.sortVolumeTierList([]);
+        expect(sortedVolumeTierList).toEqual(undefined);
+    });
+
+    test('should return undefined when list is undefined', async () => {
+        const sortedVolumeTierList = AggregatedPricingDataService.sortVolumeTierList(undefined);
+        expect(sortedVolumeTierList).toEqual(undefined);
     });
 });

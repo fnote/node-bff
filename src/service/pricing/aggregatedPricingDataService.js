@@ -49,9 +49,21 @@ class AggregatedPricingDataService {
                 }
                 modifiedVolumeTierList.push(modifiedTier);
             });
-            pciPricesPayload.products[0].volumePricingTiers = modifiedVolumeTierList;
+            pciPricesPayload.products[0].volumePricingTiers = this.sortVolumeTierList(modifiedVolumeTierList);
         }
         return pciPricesPayload;
+    }
+
+    /**
+     * This fuction sort volume pricing tiers based on the tier bounds
+     * @returns [] sorted volumeTierList
+     * @param volumeTiersList: pricing volume tier list
+     */
+    sortVolumeTierList(volumeTiersList) {
+        if (volumeTiersList && Object.keys(volumeTiersList).length !== 0) {
+            return volumeTiersList.sort((a, b) => a.eligibility.lowerBound - b.eligibility.lowerBound);
+        }
+        return undefined;
     }
 
     getPriceSourceName(pciPricesPayload) {
