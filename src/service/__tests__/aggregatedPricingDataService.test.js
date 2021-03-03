@@ -151,11 +151,11 @@ describe('Aggregated Pricing Data Service sort pricing tiers', () => {
 
     test('should return undefined when empty list passed', async () => {
         const sortedVolumeTierList = AggregatedPricingDataService.sortVolumeTierList([]);
-        expect(sortedVolumeTierList).toEqual(undefined);
+        expect(sortedVolumeTierList).toEqual([]);
     });
 
     test('should return undefined when list is undefined', async () => {
         const sortedVolumeTierList = AggregatedPricingDataService.sortVolumeTierList(undefined);
-        expect(sortedVolumeTierList).toEqual(undefined);
+        expect(sortedVolumeTierList).toEqual([]);
     });
 });

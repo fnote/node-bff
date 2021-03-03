@@ -63,7 +63,7 @@ class AggregatedPricingDataService {
         if (volumeTiersList && Object.keys(volumeTiersList).length !== 0) {
             return volumeTiersList.sort((a, b) => a.eligibility.lowerBound - b.eligibility.lowerBound);
         }
-        return undefined;
+        return [];
     }
 
     getPriceSourceName(pciPricesPayload) {
