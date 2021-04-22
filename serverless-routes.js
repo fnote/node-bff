@@ -1,12 +1,16 @@
 const GET = 'get';
 const POST = 'post';
+const DELETE = 'delete';
 const version = '/v1';
 const appName = '/pci-bff';
 
 const routes = [
   { path: '/', method: GET },
   { path: '/support/healthcheck', method: GET},
-  { path: '/batch/signed-url/{source}', method: POST },
+  { path: '/batch/files/signed-url/input', method: POST },
+  { path: '/batch/files/signed-url/output', method: POST },
+  { path: '/batch/jobs', method: GET },
+  { path: '/batch/jobs/{jobId}', method: DELETE },
   { path: '/auth/login', method: GET },
   { path: '/auth/logout', method: GET },
   { path: '/auth/user-details', method: GET },

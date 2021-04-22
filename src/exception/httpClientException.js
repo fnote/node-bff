@@ -40,6 +40,10 @@ export default class HttpClientException extends Error {
         this.errorCode = errorCode;
     }
 
+    getErrorCode() {
+        return this.errorCode;
+    }
+
     getStatus() {
         if (this.errorDetails.response && this.errorDetails.response.status) {
             return this.errorDetails.response.status;

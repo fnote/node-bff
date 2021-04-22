@@ -9,13 +9,13 @@ import * as HttpStatus from 'http-status-codes';
 import {jest} from '@jest/globals';
 import app from '../../../app';
 import {
-    pricingDataMockRequest,
-    cloudPricingErrorMockRequest,
     aggregatedPricingMockResponst,
+    cloudPricingErrorMockRequest,
+    pricingDataMockRequest,
     pricingDataMockResponseThrowErrorForCloudPricingCall,
 } from '../../../config/test.config';
-import { ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY } from '../../../util/constants';
-import { PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE } from '../../../exception/exceptionCodes';
+import {INVALID_REQUEST_BODY} from '../../../util/constants';
+import {PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE} from '../../../exception/exceptionCodes';
 
 jest.mock('../../../httpClient/httpClient');
 jest.mock('../../../util/accessTokenGenerator');
@@ -52,7 +52,7 @@ describe('routes: /pricing-data', () => {
                 .post('/v1/pci-bff/pricing/pricing-data')
                 .send({})
                 .set('Accept', 'application/something');
-            expect(res.body.cause).toEqual(ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY);
+            expect(res.body.cause).toEqual(INVALID_REQUEST_BODY);
             expect(res.body.errorCode).toEqual(PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE);
             expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
         });

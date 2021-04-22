@@ -10,9 +10,10 @@ custom:
     includeModules: true   # Node modules configuration for packaging
     packager: 'npm'   # Packager that will be used to package your external modules
     excludeFiles: src/**/*.test.js # Provide a glob for files to ignore
-  custom:
-    serverless-offline:
-      httpPort: 4000
+  serverless-offline:
+    httpPort: 4000
+    # to locally up this along with batch-api, enable this lambda port
+#    lambdaPort: 3002
   environments:
     local: LOCAL
     dev: DEV

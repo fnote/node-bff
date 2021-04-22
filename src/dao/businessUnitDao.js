@@ -14,7 +14,7 @@ class BusinessUnitDao {
         try {
             connection = await getConnection();
 
-            const [rows] = await connection.execute('SELECT bunit_id, bunit_name, periscope_on from business_unit');
+            const [rows] = await connection.execute('SELECT bunit_id, bunit_name, batch_on, periscope_on from business_unit');
 
             return rows;
         } catch (e) {

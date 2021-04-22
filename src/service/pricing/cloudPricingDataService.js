@@ -11,7 +11,7 @@ import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetc
 import { getCorrelationId } from '../../util/correlationIdGenerator';
 import {
     HTTP_POST, ERROR_IN_FETCHING_CLOUD_PRICING_DATA,
-    APPLICATION_JSON, CORRELATION_ID_HEADER, ORDER_PRICE_TYPE_HAND
+    APPLICATION_JSON, CORRELATION_ID_HEADER, ORDER_PRICE_TYPE_HAND,
 } from '../../util/constants';
 
 class CloudPricingDataService {
@@ -47,19 +47,19 @@ class CloudPricingDataService {
         const body = {
             businessUnitNumber: `${reqBody.businessUnitNumber}`,
             customerAccount: `${reqBody.customerAccount}`,
-            priceRequestDate: `${reqBody.priceRequestDate}`
+            priceRequestDate: `${reqBody.priceRequestDate}`,
         };
 
         const product = { ...reqBody.product, quantity: `${reqBody.requestedQuantity}` };
 
-        if(reqBody.orderPrice) {
+        if (reqBody.orderPrice) {
             product.orderPrice = reqBody.orderPrice;
-            product.orderPriceType = reqBody.orderPriceType ? reqBody.orderPriceType : ORDER_PRICE_TYPE_HAND
+            product.orderPriceType = reqBody.orderPriceType ? reqBody.orderPriceType : ORDER_PRICE_TYPE_HAND;
         }
 
         body.products = [product];
 
-        logger.debug("Request to PCI-Prices: " + JSON.stringify(body));
+        logger.debug(`Request to PCI-Prices: ${JSON.stringify(body)}`);
 
         const headers = {
             'Content-type': APPLICATION_JSON,

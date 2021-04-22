@@ -4,42 +4,33 @@
  * @author: gkar5861 on 23/06/20
  * */
 
+import * as HttpStatus from 'http-status-codes';
 import {
-    cloudPricingPCIMockRequest,
+    cloudPCIPricingMockResponse,
+    cloudPricingDataMockRequest,
     cloudPricingErrorMockRequest,
     cloudPricingMockRequest,
     cloudPricingMockRequestForErrorScenario,
     cloudPricingMockResponse,
     cloudPricingMockResponseForAggregatedErrorPricingCall,
     cloudPricingMockResponseForAggregatedPricingCall,
-    cloudPricingDataMockRequest,
+    cloudPricingPCIMockRequest,
+    customerInfoMockResponse,
+    mockBatchApiDownloadUrlRequest,
+    mockBatchApiUploadUrlRequest,
+    mockErrorBatchFileDownloadApiRequest,
+    mockErrorBatchFileUploadApiRequest,
+    mockResponseDeleteJob,
+    mockResponseJobList,
+    mockResponseSignedUrl,
     pricingDataMockRequestForErrorOnCloudPricingCall,
     pricingDataMockRequestThrowErrorForCloudPricingCall,
     productInfoMockResponse,
-    cloudPCIPricingMockResponse, customerInfoMockResponse,
 } from '../../config/test.config';
 import HttpClientException from '../../exception/httpClientException';
-import {HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
-
-const batchApiMockRequestBody = {
-    fileNames: [
-        'fileName1',
-        'fileName2',
-    ],
-};
-
-const batchApiMockResponse = {
-    data: [
-        {
-            fileName: 'fileName1',
-            putUrl: 'https://batch-output.s3.amazonaws.com/fileName1?AWSAccessKeyId=ASIAQRLXWZJ',
-        },
-        {
-            fileName: 'fileName2',
-            putUrl: 'https://batch-output.s3.amazonaws.com/fileName2?AWSAccessKeyId=ASIAQRLXWZJ',
-        },
-    ],
-};
+import {BATCH_API_DATA_FETCH_ERROR_CODE, HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
+import {HTTP_DELETE, HTTP_GET, HTTP_POST} from '../../util/constants';
+import InvalidRequestException from '../../exception/invalidRequestException';
 
 class HttpClient {
     async makeRequest(method, URL, data) {
@@ -63,17 +54,48 @@ class HttpClient {
             },
 
         };
+        if (URL.includes('/batch/files/signed-url/input') && method === HTTP_POST
+            && JSON.stringify(data) === JSON.stringify(mockBatchApiUploadUrlRequest)) {
+            return mockResponseSignedUrl;
+        }
+        if (URL.includes('/batch/files/signed-url/output') && method === HTTP_POST
+            && JSON.stringify(data) === JSON.stringify(mockBatchApiDownloadUrlRequest)) {
+            return mockResponseSignedUrl;
+        }
+        if (URL.includes('/batch/files/signed-url/input') && method === HTTP_POST
+            && JSON.stringify(data) === JSON.stringify(mockErrorBatchFileUploadApiRequest)) {
+            throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
+        }
+        if (URL.includes('/batch/files/signed-url/output') && method === HTTP_POST
+            && JSON.stringify(data) === JSON.stringify(mockErrorBatchFileDownloadApiRequest)) {
+            throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
+        }
+        if (URL.includes('/batch/users/test1234/jobs?pageSize=10&offSet=10') && method === HTTP_GET) {
+            return mockResponseJobList;
+        }
+        if (URL.includes('/batch/users/test12345/jobs') && method === HTTP_GET) {
+            throw new InvalidRequestException('Bad request', HttpStatus.BAD_REQUEST, BATCH_API_DATA_FETCH_ERROR_CODE);
+        }
+        if (URL.includes('/batch/users/test1234/jobs?pageSize') && method === HTTP_GET) {
+            throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
+        }
+        if (URL.includes('/batch/users/test1234/jobs/11112222') && method === HTTP_DELETE) {
+            return mockResponseDeleteJob;
+        }
+        if (URL.includes('/batch/users/test1234/jobs/0') && method === HTTP_DELETE) {
+            throw new HttpClientException('Http client exception', BATCH_API_DATA_FETCH_ERROR_CODE);
+        }
+        if (URL.includes('/batch/users/test12345/jobs/11112222') && method === HTTP_DELETE) {
+            throw new InvalidRequestException('Bad request', HttpStatus.BAD_REQUEST, BATCH_API_DATA_FETCH_ERROR_CODE);
+        }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingErrorMockRequest.body)) {
-            return { data2: cloudPricingMockResponse };
+            return {data2: cloudPricingMockResponse};
         }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
-            return { data: cloudPricingMockResponse };
+            return {data: cloudPricingMockResponse};
         }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingPCIMockRequest.body)) {
             return { data: cloudPCIPricingMockResponse };
-        }
-        if (JSON.stringify(data) === JSON.stringify(batchApiMockRequestBody)) {
-            return batchApiMockResponse;
         }
         if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
             return cloudPricingMockResponse;
@@ -95,7 +117,7 @@ class HttpClient {
             throw new HttpClientException({
                 response: {
                     data: { message: 'HTTP_CLIENT_EXCEPTION', code: 222 },
-                    status: 'error satatus',
+                    status: 'error status',
                     headers: 'error headers',
                 },
             });
