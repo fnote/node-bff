@@ -38,13 +38,13 @@ export const getCloudPricingConfig = () => ({
 
 export const getProductInfoApiConfig = () => ({
     CONFIG: {
-        productInfoApiUrl: `${process.env.API_CENTRAL_BASE_URL}/sm/product-info/1.0.0`,
+        productInfoApiUrl: `${process.env.API_CENTRAL_BASE_URL}/services/enterprise-product-information-service-v1`,
     },
 });
 
 export const getCustomerInfoApiConfig = () => ({
     CONFIG: {
-        customerInfoApiUrl: `${process.env.API_CENTRAL_BASE_URL}/sm/customer/1.0.0`,
+        customerInfoApiUrl: `${process.env.API_CENTRAL_BASE_URL}/services/enterprise-customer-service-v1`,
     },
 });
 
