@@ -1109,6 +1109,77 @@ export const pciPricesMockDataPriceSourceId = {
     ],
 };
 
+export const mockModifiedVolumePricingTiers = [
+    {
+        customerPrequalifiedPrice: 21.99,
+        unitPrice: 21.99,
+        netPrice: 21.99,
+        eligibility: {
+            operator: '>=',
+            lowerBound: 9,
+        },
+        agreements: [],
+        discounts: [
+            {
+                id: '6463',
+                type: 'PREQUALIFIED',
+                name: 'CASE_VOLUME_DISCOUNT',
+                amountType: 'Factor',
+                amount: 0.98,
+                priceAdjustment: -0.5,
+                effectiveFrom: '19000101',
+                effectiveTo: '21000101',
+            },
+        ],
+    },
+    {
+        customerPrequalifiedPrice: 22.14,
+        unitPrice: 22.14,
+        netPrice: 22.14,
+        eligibility: {
+            operator: 'Between',
+            lowerBound: 6,
+            upperBound: 8,
+        },
+        agreements: [],
+        discounts: [
+            {
+                id: '6463',
+                type: 'PREQUALIFIED',
+                name: 'CASE_VOLUME_DISCOUNT',
+                amountType: 'Factor',
+                amount: 0.99,
+                priceAdjustment: -0.25,
+                effectiveFrom: '19000101',
+                effectiveTo: '21000101',
+            },
+        ],
+    },
+    {
+        customerPrequalifiedPrice: 22.99,
+        unitPrice: 22.99,
+        netPrice: 22.99,
+        eligibility: {
+            operator: 'Between',
+            lowerBound: 2,
+            upperBound: 5,
+        },
+        agreements: [],
+        discounts: [
+            {
+                id: '6463',
+                type: 'PREQUALIFIED',
+                name: 'CASE_VOLUME_DISCOUNT',
+                amountType: 'Factor',
+                amount: 0.99,
+                priceAdjustment: -0.25,
+                effectiveFrom: '19000101',
+                effectiveTo: '21000101',
+            },
+        ],
+    },
+];
+
 export const mockRequestUploadSignedUrl = {
     fileNames: [
         {fileName: 'fileName1', contentType: ''},
