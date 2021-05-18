@@ -34,10 +34,7 @@ export const getAccessToken = async (expired = false) => {
                     Accept: 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded',
                 };
-
-                const requestBody = {
-                        grant_type: 'client_credentials',
-                };
+                const requestBody = 'grant_type=client_credentials';
 
                 const res = await httpClient.makeRequest('post', URL, requestBody, headers);
                 tokenGeneratedAt = Date.now();

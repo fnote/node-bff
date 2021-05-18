@@ -21,7 +21,7 @@ jest.mock('../../../initializer', () => ({
 }));
 
 describe('routes: /support', () => {
-    test('get /support/healthcheck should return project details when the app is up and running', async () => {
+    test('get /support/healthcheck should return only the appName and appVersion when the app is up and running', async () => {
         const response = await request(app.app)
             .get('/v1/pci-bff/support/healthcheck')
             .set('Accept', 'application/json');
@@ -29,5 +29,15 @@ describe('routes: /support', () => {
         expect(response.body).toBeDefined();
         expect(response.body.appVersion).toEqual(CLOUD_PCI_BFF_VERSION);
         expect(response.body.appName).toEqual(CLOUD_PCI_BFF);
+    });
+
+    test('get /support/status should return project details when the app is up and running', async () => {
+            const response = await request(app.app)
+                .get('/v1/pci-bff/support/status')
+                .set('Accept', 'application/json');
+            expect(response.status).toEqual(HttpStatus.OK);
+            expect(response.body).toBeDefined();
+            expect(response.body.appVersion).toEqual(CLOUD_PCI_BFF_VERSION);
+            expect(response.body.appName).toEqual(CLOUD_PCI_BFF);
     });
 });
