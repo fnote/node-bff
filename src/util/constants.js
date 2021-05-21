@@ -31,6 +31,7 @@ export const ERROR_IN_FETCHING_CLOUD_PRICING_DATA = 'Failed to fetch data from C
 
 // whitelisted url paths
 export const AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK = '/v1/pci-bff/support/healthcheck';
+export const AUTHENTICATION_NOT_REQUIRED_STATUS_CHECK = '/v1/pci-bff/support/status';
 
 export const LOGIN_URL = '/v1/pci-bff/auth/login';
 export const LOGOUT_URL = '/v1/pci-bff/auth/logout';
