@@ -54,7 +54,7 @@ class AuthenticateService {
                 }
                 return this.validateToken(this.pems, accessToken, req, res);
             }
-                return this.validateToken(this.pems, accessToken, req, res);
+            return this.validateToken(this.pems, accessToken, req, res);
         } catch (e) {
             const errorMessage = 'Unexpected error occurred while validating the token';
             logger.error(`${errorMessage}: ${e} stacktrace: ${e.stackTrace}`);
@@ -117,10 +117,10 @@ class AuthenticateService {
     }
 
     sendUnauthenticatedErrorResponse = (cause) => ({
-            authenticated: false,
-            username: null,
-            cause,
-        })
+        authenticated: false,
+        username: null,
+        cause,
+    })
 
     // eslint-disable-next-line no-unused-vars
     decodeUserClaimToken = (req, res) => {
@@ -147,11 +147,13 @@ class AuthenticateService {
                         return this.sendUnauthenticatedErrorResponse('Authorized OPCO given in the authentication token is invalid');
                     }
 
-                    let authorizedBunitList;
+                    let authorizedPricingTransformationEnabledBunitList;
+                    let authorizedBatchEnabledBunitList;
                     let selectedUserRole;
                     if (Number.isNaN(opcoParsed)) {
                         logger.warn(`User's opco attribute: ${opcoParsed} is not numeric parsable, so returning empty set of authorized opco list`);
-                        authorizedBunitList = [];
+                        authorizedPricingTransformationEnabledBunitList = [];
+                        authorizedBatchEnabledBunitList = [];
                     } else {
                         // User roles can come in two formats
                         // If it's single role: it'll come like a string "rsm"
@@ -175,12 +177,14 @@ class AuthenticateService {
                             logger.error(`Error in parsing the user role value: ${userRoles}`);
                             selectedUserRole = userRoles;
                         }
-                        authorizedBunitList = AuthorizationService
-                            .getAuthorizedBusinessUnits(opcoString, selectedUserRole);
+                        const authorizedBunitList = AuthorizationService.getAuthorizedBusinessUnits(opcoString, selectedUserRole);
+                        authorizedPricingTransformationEnabledBunitList = authorizedBunitList.authorizedPricingTransformationEnabledBunitList;
+                        authorizedBatchEnabledBunitList = authorizedBunitList.authorizedBatchEnabledBunitList;
                     }
 
                     const userDetailsData = {
-                        authorizedBunitList,
+                        authorizedPricingTransformationEnabledBunitList,
+                        authorizedBatchEnabledBunitList,
                         firstName: decodedPayloadFromJwt.given_name,
                         lastName: decodedPayloadFromJwt.family_name,
                         username,
@@ -202,11 +206,11 @@ class AuthenticateService {
                         userDetailsData,
                     };
                 }
-                    logger.error(`Username in the auth token is not in the expected format: ${username}`);
-                    return this.sendUnauthenticatedErrorResponse('Username given in the authentication token is invalid');
+                logger.error(`Username in the auth token is not in the expected format: ${username}`);
+                return this.sendUnauthenticatedErrorResponse('Username given in the authentication token is invalid');
             }
-                logger.error('Username is not present in the auth token');
-                return this.sendUnauthenticatedErrorResponse('Username is not present in the auth token');
+            logger.error('Username is not present in the auth token');
+            return this.sendUnauthenticatedErrorResponse('Username is not present in the auth token');
         }
     }
 }

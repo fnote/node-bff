@@ -5,45 +5,83 @@
  * */
 
 import * as HttpStatus from 'http-status-codes';
-import validateRequestBody from '../validateRequestBody';
+import {describe, test} from '@jest/globals';
+import {isEmptyRequestBody, validateRequestBody} from '../validateRequest';
 import InvalidRequestException from '../../exception/invalidRequestException';
-import {ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY} from '../../util/constants';
+import {EMPTY_REQUEST_BODY, INVALID_REQUEST_BODY} from '../../util/constants';
+import {EMPTY_REQUEST_BODY_CODE, INVALID_REQUEST_BODY_CODE} from '../../exception/exceptionCodes';
 
 const validRequestBody = {
     fileNames: [
         'fileName1',
         'fileName2',
     ],
+    contentType: 'text/plain',
+    userId: 'test1234',
+    authorizedBunitList: ['001', '002'],
 };
+
+const emptyRequestBody = {};
 
 const inValidRequestBody1 = {
     fileNames: '',
+    contentType: 'text/plain',
+    userId: 'test1234',
+    authorizedBunitList: ['001', '002'],
 };
 
-const inValidRequestBody2 = {};
+const inValidRequestBody2 = {
+    '': [
+        'fileName1',
+        'fileName2',
+    ],
+contentType: 'text/plain',
+    userId: 'test1234',
+    authorizedBunitList: ['001', '002'],
+};
 
 describe('Request Body Validator', () => {
     test('should return nothing when the request body is valid', async () => {
         expect(() => validateRequestBody(validRequestBody)).not
             .toThrowError(new InvalidRequestException(
-                ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
+                INVALID_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
             ));
     });
 
-    test('should throw InvalidRequestException when the request body is inValid', async () => {
+    test('should throw InvalidRequestException when the request body is empty', async () => {
         expect(() => validateRequestBody(inValidRequestBody1))
             .toThrowError(new InvalidRequestException(
-                ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
+                INVALID_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
+                INVALID_REQUEST_BODY_CODE,
             ));
     });
 
     test('should throw InvalidRequestException when the request body is empty', async () => {
         expect(() => validateRequestBody(inValidRequestBody2))
             .toThrowError(new InvalidRequestException(
-                ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
+                INVALID_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
+                INVALID_REQUEST_BODY_CODE,
+            ));
+    });
+
+    test('should throw InvalidRequestException when the request body is empty', async () => {
+        expect(() => validateRequestBody(emptyRequestBody))
+            .toThrowError(new InvalidRequestException(
+                EMPTY_REQUEST_BODY,
+                HttpStatus.BAD_REQUEST,
+                EMPTY_REQUEST_BODY_CODE,
+            ));
+    });
+
+    test('should throw InvalidRequestException when the request body is empty', async () => {
+        expect(() => isEmptyRequestBody(emptyRequestBody))
+            .toThrowError(new InvalidRequestException(
+                EMPTY_REQUEST_BODY,
+                HttpStatus.BAD_REQUEST,
+                EMPTY_REQUEST_BODY_CODE,
             ));
     });
 });

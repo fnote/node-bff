@@ -3,59 +3,35 @@
  *
  * @author: gkar5861 on 22/06/20
  * */
-import * as HttpStatus from 'http-status-codes';
 import BatchService from '../batch/batchService';
-import InvalidRequestException from '../../exception/invalidRequestException';
-import {ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY} from '../../util/constants';
+import {
+    mockBatchApiDownloadUrlRequest,
+    mockBatchApiUploadUrlRequest,
+    mockResponseDeleteJob,
+    mockResponseJobList,
+    mockResponseSignedUrl,
+} from '../../config/test.config';
 
 jest.mock('../../httpClient/httpClient');
 
-const mockRequestBody = {
-    fileNames: [
-        'fileName1',
-        'fileName2',
-    ],
-};
-
-const mockResponse = {
-    data: [
-        {
-            fileName: 'fileName1',
-            putUrl: 'https://batch-output.s3.amazonaws.com/fileName1?AWSAccessKeyId=ASIAQRLXWZJ',
-        },
-        {
-            fileName: 'fileName2',
-            putUrl: 'https://batch-output.s3.amazonaws.com/fileName2?AWSAccessKeyId=ASIAQRLXWZJ',
-        },
-    ],
-};
-
 describe('Batch Service', () => {
-    test('should generate input signed urls  when the request body is valid', async () => {
-        const response = await BatchService.generateInputSignUrl(mockRequestBody);
-        expect(response).toEqual(mockResponse);
+    test('generateFileUploadSignedUrl should generate write signed urls  when the request body is valid', async () => {
+        const response = await BatchService.generateFileUploadSignedUrl(mockBatchApiUploadUrlRequest);
+        expect(response).toEqual(mockResponseSignedUrl);
     });
 
-    test('should generate output signed urls when the request body is valid', async () => {
-        const response = await BatchService.generateOutputSignUrl(mockRequestBody);
-        expect(response).toEqual(mockResponse);
+    test('generateFileDownloadSignedUrl should generate read signed urls when the request body is valid', async () => {
+        const response = await BatchService.generateFileDownloadSignedUrl(mockBatchApiDownloadUrlRequest);
+        expect(response).toEqual(mockResponseSignedUrl);
     });
 
-    test('should throw exception  when the request body is empty', async () => {
-        const emptyRequestBody = {};
-        await expect(BatchService.generateInputSignUrl(emptyRequestBody)).rejects
-            .toThrowError(new InvalidRequestException(
-                ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
-                HttpStatus.BAD_REQUEST,
-            ));
+    test('getBatchJobs should generate list of files  when the source is valid', async () => {
+        const response = await BatchService.getBatchJobs('test1234', '?pageSize=10&offSet=10');
+        expect(response).toEqual(mockResponseJobList);
     });
 
-    test('should throw exception  when the request body is invalid', async () => {
-        const invalidRequestBody = {filenames: ''};
-        await expect(BatchService.generateInputSignUrl(invalidRequestBody)).rejects
-            .toThrowError(new InvalidRequestException(
-                ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY,
-                HttpStatus.BAD_REQUEST,
-            ));
+    test('should delete files  when the pass the file list', async () => {
+        const response = await BatchService.deleteJob('test1234', '11112222');
+        expect(response).toEqual(mockResponseDeleteJob);
     });
 });

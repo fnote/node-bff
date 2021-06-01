@@ -1,13 +1,20 @@
 import AggregatedPricingDataService from '../pricing/aggregatedPricingDataService';
 import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetchException';
 import InvalidRequestException from '../../exception/invalidRequestException';
-import { ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY } from '../../util/constants';
+import {INVALID_REQUEST_BODY} from '../../util/constants';
 import {PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE} from '../../exception/exceptionCodes';
 import {
-    pricingDataMockRequest1, pricingDataMockErrorRequest, pciPriceMockPayload, pciPriceMockPayloadNoVolTiers,
-    pciModifiedPriceMockPayload1, pciModifiedPriceMockPayload2, mockPCIPricingErrorResponse, mockProductPricingErrorResponse,
-    pciPricesMockDataPriceSourceId,
+    mockModifiedVolumePricingTiers,
+    mockPCIPricingErrorResponse,
+    mockProductPricingErrorResponse,
+    pciModifiedPriceMockPayload1,
+    pciModifiedPriceMockPayload2,
     pciModifiedPriceMockPayload3,
+    pciPriceMockPayload,
+    pciPriceMockPayloadNoVolTiers,
+    pciPricesMockDataPriceSourceId,
+    pricingDataMockErrorRequest,
+    pricingDataMockRequest1,
 } from '../../config/test.config';
 
 describe('Aggregated Pricing Data Service request validation', () => {
@@ -17,7 +24,7 @@ describe('Aggregated Pricing Data Service request validation', () => {
                 .getAggregatedPricingData({body: pricingDataMockErrorRequest});
         } catch (e) {
             expect(e.name).toEqual(InvalidRequestException.name);
-            expect(e.errorDetails.message).toEqual(ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY);
+            expect(e.errorDetails.message).toEqual(INVALID_REQUEST_BODY);
             expect(e.errorCode).toEqual(PRICING_DATA_INVALID_PAYLOAD_ERROR_CODE);
         }
     });
@@ -131,5 +138,24 @@ describe('Aggregated Pricing Data Service checkCPResponseErrorStatus', () => {
             expect(e.errorDetails.message).toEqual('Failed to fetch data from Cloud Pricing Endpoint, Product not found PCI Pricing');
             expect(e.errorCode).toEqual('801');
         }
+    });
+});
+
+describe('Aggregated Pricing Data Service sort pricing tiers', () => {
+    test('should return sorted pricing tiers', async () => {
+        const sortedVolumeTierList = AggregatedPricingDataService.sortVolumeTierList(mockModifiedVolumePricingTiers);
+        expect(sortedVolumeTierList[0].eligibility.lowerBound).toBeLessThan(sortedVolumeTierList[1].eligibility.lowerBound);
+        expect(sortedVolumeTierList[0].eligibility.lowerBound).toBeLessThan(sortedVolumeTierList[2].eligibility.lowerBound);
+        expect(sortedVolumeTierList[1].eligibility.lowerBound).toBeLessThan(sortedVolumeTierList[2].eligibility.lowerBound);
+    });
+
+    test('should return undefined when empty list passed', async () => {
+        const sortedVolumeTierList = AggregatedPricingDataService.sortVolumeTierList([]);
+        expect(sortedVolumeTierList).toEqual([]);
+    });
+
+    test('should return undefined when list is undefined', async () => {
+        const sortedVolumeTierList = AggregatedPricingDataService.sortVolumeTierList(undefined);
+        expect(sortedVolumeTierList).toEqual([]);
     });
 });

@@ -4,38 +4,34 @@
  * */
 
 export const CLOUD_PCI_BFF = 'Cloud PCI BFF';
-export const CLOUD_PCI_BFF_VERSION = '1.0.0';
+export const CLOUD_PCI_BFF_VERSION = '1.4.0';
 export const SUCCESS = 'success';
 export const ERROR = 'error';
 
 // AWS values
 export const AWS_REGION = 'us-east-1';
 
-// file sources
-export const FILE_SOURCE_INPUT = 'input';
-export const FILE_SOURCE_OUTPUT = 'output';
-
 // http methods
 export const HTTP_GET = 'GET';
 export const HTTP_POST = 'POST';
+export const HTTP_DELETE = 'DELETE';
 
 // HTTP req/res metadata
 export const APPLICATION_JSON = 'application/json';
 export const CORRELATION_ID_HEADER = 'X-Syy-Correlation-Id';
 
-// http error codes
-export const HTTP_CLIENT_ERROR_CODE_INTERNAL_SERVER_ERROR = 500;
-
 // errors
-export const ERROR_IN_GETTING_S3_INPUT_SIGNED_URL = 'Error in getting S3 input signed urls';
-export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL = 'Error in getting S3 output signed urls';
-export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_INVALID_SOURCE = `Invalid source is passed in the url. 
-Valid sources are input/output`;
-export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL_UNSUPPORTED_REQUEST_BODY = 'Unsupported request body';
+export const ERROR_IN_GETTING_S3_INPUT_SIGNED_URL = 'Error in getting S3 file upload signed urls';
+export const ERROR_IN_GETTING_S3_OUTPUT_SIGNED_URL = 'Error in getting S3 file download signed urls';
+export const ERROR_IN_GETTING_BATCH_JOBS = 'Error occurred while retrieving batch job details';
+export const ERROR_IN_DELETING_BATCH_JOBS = 'Error occurred while deleting a batch job';
+export const INVALID_REQUEST_BODY = 'Invalid/ Unsupported request body';
+export const EMPTY_REQUEST_BODY = 'Empty request body';
 export const ERROR_IN_FETCHING_CLOUD_PRICING_DATA = 'Failed to fetch data from Cloud Pricing Endpoint';
 
 // whitelisted url paths
 export const AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK = '/v1/pci-bff/support/healthcheck';
+export const AUTHENTICATION_NOT_REQUIRED_STATUS_CHECK = '/v1/pci-bff/support/status';
 
 export const LOGIN_URL = '/v1/pci-bff/auth/login';
 export const LOGOUT_URL = '/v1/pci-bff/auth/logout';

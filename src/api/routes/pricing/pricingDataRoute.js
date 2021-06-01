@@ -4,21 +4,21 @@
  * @author: adis0892 on 03/08/20
  * */
 
-import { Router } from 'express';
+import {Router} from 'express';
 import * as HttpStatus from 'http-status-codes';
 import AggregatedPricingDataService from '../../../service/pricing/aggregatedPricingDataService';
 import logger from '../../../util/logger';
-import { createErrorResponse } from '../../../mapper/responseMapper';
+import {createErrorResponse} from '../../../mapper/responseMapper';
 import AuthorizationService from '../../../service/auth/authorizationService';
 import CloudPricingDataFetchException from '../../../exception/cloudPricingDataFetchException';
 import InvalidRequestException from '../../../exception/invalidRequestException';
 import ProductInfoDataFetchException from '../../../exception/productInfoDataFetchException';
-import { CORRELATION_ID_HEADER } from '../../../util/constants';
-import { getCorrelationId } from '../../../util/correlationIdGenerator';
+import {CORRELATION_ID_HEADER} from '../../../util/constants';
+import {getCorrelationId} from '../../../util/correlationIdGenerator';
 import CustomerInfoDataFetchException from '../../../exception/customerInfoDataFetchException';
 
 export default () => {
-    const cloudPricingRouter = new Router({ mergeParams: true });
+    const cloudPricingRouter = new Router({mergeParams: true});
 
     cloudPricingRouter.post('/pricing-data', async (req, res) => {
         try {

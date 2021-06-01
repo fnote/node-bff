@@ -1108,3 +1108,204 @@ export const pciPricesMockDataPriceSourceId = {
         },
     ],
 };
+
+export const mockModifiedVolumePricingTiers = [
+    {
+        customerPrequalifiedPrice: 21.99,
+        unitPrice: 21.99,
+        netPrice: 21.99,
+        eligibility: {
+            operator: '>=',
+            lowerBound: 9,
+        },
+        agreements: [],
+        discounts: [
+            {
+                id: '6463',
+                type: 'PREQUALIFIED',
+                name: 'CASE_VOLUME_DISCOUNT',
+                amountType: 'Factor',
+                amount: 0.98,
+                priceAdjustment: -0.5,
+                effectiveFrom: '19000101',
+                effectiveTo: '21000101',
+            },
+        ],
+    },
+    {
+        customerPrequalifiedPrice: 22.14,
+        unitPrice: 22.14,
+        netPrice: 22.14,
+        eligibility: {
+            operator: 'Between',
+            lowerBound: 6,
+            upperBound: 8,
+        },
+        agreements: [],
+        discounts: [
+            {
+                id: '6463',
+                type: 'PREQUALIFIED',
+                name: 'CASE_VOLUME_DISCOUNT',
+                amountType: 'Factor',
+                amount: 0.99,
+                priceAdjustment: -0.25,
+                effectiveFrom: '19000101',
+                effectiveTo: '21000101',
+            },
+        ],
+    },
+    {
+        customerPrequalifiedPrice: 22.99,
+        unitPrice: 22.99,
+        netPrice: 22.99,
+        eligibility: {
+            operator: 'Between',
+            lowerBound: 2,
+            upperBound: 5,
+        },
+        agreements: [],
+        discounts: [
+            {
+                id: '6463',
+                type: 'PREQUALIFIED',
+                name: 'CASE_VOLUME_DISCOUNT',
+                amountType: 'Factor',
+                amount: 0.99,
+                priceAdjustment: -0.25,
+                effectiveFrom: '19000101',
+                effectiveTo: '21000101',
+            },
+        ],
+    },
+];
+
+export const mockRequestUploadSignedUrl = {
+    fileNames: [
+        {fileName: 'fileName1', contentType: ''},
+        {fileName: 'fileName2.txt', contentType: 'text/plain'},
+    ],
+};
+
+export const mockRequestDownloadSignedUrl = {
+    fileNames: [
+        'fileName1',
+        'fileName2',
+    ],
+};
+
+export const mockBatchApiUploadUrlRequest = {
+    fileNames: [
+        {fileName: 'fileName1', contentType: ''},
+        {fileName: 'fileName2.txt', contentType: 'text/plain'},
+    ],
+    userId: 'test1234',
+    authorizedBunitList: ['001', '002'],
+};
+
+export const mockBatchApiDownloadUrlRequest = {
+    fileNames: [
+        'fileName1',
+        'fileName2',
+    ],
+    userId: 'test1234',
+};
+
+export const mockErrorRequestSignedUrl = {
+    fileNames: [
+        'error_fileName1',
+    ],
+};
+
+export const mockErrorRequestUploadSignedUrl = {
+    fileNames: [
+        {fileName: 'error_fileName1', contentType: ''},
+    ],
+};
+
+export const mockErrorBatchFileUploadApiRequest = {
+    fileNames: [
+        {fileName: 'error_fileName1', contentType: ''},
+    ],
+    userId: 'test1234',
+    authorizedBunitList: ['001', '002'],
+
+};
+
+export const mockErrorBatchFileDownloadApiRequest = {
+    fileNames: [
+        'error_fileName1',
+    ],
+    userId: 'test1234',
+
+};
+
+export const mockResponseSignedUrl = {
+    data: {
+        status: 'success',
+        message: null,
+        data: [
+            {
+                fileName: 'fileName1',
+                putUrl: 'https://batch-output.s3.amazonaws.com/fileName1?AWSAccessKeyId=ASIAQRLXWZJ',
+            },
+            {
+                fileName: 'fileName2',
+                putUrl: 'https://batch-output.s3.amazonaws.com/fileName2?AWSAccessKeyId=ASIAQRLXWZJ',
+            },
+        ],
+},
+};
+
+export const mockResponseJobList = {
+    data: {
+        status: 'success',
+        message: null,
+        data: [
+            {
+                jobId: 44489,
+                bunitId: '066',
+                status: 'PARTIALLY_COMPLETED',
+                statusTime: '2021-01-14T14:42:33.000Z',
+                startTime: '2021-01-14T14:42:13.000Z',
+                endTime: '2021-01-14T14:42:33.000Z',
+                fileName: 'BPTestC04_066_000041_C.txt',
+                submittedUser: 'test1234',
+                minorErrorFileName: 'minor-errors/BPTestC04_066_000041_C_errors.txt',
+            },
+            {
+                jobId: 44242,
+                bunitId: '000',
+                status: 'ERROR',
+                statusTime: '2021-01-10T22:34:50.000Z',
+                startTime: '2021-01-10T22:34:50.000Z',
+                endTime: '2021-01-10T22:34:50.000Z',
+                fileName: 'CPPCI-DevTest2_999_20200622_C.txt',
+                submittedUser: 'test1234',
+                minorErrorFileName: null,
+            },
+            {
+                jobId: 44504,
+                bunitId: '066',
+                status: 'COMPLETED',
+                statusTime: '2021-01-14T14:44:58.000Z',
+                startTime: '2021-01-14T14:44:41.000Z',
+                endTime: '2021-01-14T14:44:58.000Z',
+                fileName: 'TestC03_066_A.txt',
+                submittedUser: 'test1234',
+                minorErrorFileName: null,
+            },
+        ],
+    },
+};
+
+export const mockResponseDeleteJob = {
+    data: {
+        status: 'success',
+        message: null,
+        data: {
+            userId: 'test1234',
+            jobId: '11112222',
+        },
+    },
+};

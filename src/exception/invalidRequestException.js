@@ -22,4 +22,8 @@ export default class InvalidRequestException extends Error {
         }
         return -1;
     }
+
+    getErrorCode() {
+        return this.errorCode;
+    }
 }
