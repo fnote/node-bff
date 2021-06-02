@@ -16,6 +16,14 @@ npm test
 ### API Spec
 ````
 GET  | {hos url}/v1/pci-bff/support/healthcheck 
-POST | {hos url}/v1/pci-bff/batch/signed-url/{source}    
+GET  | {hos url}/v1/pci-bff/support/status 
+POST | {hos url}/v1/pci-bff/batch/files/signed-url/input
+POST | {hos url}/v1/pci-bff/batch/files/signed-url/output
+GET  | {hos url}/v1/pci-bff/batch/jobs 
+DELETE  | {hos url}/v1/pci-bff/batch/jobs/{jobId}
+GET  | {hos url}/v1/pci-bff/auth/login
+GET  | {hos url}/v1/pci-bff/auth/logout
+GET  | {hos url}/v1/pci-bff/auth/user-details
+POST | {hos url}/v1/pci-bff/pricing/pricing-data  
 ````
 
