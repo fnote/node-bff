@@ -24,9 +24,8 @@ import {getSeedApiConfig} from '../../config/configs';
              [CORRELATION_ID_HEADER]: getCorrelationId(),
              BearerAuth : await getAccessToken(false)
          };
-
-         const reqUrl = this.seedApiConfig.CONFIG.seedApiUrl 
-         + this.seedApiConfig.CONFIG.getItemAttributeGroupsEndpoint;
+         const reqUrl = this.seedApiConfig.CONFIG.seedApiUrl +
+          this.seedApiConfig.CONFIG.getItemAttributeGroupsEndpoint;
          return this.sendGetRequest(reqUrl, headers);
      }
 
