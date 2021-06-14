@@ -21,8 +21,7 @@ import {getSeedApiConfig} from '../../config/configs';
              Accept: APPLICATION_JSON,
              clientID: this.seedApiConfig.CONFIG.clientId,
              [CORRELATION_ID_HEADER]: getCorrelationId(),
-             BearerAuth : await getAccessToken(false);
-
+             BearerAuth : await getAccessToken(false)
          };
  
          const reqUrl = this.seedApiConfig.CONFIG.seedApiUrl 
