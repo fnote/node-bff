@@ -60,6 +60,13 @@ export const getSSMlConfig = () => ({
     },
 });
 
+export const getSeedApiConfig = () => ({
+    CONFIG: {
+        seedApiUrl: `${process.env.API_CENTRAL_BASE_URL}/v1/edwp`,
+        clientId: 'SEED_API',
+    },
+});
+
 export const getAuthorizationRoleHierarchy = () => {
     const authorizationRoleHierarchy = {};
 
