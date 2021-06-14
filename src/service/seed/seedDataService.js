@@ -7,6 +7,7 @@ import {getSeedApiConfig} from '../../config/configs';
      HTTP_GET, ERROR_IN_FETCHING_SEED_DATA,
      APPLICATION_JSON, CORRELATION_ID_HEADER,
  } from '../../util/constants';
+ import {getAccessToken} from '../../util/accessTokenGenerator';
  
  class SeedDataService {
      constructor() {
@@ -20,7 +21,7 @@ import {getSeedApiConfig} from '../../config/configs';
              Accept: APPLICATION_JSON,
              clientID: this.seedApiConfig.CONFIG.clientId,
              [CORRELATION_ID_HEADER]: getCorrelationId(),
-             BearerAuth : '1234'
+             BearerAuth : await getAccessToken(false);
 
          };
  
