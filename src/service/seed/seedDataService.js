@@ -49,7 +49,6 @@ import {getSeedApiConfig} from '../../config/configs';
                    }
                 ]}
                 );
-            //return await httpClient.makeRequest(HTTP_GET, reqUrl, undefined, headers);
          } catch (e) {
             const errorMessage = ERROR_IN_FETCHING_SEED_DATA;
             logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
