@@ -24,7 +24,8 @@ import {getSeedApiConfig} from '../../config/configs';
 
          };
  
-         const reqUrl = this.seedApiConfig.CONFIG.seedApiUrl + '/item/attribute-groups'
+         const reqUrl = this.seedApiConfig.CONFIG.seedApiUrl 
+         + this.seedApiConfig.CONFIG.getItemAttributeGroupsEndpoint;
          return this.sendGetRequest(reqUrl, headers);
      }
  
