@@ -1,19 +1,20 @@
 export default class SeedApiDataFetchException extends Error {
-    constructor(error, cause, errorCode) {
+
+    constructor(error, errorMessage, errorCode) {
         super(error.toString());
         Error.captureStackTrace(this, this.constructor);
 
-        this.name = this.constructor.name;
         this.errorDetails = {};
+        this.name = this.constructor.name;
 
-        this.cause = cause;
-        this.errorDetails.message = error;
         this.errorCode = errorCode;
+        this.stack = error.stack;
+        this.errorDetails.message = errorMessage;
     }
 
     getStatus() {
-        if (this.errorDetails.response && this.errorDetails.response.status) {
-            return this.errorDetails.response.status;
+        if (this.errorDetails.message) {
+            return this.errorDetails.message;
         }
         return -1;
     }
