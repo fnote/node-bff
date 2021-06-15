@@ -16,6 +16,7 @@ const routes = [
   { path: '/auth/logout', method: GET },
   { path: '/auth/user-details', method: GET },
   { path: '/pricing/pricing-data', method: POST },
+  { path: '/price-zone-reassignment/item-attribute-groups', method: GET}
 ];
 
 module.exports = () => {
