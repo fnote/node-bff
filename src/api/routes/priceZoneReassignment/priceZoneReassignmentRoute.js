@@ -7,7 +7,7 @@
  import {CORRELATION_ID_HEADER} from '../../../util/constants';
  import {getCorrelationId} from '../../../util/correlationIdGenerator';
 import SeedApiDataFetchException from '../../../exception/seedApiDataFechException';
- 
+
  export default () => {
      const priceZoneReassignmentRouter = new Router();
 
@@ -21,24 +21,24 @@ import SeedApiDataFetchException from '../../../exception/seedApiDataFechExcepti
                 res.status(HttpStatus.OK)
                     .send(responseData);
              } else {
-                 res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized',
+                 res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse(
+                     'Unauthorized',
                      'User is not authorized to perform this action in the requested opco',
                      null, 'User authorization validations failed'));
              }
          } catch (error) {
-             const errMessage = 'Error occurred in getting Seed API item attribute group data';
-             logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
-             let httpStatusCode;
+             const errorMsg = 'Error occurred in getting Seed API item attribute group data';
+             logger.error(`${errorMsg} : ${error} cause : ${error.stack} errorCode : ${error.errorCode}`);
+             let httpResponseStatusCode;
              if (error instanceof SeedApiDataFetchException) {
-                 httpStatusCode = HttpStatus.BAD_REQUEST;
+                httpResponseStatusCode = HttpStatus.BAD_REQUEST;
              } else {
-                 httpStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+                httpResponseStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
              }
              res.set(CORRELATION_ID_HEADER, getCorrelationId());
-             res.status(httpStatusCode)
-                 .send(createErrorResponse(null, errMessage, error, null, error.errorCode));
+             res.status(httpResponseStatusCode)
+                 .send(createErrorResponse(null, errorMsg, error, null, error.errorCode));
          }
      });
      return priceZoneReassignmentRouter;
  };
- 
