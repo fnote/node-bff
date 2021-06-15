@@ -3,12 +3,12 @@
  import logger from '../../../util/logger';
  import {createErrorResponse} from '../../../mapper/responseMapper';
  import AuthorizationService from '../../../service/auth/authorizationService';
- import SeedDataService from '../../../service/seed/seedDataService'
+ import SeedDataService from '../../../service/seed/seedDataService';
  import {CORRELATION_ID_HEADER} from '../../../util/constants';
  import {getCorrelationId} from '../../../util/correlationIdGenerator';
 import SeedApiDataFetchException from '../../../exception/seedApiDataFechException';
- 
- export default () => {
+
+export default () => {
      const priceZoneReassignmentRouter = new Router();
 
      priceZoneReassignmentRouter.get('/item-attribute-groups', async (req, res) => {
@@ -41,4 +41,3 @@ import SeedApiDataFetchException from '../../../exception/seedApiDataFechExcepti
      });
      return priceZoneReassignmentRouter;
  };
- 
