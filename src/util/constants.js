@@ -28,7 +28,7 @@ export const ERROR_IN_DELETING_BATCH_JOBS = 'Error occurred while deleting a bat
 export const INVALID_REQUEST_BODY = 'Invalid/ Unsupported request body';
 export const EMPTY_REQUEST_BODY = 'Empty request body';
 export const ERROR_IN_FETCHING_CLOUD_PRICING_DATA = 'Failed to fetch data from Cloud Pricing Endpoint';
-export const ERROR_IN_FETCHING_SEED_DATA = 'Failed to fetch data from Seed Api while getting item attributes group data';
+export const ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA = 'Failed to fetch data from Seed Api while getting item attributes group data';
 
 // whitelisted url paths
 export const AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK = '/v1/pci-bff/support/healthcheck';

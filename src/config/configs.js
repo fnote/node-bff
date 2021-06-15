@@ -62,9 +62,9 @@ export const getSSMlConfig = () => ({
 
 export const getSeedApiConfig = () => ({
     CONFIG: {
-        seedApiUrl: `${process.env.API_CENTRAL_BASE_URL}/v1/edwp`,
+        seedApiBaseUrl: `${process.env.API_CENTRAL_BASE_URL}/v1/edwp`,
         clientId: 'SEED_API',
-        getItemAttributeGroupsEndpoint : "/item/attribute-groups"
+        getItemAttributeGroupsEndpoint : '/item/attribute-groups'
     },
 });
 

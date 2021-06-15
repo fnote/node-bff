@@ -23,21 +23,20 @@ export const productInfoMockResponse = {
 export const seedGetItemAttributeGroupMockResponse = {
     status: HTTP.OK,
     data: {
-        
-            attributeGroups:[
-          {
-             name:"MILK",
-             id:12213
-          },
-          {
-             name:"FOOD STORAGE BAGS/SANDWICH BAGS/PAN LINERS",
-             id:16892
-          },
-          {
-             name:"FROZEN PASTA",
-             id:12341
-          }
-       ]
+        attributeGroups:[
+            {
+                name:"MILK",
+                id:12213
+            },
+            {
+                name:"FOOD STORAGE BAGS/SANDWICH BAGS/PAN LINERS",
+                id:16892
+            },
+            {
+                name:"FROZEN PASTA",
+                id:12341
+            }
+        ]
     },
 };
 
