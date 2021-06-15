@@ -3,7 +3,7 @@ import {getSeedApiConfig} from '../../config/configs';
  import SeedApiDataFetchException from '../../exception/seedApiDataFechException';
  import { getCorrelationId } from '../../util/correlationIdGenerator';
  import {
-     ERROR_IN_FETCHING_SEED_DATA,
+     ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA,
      APPLICATION_JSON, CORRELATION_ID_HEADER,
  } from '../../util/constants';
  import {getAccessToken} from '../../util/accessTokenGenerator';
@@ -49,7 +49,7 @@ import {getSeedApiConfig} from '../../config/configs';
                 ]}
                 );
          } catch (e) {
-            const errorMessage = ERROR_IN_FETCHING_SEED_DATA;
+            const errorMessage = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA;
             logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
              throw new SeedApiDataFetchException(e, errorMessage, SEED_API_DATA_FETCH_ERROR_CODE,);
          }
