@@ -7,7 +7,8 @@ import {getSeedApiConfig} from '../../config/configs';
      APPLICATION_JSON, CORRELATION_ID_HEADER,
  } from '../../util/constants';
  import {getAccessToken} from '../../util/accessTokenGenerator';
- import { SEED_API_DATA_FETCH_ERROR_CODE } from '../../exception/exceptionCodes';
+ import { SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE } from '../../exception/exceptionCodes';
+ import { seedGetItemAttributeGroupMockResponse } from '../cipzMockData';
 
 
  class SeedDataService {
@@ -31,27 +32,11 @@ import {getSeedApiConfig} from '../../config/configs';
 
      async sendGetRequest(reqUrl, headers) {
          try {
-             return (
-                 {
-                     attributeGroups:[
-                   {
-                      name:"MILK",
-                      id:12213
-                   },
-                   {
-                      name:"FOOD STORAGE BAGS/SANDWICH BAGS/PAN LINERS",
-                      id:16892
-                   },
-                   {
-                      name:"FROZEN PASTA",
-                      id:12341
-                   }
-                ]}
-                );
+             return (seedGetItemAttributeGroupMockResponse.data);
          } catch (e) {
             const errorMessage = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA;
             logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
-             throw new SeedApiDataFetchException(e, errorMessage, SEED_API_DATA_FETCH_ERROR_CODE,);
+             throw new SeedApiDataFetchException(e, errorMessage, SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE,);
          }
      }
  }
