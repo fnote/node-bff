@@ -5,7 +5,6 @@
  import {
     seedGetItemAttributeGroupMockResponse,
  } from '../../../config/test.config';
- import authService from '../../../service/auth/authorizationService';
 
  jest.mock('../../../httpClient/httpClient');
  jest.mock('../../../util/accessTokenGenerator');
@@ -68,67 +67,4 @@ describe('routes: /item-attribute-groups', () => {
             });
     });
 
-    test('get/item-attribute-groups should return error response when it is not authorized', async () => {
-
-        authMiddleware.mockImplementationOnce((req, res, next) => {
-            res.locals.authResponse = {
-                authenticated: true,
-                cause: null,
-                username: 'username',
-                userDetailsData: {
-                    authorizedPricingTransformationEnabledBunitList: ['019'],
-                    authorizedBatchEnabledBunitList: ['001', '002'],
-                    email: 'firstName.secondName@syscolabs.com',
-                    firstName: 'firstName',
-                    jobTitle: 'jobTitle',
-                    lastName: 'secondName',
-                    username: 'test1234',
-                },
-            };
-            next();
-        });
-
-        jest.spyOn(authService, 'isAuthorizedRequest').mockReturnValue(false);
-
-        jest.setTimeout(100000);
-        await request(app.app)
-            .get('/v1/pci-bff/price-zone-reassignment/item-attribute-groups')
-            .set('Accept', 'application/json')
-            .then((res) => {
-                expect(res.status).toEqual(HttpStatus.UNAUTHORIZED);
-            });
-    });
-
-    test('get/item-attribute-groups should return error response when error occured', async () => {
-
-        authMiddleware.mockImplementationOnce((req, res, next) => {
-            res.locals.authResponse = {
-                authenticated: true,
-                cause: null,
-                username: 'username',
-                userDetailsData: {
-                    authorizedPricingTransformationEnabledBunitList: ['019'],
-                    authorizedBatchEnabledBunitList: ['001', '002'],
-                    email: 'firstName.secondName@syscolabs.com',
-                    firstName: 'firstName',
-                    jobTitle: 'jobTitle',
-                    lastName: 'secondName',
-                    username: 'test1234',
-                },
-            };
-            next();
-        });
-
-        jest.spyOn(authService, 'isAuthorizedRequest').mockImplementation(() => {
-            throw new Error('test error');
-          });
-
-        jest.setTimeout(100000);
-        await request(app.app)
-            .get('/v1/pci-bff/price-zone-reassignment/item-attribute-groups')
-            .set('Accept', 'application/json')
-            .then((res) => {
-                expect(res.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
-            });
-    });
 });
