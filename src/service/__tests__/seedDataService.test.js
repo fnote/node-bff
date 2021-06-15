@@ -18,6 +18,12 @@
          "Error", SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE,)
         expect(response.getStatus()).toEqual("Error");
     });
+
+    test('should generate the error response', async () => {
+        const response = new SeedApiDataFetchException("Test Error",
+         null, SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE,)
+        expect(response.getStatus()).toEqual(-1);
+    });
  });
 
  
