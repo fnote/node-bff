@@ -1,9 +1,3 @@
-/**
- * Pricing data routes unit tests
- *
- * @author: adis0892 on 28/07/20
- * */
-
  import request from 'supertest';
  import * as HttpStatus from 'http-status-codes';
  import {jest} from '@jest/globals';
