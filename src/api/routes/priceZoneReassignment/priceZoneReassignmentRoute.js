@@ -10,11 +10,10 @@ import SeedApiDataFetchException from '../../../exception/seedApiDataFechExcepti
  
  export default () => {
      const priceZoneReassignmentRouter = new Router();
-     
+
      priceZoneReassignmentRouter.get('/item-attribute-groups', async (req, res) => {
          try {
              const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
- 
              if (isAuthorized) {
                 const responseData = await SeedDataService.getSeedItemAttributeGroupsData();
                 logger.info(`Success Seed Data response received: ${JSON.stringify(responseData)}`);
