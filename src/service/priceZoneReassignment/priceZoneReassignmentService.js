@@ -34,7 +34,7 @@ import {getCIPZApiConfig} from '../../config/configs';
      }
 
      /**
-      * return httpClient.makeRequest(HTTP_GET, reqUrl, undefined, headers, 
+      * return httpClient.makeRequest(HTTP_GET, reqUrl, undefined, headers,
       * {offset: (offset*limit), limit: limit, request_submitter: requestSubmitter, request_status: reqStatus } );
       */
      async sendGetRequest(reqUrl, headers, pageNumber, requestSubmitter, reqStatus) {
@@ -46,7 +46,7 @@ import {getCIPZApiConfig} from '../../config/configs';
              logger.info(`url : ${reqUrl}, headers :${headers}, offset: ${offset},
               limit: ${limit}, requestSubmitter: ${requestSubmitter}, requestStatus: ${reqStatus}`);
              return cipzApiGetSubmittedRequestMockResponse.data;
-             
+
          } catch (e) {
             const errorMessage = ERROR_IN_FETCHING_CIPZ_API_SUBMITTED_REQUEST_DATA;
             logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
