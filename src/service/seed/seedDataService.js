@@ -5,7 +5,6 @@ import {getSeedApiConfig} from '../../config/configs';
  import {
      ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA,
      APPLICATION_JSON, CORRELATION_ID_HEADER,
-     PAGE_SIZE,
     //  HTTP_POST
  } from '../../util/constants';
  import { SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE } from '../../exception/exceptionCodes';
@@ -36,13 +35,6 @@ import {getSeedApiConfig} from '../../config/configs';
         const headers = await this.constructHeaders();
         const reqUrl = this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getItemAttributeGroupsEndpoint;
         return this.sendGetRequest(reqUrl, headers);
-    }
-
-    generatePaginationParams(page) {
-        return ({
-            offset: PAGE_SIZE * page,
-            limit: PAGE_SIZE,
-        });
     }
 
     async getPriceZoneDetailsForCustomerAndItemAttributeGroup(req) {
