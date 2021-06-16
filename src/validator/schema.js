@@ -30,3 +30,16 @@ export const pricingDataReqBody = Joi.object({
     }),
 
 });
+
+export const priceZoneReassignmentSearchReqBody = Joi.object({
+    businessUnitNumber: Joi.string()
+        .alphanum()
+        .min(3)
+        .max(3)
+        .required(),
+    itemAttributeGroupId: Joi.string().required(),
+    customerAccount: Joi.string(),
+    customerGroupId: Joi.string(),
+    offset: Joi.number().integer(),
+    limit: Joi.number().integer(),
+}).xor('customerAccount', 'customerGroupId');
