@@ -200,3 +200,47 @@ export const cipzApiGetSubmittedRequestMockResponse = {
      }
 };
 
+export const cipzApiGetPriceZoneUpdateMockData = {
+    data : {
+        "totalRecords":10,
+        "offset":1,
+        "limit":3,
+        "data":{
+           "pzUpdateRequests":[
+              {
+                 "supc":"122122",
+                 "productName": "Sysco MILK",
+                 "customerAccount":"10001",
+                 "customerName": "Bills Diary Shop",
+                 "requestId":112,
+                 "currentPriceZone":2,
+                 "newPriceZone":3,
+                 "effectiveFrom":"20210531",
+                 "source": "EAT"
+              },
+              {
+                 "supc":"122122",
+                 "productName": "Sysco MILK",
+                 "customerAccount":"10002",
+                 "customerName": "Bills Diary Shop",
+                 "requestId":112,
+                 "currentPriceZone":2,
+                 "newPriceZone":3,
+                 "effectiveFrom":"20210531",
+                 "source": "EAT"
+              },
+              {
+                 "supc":"122122",
+                 "productName": "Sysco MILK",
+                 "customerAccount":"10003",
+                 "customerName": "Bills Diary Shop",
+                 "requestId":112,
+                 "currentPriceZone":2,
+                 "newPriceZone":3,
+                 "effectiveFrom":"20210531",
+                 "source": "EAT"
+              }
+           ]
+        }
+     }
+};
