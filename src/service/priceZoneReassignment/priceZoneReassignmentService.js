@@ -17,7 +17,8 @@ import {getCIPZApiConfig} from '../../config/configs';
 
      async getCIPZSubmittedRequestData(query) {
 
-        const pageNumber = query.page;
+        const limit = query.limit;
+        const offset = query.offset;
         const reqStatus = query.request_status;
 
          const headers = {
@@ -29,18 +30,16 @@ import {getCIPZApiConfig} from '../../config/configs';
 
          const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl +
           this.CipzConfig.CONFIG.getSubmittedRequestEndpoint;
-         return this.sendGetRequest(reqUrl, headers, pageNumber, reqStatus);
+         return this.sendGetRequest(reqUrl, headers, limit, offset, reqStatus);
      }
 
      /**
       * return httpClient.makeRequest(HTTP_GET, reqUrl, undefined, headers,
-      * {offset: (offset*limit), limit: limit, request_status: reqStatus } );
+      * {offset: offset, limit: limit, request_status: reqStatus } );
       */
-     async sendGetRequest(reqUrl, headers, pageNumber, reqStatus) {
+     async sendGetRequest(reqUrl, headers, limit, offset, reqStatus) {
 
          try {
-             const limit = this.CipzConfig.CONFIG.pageSizeForSubmittedRequest;
-             const offset = (Number(pageNumber) - 1)*limit;
 
              logger.info(`url : ${reqUrl}, headers :${headers}, offset: ${offset},
               limit: ${limit}, requestStatus: ${reqStatus}`);
