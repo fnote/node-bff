@@ -8,8 +8,6 @@
  import {getCorrelationId} from '../../../util/correlationIdGenerator';
 import SeedApiDataFetchException from '../../../exception/seedApiDataFechException';
 import CipzApiDataFetchException from '../../../exception/cipzApiDataFetchException';
-const url = require('url');
-const querystring = require('querystring');
 
  export default () => {
 

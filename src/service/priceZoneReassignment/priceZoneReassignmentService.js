@@ -9,7 +9,6 @@ import {getCIPZApiConfig} from '../../config/configs';
  import { CIPZ_API_SUBMITTED_REQ_ERROR_CODE } from '../../exception/exceptionCodes';
  import { cipzApiGetSubmittedRequestMockResponse } from '../cipzMockData';
 
-
  class PriceZoneReassignmentService {
 
      constructor() {
@@ -21,7 +20,6 @@ import {getCIPZApiConfig} from '../../config/configs';
         const pageNumber = query.page;
         const requestSubmitter = query.submitter;
         const reqStatus = query.req_status;
-
 
          const headers = {
              'Content-type': APPLICATION_JSON,
