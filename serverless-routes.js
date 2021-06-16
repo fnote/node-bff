@@ -18,6 +18,7 @@ const routes = [
   { path: '/pricing/pricing-data', method: POST },
   { path: '/price-zone-reassignment/item-attribute-groups', method: GET},
   { path: '/price-zone-reassignment/pz-update-requests', method: GET},
+  { path: '/price-zone-reassignment/pz-update-requests', method: POST },
   { path: '/price-zone-reassignment/pz-updates/{request_id}', method: GET},
   { path: '/price-zone-reassignment/search', method: POST },
 ];

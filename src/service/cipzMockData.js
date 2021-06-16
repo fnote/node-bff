@@ -244,3 +244,11 @@ export const cipzApiGetPriceZoneUpdateMockData = {
         }
      }
 };
+
+export const cipzCreatePriceZoneChangeMockResponse = {
+    data: {
+        requestId: '112',
+        requestStatus: 'PENDING_APPROVAL',
+        createdTime: 1621837508,
+    },
+};

@@ -5,12 +5,19 @@ import {createErrorResponse} from '../../../mapper/responseMapper';
 import AuthorizationService from '../../../service/auth/authorizationService';
 import SeedDataService from '../../../service/seed/seedDataService';
 import PriceZoneReassignmentService from '../../../service/priceZoneReassignment/priceZoneReassignmentService';
-import {CORRELATION_ID_HEADER, INVALID_REQUEST_BODY} from '../../../util/constants';
+import {
+    CORRELATION_ID_HEADER,
+    INVALID_REQUEST_BODY,
+    ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE,
+} from '../../../util/constants';
 import {getCorrelationId} from '../../../util/correlationIdGenerator';
 import SeedApiDataFetchException from '../../../exception/seedApiDataFechException';
 import InvalidRequestException from '../../../exception/invalidRequestException';
-import {PRICE_ZONE_REASSIGNMENT_INVALID_SEARCH_PAYLOAD_ERROR_CODE} from '../../../exception/exceptionCodes';
-import {priceZoneReassignmentSearchReqBody} from '../../../validator/schema';
+import {
+    PRICE_ZONE_REASSIGNMENT_INVALID_SEARCH_PAYLOAD_ERROR_CODE,
+    PRICE_ZONE_REASSIGNMENT_INVALID_UPDATE_PAYLOAD_ERROR_CODE,
+} from '../../../exception/exceptionCodes';
+import {priceZoneReassignmentSearchReqBody, priceZoneReassignmentCreateReqBody} from '../../../validator/schema';
 import CipzApiDataFetchException from '../../../exception/cipzApiDataFetchException';
 
 export default () => {
@@ -40,6 +47,17 @@ export default () => {
         res.set(CORRELATION_ID_HEADER, getCorrelationId());
         res.status(httpStatusCode)
             .send(createErrorResponse(null, errorMessage, error, null, error.errorCode));
+    };
+
+    const validateCreatePriceZoneChangeRequest = ({ body }) => {
+        const { error } = priceZoneReassignmentCreateReqBody.validate(body);
+        if (error) {
+            throw new InvalidRequestException(
+                INVALID_REQUEST_BODY,
+                HttpStatus.BAD_REQUEST,
+                PRICE_ZONE_REASSIGNMENT_INVALID_UPDATE_PAYLOAD_ERROR_CODE,
+            );
+        }
     };
 
     priceZoneReassignmentRouter.get('/item-attribute-groups', async (req, res) => {
@@ -76,6 +94,24 @@ export default () => {
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(httpResponseStatusCode)
                 .send(createErrorResponse(null, errorMsg, error, null, error.errorCode));
+        }
+    });
+
+    priceZoneReassignmentRouter.post('/pz-update-requests', async (req, res) => {
+        try {
+            const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
+            if (isAuthorized) {
+                validateCreatePriceZoneChangeRequest(req);
+                const responseData = await PriceZoneReassignmentService.createPriceZoneChange(req);
+                logger.info(`Success CIPZ create price zone update response received: ${JSON.stringify(responseData)}`);
+                handleSuccessResponse(res, responseData);
+            } else {
+                handleUnauthorizedRequest(res);
+            }
+        } catch (error) {
+            const errMessage = ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE;
+            logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
+            handleUnsuccessfulResponse(res, error, errMessage);
         }
     });
 

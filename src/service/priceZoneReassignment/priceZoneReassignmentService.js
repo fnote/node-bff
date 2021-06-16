@@ -4,16 +4,29 @@ import {getCIPZApiConfig} from '../../config/configs';
  import { getCorrelationId } from '../../util/correlationIdGenerator';
  import {
     ERROR_IN_FETCHING_CIPZ_API_DATA,
-     APPLICATION_JSON, CORRELATION_ID_HEADER,
+    ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE,
+    APPLICATION_JSON, CORRELATION_ID_HEADER,
+    HTTP_POST,
  } from '../../util/constants';
- import { CIPZ_API_DATA_FETCH_ERROR_CODE } from '../../exception/exceptionCodes';
- import { cipzApiGetSubmittedRequestMockResponse, cipzApiGetPriceZoneUpdateMockData } from '../cipzMockData';
-
+ import { CIPZ_API_DATA_FETCH_ERROR_CODE, CIPZ_API_CREATE_PRICE_ZONE_UPDATE_ERROR_CODE } from '../../exception/exceptionCodes';
+ import { cipzApiGetSubmittedRequestMockResponse, cipzApiGetPriceZoneUpdateMockData, cipzCreatePriceZoneChangeMockResponse } from '../cipzMockData';
+//  import {httpClient} from '../../httpClient/httpClient';
  class PriceZoneReassignmentService {
 
      constructor() {
          this.CipzConfig = getCIPZApiConfig();
      }
+
+     async constructHeaders() {
+        // const accessToken = await getAccessToken(false);
+        return ({
+            'Content-type': APPLICATION_JSON,
+            Accept: APPLICATION_JSON,
+            clientID: this.seedApiConfig.CONFIG.clientId,
+            [CORRELATION_ID_HEADER]: getCorrelationId(),
+            // BearerAuth: accessToken,
+        });
+    }
 
      /**
       * Decide what to do if params are not set
@@ -85,6 +98,17 @@ import {getCIPZApiConfig} from '../../config/configs';
              throw new CipzApiDataFetchException(e, errorMessage, cpizErrorCode,);
          }
      }
+
+    async createPriceZoneChange(req) {
+        try {
+            // const headers = await this.constructHeaders();
+            // const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.createPriceZoneUpdateEndpoint;
+            // return httpClient.makeRequest(HTTP_POST, reqUrl, req.body, headers);
+            return (cipzCreatePriceZoneChangeMockResponse.data);
+        } catch (error) {
+            throw new CipzApiDataFetchException(error, ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE, CIPZ_API_CREATE_PRICE_ZONE_UPDATE_ERROR_CODE);
+        }
+    }
  }
 
  export default new PriceZoneReassignmentService();
