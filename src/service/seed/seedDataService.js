@@ -7,7 +7,6 @@ import {getSeedApiConfig} from '../../config/configs';
      APPLICATION_JSON, CORRELATION_ID_HEADER,
     //  HTTP_POST
  } from '../../util/constants';
- import {getAccessToken} from '../../util/accessTokenGenerator';
  import { SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE } from '../../exception/exceptionCodes';
  import {
      seedGetItemAttributeGroupMockResponse,
@@ -22,13 +21,13 @@ import {getSeedApiConfig} from '../../config/configs';
     }
 
     async constructHeaders() {
-        const accessToken = await getAccessToken(false);
+        // const accessToken = await getAccessToken(false);
         return ({
             'Content-type': APPLICATION_JSON,
             Accept: APPLICATION_JSON,
             clientID: this.seedApiConfig.CONFIG.clientId,
             [CORRELATION_ID_HEADER]: getCorrelationId(),
-            BearerAuth: accessToken,
+            // BearerAuth: accessToken,
         });
     }
 

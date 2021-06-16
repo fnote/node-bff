@@ -63,10 +63,19 @@ export const getSSMlConfig = () => ({
 export const getSeedApiConfig = () => ({
     CONFIG: {
         seedApiBaseUrl: `${process.env.API_CENTRAL_BASE_URL}/v1/edwp`,
-        clientId: 'SEED_API',
+        clientId: 'Cloud_PCI',
         getItemAttributeGroupsEndpoint: '/item/attribute-groups',
         getCustomerAndItemAttributeGroupsEndpoint: '/customer-item-attribute-pricezone',
         getCustomerGroupAndItemAttributeGroupsEndpoint: '/customer-group-item-attribute-group-pricezone',
+    },
+});
+
+export const getCIPZApiConfig = () => ({
+    CONFIG: {
+        cipzApiBaseUrl: `${process.env.API_CENTRAL_BASE_URL}/v1/cipz`,
+        clientId: 'Cloud_PCI',
+        getSubmittedRequestEndpoint : '/pz-update-requests',
+        pageSizeForSubmittedRequest : 2
     },
 });
 

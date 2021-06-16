@@ -4,12 +4,16 @@ import logger from '../../../util/logger';
 import {createErrorResponse} from '../../../mapper/responseMapper';
 import AuthorizationService from '../../../service/auth/authorizationService';
 import SeedDataService from '../../../service/seed/seedDataService';
+import PriceZoneReassignmentService from '../../../service/priceZoneReassignment/priceZoneReassignmentService';
 import {CORRELATION_ID_HEADER, INVALID_REQUEST_BODY} from '../../../util/constants';
 import {getCorrelationId} from '../../../util/correlationIdGenerator';
 import SeedApiDataFetchException from '../../../exception/seedApiDataFechException';
 import InvalidRequestException from '../../../exception/invalidRequestException';
 import {PRICE_ZONE_REASSIGNMENT_INVALID_SEARCH_PAYLOAD_ERROR_CODE} from '../../../exception/exceptionCodes';
 import {priceZoneReassignmentSearchReqBody} from '../../../validator/schema';
+import CipzApiDataFetchException from '../../../exception/cipzApiDataFetchException';
+const url = require('url');
+const querystring = require('querystring');
 
 export default () => {
     const priceZoneReassignmentRouter = new Router();
@@ -54,6 +58,26 @@ export default () => {
             const errMessage = 'Error occurred in getting Seed API item attribute group data';
             logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
             handleUnsuccessfulResponse(res, error, errMessage);
+        }
+    });
+
+    priceZoneReassignmentRouter.get('/pz-update-requests', async (req, res) => {
+
+        try {
+               const responseData = await PriceZoneReassignmentService.getCIPZSubmittedRequestData(req.query.page, req.query.limit, req.query.offset);
+               logger.info(`Success CIPZ submitted requets Data response received: ${JSON.stringify(responseData)}`);
+               res.set(CORRELATION_ID_HEADER, getCorrelationId());
+               res.status(HttpStatus.OK).send(responseData);
+
+        } catch (error) {
+
+            const errorMsg = 'Error occurred in getting CIPZ API submitted requests data';
+            logger.error(`${errorMsg} : ${error} cause : ${error.stack} errorCode : ${error.errorCode}`);
+            let httpResponseStatusCode  = (error instanceof CipzApiDataFetchException) ? HttpStatus.BAD_REQUEST
+             : HttpStatus.INTERNAL_SERVER_ERROR;
+            res.set(CORRELATION_ID_HEADER, getCorrelationId());
+            res.status(httpResponseStatusCode)
+                .send(createErrorResponse(null, errorMsg, error, null, error.errorCode));
         }
     });
 
