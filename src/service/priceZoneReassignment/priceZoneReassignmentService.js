@@ -18,8 +18,7 @@ import {getCIPZApiConfig} from '../../config/configs';
      async getCIPZSubmittedRequestData(query) {
 
         const pageNumber = query.page;
-        const requestSubmitter = query.submitter;
-        const reqStatus = query.req_status;
+        const reqStatus = query.request_status;
 
          const headers = {
              'Content-type': APPLICATION_JSON,
@@ -30,21 +29,21 @@ import {getCIPZApiConfig} from '../../config/configs';
 
          const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl +
           this.CipzConfig.CONFIG.getSubmittedRequestEndpoint;
-         return this.sendGetRequest(reqUrl, headers, pageNumber, requestSubmitter, reqStatus);
+         return this.sendGetRequest(reqUrl, headers, pageNumber, reqStatus);
      }
 
      /**
       * return httpClient.makeRequest(HTTP_GET, reqUrl, undefined, headers,
-      * {offset: (offset*limit), limit: limit, request_submitter: requestSubmitter, request_status: reqStatus } );
+      * {offset: (offset*limit), limit: limit, request_status: reqStatus } );
       */
-     async sendGetRequest(reqUrl, headers, pageNumber, requestSubmitter, reqStatus) {
+     async sendGetRequest(reqUrl, headers, pageNumber, reqStatus) {
 
          try {
              const limit = this.CipzConfig.CONFIG.pageSizeForSubmittedRequest;
              const offset = (Number(pageNumber) - 1)*limit;
 
              logger.info(`url : ${reqUrl}, headers :${headers}, offset: ${offset},
-              limit: ${limit}, requestSubmitter: ${requestSubmitter}, requestStatus: ${reqStatus}`);
+              limit: ${limit}, requestStatus: ${reqStatus}`);
              return cipzApiGetSubmittedRequestMockResponse.data;
 
          } catch (e) {
