@@ -74,11 +74,6 @@ export const getCIPZApiConfig = () => ({
         clientId: 'Cloud_PCI',
         getSubmittedRequestEndpoint : '/pz-update-requests',
         pageSizeForSubmittedRequest : 10,
-        requestStatus : {
-            PENDING_APPROVAL: 'PENDING_APPROVAL',
-            APPROVED: 'APPROVED',
-            REJECTED: 'REJECTED'
-        }
     },
 });
 
