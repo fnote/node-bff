@@ -9,7 +9,7 @@ import jwkToPem from 'jwk-to-pem';
 import logger from '../../util/logger';
 import {getAuthConfig} from '../../config/configs';
 import {httpClient} from '../../httpClient/httpClient';
-import {HTTP_GET} from '../../util/constants';
+import {HTTP_GET, ROLE_CIPZ_APPROVER, ROLE_CIPZ_SUBMITTER} from '../../util/constants';
 import AuthorizationService from './authorizationService';
 
 const unauthenticatedReturn = {
@@ -28,7 +28,12 @@ class AuthenticateService {
         try {
             const accessToken = req.headers[this.authConfig.CONFIG.authTokenHeaderAttribute];
 
+            // logger.info('.................................');
+            // logger.info(`Req headers: ${JSON.stringify(req.headers)}`);
+            // logger.info(`Request: ${JSON.stringify(req)}`);
+            // logger.info(`Given access token: ${accessToken}`);
             logger.debug(`Given access token: ${accessToken}`);
+            logger.info('.................................');
 
             if (!accessToken) {
                 const errorMessage = 'Access token is missing from header';
@@ -128,6 +133,8 @@ class AuthenticateService {
         logger.debug(`Given user claim token: ${userClaimToken}`);
 
         const decodedPayloadFromJwt = JSON.parse(Buffer.from(userClaimToken.split('.')[1], 'base64').toString());
+        console.log(decodedPayloadFromJwt);
+        logger.info(JSON.stringify(decodedPayloadFromJwt));
 
         if (decodedPayloadFromJwt) {
             if (decodedPayloadFromJwt.username) {
@@ -150,6 +157,7 @@ class AuthenticateService {
                     let authorizedPricingTransformationEnabledBunitList;
                     let authorizedBatchEnabledBunitList;
                     let selectedUserRole;
+                    let selectedCPIZUserRole = '';
                     if (Number.isNaN(opcoParsed)) {
                         logger.warn(`User's opco attribute: ${opcoParsed} is not numeric parsable, so returning empty set of authorized opco list`);
                         authorizedPricingTransformationEnabledBunitList = [];
@@ -159,24 +167,57 @@ class AuthenticateService {
                         // If it's single role: it'll come like a string "rsm"
                         // If it's multiple: it'll come like "[appadmin, generaluser]"
 
-                        const userRoles = decodedPayloadFromJwt.profile;
-                        selectedUserRole = userRoles;
+                        // const userRoles = decodedPayloadFromJwt.profile;
+                        const userRoles = 'submitter';
+                        console.log(userRoles);
+                        logger.info(userRoles);
 
+                        // only one user role that is assigned to selected user role
+                        // issue here if one role is approver or submitter
+                        // case here
+                        if (userRoles !== 'submitter' && userRoles !== 'approver') {
+                            selectedUserRole = userRoles;
+                        } else {
+                            selectedCPIZUserRole = userRoles;
+                            selectedUserRole = '';
+                        }
+                        console.log('comes here');
+                        console.log(selectedUserRole);
+                        console.log(selectedCPIZUserRole);
+                        // issue when only approver and submitter comes
+                        // '[appadmin, generaluser, submitter,approver]', '[appadmin, generaluser]' ,'[submitter,approver]'
+                        // above can come and for returns for each case (appadmin, approver )/(appadmin ,'')/ ('', approver)
                         try {
                             const userRolesArray = userRoles.split(',').map((item) => item.trim());
 
                             if (userRolesArray.length > 1) {
+                                console.log('more than 1 role present');
                                 userRolesArray[0] = userRolesArray[0].substring(1);
 
                                 const lastElement = userRolesArray[userRolesArray.length - 1];
                                 userRolesArray[userRolesArray.length - 1] = lastElement.substring(0, lastElement.length - 1);
 
-                                selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray);
+                                // break the role array to regular role array and cipz role array
+                                console.log('break the role array to regular role array and cipz role array');
+                                const cipzUserRoleArray = [];
+                                const possibleCIPZRoles = [ROLE_CIPZ_SUBMITTER, ROLE_CIPZ_APPROVER];
+                                possibleCIPZRoles.forEach((cipzRole) => {
+                                    if (userRolesArray.includes(cipzRole)) {
+                                        cipzUserRoleArray.push(cipzRole);
+                                        userRolesArray.splice(userRolesArray.indexOf(cipzRole), 1);
+                                    }
+                                });
+
+                                selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, 'regular');
+                                selectedCPIZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(cipzUserRoleArray, 'cipz');
+                                console.log(selectedUserRole);
+                                console.log(selectedCPIZUserRole);
                             }
                         } catch (e) {
                             logger.error(`Error in parsing the user role value: ${userRoles}`);
                             selectedUserRole = userRoles;
                         }
+                        // selected use role either empty , regular or
                         const authorizedBunitList = AuthorizationService.getAuthorizedBusinessUnits(opcoString, selectedUserRole);
                         authorizedPricingTransformationEnabledBunitList = authorizedBunitList.authorizedPricingTransformationEnabledBunitList;
                         authorizedBatchEnabledBunitList = authorizedBunitList.authorizedBatchEnabledBunitList;
@@ -191,7 +232,10 @@ class AuthenticateService {
                         email: decodedPayloadFromJwt.email,
                         jobTitle: decodedPayloadFromJwt.zoneinfo,
                         role: selectedUserRole,
+                        cipzRole: selectedCPIZUserRole,
                     };
+                    console.log('comes here too');
+                    console.log(userDetailsData);
 
                     logger.info(`Authenticated user's user details: First name: ${userDetailsData.firstName}
                     Last name: ${userDetailsData.lastName} Username: ${userDetailsData.username}
