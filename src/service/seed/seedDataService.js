@@ -45,24 +45,17 @@ import {getSeedApiConfig} from '../../config/configs';
         });
     }
 
-    generateRequestPayload(payload) {
-        const { page = 0, ...remainingPayload } = payload;
-        return { ...remainingPayload, ...this.generatePaginationParams(page) };
-    }
-
     async getPriceZoneDetailsForCustomerAndItemAttributeGroup(req) {
         // const headers = await this.constructHeaders();
         // const reqUrl = this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getCustomerAndItemAttributeGroupsEndpoint;
-        // const payload = this.generateRequestPayload(req);
-        // return httpClient.makeRequest(HTTP_POST, reqUrl, payload, headers);
+        // return httpClient.makeRequest(HTTP_POST, reqUrl, req.body, headers);
         return (searchByCustomerMockResponse.data);
     }
 
     async getPriceZoneDetailsForCustomerGroupAndItemAttributeGroup(req) {
         // const headers = await this.constructHeaders();
         // const reqUrl = this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getCustomerGroupAndItemAttributeGroupsEndpoint;
-        // const payload = this.generateRequestPayload(req);
-        // return httpClient.makeRequest(HTTP_POST, reqUrl, payload, headers);
+        // return httpClient.makeRequest(HTTP_POST, reqUrl, req.body, headers);
         return (searchByCustomerGroupMockResponse.data);
     }
 

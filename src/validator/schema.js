@@ -40,5 +40,6 @@ export const priceZoneReassignmentSearchReqBody = Joi.object({
     itemAttributeGroupId: Joi.string().required(),
     customerAccount: Joi.string(),
     customerGroupId: Joi.string(),
-    page: Joi.number().integer(),
+    offset: Joi.number().integer().required(),
+    limit: Joi.number().integer().required(),
 }).xor('customerAccount', 'customerGroupId');
