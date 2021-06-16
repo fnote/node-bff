@@ -73,7 +73,12 @@ export const getCIPZApiConfig = () => ({
         cipzApiBaseUrl: `${process.env.API_CENTRAL_BASE_URL}/v1/cipz`,
         clientId: 'Cloud_PCI',
         getSubmittedRequestEndpoint : '/pz-update-requests',
-        pageSizeForSubmittedRequest : 2
+        pageSizeForSubmittedRequest : 10,
+        requestStatus : {
+            PENDING_APPROVAL: 'PENDING_APPROVAL',
+            APPROVED: 'APPROVED',
+            REJECTED: 'REJECTED'
+        }
     },
 });
 

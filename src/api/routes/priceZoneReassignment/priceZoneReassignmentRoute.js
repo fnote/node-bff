@@ -39,7 +39,7 @@ const querystring = require('querystring');
      priceZoneReassignmentRouter.get('/pz-update-requests', async (req, res) => {
 
         try {
-               const responseData = await PriceZoneReassignmentService.getCIPZSubmittedRequestData(req.query.page, req.query.limit, req.query.offset);
+               const responseData = await PriceZoneReassignmentService.getCIPZSubmittedRequestData(req.query);
                logger.info(`Success CIPZ submitted requets Data response received: ${JSON.stringify(responseData)}`);
                res.set(CORRELATION_ID_HEADER, getCorrelationId());
                res.status(HttpStatus.OK).send(responseData);

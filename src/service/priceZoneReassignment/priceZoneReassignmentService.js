@@ -4,7 +4,6 @@ import {getCIPZApiConfig} from '../../config/configs';
  import { getCorrelationId } from '../../util/correlationIdGenerator';
  import {
     ERROR_IN_FETCHING_CIPZ_API_SUBMITTED_REQUEST_DATA,
-    ERROR_IN_PAGINATING_CIPZ_API_SUBMITTED_REQUEST_DATA,
      APPLICATION_JSON, CORRELATION_ID_HEADER,
  } from '../../util/constants';
  import { CIPZ_API_SUBMITTED_REQ_ERROR_CODE } from '../../exception/exceptionCodes';
@@ -17,7 +16,11 @@ import {getCIPZApiConfig} from '../../config/configs';
          this.CipzConfig = getCIPZApiConfig();
      }
 
-     async getCIPZSubmittedRequestData(pageNumber) {
+     async getCIPZSubmittedRequestData(query) {
+
+        const pageNumber = query.page;
+        const requestSubmitter = query.submitter;
+        const reqStatus = query.req_status;
 
 
          const headers = {
@@ -29,34 +32,29 @@ import {getCIPZApiConfig} from '../../config/configs';
 
          const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl +
           this.CipzConfig.CONFIG.getSubmittedRequestEndpoint;
-         return this.sendGetRequest(reqUrl, headers, pageNumber);
+         return this.sendGetRequest(reqUrl, headers, pageNumber, requestSubmitter, reqStatus);
      }
 
-     async sendGetRequest(reqUrl, headers, pageNumber) {
+     /**
+      * return httpClient.makeRequest(HTTP_GET, reqUrl, undefined, headers, 
+      * {offset: (offset*limit), limit: limit, request_submitter: requestSubmitter, request_status: reqStatus } );
+      */
+     async sendGetRequest(reqUrl, headers, pageNumber, requestSubmitter, reqStatus) {
 
          try {
-             const pageSize  =  this.CipzConfig.CONFIG.pageSizeForSubmittedRequest;
-             const response = {}
-             response.data = await this.paginate(cipzApiGetSubmittedRequestMockResponse.data.data.pzUpdateRequests, pageSize, pageNumber);
-             response.numberOfPages = Math.ceil(cipzApiGetSubmittedRequestMockResponse.data.data.pzUpdateRequests.length / pageSize);
-             return response;
+             const offset = Number(pageNumber) - 1;
+             const limit = this.CipzConfig.CONFIG.pageSizeForSubmittedRequest;
+            
+             logger.info(`url : ${reqUrl}, headers :${headers}, offset: ${offset},
+              limit: ${limit}, requestSubmitter: ${requestSubmitter}, requestStatus: ${reqStatus}`);
+             return cipzApiGetSubmittedRequestMockResponse.data;
+
          } catch (e) {
             const errorMessage = ERROR_IN_FETCHING_CIPZ_API_SUBMITTED_REQUEST_DATA;
             logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
              throw new CipzApiDataFetchException(e, errorMessage, CIPZ_API_SUBMITTED_REQ_ERROR_CODE,);
          }
      }
-
-     async paginate(array, page_size, page_number) {
-         try {
-             return array.slice((page_number - 1) * page_size, page_number * page_size);
-         } catch (e) {
-            const errorMessage = ERROR_IN_PAGINATING_CIPZ_API_SUBMITTED_REQUEST_DATA;
-            logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
-             throw new CipzApiDataFetchException(e, errorMessage, CIPZ_API_SUBMITTED_REQ_ERROR_CODE,);
-
-         }
-    }
  }
 
  export default new PriceZoneReassignmentService();
