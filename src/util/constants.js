@@ -52,3 +52,6 @@ export const IS_APPLICABLE = 'isApplicable';
 
 // misc
 export const ORDER_PRICE_TYPE_HAND = 'H';
+
+// price zone reassignment pagination
+export const PAGE_SIZE = 100;

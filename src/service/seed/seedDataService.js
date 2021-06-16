@@ -5,6 +5,7 @@ import {getSeedApiConfig} from '../../config/configs';
  import {
      ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA,
      APPLICATION_JSON, CORRELATION_ID_HEADER,
+     PAGE_SIZE,
     //  HTTP_POST
  } from '../../util/constants';
  import { SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE } from '../../exception/exceptionCodes';
@@ -37,21 +38,22 @@ import {getSeedApiConfig} from '../../config/configs';
         return this.sendGetRequest(reqUrl, headers);
     }
 
-    formatRequestPayload(payload) {
-        const formattedPayload = { ...payload };
-        // if (!formattedPayload.offset) {
+    generatePaginationParams(page) {
+        return ({
+            offset: PAGE_SIZE * page,
+            limit: PAGE_SIZE,
+        });
+    }
 
-        // }
-        // if (!formattedPayload.limit) {
-
-        // }
-        return formattedPayload;
+    generateRequestPayload(payload) {
+        const { page = 0, ...remainingPayload } = payload;
+        return { ...remainingPayload, ...this.generatePaginationParams(page) };
     }
 
     async getPriceZoneDetailsForCustomerAndItemAttributeGroup(req) {
         // const headers = await this.constructHeaders();
         // const reqUrl = this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getCustomerAndItemAttributeGroupsEndpoint;
-        // const payload = this.formatRequestPayload(req);
+        // const payload = this.generateRequestPayload(req);
         // return httpClient.makeRequest(HTTP_POST, reqUrl, payload, headers);
         return (searchByCustomerMockResponse.data);
     }
@@ -59,7 +61,7 @@ import {getSeedApiConfig} from '../../config/configs';
     async getPriceZoneDetailsForCustomerGroupAndItemAttributeGroup(req) {
         // const headers = await this.constructHeaders();
         // const reqUrl = this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getCustomerGroupAndItemAttributeGroupsEndpoint;
-        // const payload = this.formatRequestPayload(req);
+        // const payload = this.generateRequestPayload(req);
         // return httpClient.makeRequest(HTTP_POST, reqUrl, payload, headers);
         return (searchByCustomerGroupMockResponse.data);
     }
