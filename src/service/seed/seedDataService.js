@@ -11,7 +11,7 @@ import {getSeedApiConfig} from '../../config/configs';
  import {
      SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE,
      SEED_API_SEARCH_BY_CUSTOMER_ERROR_CODE,
-     SEED_API_SEARCH_BY_CUSTOMER_GROUP_ERROR_CODE
+     SEED_API_SEARCH_BY_CUSTOMER_GROUP_ERROR_CODE,
     } from '../../exception/exceptionCodes';
  import {
      seedGetItemAttributeGroupMockResponse,
