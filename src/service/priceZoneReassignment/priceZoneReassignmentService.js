@@ -42,11 +42,11 @@ import {getCIPZApiConfig} from '../../config/configs';
          try {
              const limit = this.CipzConfig.CONFIG.pageSizeForSubmittedRequest;
              const offset = (Number(pageNumber) - 1)*limit;
-            
+
              logger.info(`url : ${reqUrl}, headers :${headers}, offset: ${offset},
               limit: ${limit}, requestSubmitter: ${requestSubmitter}, requestStatus: ${reqStatus}`);
              return cipzApiGetSubmittedRequestMockResponse.data;
-
+             
          } catch (e) {
             const errorMessage = ERROR_IN_FETCHING_CIPZ_API_SUBMITTED_REQUEST_DATA;
             logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
