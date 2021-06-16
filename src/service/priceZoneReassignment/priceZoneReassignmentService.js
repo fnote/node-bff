@@ -42,8 +42,8 @@ import {getCIPZApiConfig} from '../../config/configs';
      async sendGetRequest(reqUrl, headers, pageNumber, requestSubmitter, reqStatus) {
 
          try {
-             const offset = Number(pageNumber) - 1;
              const limit = this.CipzConfig.CONFIG.pageSizeForSubmittedRequest;
+             const offset = (Number(pageNumber) - 1)*limit;
             
              logger.info(`url : ${reqUrl}, headers :${headers}, offset: ${offset},
               limit: ${limit}, requestSubmitter: ${requestSubmitter}, requestStatus: ${reqStatus}`);
