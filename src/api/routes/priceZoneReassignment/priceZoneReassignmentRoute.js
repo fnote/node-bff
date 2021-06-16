@@ -9,6 +9,8 @@ import {
     CORRELATION_ID_HEADER,
     INVALID_REQUEST_BODY,
     ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE,
+    ERROR_IN_HANDLING_SEARCH_RESULTS,
+    ERROR_IN_HANDLING_CIPZ_PRICE_ZONE_UPDATE
 } from '../../../util/constants';
 import {getCorrelationId} from '../../../util/correlationIdGenerator';
 import SeedApiDataFetchException from '../../../exception/seedApiDataFechException';
@@ -71,7 +73,7 @@ export default () => {
                 handleUnauthorizedRequest(res);
             }
         } catch (error) {
-            const errMessage = 'Error occurred in getting Seed API item attribute group data';
+            const errMessage = ERROR_IN_HANDLING_CIPZ_PRICE_ZONE_UPDATE;
             logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
             handleUnsuccessfulResponse(res, error, errMessage);
         }
@@ -166,7 +168,7 @@ export default () => {
                 handleUnauthorizedRequest(res);
             }
         } catch (error) {
-            const errMessage = 'Error occurred while searching Seed API for customer & item-attribute-group data';
+            const errMessage = ERROR_IN_HANDLING_SEARCH_RESULTS;
             logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
             handleUnsuccessfulResponse(res, error, errMessage);
         }
