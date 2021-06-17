@@ -5,10 +5,11 @@
  import {
     seedGetItemAttributeGroupMockResponse,
  } from '../../../config/test.config';
+ import { createErrorResponse } from '../../../mapper/responseMapper';
 
  jest.mock('../../../httpClient/httpClient');
  jest.mock('../../../util/accessTokenGenerator');
- 
+
  jest.mock('../../../initializer', () => ({
      initializer: (req, res, next) => next(),
  }));
@@ -18,7 +19,6 @@
 
  describe('routes: /item-attribute-groups', () => {
      test('get/item-attribute-groups should return correct response with HTTP OK when the flow is correct', async () => {
-
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.locals.authResponse = {
                 authenticated: true,
@@ -50,12 +50,10 @@
 });
 
 describe('routes: /item-attribute-groups', () => {
-
     test('get/item-attribute-groups should return error response when it is not authorized', async () => {
-
         authMiddleware.mockImplementationOnce((req, res, next) => {
             res.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .send(createErrorResponse(null, errMessage, error, null));
+            .send(createErrorResponse(null, 'Test Error Message', 'test error', null));
         });
 
         jest.setTimeout(100000);
@@ -66,5 +64,4 @@ describe('routes: /item-attribute-groups', () => {
                 expect(res.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
             });
     });
-
 });
