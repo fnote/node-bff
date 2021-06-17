@@ -56,7 +56,7 @@ export default () => {
         const { error } = priceZoneReassignmentCreateReqBody.validate(body);
         if (error) {
             throw new InvalidRequestException(
-                INVALID_REQUEST_BODY,
+                `${INVALID_REQUEST_BODY}, ${error.message}`,
                 HttpStatus.BAD_REQUEST,
                 PRICE_ZONE_REASSIGNMENT_INVALID_UPDATE_PAYLOAD_ERROR_CODE,
             );

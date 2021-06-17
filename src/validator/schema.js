@@ -31,7 +31,6 @@ export const pricingDataReqBody = Joi.object({
 
 });
 
-<<<<<<< HEAD
 export const priceZoneReassignmentSearchReqBody = Joi.object({
     businessUnitNumber: Joi.string()
         .alphanum()
@@ -46,9 +45,26 @@ export const priceZoneReassignmentSearchReqBody = Joi.object({
 }).xor('customerAccount', 'customerGroupId');
 
 export const priceZoneReassignmentCreateReqBody = Joi.object({
+    businessUnitNumber: Joi.string()
+        .alphanum()
+        .min(3)
+        .max(3)
+        .required(),
+    itemAttributeGroup: Joi.string().required(),
+    itemAttributeGroupId: Joi.string().required(),
+    customerGroupId: Joi.string(),
+    customerGroup: Joi.string().allow(null),
+    customerAccount: Joi.string(),
+    newPriceZone: Joi.number().integer().max(5).required(),
+    effectiveFromDate: Joi.string().required(),
+    submitter: Joi.object({
+        id: Joi.string().required(),
+        givenName: Joi.string().required(),
+        surname: Joi.string().required(),
+        email: Joi.string().email({ tlds: {allow: false} }).required(),
+    }).required(),
+}).xor('customerAccount', 'customerGroupId');
 
-});
-=======
 export const cipzApprovalRequestReqBody = Joi.object({
     requestId: Joi.number()
         .required(),
@@ -73,4 +89,3 @@ export const cipzApprovalRequestReqBody = Joi.object({
 
 });
 
->>>>>>> task/TRSP-107-bff-implementation
