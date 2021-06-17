@@ -13,9 +13,11 @@ import * as HttpStatus from 'http-status-codes';
 import { CIPZ_API_DATA_FETCH_ERROR_CODE, CPIZ_DATA_INVALID_PAYLOAD_ERROR_CODE } from '../../exception/exceptionCodes';
 import InvalidRequestException from '../../exception/invalidRequestException';
 import { cipzApprovalRequestReqBody } from '../../validator/schema';
-import { cipzApiGetSubmittedRequestMockResponse,
+import {
+    cipzApiGetSubmittedRequestMockResponse,
     cipzApiGetPriceZoneUpdateMockData,
-    cipzApiRespnseToApproveRequestMockData } from '../cipzMockData';
+    cipzApiRespnseToApproveRequestMockData
+} from '../cipzMockData';
 
 class PriceZoneReassignmentService {
 
