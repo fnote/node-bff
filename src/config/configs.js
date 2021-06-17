@@ -77,6 +77,7 @@ export const getCIPZApiConfig = () => ({
         getSubmittedRequestEndpoint : '/pz-update-requests',
         getPriceZoneUpdateEndpoint :'/price-zone-updates/',
         createPriceZoneUpdateEndpoint: '/pz-update-requests',
+        patchApproveRejectApprovalReqEndpoint : '/pz-update-requests'
     },
 });
 

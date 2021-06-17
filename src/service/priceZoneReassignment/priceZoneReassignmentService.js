@@ -1,103 +1,134 @@
-import {getCIPZApiConfig} from '../../config/configs';
- import logger from '../../util/logger';
- import CipzApiDataFetchException from '../../exception/cipzApiDataFetchException';
- import { getCorrelationId } from '../../util/correlationIdGenerator';
- import {
+import { getCIPZApiConfig } from '../../config/configs';
+import logger from '../../util/logger';
+import CipzApiDataFetchException from '../../exception/cipzApiDataFetchException';
+import { getCorrelationId } from '../../util/correlationIdGenerator';
+import {
     ERROR_IN_FETCHING_CIPZ_API_DATA,
-    ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE,
+    INVALID_REQUEST_BODY,
     APPLICATION_JSON, CORRELATION_ID_HEADER,
-    HTTP_POST,
- } from '../../util/constants';
- import { CIPZ_API_DATA_FETCH_ERROR_CODE, CIPZ_API_CREATE_PRICE_ZONE_UPDATE_ERROR_CODE } from '../../exception/exceptionCodes';
- import { cipzApiGetSubmittedRequestMockResponse, cipzApiGetPriceZoneUpdateMockData, cipzCreatePriceZoneChangeMockResponse } from '../cipzMockData';
-//  import {httpClient} from '../../httpClient/httpClient';
- class PriceZoneReassignmentService {
+    HTTP_GET,
+    HTTP_PATCH,
+    ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE,
+} from '../../util/constants';
+import * as HttpStatus from 'http-status-codes';
+import {
+    CIPZ_API_DATA_FETCH_ERROR_CODE,
+    CPIZ_DATA_INVALID_PAYLOAD_ERROR_CODE,
+    CIPZ_API_CREATE_PRICE_ZONE_UPDATE_ERROR_CODE,
+} from '../../exception/exceptionCodes';
+import InvalidRequestException from '../../exception/invalidRequestException';
+import { cipzApprovalRequestReqBody } from '../../validator/schema';
+import {
+    cipzApiGetSubmittedRequestMockResponse,
+    cipzApiGetPriceZoneUpdateMockData,
+    cipzApiRespnseToApproveRequestMockData,
+    cipzCreatePriceZoneChangeMockResponse
+} from '../cipzMockData';
 
-     constructor() {
-         this.CipzConfig = getCIPZApiConfig();
-     }
+class PriceZoneReassignmentService {
 
-     async constructHeaders() {
-        // const accessToken = await getAccessToken(false);
-        return ({
-            'Content-type': APPLICATION_JSON,
-            Accept: APPLICATION_JSON,
-            clientID: this.seedApiConfig.CONFIG.clientId,
-            [CORRELATION_ID_HEADER]: getCorrelationId(),
-            // BearerAuth: accessToken,
-        });
+    constructor() {
+        this.CipzConfig = getCIPZApiConfig();
     }
 
-     /**
-      * Decide what to do if params are not set
-      */
-     async getCIPZSubmittedRequestData(query) {
+    /**
+     * Decide what to do if params are not set
+     */
+    async getCIPZSubmittedRequestData(query) {
 
-         const headers = {
-             'Content-type': APPLICATION_JSON,
-             Accept: APPLICATION_JSON,
-             clientID: this.CipzConfig.CONFIG.clientId,
-             [CORRELATION_ID_HEADER]: getCorrelationId(),
-         };
+        const headers = {
+            'Content-type': APPLICATION_JSON,
+            Accept: APPLICATION_JSON,
+            clientID: this.CipzConfig.CONFIG.clientId,
+            [CORRELATION_ID_HEADER]: getCorrelationId(),
+        };
 
-         const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl +
-          this.CipzConfig.CONFIG.getSubmittedRequestEndpoint;
+        const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl +
+            this.CipzConfig.CONFIG.getSubmittedRequestEndpoint;
 
-          const params = {
-              limit : query.limit,
-              offset: query.offset,
-              reqStatus: query.reqStatus
-          }
+        const params = {
+            limit: query.limit,
+            offset: query.offset,
+            reqStatus: query.reqStatus
+        }
 
-          return this.sendGetRequest(reqUrl, headers, params);
-     }
+        return this.sendRequest(HTTP_GET, reqUrl, headers, params, undefined);
+    }
 
-     /**
-      * Decide what to do if params, requestid not set
-      */
-     async getPriceZoneUpdatesData(query, requestId) {
+    /**
+     * Decide what to do if params, requestid not set
+     */
+    async getPriceZoneUpdatesData(query, requestId) {
 
-         const headers = {
-             'Content-type': APPLICATION_JSON,
-             Accept: APPLICATION_JSON,
-             clientID: this.CipzConfig.CONFIG.clientId,
-             [CORRELATION_ID_HEADER]: getCorrelationId(),
-         };
+        const headers = {
+            'Content-type': APPLICATION_JSON,
+            Accept: APPLICATION_JSON,
+            clientID: this.CipzConfig.CONFIG.clientId,
+            [CORRELATION_ID_HEADER]: getCorrelationId(),
+        };
 
-         const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl +
-          this.CipzConfig.CONFIG.getPriceZoneUpdateEndpoint + requestId;
+        const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl +
+            this.CipzConfig.CONFIG.getPriceZoneUpdateEndpoint + requestId;
 
-          const params = {
-              limit : query.limit,
-              offset: query.offset,
-              source : query.source
-          }
+        const params = {
+            limit: query.limit,
+            offset: query.offset,
+            source: query.source
+        }
 
-          return this.sendGetRequest(reqUrl, headers, params);
-     }
+        return this.sendRequest(HTTP_GET, reqUrl, headers, params, undefined);
+    }
 
+    async approveRejectApprovalRequest(body) {
 
-     /**
-      * return httpClient.makeRequest(HTTP_GET, reqUrl, undefined, headers, params );
-      */
-     async sendGetRequest(reqUrl, headers, params) {
+        const { error } = cipzApprovalRequestReqBody.validate(body);
+        if (error) {
 
-         try {
+            logger.error(`Request body validation failed in getting CIPZ Approval update request data: 
+            ${JSON.stringify(body)}`);
 
-             logger.info(`url : ${reqUrl}, headers :${headers}, params: ${params}`);
+            throw new InvalidRequestException(
+                INVALID_REQUEST_BODY,
+                HttpStatus.BAD_REQUEST,
+                CPIZ_DATA_INVALID_PAYLOAD_ERROR_CODE,
+            );
+        }
 
-             if ('source' in params) {
-                 return cipzApiGetPriceZoneUpdateMockData.data;
-             }
-             return cipzApiGetSubmittedRequestMockResponse.data;
+        const headers = {
+            'Content-type': APPLICATION_JSON,
+            Accept: APPLICATION_JSON,
+            clientID: this.CipzConfig.CONFIG.clientId,
+            [CORRELATION_ID_HEADER]: getCorrelationId(),
+        };
 
-         } catch (e) {
+        const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl +
+            this.CipzConfig.CONFIG.patchApproveRejectApprovalReqEndpoint;
+
+        return this.sendRequest(HTTP_PATCH, reqUrl, headers, undefined, body);
+    }
+
+    /**
+     * return httpClient.makeRequest(httpMethod, reqUrl, body, headers, params );
+     */
+    async sendRequest(httpMethod, reqUrl, headers, params, body) {
+
+        try {
+            if (params) {
+                if ('source' in params) {
+                    return cipzApiGetPriceZoneUpdateMockData.data;
+                }
+                return cipzApiGetSubmittedRequestMockResponse.data;
+            } else {
+                return cipzApiRespnseToApproveRequestMockData;
+            }
+
+        } catch (e) {
             const errorMessage = ERROR_IN_FETCHING_CIPZ_API_DATA;
-            const cpizErrorCode = CIPZ_API_DATA_FETCH_ERROR_CODE;
+            const errorCode = CIPZ_API_DATA_FETCH_ERROR_CODE;
             logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
-             throw new CipzApiDataFetchException(e, errorMessage, cpizErrorCode,);
-         }
-     }
+            throw new CipzApiDataFetchException(e, errorMessage, errorCode,);
+        }
+    }
 
     async createPriceZoneChange(req) {
         try {
@@ -109,6 +140,7 @@ import {getCIPZApiConfig} from '../../config/configs';
             throw new CipzApiDataFetchException(error, ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE, CIPZ_API_CREATE_PRICE_ZONE_UPDATE_ERROR_CODE);
         }
     }
- }
 
- export default new PriceZoneReassignmentService();
+}
+
+export default new PriceZoneReassignmentService();

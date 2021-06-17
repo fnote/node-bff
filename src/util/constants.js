@@ -15,6 +15,7 @@ export const AWS_REGION = 'us-east-1';
 export const HTTP_GET = 'GET';
 export const HTTP_POST = 'POST';
 export const HTTP_DELETE = 'DELETE';
+export const HTTP_PATCH = 'PATCH';
 
 // HTTP req/res metadata
 export const APPLICATION_JSON = 'application/json';

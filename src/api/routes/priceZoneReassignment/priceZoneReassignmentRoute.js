@@ -19,6 +19,7 @@ import {
     PRICE_ZONE_REASSIGNMENT_INVALID_SEARCH_PAYLOAD_ERROR_CODE,
     PRICE_ZONE_REASSIGNMENT_INVALID_UPDATE_PAYLOAD_ERROR_CODE,
 } from '../../../exception/exceptionCodes';
+import { isEmptyRequestBody } from '../../../validator/validateRequest';
 import {priceZoneReassignmentSearchReqBody, priceZoneReassignmentCreateReqBody} from '../../../validator/schema';
 import CipzApiDataFetchException from '../../../exception/cipzApiDataFetchException';
 
@@ -82,17 +83,17 @@ export default () => {
     priceZoneReassignmentRouter.get('/pz-update-requests', async (req, res) => {
 
         try {
-               const responseData = await PriceZoneReassignmentService.getCIPZSubmittedRequestData(req.query);
-               logger.info(`Success CIPZ submitted requets Data response received: ${JSON.stringify(responseData)}`);
-               res.set(CORRELATION_ID_HEADER, getCorrelationId());
-               res.status(HttpStatus.OK).send(responseData);
+            const responseData = await PriceZoneReassignmentService.getCIPZSubmittedRequestData(req.query);
+            logger.info(`Success CIPZ submitted requets Data response received: ${JSON.stringify(responseData)}`);
+            res.set(CORRELATION_ID_HEADER, getCorrelationId());
+            res.status(HttpStatus.OK).send(responseData);
 
         } catch (error) {
 
             const errorMsg = 'Error occurred in getting CIPZ API submitted requests data';
             logger.error(`${errorMsg} : ${error} cause : ${error.stack} errorCode : ${error.errorCode}`);
-            let httpResponseStatusCode  = (error instanceof CipzApiDataFetchException) ? HttpStatus.BAD_REQUEST
-             : HttpStatus.INTERNAL_SERVER_ERROR;
+            let httpResponseStatusCode = (error instanceof CipzApiDataFetchException) ? HttpStatus.BAD_REQUEST
+                : HttpStatus.INTERNAL_SERVER_ERROR;
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(httpResponseStatusCode)
                 .send(createErrorResponse(null, errorMsg, error, null, error.errorCode));
@@ -121,18 +122,40 @@ export default () => {
 
         try {
 
-               let requestId = req.params.request_id;
-               const responseData = await PriceZoneReassignmentService.getPriceZoneUpdatesData(req.query, requestId);
-               logger.info(`Success CIPZ API Price Zone Updates Data response received: ${JSON.stringify(responseData)}`);
-               res.set(CORRELATION_ID_HEADER, getCorrelationId());
-               res.status(HttpStatus.OK).send(responseData);
+            let requestId = req.params.request_id;
+            const responseData = await PriceZoneReassignmentService.getPriceZoneUpdatesData(req.query, requestId);
+            logger.info(`Success CIPZ API Price Zone Updates Data response received: ${JSON.stringify(responseData)}`);
+            res.set(CORRELATION_ID_HEADER, getCorrelationId());
+            res.status(HttpStatus.OK).send(responseData);
 
         } catch (error) {
 
             const errorMsg = 'Error occurred in getting CIPZ API Price Zone Updates data';
             logger.error(`${errorMsg} : ${error} cause : ${error.stack} errorCode : ${error.errorCode}`);
-            let httpResponseStatusCode  = (error instanceof CipzApiDataFetchException) ? HttpStatus.BAD_REQUEST
-             : HttpStatus.INTERNAL_SERVER_ERROR;
+            let httpResponseStatusCode = (error instanceof CipzApiDataFetchException) ? HttpStatus.BAD_REQUEST
+                : HttpStatus.INTERNAL_SERVER_ERROR;
+            res.set(CORRELATION_ID_HEADER, getCorrelationId());
+            res.status(httpResponseStatusCode)
+                .send(createErrorResponse(null, errorMsg, error, null, error.errorCode));
+        }
+    });
+
+    priceZoneReassignmentRouter.patch('/pz-update-requests', async (req, res) => {
+
+        try {
+            isEmptyRequestBody(req.body);
+
+            const responseData = await PriceZoneReassignmentService.approveRejectApprovalRequest(req.body);
+            logger.info(` Successfully responsed CIPZ API approval request: ${JSON.stringify(responseData)}`);
+            res.set(CORRELATION_ID_HEADER, getCorrelationId());
+            res.status(HttpStatus.OK).send(responseData);
+
+        } catch (error) {
+
+            const errorMsg = 'Error occurred in responsing CIPZ API approval request';
+            logger.error(`${errorMsg} : ${error} cause : ${error.stack} errorCode : ${error.errorCode}`);
+            let httpResponseStatusCode = (error instanceof CipzApiDataFetchException) ? HttpStatus.BAD_REQUEST
+                : HttpStatus.INTERNAL_SERVER_ERROR;
             res.set(CORRELATION_ID_HEADER, getCorrelationId());
             res.status(httpResponseStatusCode)
                 .send(createErrorResponse(null, errorMsg, error, null, error.errorCode));

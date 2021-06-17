@@ -1,6 +1,7 @@
 const GET = 'get';
 const POST = 'post';
 const DELETE = 'delete';
+const PATCH = 'patch';
 const version = '/v1';
 const appName = '/pci-bff';
 
@@ -21,6 +22,7 @@ const routes = [
   { path: '/price-zone-reassignment/pz-update-requests', method: POST },
   { path: '/price-zone-reassignment/pz-updates/{request_id}', method: GET},
   { path: '/price-zone-reassignment/search', method: POST },
+  { path: '/price-zone-reassignment/pz-update-requests', method: PATCH},
 ];
 
 module.exports = () => {
