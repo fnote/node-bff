@@ -28,11 +28,14 @@ export const ERROR_IN_GETTING_BATCH_JOBS = 'Error occurred while retrieving batc
 export const ERROR_IN_DELETING_BATCH_JOBS = 'Error occurred while deleting a batch job';
 export const INVALID_REQUEST_BODY = 'Invalid/ Unsupported request body';
 export const EMPTY_REQUEST_BODY = 'Empty request body';
+export const INVALID_QUERY_PARAMS = 'Invalid/ Unsupported query parameters';
 export const ERROR_IN_FETCHING_CLOUD_PRICING_DATA = 'Failed to fetch data from Cloud Pricing Endpoint';
 export const ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA = 'Failed to fetch data from Seed Api while getting item attributes group data';
 export const ERROR_IN_FETCHING_CIPZ_API_DATA = 'Failed to fetch data from CIPZ Api Endpoint';
 export const ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE = 'Error occurred while creating price zone update request from CIPZ Api Endpoint';
 export const ERROR_IN_HANDLING_CIPZ_PRICE_ZONE_UPDATE = 'Error occurred while handling price zone update request';
+export const ERROR_IN_GETTING_CIPZ_PRICE_ZONE_SUBMITTED_REQ_DATA = 'Error occurred in getting CIPZ API submitted requests data';
+export const ERROR_IN_RESPONSING_CIPZ_PRICE_ZONE_APPROVAL_REQ = 'Error occurred in responsing CIPZ API approval request';
 export const ERROR_IN_GETTING_SEED_SEARCH_RESULTS = 'Error occurred while searching Seed API for customer & item-attribute-group data';
 export const ERROR_IN_HANDLING_SEARCH_RESULTS = 'Error occurred while handling the price zone reassignment search request';
 

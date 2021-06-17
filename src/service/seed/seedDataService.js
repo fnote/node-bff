@@ -1,5 +1,4 @@
 import {getSeedApiConfig} from '../../config/configs';
- import logger from '../../util/logger';
  import SeedApiDataFetchException from '../../exception/seedApiDataFechException';
  import { getCorrelationId } from '../../util/correlationIdGenerator';
  import {
@@ -37,9 +36,14 @@ import {getSeedApiConfig} from '../../config/configs';
     }
 
     async getSeedItemAttributeGroupsData() {
-        const headers = await this.constructHeaders();
-        const reqUrl = this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getItemAttributeGroupsEndpoint;
-        return this.sendGetRequest(reqUrl, headers);
+        try {
+            // const headers = await this.constructHeaders();
+            // const reqUrl = this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getItemAttributeGroupsEndpoint;
+            // return httpClient.makeRequest(HTTP_GET, reqUrl, req.body, headers);
+            return (seedGetItemAttributeGroupMockResponse.data);
+        } catch (error) {
+            throw new SeedApiDataFetchException(error, ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA, SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE);
+        }
     }
 
     async getPriceZoneDetailsForCustomerAndItemAttributeGroup(req) {
@@ -61,16 +65,6 @@ import {getSeedApiConfig} from '../../config/configs';
             return (searchByCustomerGroupMockResponse.data);
         } catch (error) {
             throw new SeedApiDataFetchException(error, ERROR_IN_GETTING_SEED_SEARCH_RESULTS, SEED_API_SEARCH_BY_CUSTOMER_GROUP_ERROR_CODE);
-        }
-    }
-
-    async sendGetRequest(reqUrl, headers) {
-        try {
-            return (seedGetItemAttributeGroupMockResponse.data);
-        } catch (e) {
-            const errorMessage = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA;
-            logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
-            throw new SeedApiDataFetchException(e, errorMessage, SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE);
         }
     }
  }
