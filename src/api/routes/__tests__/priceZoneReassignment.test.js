@@ -9,7 +9,6 @@
  import PriceZoneReassignmentService from '../../../service/priceZoneReassignment/priceZoneReassignmentService';
  import {mockPzUpdateRequestBody} from '../../../config/test.config';
 
-
  jest.mock('../../../httpClient/httpClient');
  jest.mock('../../../util/accessTokenGenerator');
 
@@ -432,5 +431,4 @@ describe('routes: /pz-update-requests', () => {
                expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
            });
    });
-   
 });

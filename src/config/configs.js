@@ -74,10 +74,10 @@ export const getCIPZApiConfig = () => ({
     CONFIG: {
         cipzApiBaseUrl: `${process.env.API_CENTRAL_BASE_URL}/v1/cipz`,
         clientId: 'Cloud_PCI',
-        getSubmittedRequestEndpoint : '/pz-update-requests',
-        getPriceZoneUpdateEndpoint :'/price-zone-updates/',
+        getSubmittedRequestEndpoint: '/pz-update-requests',
+        getPriceZoneUpdateEndpoint: '/price-zone-updates/',
         createPriceZoneUpdateEndpoint: '/pz-update-requests',
-        patchApproveRejectApprovalReqEndpoint : '/pz-update-requests'
+        patchApproveRejectApprovalReqEndpoint: '/pz-update-requests',
     },
 });
 
