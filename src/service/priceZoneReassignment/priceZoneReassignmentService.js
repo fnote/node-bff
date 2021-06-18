@@ -66,10 +66,11 @@ class PriceZoneReassignmentService {
             );
         }
         try {
-            // const headers = await this.constructHeaders();
-            // const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.getSubmittedRequestEndpoint;
+            const headers = await this.constructHeaders();
+            const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.getSubmittedRequestEndpoint;
+            logger.info({headers, reqUrl, params});
             // return httpClient.makeRequest(HTTP_GET, reqUrl, undefined, headers, params);
-            return (cipzApiGetSubmittedRequestMockResponse.data)
+            return (cipzApiGetSubmittedRequestMockResponse.data);
         } catch (e) {
             const errorMessage = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA;
             const errorCode = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA_CODE;
@@ -95,8 +96,9 @@ class PriceZoneReassignmentService {
             );
         }
         try {
-            // const headers = await this.constructHeaders();
-            // const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.getPriceZoneUpdateEndpoint + requestId;
+            const headers = await this.constructHeaders();
+            const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.getPriceZoneUpdateEndpoint + requestId;
+            logger.info({headers, reqUrl, params});
             // return httpClient.makeRequest(HTTP_GET, reqUrl, undefined, headers, params);
             return (cipzApiGetPriceZoneUpdateMockData.data);
         } catch (e) {
@@ -119,9 +121,10 @@ class PriceZoneReassignmentService {
             );
         }
         try {
-            // const headers = await this.constructHeaders();
-            // const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl
-            // + this.CipzConfig.CONFIG.patchApproveRejectApprovalReqEndpoint;
+            const headers = await this.constructHeaders();
+            const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl
+            + this.CipzConfig.CONFIG.patchApproveRejectApprovalReqEndpoint;
+            logger.info({headers, reqUrl, body});
             // return httpClient.makeRequest(HTTP_PATCH, reqUrl, body, headers);
             return (cipzApiRespnseToApproveRequestMockData.data);
         } catch (e) {
