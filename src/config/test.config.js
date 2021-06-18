@@ -23,20 +23,20 @@ export const productInfoMockResponse = {
 export const seedGetItemAttributeGroupMockResponse = {
     status: HTTP.OK,
     data: {
-        attributeGroups:[
+        attributeGroups: [
             {
-                name:"MILK",
-                id:12213
+                name: 'MILK',
+                id: 12213,
             },
             {
-                name:"FOOD STORAGE BAGS/SANDWICH BAGS/PAN LINERS",
-                id:16892
+                name: 'FOOD STORAGE BAGS/SANDWICH BAGS/PAN LINERS',
+                id: 16892,
             },
             {
-                name:"FROZEN PASTA",
-                id:12341
-            }
-        ]
+                name: 'FROZEN PASTA',
+                id: 12341,
+            },
+        ],
     },
 };
 
@@ -1206,6 +1206,17 @@ export const mockRequestUploadSignedUrl = {
         {fileName: 'fileName2.txt', contentType: 'text/plain'},
     ],
 };
+
+export const mockPzUpdateRequestBody = {
+    requestId: 112,
+    approver: {
+       id: 'sams5625',
+       givenName: 'Sanjaya',
+       surname: 'Amarasinghe',
+       email: 'sams5625@sysco.com',
+    },
+    status: 'APPROVED',
+ };
 
 export const mockRequestDownloadSignedUrl = {
     fileNames: [
