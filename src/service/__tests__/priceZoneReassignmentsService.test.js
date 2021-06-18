@@ -1,9 +1,7 @@
 import {jest} from '@jest/globals';
-import * as HttpStatus from 'http-status-codes';
 import PriceZoneReassignmentService from '../priceZoneReassignment/priceZoneReassignmentService';
 import CipzApiDataFetchException from '../../exception/cipzApiDataFetchException';
 import InvalidRequestException from '../../exception/invalidRequestException';
-import { SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE } from '../../exception/exceptionCodes';
 
 jest.mock('../../httpClient/httpClient');
 jest.mock('../../util/accessTokenGenerator');
