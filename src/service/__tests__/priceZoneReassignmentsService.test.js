@@ -96,15 +96,15 @@ describe(' Price Zone Reassignment Service - approveRejectApprovalRequest', () =
     test('should generate non null response when flow is correct', async () => {
         const body = {
             requestId: 112,
-            approver: {
+            reviewer: {
                id: 'sams5625',
                givenName: 'Sanjaya',
                surname: 'Amarasinghe',
                email: 'sams5625@sysco.com',
             },
+            reviewNote: 'review',
             status: 'APPROVED',
          };
-
         jest.spyOn(PriceZoneReassignmentService, 'constructHeaders').mockImplementation(() => ({
                 headers: 'mock headers',
             }));
@@ -116,12 +116,13 @@ describe(' Price Zone Reassignment Service - approveRejectApprovalRequest', () =
     test('should generate the error response when body is invalid', async () => {
         const body = {
             requestId: 112,
-            approver: {
+            reviewer: {
                id: 'sams5625',
                givenName: 'Sanjaya',
                surname: 'Amarasinghe',
                email: 'sams5625@sysco.com',
             },
+            reviewNote: '',
          };
         try {
             await PriceZoneReassignmentService.approveRejectApprovalRequest(body);
@@ -133,12 +134,13 @@ describe(' Price Zone Reassignment Service - approveRejectApprovalRequest', () =
     test('should generate the error response when error occured in creating response', async () => {
         const body = {
             requestId: 112,
-            approver: {
+            reviewer: {
                id: 'sams5625',
                givenName: 'Sanjaya',
                surname: 'Amarasinghe',
                email: 'sams5625@sysco.com',
             },
+            reviewNote: '',
             status: 'APPROVED',
          };
         jest.spyOn(PriceZoneReassignmentService, 'constructHeaders').mockImplementation(() => {

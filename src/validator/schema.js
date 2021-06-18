@@ -69,10 +69,7 @@ export const cipzApprovalRequestReqBody = Joi.object({
     requestId: Joi.number()
         .required(),
 
-    status: Joi.string()
-        .required(),
-
-    approver: Joi.object({
+    reviewer: Joi.object({
         id: Joi.string()
             .alphanum()
             .required(),
@@ -84,8 +81,12 @@ export const cipzApprovalRequestReqBody = Joi.object({
             .required(),
 
         email: Joi.string()
-            .required()
+            .required(),
     }),
 
-});
+    reviewNote: Joi.optional(),
 
+    status: Joi.string()
+        .required(),
+
+});
