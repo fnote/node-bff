@@ -112,8 +112,8 @@ class PriceZoneReassignmentService {
     async approveRejectApprovalRequest(body) {
         const { error } = cipzApprovalRequestReqBody.validate(body);
         if (error) {
-            logger.error(`Request body validation failed in getting CIPZ Approval update request data: 
-            ${JSON.stringify(body)}`);
+            logger.error(`Request body validation failed in getting CIPZ Approval update request data:
+             ${JSON.stringify(body)}`);
             throw new InvalidRequestException(
                 INVALID_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,

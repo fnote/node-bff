@@ -17,6 +17,7 @@ import {getSeedApiConfig} from '../../config/configs';
      searchByCustomerMockResponse,
      searchByCustomerGroupMockResponse,
     } from '../cipzMockData';
+import logger from '../../util/logger';
 //  import {httpClient} from '../../httpClient/httpClient';
 
  class SeedDataService {
@@ -37,9 +38,10 @@ import {getSeedApiConfig} from '../../config/configs';
 
     async getSeedItemAttributeGroupsData() {
         try {
-            // const headers = await this.constructHeaders();
-            // const reqUrl = this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getItemAttributeGroupsEndpoint;
+            const headers = await this.constructHeaders();
+            const reqUrl = this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getItemAttributeGroupsEndpoint;
             // return httpClient.makeRequest(HTTP_GET, reqUrl, req.body, headers);
+            logger.info({headers, reqUrl});
             return (seedGetItemAttributeGroupMockResponse.data);
         } catch (error) {
             throw new SeedApiDataFetchException(error, ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA, SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE);
