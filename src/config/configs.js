@@ -73,15 +73,6 @@ export const getAuthorizationRoleHierarchy = (roleType) => {
     return authorizationRoleHierarchy;
 };
 
-// export const getAuthorizationRoleHierarchyForCIPZRoles = () => {
-//     const cipzAuthorizationRoleHierarchy = {};
-//
-//     cipzAuthorizationRoleHierarchy[ROLE_CIPZ_APPROVER] = 1;
-//     cipzAuthorizationRoleHierarchy[ROLE_CIPZ_SUBMITTER] = 2;
-//
-//     return cipzAuthorizationRoleHierarchy;
-// };
-
 export const getPriceSourceName = (key) => {
     const priceSourceNameMap = {
         30: 'Price Rule',
