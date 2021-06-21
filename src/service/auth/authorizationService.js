@@ -6,7 +6,7 @@
 
 import BusinessUnitDao from '../../dao/businessUnitDao';
 import {MAX_ROLE_HIERARCHY_NUMBER, ROLE_APP_ADMIN, ROLE_GENERAL_USER} from '../../util/constants';
-import {getAuthorizationRoleHierarchy, getAuthorizationRoleHierarchyForCIPZRoles} from '../../config/configs';
+import {getAuthorizationRoleHierarchy} from '../../config/configs';
 import logger from '../../util/logger';
 
 class AuthorizationService {
