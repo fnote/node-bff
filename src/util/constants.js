@@ -42,6 +42,10 @@ export const ROLE_GENERAL_USER = 'generaluser';
 export const ROLE_CIPZ_APPROVER = 'cipz_approver';
 export const ROLE_CIPZ_SUBMITTER = 'cipz_submitter';
 
+// user role types
+export const ROLE_REGULAR = 'regular';
+export const ROLE_CIPZ = 'cipz';
+
 export const MAX_ROLE_HIERARCHY_NUMBER = 10000;
 
 // application constants

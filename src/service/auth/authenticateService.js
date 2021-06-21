@@ -9,7 +9,7 @@ import jwkToPem from 'jwk-to-pem';
 import logger from '../../util/logger';
 import {getAuthConfig} from '../../config/configs';
 import {httpClient} from '../../httpClient/httpClient';
-import {HTTP_GET, ROLE_CIPZ_APPROVER, ROLE_CIPZ_SUBMITTER} from '../../util/constants';
+import {HTTP_GET, ROLE_CIPZ, ROLE_CIPZ_APPROVER, ROLE_CIPZ_SUBMITTER, ROLE_REGULAR} from '../../util/constants';
 import AuthorizationService from './authorizationService';
 
 const unauthenticatedReturn = {
@@ -200,8 +200,8 @@ class AuthenticateService {
                                     }
                                 });
 
-                                selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, 'regular');
-                                selectedCPIZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(cipzUserRoleArray, 'cipz');
+                                selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_REGULAR);
+                                selectedCPIZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(cipzUserRoleArray, ROLE_CIPZ);
                             }
                         } catch (e) {
                             logger.error(`Error in parsing the user role value: ${userRoles}`);
