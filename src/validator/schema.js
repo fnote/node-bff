@@ -6,29 +6,21 @@ export const pricingDataReqBody = Joi.object({
         .min(3)
         .max(3)
         .required(),
-
     customerAccount: Joi.string()
         .alphanum()
         .required(),
-
     priceRequestDate: Joi.string()
         .required(),
-
     requestedQuantity: Joi.number()
         .required(),
-
     product: Joi.object({
         supc: Joi.string()
             .alphanum()
             .required(),
-
         splitFlag: Joi.boolean(),
-
         orderPrice: Joi.number(),
-
         orderPriceType: Joi.string(),
     }),
-
 });
 
 export const priceZoneReassignmentSearchReqBody = Joi.object({
@@ -68,25 +60,18 @@ export const priceZoneReassignmentCreateReqBody = Joi.object({
 export const cipzApprovalRequestReqBody = Joi.object({
     requestId: Joi.number()
         .required(),
-
     reviewer: Joi.object({
         id: Joi.string()
             .alphanum()
             .required(),
-
         givenName: Joi.string()
             .required(),
-
         surname: Joi.string()
             .required(),
-
         email: Joi.string()
             .required(),
     }),
-
     reviewNote: Joi.optional(),
-
     status: Joi.string()
         .required(),
-
 });
