@@ -13,6 +13,10 @@ import {
     mockSearchRequestWithCustomerAccount,
     mockSearchResponseWithCutomerGroup,
     mockSearchResponseWithCutomerAccount,
+    mockSearchRequestWithoutCustomer,
+    mockSearchRequestWithoutItemAttributeGroup,
+    mockSearchRequestWithBothCustomerAndCutomerGroup,
+    mockSearchRequestWithoutOpCoId,
 } from '../../../config/test.config.pzreassignment';
 
 jest.mock('../../../httpClient/httpClient');
@@ -192,5 +196,81 @@ describe('routes: /pz-update-requests', () => {
             .then((res) => {
                 expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
             });
+    });
+});
+
+describe('route: /search', () => {
+    test('search with valid request payload, cutomer_group in it', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/search')
+        .send(mockSearchRequestWithCustomerGroup)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.OK);
+            expect(res.body).toBeDefined();
+            expect(res.body).toEqual(mockSearchResponseWithCutomerGroup);
+        });
+    });
+
+    test('search with valid request payload, cutomer_account in it', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/search')
+        .send(mockSearchRequestWithCustomerAccount)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.OK);
+            expect(res.body).toBeDefined();
+            expect(res.body).toEqual(mockSearchResponseWithCutomerAccount);
+        });
+    });
+
+    test('search with invalid payload, no OpCoId present', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/search')
+        .send(mockSearchRequestWithoutOpCoId)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+            expect(res.body).toBeDefined();
+        });
+    });
+
+    test('search with invalid payload, no customer identifier present', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/search')
+        .send(mockSearchRequestWithoutCustomer)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+            expect(res.body).toBeDefined();
+        });
+    });
+
+    test('search with invalid payload, no item attribute group id present', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/search')
+        .send(mockSearchRequestWithoutItemAttributeGroup)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+            expect(res.body).toBeDefined();
+        });
+    });
+
+    test('search with invalid payload, both customer & customer group id present', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/search')
+        .send(mockSearchRequestWithBothCustomerAndCutomerGroup)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+            expect(res.body).toBeDefined();
+        });
     });
 });
