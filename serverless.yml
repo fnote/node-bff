@@ -85,17 +85,17 @@ functions:
     timeout: 60
     # to locally up the application, uncomment -> events: ${file(./serverless-routes.js)} this line and comment
     # out the other events section which is used in alb
-    events: ${file(./serverless-routes.js)}
-    # events:
-    #   - alb:
-    #       listenerArn: !Ref LoadBalancerListenerHTTPS
-    #       priority: 2
-    #       conditions:
-    #         path: /v1/pci-bff/auth/login
-    #       authorizer: 'cognitoLoginAuth'
-    #   - alb:
-    #       listenerArn: !Ref LoadBalancerListenerHTTPS
-    #       priority: 3
-    #       conditions:
-    #         path: /v1/*
-    #       authorizer: 'cognitoAuth'
+    # events: ${file(./serverless-routes.js)}
+    events:
+      - alb:
+          listenerArn: !Ref LoadBalancerListenerHTTPS
+          priority: 2
+          conditions:
+            path: /v1/pci-bff/auth/login
+          authorizer: 'cognitoLoginAuth'
+      - alb:
+          listenerArn: !Ref LoadBalancerListenerHTTPS
+          priority: 3
+          conditions:
+            path: /v1/*
+          authorizer: 'cognitoAuth'
