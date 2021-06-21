@@ -68,6 +68,7 @@ const authenticatedMockResponse = {
         lastName: 'secondName',
         username: 'username',
         role: 'appadmin',
+        cipzRole: '',
     },
 };
 
@@ -342,6 +343,7 @@ describe('Auth Service', () => {
                 lastName: 'secondName',
                 username: 'username',
                 role: undefined,
+                cipzRole: '',
             },
         };
         const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
@@ -504,6 +506,7 @@ describe('Auth Service', () => {
                 lastName: 'secondName',
                 username: 'username',
                 role: '[appadmin, generaluser]',
+                cipzRole: '',
             },
         };
 

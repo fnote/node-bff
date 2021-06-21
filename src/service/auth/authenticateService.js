@@ -27,11 +27,6 @@ class AuthenticateService {
     prepareToValidateToken = async (req, res) => {
         try {
             const accessToken = req.headers[this.authConfig.CONFIG.authTokenHeaderAttribute];
-
-            // logger.info('.................................');
-            // logger.info(`Req headers: ${JSON.stringify(req.headers)}`);
-            // logger.info(`Request: ${JSON.stringify(req)}`);
-            // logger.info(`Given access token: ${accessToken}`);
             logger.debug(`Given access token: ${accessToken}`);
             logger.info('.................................');
 
@@ -133,7 +128,6 @@ class AuthenticateService {
         logger.debug(`Given user claim token: ${userClaimToken}`);
 
         const decodedPayloadFromJwt = JSON.parse(Buffer.from(userClaimToken.split('.')[1], 'base64').toString());
-        console.log(decodedPayloadFromJwt);
         logger.info(JSON.stringify(decodedPayloadFromJwt));
 
         if (decodedPayloadFromJwt) {
