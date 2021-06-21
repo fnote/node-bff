@@ -21,7 +21,7 @@ import {getSeedApiConfig} from '../../config/configs';
 
  import {httpClient} from '../../httpClient/httpClient';
 
- class seedService {
+ class SeedService {
     constructor() {
         this.seedApiConfig = getSeedApiConfig();
     }
@@ -70,4 +70,4 @@ import {getSeedApiConfig} from '../../config/configs';
     }
  }
 
- export default new seedService();
+ export default new SeedService();
