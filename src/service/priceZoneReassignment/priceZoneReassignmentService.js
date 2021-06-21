@@ -1,4 +1,4 @@
-// import {httpClient} from '../../httpClient/httpClient';
+import {httpClient} from '../../httpClient/httpClient';
 import { getCIPZApiConfig } from '../../config/configs';
 import logger from '../../util/logger';
 import CipzApiDataFetchException from '../../exception/cipzApiDataFetchException';
@@ -8,8 +8,8 @@ import {
     ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA,
     APPLICATION_JSON, CORRELATION_ID_HEADER,
     ERROR_IN_RESPONSING_CIPZ_PRICE_ZONE_APPROVAL_REQ,
-    // HTTP_GET,
-    // HTTP_PATCH,
+    HTTP_GET,
+    HTTP_PATCH,
     ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE,
 } from '../../util/constants';
 import {
@@ -20,10 +20,10 @@ import {
 
 } from '../../exception/exceptionCodes';
 import {
+    cipzCreatePriceZoneChangeMockResponse,
     cipzApiGetSubmittedRequestMockResponse,
     cipzApiGetPriceZoneUpdateMockData,
     cipzApiRespnseToApproveRequestMockData,
-    cipzCreatePriceZoneChangeMockResponse,
 } from '../cipzMockData';
 
 class PriceZoneReassignmentService {
@@ -49,9 +49,8 @@ class PriceZoneReassignmentService {
         try {
             const headers = await this.constructHeaders();
             const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.getSubmittedRequestEndpoint;
-            logger.info({headers, reqUrl, params});
-            // return httpClient.makeRequest(HTTP_GET, reqUrl, undefined, headers, params);
-            return (cipzApiGetSubmittedRequestMockResponse.data);
+            return cipzApiGetSubmittedRequestMockResponse.data;
+            // return httpClient.makeRequest(HTTP_GET, reqUrl, null, headers, params);
         } catch (e) {
             const errorMessage = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA;
             const errorCode = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA_CODE;
@@ -69,9 +68,8 @@ class PriceZoneReassignmentService {
         try {
             const headers = await this.constructHeaders();
             const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.getPriceZoneUpdateEndpoint + requestId;
-            logger.info({headers, reqUrl, params});
             // return httpClient.makeRequest(HTTP_GET, reqUrl, null, headers, params);
-            return (cipzApiGetPriceZoneUpdateMockData.data);
+            return cipzApiGetPriceZoneUpdateMockData.data;
         } catch (e) {
             const errorMessage = ERROR_IN_GETTING_CIPZ_PRICE_ZONE_UPDATE_DATA;
             const errorCode = UPDATING_CIPZ_PRICE_ZONE_SUBMITTED_REQ_ERROR_CODE;
@@ -84,9 +82,8 @@ class PriceZoneReassignmentService {
         try {
             const headers = await this.constructHeaders();
             const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.patchApproveRejectApprovalReqEndpoint;
-            logger.info({headers, reqUrl, body});
+            return cipzApiRespnseToApproveRequestMockData;
             // return httpClient.makeRequest(HTTP_PATCH, reqUrl, body, headers);
-            return (cipzApiRespnseToApproveRequestMockData.data);
         } catch (e) {
             const errorMessage = ERROR_IN_RESPONSING_CIPZ_PRICE_ZONE_APPROVAL_REQ;
             const errorCode = CIPZ_API_DATA_FETCH_ERROR_CODE;

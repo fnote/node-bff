@@ -71,8 +71,8 @@ export default () => {
     priceZoneReassignmentRouter.get('/item-attribute-groups', async (req, res) => {
         try {
             const responseData = await seedService.getSeedItemAttributeGroupsData();
-            logger.info(`Success Seed Data response received: ${JSON.stringify(responseData)}`);
-            handleSuccessResponse(res, responseData);
+            logger.info(`Success Seed Data response received: ${JSON.stringify(responseData.data)}`);
+            handleSuccessResponse(res, responseData.data);
         } catch (error) {
             const errMessage = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA;
             logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);

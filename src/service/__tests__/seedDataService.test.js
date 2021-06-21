@@ -10,7 +10,7 @@
  describe('Seed API Data Service', () => {
      test('should generate the correct response when flow is correct', async () => {
          const response = await seedService.getSeedItemAttributeGroupsData();
-         expect(response).toEqual(seedGetItemAttributeGroupMockResponse.data);
+         expect(response.data).toEqual(seedGetItemAttributeGroupMockResponse.data);
      });
 
      test('should generate the error response', async () => {
