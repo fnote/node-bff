@@ -8,4 +8,4 @@ export const mockPzUpdateRequestBody = {
     },
     reviewNote: '',
     status: 'APPROVED',
- };
+};
