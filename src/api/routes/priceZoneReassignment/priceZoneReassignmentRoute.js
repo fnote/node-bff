@@ -3,7 +3,7 @@ import * as HttpStatus from 'http-status-codes';
 import logger from '../../../util/logger';
 import { createErrorResponse } from '../../../mapper/responseMapper';
 import AuthorizationService from '../../../service/auth/authorizationService';
-import SeedDataService from '../../../service/seed/seedDataService';
+import seedService from '../../../service/seed/seedService';
 import PriceZoneReassignmentService from '../../../service/priceZoneReassignment/priceZoneReassignmentService';
 import {
     CORRELATION_ID_HEADER,
@@ -21,9 +21,9 @@ import InvalidRequestException from '../../../exception/invalidRequestException'
 import {
     PRICE_ZONE_REASSIGNMENT_INVALID_SEARCH_PAYLOAD_ERROR_CODE,
     PRICE_ZONE_REASSIGNMENT_INVALID_UPDATE_PAYLOAD_ERROR_CODE,
+    CPIZ_API_DATA_INVALID_PAYLOAD_ERROR_CODE,
 } from '../../../exception/exceptionCodes';
-import { isEmptyRequestBody } from '../../../validator/validateRequest';
-import { priceZoneReassignmentSearchReqBody, priceZoneReassignmentCreateReqBody } from '../../../validator/schema';
+import { priceZoneReassignmentSearchReqBody, priceZoneReassignmentCreateReqBody, cipzApprovalRequestReqBody } from '../../../validator/schema';
 import CipzApiDataFetchException from '../../../exception/cipzApiDataFetchException';
 
 export default () => {
@@ -70,14 +70,9 @@ export default () => {
 
     priceZoneReassignmentRouter.get('/item-attribute-groups', async (req, res) => {
         try {
-            const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
-            if (isAuthorized) {
-                const responseData = await SeedDataService.getSeedItemAttributeGroupsData();
-                logger.info(`Success Seed Data response received: ${JSON.stringify(responseData)}`);
-                handleSuccessResponse(res, responseData);
-            } else {
-                handleUnauthorizedRequest(res);
-            }
+            const responseData = await seedService.getSeedItemAttributeGroupsData();
+            logger.info(`Success Seed Data response received: ${JSON.stringify(responseData)}`);
+            handleSuccessResponse(res, responseData);
         } catch (error) {
             const errMessage = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA;
             logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
@@ -87,15 +82,9 @@ export default () => {
 
     priceZoneReassignmentRouter.get('/pz-update-requests', async (req, res) => {
         try {
-            const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
-            if (isAuthorized) {
-                const responseData = await PriceZoneReassignmentService.getCIPZSubmittedRequestData(req.query);
-                logger.info(`Success CIPZ submitted requets Data response received: ${JSON.stringify(responseData)}`);
-                res.set(CORRELATION_ID_HEADER, getCorrelationId());
-                res.status(HttpStatus.OK).send(responseData);
-            } else {
-                handleUnauthorizedRequest(res);
-            }
+            const responseData = await PriceZoneReassignmentService.getCIPZSubmittedRequestData(req.query);
+            logger.info(`Success CIPZ submitted requets Data response received: ${JSON.stringify(responseData)}`);
+            handleSuccessResponse(res, responseData);
         } catch (error) {
             const errorMsg = ERROR_IN_GETTING_CIPZ_PRICE_ZONE_SUBMITTED_REQ_DATA;
             logger.error(`${errorMsg} : ${error} cause : ${error.stack} errorCode : ${error.errorCode}`);
@@ -123,16 +112,10 @@ export default () => {
 
     priceZoneReassignmentRouter.get('/pz-updates/:request_id', async (req, res) => {
         try {
-            const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
-            if (isAuthorized) {
-                const requestId = req.params.request_id;
-                const responseData = await PriceZoneReassignmentService.getPriceZoneUpdatesData(req.query, requestId);
-                logger.info(`Success CIPZ API Price Zone Updates Data response received: ${JSON.stringify(responseData)}`);
-                res.set(CORRELATION_ID_HEADER, getCorrelationId());
-                res.status(HttpStatus.OK).send(responseData);
-            } else {
-                handleUnauthorizedRequest(res);
-            }
+            const requestId = req.params.request_id;
+            const responseData = await PriceZoneReassignmentService.getPriceZoneUpdatesData(req.query, requestId);
+            logger.info(`Success CIPZ API Price Zone Updates Data response received: ${JSON.stringify(responseData)}`);
+            handleSuccessResponse(res, responseData);
         } catch (error) {
             const errorMsg = ERROR_IN_HANDLING_CIPZ_PRICE_ZONE_UPDATE;
             logger.error(`${errorMsg} : ${error} cause : ${error.stack} errorCode : ${error.errorCode}`);
@@ -141,21 +124,19 @@ export default () => {
     });
 
     priceZoneReassignmentRouter.patch('/pz-update-requests', async (req, res) => {
+        const { error } = cipzApprovalRequestReqBody.validate(req.body);
+        if (error) {
+            logger.error(`Request body validation failed in getting CIPZ Approval update request data: ${JSON.stringify(req.body)}`);
+            throw new InvalidRequestException(INVALID_REQUEST_BODY, HttpStatus.BAD_REQUEST, CPIZ_API_DATA_INVALID_PAYLOAD_ERROR_CODE);
+        }
         try {
-            const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
-            if (isAuthorized) {
-                isEmptyRequestBody(req.body);
-                const responseData = await PriceZoneReassignmentService.approveRejectApprovalRequest(req.body);
-                logger.info(` Successfully responsed CIPZ API approval request: ${JSON.stringify(responseData)}`);
-                res.set(CORRELATION_ID_HEADER, getCorrelationId());
-                res.status(HttpStatus.OK).send(responseData);
-            } else {
-                handleUnauthorizedRequest(res);
-            }
-        } catch (error) {
+            const responseData = await PriceZoneReassignmentService.reviewSubmission(req.body);
+            logger.info(` Successfully responsed CIPZ API approval request: ${JSON.stringify(responseData)}`);
+            handleSuccessResponse(res, responseData);
+        } catch (e) {
             const errorMsg = ERROR_IN_RESPONSING_CIPZ_PRICE_ZONE_APPROVAL_REQ;
-            logger.error(`${errorMsg} : ${error} cause : ${error.stack} errorCode : ${error.errorCode}`);
-            handleUnsuccessfulResponse(res, error, errorMsg);
+            logger.error(`${errorMsg} : ${e} cause : ${e.stack} errorCode : ${e.errorCode}`);
+            handleUnsuccessfulResponse(res, e, errorMsg);
         }
     });
 
@@ -178,9 +159,9 @@ export default () => {
                 validateSearchRequest(req);
                 let responseData;
                 if (isCustomerAccountDefined(req.body)) {
-                    responseData = await SeedDataService.getPriceZoneDetailsForCustomerAndItemAttributeGroup(req);
+                    responseData = await seedService.getPriceZoneDetailsForCustomerAndItemAttributeGroup(req);
                 } else {
-                    responseData = await SeedDataService.getPriceZoneDetailsForCustomerGroupAndItemAttributeGroup(req);
+                    responseData = await seedService.getPriceZoneDetailsForCustomerGroupAndItemAttributeGroup(req);
                 }
                 logger.info(`Success Seed Data response received for search: ${JSON.stringify(responseData)}`);
                 handleSuccessResponse(res, responseData);

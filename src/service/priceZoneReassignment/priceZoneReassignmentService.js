@@ -1,4 +1,3 @@
-import * as HttpStatus from 'http-status-codes';
 // import {httpClient} from '../../httpClient/httpClient';
 import { getCIPZApiConfig } from '../../config/configs';
 import logger from '../../util/logger';
@@ -6,8 +5,6 @@ import CipzApiDataFetchException from '../../exception/cipzApiDataFetchException
 import { getCorrelationId } from '../../util/correlationIdGenerator';
 import {
     ERROR_IN_GETTING_CIPZ_PRICE_ZONE_UPDATE_DATA,
-    INVALID_REQUEST_BODY,
-    INVALID_QUERY_PARAMS,
     ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA,
     APPLICATION_JSON, CORRELATION_ID_HEADER,
     ERROR_IN_RESPONSING_CIPZ_PRICE_ZONE_APPROVAL_REQ,
@@ -17,15 +14,11 @@ import {
 } from '../../util/constants';
 import {
     CIPZ_API_DATA_FETCH_ERROR_CODE,
-    CPIZ_API_DATA_INVALID_PAYLOAD_ERROR_CODE,
     CIPZ_API_CREATE_PRICE_ZONE_UPDATE_ERROR_CODE,
-    CPIZ_API_DATA_INVALID_QUERY_PARAMS_ERROR_CODE,
     ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA_CODE,
     UPDATING_CIPZ_PRICE_ZONE_SUBMITTED_REQ_ERROR_CODE,
 
 } from '../../exception/exceptionCodes';
-import InvalidRequestException from '../../exception/invalidRequestException';
-import { cipzApprovalRequestReqBody } from '../../validator/schema';
 import {
     cipzApiGetSubmittedRequestMockResponse,
     cipzApiGetPriceZoneUpdateMockData,
@@ -39,32 +32,20 @@ class PriceZoneReassignmentService {
     }
 
     async constructHeaders() {
-        // const accessToken = await getAccessToken(false);
         return ({
             'Content-type': APPLICATION_JSON,
             Accept: APPLICATION_JSON,
             clientID: this.CipzConfig.CONFIG.clientId,
             [CORRELATION_ID_HEADER]: getCorrelationId(),
-            // BearerAuth: accessToken,
         });
     }
 
     async getCIPZSubmittedRequestData(query) {
-        let params;
-        if (query && query.limit && query.offset && query.request_status) {
-            params = {
+        const params = {
                 limit: query.limit,
                 offset: query.offset,
                 request_status: query.request_status,
-            };
-        } else {
-            logger.error('Request query params validation failed in getting CIPZ submitted request data.');
-            throw new InvalidRequestException(
-                INVALID_QUERY_PARAMS,
-                HttpStatus.BAD_REQUEST,
-                CPIZ_API_DATA_INVALID_QUERY_PARAMS_ERROR_CODE,
-            );
-        }
+        };
         try {
             const headers = await this.constructHeaders();
             const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.getSubmittedRequestEndpoint;
@@ -80,26 +61,16 @@ class PriceZoneReassignmentService {
     }
 
     async getPriceZoneUpdatesData(query, requestId) {
-        let params;
-        if (query && query.limit && query.offset && query.source) {
-            params = {
-                limit: query.limit,
-                offset: query.offset,
-                source: query.source,
-            };
-        } else {
-            logger.error('Request query params validation failed in getting CIPZ Price Zone update data');
-            throw new InvalidRequestException(
-                INVALID_QUERY_PARAMS,
-                HttpStatus.BAD_REQUEST,
-                CPIZ_API_DATA_INVALID_QUERY_PARAMS_ERROR_CODE,
-            );
-        }
+        const params = {
+            limit: query.limit,
+            offset: query.offset,
+            source: query.source,
+        };
         try {
             const headers = await this.constructHeaders();
             const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.getPriceZoneUpdateEndpoint + requestId;
             logger.info({headers, reqUrl, params});
-            // return httpClient.makeRequest(HTTP_GET, reqUrl, undefined, headers, params);
+            // return httpClient.makeRequest(HTTP_GET, reqUrl, null, headers, params);
             return (cipzApiGetPriceZoneUpdateMockData.data);
         } catch (e) {
             const errorMessage = ERROR_IN_GETTING_CIPZ_PRICE_ZONE_UPDATE_DATA;
@@ -109,21 +80,10 @@ class PriceZoneReassignmentService {
         }
     }
 
-    async approveRejectApprovalRequest(body) {
-        const { error } = cipzApprovalRequestReqBody.validate(body);
-        if (error) {
-            logger.error(`Request body validation failed in getting CIPZ Approval update request data:
-             ${JSON.stringify(body)}`);
-            throw new InvalidRequestException(
-                INVALID_REQUEST_BODY,
-                HttpStatus.BAD_REQUEST,
-                CPIZ_API_DATA_INVALID_PAYLOAD_ERROR_CODE,
-            );
-        }
+    async reviewSubmission(body) {
         try {
             const headers = await this.constructHeaders();
-            const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl
-            + this.CipzConfig.CONFIG.patchApproveRejectApprovalReqEndpoint;
+            const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.patchApproveRejectApprovalReqEndpoint;
             logger.info({headers, reqUrl, body});
             // return httpClient.makeRequest(HTTP_PATCH, reqUrl, body, headers);
             return (cipzApiRespnseToApproveRequestMockData.data);

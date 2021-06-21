@@ -92,7 +92,7 @@ describe(' Price Zone Reassignment Service - getPriceZoneUpdatesData', () => {
     });
 });
 
-describe(' Price Zone Reassignment Service - approveRejectApprovalRequest', () => {
+describe(' Price Zone Reassignment Service - reviewSubmission', () => {
     test('should generate non null response when flow is correct', async () => {
         const body = {
             requestId: 112,
@@ -109,7 +109,7 @@ describe(' Price Zone Reassignment Service - approveRejectApprovalRequest', () =
                 headers: 'mock headers',
             }));
 
-        const response = await PriceZoneReassignmentService.approveRejectApprovalRequest(body);
+        const response = await PriceZoneReassignmentService.reviewSubmission(body);
         expect(response).not.toBeNull();
     });
 
@@ -125,7 +125,7 @@ describe(' Price Zone Reassignment Service - approveRejectApprovalRequest', () =
             reviewNote: '',
          };
         try {
-            await PriceZoneReassignmentService.approveRejectApprovalRequest(body);
+            await PriceZoneReassignmentService.reviewSubmission(body);
         } catch (e) {
             expect(e.name).toEqual(InvalidRequestException.name);
         }
@@ -147,7 +147,7 @@ describe(' Price Zone Reassignment Service - approveRejectApprovalRequest', () =
             throw new Error();
         });
         try {
-            await PriceZoneReassignmentService.approveRejectApprovalRequest(body);
+            await PriceZoneReassignmentService.reviewSubmission(body);
         } catch (e) {
             expect(e.name).toEqual(CipzApiDataFetchException.name);
         }

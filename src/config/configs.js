@@ -64,7 +64,7 @@ export const getSeedApiConfig = () => ({
     CONFIG: {
         seedApiBaseUrl: `${process.env.API_CENTRAL_BASE_URL}/v1/edwp`,
         clientId: 'Cloud_PCI',
-        getItemAttributeGroupsEndpoint: '/item/attribute-groups',
+        getItemAttributeGroupsEndpoint: '/attribute-groups',
         getCustomerAndItemAttributeGroupsEndpoint: '/customer-item-attribute-pricezone',
         getCustomerGroupAndItemAttributeGroupsEndpoint: '/customer-group-item-attribute-group-pricezone',
     },
