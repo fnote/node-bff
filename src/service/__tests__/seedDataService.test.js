@@ -1,6 +1,6 @@
  import {jest} from '@jest/globals';
  import SeedDataService from '../seed/seedDataService';
- import {seedGetItemAttributeGroupMockResponse} from '../../config/test.config';
+ import {seedGetItemAttributeGroupMockResponse} from '../../config/test.config.pzreassignment';
  import SeedApiDataFetchException from '../../exception/seedApiDataFechException';
  import { SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE } from '../../exception/exceptionCodes';
 
