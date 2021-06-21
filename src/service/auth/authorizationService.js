@@ -61,7 +61,7 @@ class AuthorizationService {
             authorizedBatchEnabledBunitList: [],
         };
         // change here as well
-        if (userRole === ROLE_APP_ADMIN || userRole === ROLE_GENERAL_USER || userRole === 'norole') {
+        if (userRole === ROLE_APP_ADMIN || userRole === ROLE_GENERAL_USER) {
             // If these user roles, they should have access to all opcos
             logger.info(`User because of his user role: ${userRole} is given access to all opcos`);
             authorizedBunitList.authorizedPricingTransformationEnabledBunitList = this.generatePricingTransformationEnabledAllBusinessUnit();
@@ -137,12 +137,8 @@ class AuthorizationService {
     };
 
     getTheRoleWithHighestAuthority = (rolesArray, roleType) => {
-        logger.info('role array');
-        logger.info(rolesArray);
-        logger.info('***************************************************************');
-        // we receive multiple values here at in role array ,change below methid
+        // we receive multiple values here  in role array
         const authorizationRoleHierarchy = getAuthorizationRoleHierarchy(roleType);
-        // const cipzAuthorizationRoleHierarchy = getAuthorizationRoleHierarchyForCIPZRoles();
         let selectedAuthorizedRole = '';
 
         let selectedHierarchyNumber = MAX_ROLE_HIERARCHY_NUMBER;
@@ -151,7 +147,6 @@ class AuthorizationService {
             return selectedAuthorizedRole;
         }
         rolesArray.forEach((roleFromUserLogin) => {
-            // has to change
             const hierarchyNumber = authorizationRoleHierarchy[roleFromUserLogin];
 
             if (selectedHierarchyNumber > hierarchyNumber) {

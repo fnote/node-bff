@@ -167,10 +167,7 @@ class AuthenticateService {
                         // If it's single role: it'll come like a string "rsm"
                         // If it's multiple: it'll come like "[appadmin, generaluser]"
 
-                        // const userRoles = decodedPayloadFromJwt.profile;
-                        const userRoles = 'submitter';
-                        console.log(userRoles);
-                        logger.info(userRoles);
+                        const userRoles = decodedPayloadFromJwt.profile;
 
                         // only one user role that is assigned to selected user role
                         // issue here if one role is approver or submitter
@@ -181,9 +178,6 @@ class AuthenticateService {
                             selectedCPIZUserRole = userRoles;
                             selectedUserRole = '';
                         }
-                        console.log('comes here');
-                        console.log(selectedUserRole);
-                        console.log(selectedCPIZUserRole);
                         // issue when only approver and submitter comes
                         // '[appadmin, generaluser, submitter,approver]', '[appadmin, generaluser]' ,'[submitter,approver]'
                         // above can come and for returns for each case (appadmin, approver )/(appadmin ,'')/ ('', approver)
@@ -191,14 +185,12 @@ class AuthenticateService {
                             const userRolesArray = userRoles.split(',').map((item) => item.trim());
 
                             if (userRolesArray.length > 1) {
-                                console.log('more than 1 role present');
                                 userRolesArray[0] = userRolesArray[0].substring(1);
 
                                 const lastElement = userRolesArray[userRolesArray.length - 1];
                                 userRolesArray[userRolesArray.length - 1] = lastElement.substring(0, lastElement.length - 1);
 
                                 // break the role array to regular role array and cipz role array
-                                console.log('break the role array to regular role array and cipz role array');
                                 const cipzUserRoleArray = [];
                                 const possibleCIPZRoles = [ROLE_CIPZ_SUBMITTER, ROLE_CIPZ_APPROVER];
                                 possibleCIPZRoles.forEach((cipzRole) => {
@@ -210,8 +202,6 @@ class AuthenticateService {
 
                                 selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, 'regular');
                                 selectedCPIZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(cipzUserRoleArray, 'cipz');
-                                console.log(selectedUserRole);
-                                console.log(selectedCPIZUserRole);
                             }
                         } catch (e) {
                             logger.error(`Error in parsing the user role value: ${userRoles}`);
@@ -234,8 +224,6 @@ class AuthenticateService {
                         role: selectedUserRole,
                         cipzRole: selectedCPIZUserRole,
                     };
-                    console.log('comes here too');
-                    console.log(userDetailsData);
 
                     logger.info(`Authenticated user's user details: First name: ${userDetailsData.firstName}
                     Last name: ${userDetailsData.lastName} Username: ${userDetailsData.username}
