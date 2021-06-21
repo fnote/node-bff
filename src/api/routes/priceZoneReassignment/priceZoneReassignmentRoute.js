@@ -140,7 +140,7 @@ export default () => {
         }
     });
 
-    const isCustomerAccountDefined = ({ customerAccount }) => !!customerAccount;
+    const isCustomerAccountDefined = ({ customer_account: customerAccount }) => !!customerAccount;
     const validateSearchRequest = ({ body }) => {
         const { error } = priceZoneReassignmentSearchReqBody.validate(body);
         if (error) {
