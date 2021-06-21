@@ -7,7 +7,7 @@ import AuthorizationService from '../../../service/auth/authorizationService';
 import SeedDataService from '../../../service/seed/seedDataService';
 import SeedApiDataFetchException from '../../../exception/seedApiDataFechException';
 import PriceZoneReassignmentService from '../../../service/priceZoneReassignment/priceZoneReassignmentService';
-import {mockPzUpdateRequestBody} from '../../../config/test.config';
+import {mockPzUpdateRequestBody} from '../../../config/test.config.pzreassignment';
 
 jest.mock('../../../httpClient/httpClient');
 jest.mock('../../../util/accessTokenGenerator');
