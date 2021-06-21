@@ -186,12 +186,11 @@ describe('routes: /pz-update-requests', () => {
 
         jest.setTimeout(100000);
         await request(app.app)
-        .post('/v1/pci-bff/price-zone-reassignment/search')
-        .send(mockSearchRequestWithCustomerAccount)
-        .then((res) => {
-            expect(res.status).toEqual(HttpStatus.OK);
-            expect(res.body).toBeDefined();
-            expect(res.body).toEqual(mockSearchResponseWithCutomerGroup);
-        });
+            .patch('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
+            .set('Accept', 'application/json')
+            .send(mockPzUpdateRequestBody)
+            .then((res) => {
+                expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+            });
     });
 });
