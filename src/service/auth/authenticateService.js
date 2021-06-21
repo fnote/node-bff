@@ -28,7 +28,6 @@ class AuthenticateService {
         try {
             const accessToken = req.headers[this.authConfig.CONFIG.authTokenHeaderAttribute];
             logger.debug(`Given access token: ${accessToken}`);
-            logger.info('.................................');
 
             if (!accessToken) {
                 const errorMessage = 'Access token is missing from header';
