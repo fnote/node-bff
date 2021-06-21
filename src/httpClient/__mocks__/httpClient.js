@@ -27,6 +27,10 @@ import {
     pricingDataMockRequestThrowErrorForCloudPricingCall,
     productInfoMockResponse,
 } from '../../config/test.config';
+import {
+    mockSearchResponseWithCutomerGroup,
+    mockSearchResponseWithCutomerAccount
+} from '../../config/test.config.pzreassignment';
 import HttpClientException from '../../exception/httpClientException';
 import {BATCH_API_DATA_FETCH_ERROR_CODE, HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
 import {HTTP_DELETE, HTTP_GET, HTTP_POST} from '../../util/constants';
@@ -111,6 +115,12 @@ class HttpClient {
         }
         if (URL.includes('/opcos/999/products/9999999')) {
             throw new HttpClientException('Http client exception', HTTP_CLIENT_EXCEPTION);
+        }
+        if (URL.includes('/item-price-zone/customer-attribute-group')) {
+            return mockSearchResponseWithCutomerAccount;
+        }
+        if (URL.includes('/item-price-zone/customer-group-attribute-group')) {
+            return mockSearchResponseWithCutomerGroup;
         }
         if (JSON.stringify(data) === JSON
             .stringify(cloudPricingMockRequestForErrorScenario.body)) {

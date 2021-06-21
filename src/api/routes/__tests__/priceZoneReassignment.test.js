@@ -1,13 +1,19 @@
 import request from 'supertest';
 import * as HttpStatus from 'http-status-codes';
-import {describe, jest} from '@jest/globals';
+import {describe, expect, jest} from '@jest/globals';
 import app from '../../../app';
 import { createErrorResponse } from '../../../mapper/responseMapper';
 import AuthorizationService from '../../../service/auth/authorizationService';
 import seedService from '../../../service/seed/seedService';
 import SeedApiDataFetchException from '../../../exception/seedApiDataFechException';
 import PriceZoneReassignmentService from '../../../service/priceZoneReassignment/priceZoneReassignmentService';
-import {mockPzUpdateRequestBody} from '../../../config/test.config.pzreassignment';
+import {
+    mockPzUpdateRequestBody,
+    mockSearchRequestWithCustomerGroup,
+    mockSearchRequestWithCustomerAccount,
+    mockSearchResponseWithCutomerGroup,
+    mockSearchResponseWithCutomerAccount,
+} from '../../../config/test.config.pzreassignment';
 
 jest.mock('../../../httpClient/httpClient');
 jest.mock('../../../util/accessTokenGenerator');
@@ -180,11 +186,12 @@ describe('routes: /pz-update-requests', () => {
 
         jest.setTimeout(100000);
         await request(app.app)
-            .patch('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
-            .set('Accept', 'application/json')
-            .send(mockPzUpdateRequestBody)
-            .then((res) => {
-                expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
-            });
+        .post('/v1/pci-bff/price-zone-reassignment/search')
+        .send(mockSearchRequestWithCustomerAccount)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.OK);
+            expect(res.body).toBeDefined();
+            expect(res.body).toEqual(mockSearchResponseWithCutomerGroup);
+        });
     });
 });

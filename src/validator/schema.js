@@ -32,17 +32,17 @@ export const pricingDataReqBody = Joi.object({
 });
 
 export const priceZoneReassignmentSearchReqBody = Joi.object({
-    businessUnitNumber: Joi.string()
+    business_unit_number: Joi.string()
         .alphanum()
         .min(3)
         .max(3)
         .required(),
-    itemAttributeGroupId: Joi.string().required(),
-    customerAccount: Joi.string(),
-    customerGroupId: Joi.string(),
+    item_attribute_group_id: Joi.string().required(),
+    customer_account: Joi.string(),
+    customer_group: Joi.string(),
     offset: Joi.number().integer().required(),
     limit: Joi.number().integer().required(),
-}).xor('customerAccount', 'customerGroupId');
+}).xor('customer_account', 'customer_group');
 
 export const priceZoneReassignmentCreateReqBody = Joi.object({
     businessUnitNumber: Joi.string()
