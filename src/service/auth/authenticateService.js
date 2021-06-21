@@ -167,15 +167,13 @@ class AuthenticateService {
                         // If it's multiple: it'll come like "[appadmin, generaluser]"
 
                         const userRoles = decodedPayloadFromJwt.profile;
-
-                        // only one user role that is assigned to selected user role
-                        // issue here if one role is approver or submitter
-                        // case here
-                        if (userRoles !== ROLE_CIPZ_SUBMITTER && userRoles !== ROLE_CIPZ_REVIEWER) {
-                            selectedUserRole = userRoles; // appadmin
+                        const roleResult = this.extractCIPZRoleDetails(userRoles);
+                        if (roleResult !== '') {
+                            selectedUserRole = roleResult.userRole;
+                            selectedCIPZUserRole = roleResult.cipzUserRole;
                         } else {
-                            selectedCIPZUserRole = userRoles;
-                            selectedUserRole = '';
+                            // either array or single string , arrays will be sorted below or single regular role value which is assigned here
+                            selectedUserRole = userRoles;
                         }
                         //  Issue when only reviewer and submitter comes
                         // '[appadmin, generaluser, submitter,approver]', '[appadmin, generaluser]' ,'[submitter,approver]'
@@ -188,31 +186,19 @@ class AuthenticateService {
 
                                 const lastElement = userRolesArray[userRolesArray.length - 1];
                                 userRolesArray[userRolesArray.length - 1] = lastElement.substring(0, lastElement.length - 1);
-
-                                // break the role array to regular role array and cipz role array
-                                const cipzUserRoleArray = [];
-                                const possibleCIPZRoles = [ROLE_CIPZ_SUBMITTER, ROLE_CIPZ_REVIEWER];
-                                possibleCIPZRoles.forEach((cipzRole) => {
-                                    if (userRolesArray.includes(cipzRole)) {
-                                        cipzUserRoleArray.push(cipzRole);
-                                        userRolesArray.splice(userRolesArray.indexOf(cipzRole), 1);
-                                    }
-                                });
-
                                 selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_REGULAR);
-                                selectedCIPZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(cipzUserRoleArray, ROLE_CIPZ);
+                                selectedCIPZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_CIPZ);
                             }
                         } catch (e) {
                             logger.error(`Error in parsing the user role value: ${userRoles}`);
                             selectedUserRole = userRoles;
-                            selectedCIPZUserRole = '';
                         }
+
                         // selected use role either empty , regular or
                         const authorizedBunitList = AuthorizationService.getAuthorizedBusinessUnits(opcoString, selectedUserRole);
                         authorizedPricingTransformationEnabledBunitList = authorizedBunitList.authorizedPricingTransformationEnabledBunitList;
                         authorizedBatchEnabledBunitList = authorizedBunitList.authorizedBatchEnabledBunitList;
                     }
-
                     const userDetailsData = {
                         authorizedPricingTransformationEnabledBunitList,
                         authorizedBatchEnabledBunitList,
@@ -244,6 +230,16 @@ class AuthenticateService {
             logger.error('Username is not present in the auth token');
             return this.sendUnauthenticatedErrorResponse('Username is not present in the auth token');
         }
+    }
+
+    extractCIPZRoleDetails= (userRoles) => {
+        if (userRoles === ROLE_CIPZ_SUBMITTER || userRoles === ROLE_CIPZ_REVIEWER) {
+            return {
+                cipzUserRole: userRoles,
+                userRole: '',
+            };
+        }
+        return '';
     }
 }
 

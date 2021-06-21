@@ -9,10 +9,12 @@ import * as jwt from 'jsonwebtoken';
 import {jest} from '@jest/globals';
 import {getAuthConfig} from '../../config/configs';
 import AuthenticateService from '../auth/authenticateService';
+import AuthorizationService from '../auth/authorizationService';
 
 jest.mock('../../httpClient/httpClient');
 jest.mock('jwk-to-pem');
 jest.mock('jsonwebtoken');
+jest.mock('../../service/auth/authorizationService');
 
 const authConfig = getAuthConfig();
 const tokenName = authConfig.CONFIG.authTokenHeaderAttribute;
@@ -512,5 +514,119 @@ describe('Auth Service', () => {
 
         const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         expect(response).toEqual(authenticatedMockResponseWithHighProfile);
+    });
+    test('should generate authenticated with high profile when more cipz user roles are passed', async () => {
+        AuthorizationService.getTheRoleWithHighestAuthority = jest.fn().mockReturnValueOnce('appadmin').mockReturnValueOnce('cipz_approver');
+        JSON.parse = jest.fn().mockImplementationOnce(() => ({
+            username: 'AD_username',
+            profile: '[cipz_submitter,cipz_reviewer]',
+            locale: '341 - Sysco Labs',
+            given_name: 'firstName',
+            family_name: 'secondName',
+            email: 'firstName.secondName@syscolabs.com',
+            zoneinfo: 'jobTitle',
+        }));
+        jwt.decode.mockReturnValue({
+            payload: {
+                iss: 'testIssuer',
+                token_use: 'access',
+            },
+            header: {
+                kid: 'kid2',
+            },
+        });
+
+        const payload = {
+            sub: 'principal-id-001',
+            username: 'AD_username',
+        };
+
+        jwt.verify.mockImplementation((obj, pems, param, callback) => {
+            callback(null, payload);
+        });
+
+        const authenticatedMockResponseWithHighProfile = {
+            authenticated: true,
+            cause: null,
+            username: 'username',
+            userDetailsData: {
+                authorizedPricingTransformationEnabledBunitList,
+                authorizedBatchEnabledBunitList,
+                email: 'firstName.secondName@syscolabs.com',
+                firstName: 'firstName',
+                jobTitle: 'jobTitle',
+                lastName: 'secondName',
+                username: 'username',
+                role: 'appadmin',
+                cipzRole: 'cipz_approver',
+            },
+        };
+
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
+        expect(response).toEqual(authenticatedMockResponseWithHighProfile);
+    });
+
+    test('should generate authenticated with high profile when single cipz user role is passed', async () => {
+        AuthorizationService.getTheRoleWithHighestAuthority = jest.fn().mockReturnValueOnce('').mockReturnValueOnce('cipz_submitter');
+        JSON.parse = jest.fn().mockImplementationOnce(() => ({
+            username: 'AD_username',
+            profile: 'cipz_submitter',
+            locale: '341 - Sysco Labs',
+            given_name: 'firstName',
+            family_name: 'secondName',
+            email: 'firstName.secondName@syscolabs.com',
+            zoneinfo: 'jobTitle',
+        }));
+        jwt.decode.mockReturnValue({
+            payload: {
+                iss: 'testIssuer',
+                token_use: 'access',
+            },
+            header: {
+                kid: 'kid2',
+            },
+        });
+
+        const payload = {
+            sub: 'principal-id-001',
+            username: 'AD_username',
+        };
+
+        jwt.verify.mockImplementation((obj, pems, param, callback) => {
+            callback(null, payload);
+        });
+
+        const authenticatedMockResponseWithHighProfile = {
+            authenticated: true,
+            cause: null,
+            username: 'username',
+            userDetailsData: {
+                authorizedPricingTransformationEnabledBunitList,
+                authorizedBatchEnabledBunitList,
+                email: 'firstName.secondName@syscolabs.com',
+                firstName: 'firstName',
+                jobTitle: 'jobTitle',
+                lastName: 'secondName',
+                username: 'username',
+                role: '',
+                cipzRole: 'cipz_submitter',
+            },
+        };
+
+        const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
+        expect(response).toEqual(authenticatedMockResponseWithHighProfile);
+    });
+
+    test('should generate proper response when extract cipz role details method called', async () => {
+        const reviewerResponseExpected = {cipzUserRole: 'cipz_reviewer', userRole: ''};
+        const submitterResponseExpected = {cipzUserRole: 'cipz_submitter', userRole: ''};
+        const response = await AuthenticateService.extractCIPZRoleDetails('appadmin');
+        const response2 = await AuthenticateService.extractCIPZRoleDetails('[appadmin, cipz_approver]');
+        const response3 = await AuthenticateService.extractCIPZRoleDetails('cipz_reviewer');
+        const response4 = await AuthenticateService.extractCIPZRoleDetails('cipz_submitter');
+        expect(response).toEqual('');
+        expect(response2).toEqual('');
+        expect(response3).toEqual(reviewerResponseExpected);
+        expect(response4).toEqual(submitterResponseExpected);
     });
 });
