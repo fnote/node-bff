@@ -142,7 +142,6 @@ class AuthorizationService {
         let selectedAuthorizedRole = '';
 
         let selectedHierarchyNumber = MAX_ROLE_HIERARCHY_NUMBER;
-
         if (rolesArray.length === 0) {
             return selectedAuthorizedRole;
         }

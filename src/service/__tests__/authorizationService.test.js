@@ -6,7 +6,7 @@
 import {jest} from '@jest/globals';
 import AuthorizationService from '../auth/authorizationService';
 import BusinessUnitDao from '../../dao/businessUnitDao';
-import {ROLE_APP_ADMIN, ROLE_CIPZ, ROLE_CIPZ_APPROVER, ROLE_CIPZ_SUBMITTER, ROLE_GENERAL_USER, ROLE_REGULAR} from '../../util/constants';
+import {ROLE_APP_ADMIN, ROLE_CIPZ, ROLE_CIPZ_REVIEWER, ROLE_CIPZ_SUBMITTER, ROLE_GENERAL_USER, ROLE_REGULAR} from '../../util/constants';
 
 jest.mock('../../dao/businessUnitDao');
 
@@ -481,10 +481,10 @@ describe('Auth Service', () => {
         expect(selectedRole).toEqual('');
     });
 
-    test('should send ROLE_CIPZ_APPROVER when passed other roles is less priority in the hierarchy', async () => {
-        const rolesArrayFromUser = [ROLE_CIPZ_APPROVER,ROLE_CIPZ_SUBMITTER];
+    test('should send ROLE_CIPZ_REVIEWER when passed other roles is less priority in the hierarchy', async () => {
+        const rolesArrayFromUser = [ROLE_CIPZ_REVIEWER, ROLE_CIPZ_SUBMITTER];
         const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser, ROLE_CIPZ);
-        expect(selectedRole).toEqual(ROLE_CIPZ_APPROVER);
+        expect(selectedRole).toEqual(ROLE_CIPZ_REVIEWER);
     });
 
     test('should send ROLE_CIPZ_SUBMITTER when passed other roles is less priority in the hierarchy', async () => {

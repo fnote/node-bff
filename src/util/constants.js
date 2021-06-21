@@ -39,7 +39,7 @@ export const LOGOUT_URL = '/v1/pci-bff/auth/logout';
 // user roles
 export const ROLE_APP_ADMIN = 'appadmin';
 export const ROLE_GENERAL_USER = 'generaluser';
-export const ROLE_CIPZ_APPROVER = 'cipz_approver';
+export const ROLE_CIPZ_REVIEWER = 'cipz_reviewer';
 export const ROLE_CIPZ_SUBMITTER = 'cipz_submitter';
 
 // user role types

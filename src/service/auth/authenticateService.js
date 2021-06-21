@@ -9,7 +9,13 @@ import jwkToPem from 'jwk-to-pem';
 import logger from '../../util/logger';
 import {getAuthConfig} from '../../config/configs';
 import {httpClient} from '../../httpClient/httpClient';
-import {HTTP_GET, ROLE_CIPZ, ROLE_CIPZ_APPROVER, ROLE_CIPZ_SUBMITTER, ROLE_REGULAR} from '../../util/constants';
+import {
+    HTTP_GET,
+    ROLE_CIPZ,
+    ROLE_CIPZ_REVIEWER,
+    ROLE_CIPZ_SUBMITTER,
+    ROLE_REGULAR,
+} from '../../util/constants';
 import AuthorizationService from './authorizationService';
 
 const unauthenticatedReturn = {
@@ -150,14 +156,14 @@ class AuthenticateService {
                     let authorizedPricingTransformationEnabledBunitList;
                     let authorizedBatchEnabledBunitList;
                     let selectedUserRole;
-                    let selectedCPIZUserRole = '';
+                    let selectedCIPZUserRole = '';
                     if (Number.isNaN(opcoParsed)) {
                         logger.warn(`User's opco attribute: ${opcoParsed} is not numeric parsable, so returning empty set of authorized opco list`);
                         authorizedPricingTransformationEnabledBunitList = [];
                         authorizedBatchEnabledBunitList = [];
                     } else {
                         // User roles can come in two formats
-                        // If it's single role: it'll come like a string "rsm"
+                        // If it's single role: it'll come like a string "appadmin"
                         // If it's multiple: it'll come like "[appadmin, generaluser]"
 
                         const userRoles = decodedPayloadFromJwt.profile;
@@ -165,13 +171,13 @@ class AuthenticateService {
                         // only one user role that is assigned to selected user role
                         // issue here if one role is approver or submitter
                         // case here
-                        if (userRoles !== 'submitter' && userRoles !== 'approver') {
-                            selectedUserRole = userRoles;
+                        if (userRoles !== ROLE_CIPZ_SUBMITTER && userRoles !== ROLE_CIPZ_REVIEWER) {
+                            selectedUserRole = userRoles; // appadmin
                         } else {
-                            selectedCPIZUserRole = userRoles;
+                            selectedCIPZUserRole = userRoles;
                             selectedUserRole = '';
                         }
-                        // issue when only approver and submitter comes
+                        //  Issue when only reviewer and submitter comes
                         // '[appadmin, generaluser, submitter,approver]', '[appadmin, generaluser]' ,'[submitter,approver]'
                         // above can come and for returns for each case (appadmin, approver )/(appadmin ,'')/ ('', approver)
                         try {
@@ -185,7 +191,7 @@ class AuthenticateService {
 
                                 // break the role array to regular role array and cipz role array
                                 const cipzUserRoleArray = [];
-                                const possibleCIPZRoles = [ROLE_CIPZ_SUBMITTER, ROLE_CIPZ_APPROVER];
+                                const possibleCIPZRoles = [ROLE_CIPZ_SUBMITTER, ROLE_CIPZ_REVIEWER];
                                 possibleCIPZRoles.forEach((cipzRole) => {
                                     if (userRolesArray.includes(cipzRole)) {
                                         cipzUserRoleArray.push(cipzRole);
@@ -194,11 +200,12 @@ class AuthenticateService {
                                 });
 
                                 selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_REGULAR);
-                                selectedCPIZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(cipzUserRoleArray, ROLE_CIPZ);
+                                selectedCIPZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(cipzUserRoleArray, ROLE_CIPZ);
                             }
                         } catch (e) {
                             logger.error(`Error in parsing the user role value: ${userRoles}`);
                             selectedUserRole = userRoles;
+                            selectedCIPZUserRole = '';
                         }
                         // selected use role either empty , regular or
                         const authorizedBunitList = AuthorizationService.getAuthorizedBusinessUnits(opcoString, selectedUserRole);
@@ -215,7 +222,7 @@ class AuthenticateService {
                         email: decodedPayloadFromJwt.email,
                         jobTitle: decodedPayloadFromJwt.zoneinfo,
                         role: selectedUserRole,
-                        cipzRole: selectedCPIZUserRole,
+                        cipzRole: selectedCIPZUserRole,
                     };
 
                     logger.info(`Authenticated user's user details: First name: ${userDetailsData.firstName}
