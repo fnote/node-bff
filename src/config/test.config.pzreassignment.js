@@ -112,18 +112,15 @@ const itemPriceZones = [
  ];
 
 export const mockSearchResponseWithCutomerGroup = {
-    status: HTTP.OK,
+    total_records: 3,
+    offset: 1,
+    limit: 20,
     data: {
-        total_records: 3,
-        offset: 1,
-        limit: 20,
-        data: {
-           business_unit_number: '020',
-           customer_group: '1662',
-           item_attribute_group: 'MILK',
-           item_attribute_group_id: '1234',
-           item_price_zones: itemPriceZones,
-        },
+        business_unit_number: '020',
+        customer_group: '1662',
+        item_attribute_group: 'MILK',
+        item_attribute_group_id: '1234',
+        item_price_zones: itemPriceZones,
     },
 };
 

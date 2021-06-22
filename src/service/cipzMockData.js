@@ -107,98 +107,67 @@ export const cipzApiGetSubmittedRequestMockResponse = {
    },
 };
 
+const itemPriceZones = [
+   {
+      supc: '1000001',
+      customer_account: '100001',
+      product_name: 'Sysco MILK',
+      customer_name: 'Bills Diary shop',
+      price_zone: 3,
+      existent_price_zones: [1, 2, 3, 4, 5],
+      effective_from_date: '20210530',
+      source: 'WTP model',
+   },
+   {
+      supc: '1000002',
+      customer_account: '100002',
+      product_name: 'Sysco MILK',
+      customer_name: 'Bills Diary shop',
+      price_zone: 2,
+      existent_price_ones: [1, 2, 3, 4, 5],
+      effective_from_date: '20210530',
+      source: 'WTP model',
+   },
+   {
+      supc: '1000021',
+      customer_account: '100005',
+      product_name: 'Sysco MILK',
+      customer_name: 'Bills Diary shop',
+      price_zone: 3,
+      existent_price_zones: [1, 2, 3, 4, 5],
+      effective_from_date: '20210530',
+      source: 'WTP model',
+   },
+];
+
 export const searchByCustomerMockResponse = {
-    data: {
-        totalRecords: 123,
-        offset: 1,
-        limit: 20,
-        data: {
-            businessUnitNumber: '020',
-            customerGroupId: '112',
-            customerGroup: 'El Cerro',
-            itemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
-            itemAttributeGroupId: '123',
-            priceZones: [
-                {
-                    supc: '1000001',
-                    customerAccount: '100001',
-                    productName: 'Sysco MILK',
-                    CustomerName: 'Bills Diary shop',
-                    priceZone: 3,
-                    existentPriceZones: [1, 2, 5],
-                    effectiveFromDate: '20210530',
-                    source: 'WTP model',
-                },
-                {
-                    supc: '1000010',
-                    customerAccount: '100001',
-                    productName: 'Sysco MILK',
-                    CustomerName: 'Bills Diary shop',
-                    priceZone: 3,
-                    existentPriceZones: [1, 3, 4, 5],
-                    effectiveFromDate: '20210530',
-                    source: 'WTP model',
-                },
-                {
-                    supc: '7000001',
-                    customerAccount: '100001',
-                    productName: 'Sysco MILK',
-                    CustomerName: 'Bills Diary shop',
-                    priceZone: 3,
-                    existentPriceZones: [1, 2, 3, 4, 5],
-                    effectiveFromDate: '20210530',
-                    source: 'WTP model',
-                },
-            ],
-        },
-    },
+   data: {
+      total_records: 3,
+      offset: 1,
+      limit: 20,
+      data: {
+         business_unit_number: '020',
+         customer_group: '1662',
+         item_attribute_group: 'MILK',
+         item_attribute_group_id: '1234',
+         item_price_zones: itemPriceZones,
+      },
+  },
 };
 
 export const searchByCustomerGroupMockResponse = {
-    data: {
-        totalRecords: 123,
-        offset: 1,
-        limit: 20,
-        data: {
-            businessUnitNumber: '020',
-            customerGroupId: '112',
-            customerGroup: 'El Cerro',
-            itemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
-            itemAttributeGroupId: '123',
-            priceZones: [
-                {
-                    supc: '1000001',
-                    customerAccount: '100001',
-                    productName: 'Sysco MILK',
-                    CustomerName: 'Bills Diary shop',
-                    priceZone: 3,
-                    existentPriceZones: [1, 2, 5],
-                    effectiveFromDate: '20210530',
-                    source: 'WTP model',
-                },
-                {
-                    supc: '1000010',
-                    customerAccount: '100001',
-                    productName: 'Sysco MILK',
-                    CustomerName: 'Bills Diary shop',
-                    priceZone: 3,
-                    existentPriceZones: [1, 3, 4, 5],
-                    effectiveFromDate: '20210530',
-                    source: 'WTP model',
-                },
-                {
-                    supc: '7000001',
-                    customerAccount: '100001',
-                    productName: 'Sysco MILK',
-                    CustomerName: 'Bills Diary shop',
-                    priceZone: 3,
-                    existentPriceZones: [1, 2, 3, 4, 5],
-                    effectiveFromDate: '20210530',
-                    source: 'WTP model',
-                },
-            ],
-        },
-    },
+   data: {
+      total_records: 3,
+      offset: 1,
+      limit: 20,
+      data: {
+          business_unit_number: '020',
+          customer_account: '123456',
+          item_attribute_group: 'MILK',
+          item_attribute_group_id: '1234',
+          item_price_zones: itemPriceZones,
+      },
+   },
 };
 
 export const cipzCreatePriceZoneChangeMockResponse = {
