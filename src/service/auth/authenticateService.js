@@ -1,3 +1,4 @@
+// eslint-disable one-return-only
 /**
  * Auth Service functions
  *
@@ -239,7 +240,6 @@ class AuthenticateService {
                 userRole: '',
             };
         }
-        // eslint-disable one-return-only
         return '';
     }
 }
