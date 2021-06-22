@@ -19,6 +19,10 @@ import {
     mockSearchRequestWithoutOpCoId,
     mockCreatePriceZoneUpdatePayload,
     mockCreatePriceZoneUpdateResponse,
+    seedGetItemAttributeGroupMockResponse,
+    cipzApiGetSubmittedRequestMockResponse,
+    cipzApiGetPriceZoneUpdateMockData,
+    cipzApiRespnseToApproveRequestMockData,
 } from '../../../config/test.config.pzreassignment';
 
 jest.mock('../../../httpClient/httpClient');
@@ -67,6 +71,7 @@ describe('routes: /item-attribute-groups', () => {
             .set('Accept', 'application/json')
             .then((res) => {
                 expect(res.status).toEqual(HttpStatus.OK);
+                expect(res.body).toEqual(seedGetItemAttributeGroupMockResponse.data);
             });
     });
 
@@ -127,6 +132,7 @@ describe('routes: /pz-update-requests', () => {
             .set('Accept', 'application/json')
             .then((res) => {
                 expect(res.status).toEqual(HttpStatus.OK);
+                expect(res.body.data).toEqual(cipzApiGetSubmittedRequestMockResponse.data.data);
             });
     });
 
@@ -156,6 +162,7 @@ describe('routes: /pz-updates/:request_id', () => {
             .set('Accept', 'application/json')
             .then((res) => {
                 expect(res.status).toEqual(HttpStatus.OK);
+                expect(res.body.data).toEqual(cipzApiGetPriceZoneUpdateMockData.data.data);
             });
     });
 
@@ -186,6 +193,7 @@ describe('routes: /pz-update-requests', () => {
             .send(mockPzUpdateRequestBody)
             .then((res) => {
                 expect(res.status).toEqual(HttpStatus.OK);
+                expect(res.body).toEqual(cipzApiRespnseToApproveRequestMockData);
             });
     });
 

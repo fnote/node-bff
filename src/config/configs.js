@@ -62,7 +62,7 @@ export const getSSMlConfig = () => ({
 
 export const getSeedApiConfig = () => ({
     CONFIG: {
-        seedApiBaseUrl: `${process.env.API_CENTRAL_BASE_URL}/v1/edwp`,
+        seedApiBaseUrl: `${process.env.SEED_URL}/v1/edwp`,
         clientId: 'Cloud_PCI',
         getItemAttributeGroupsEndpoint: '/attribute-groups',
         getCustomerAndItemAttributeGroupsEndpoint: '/item-price-zone/customer-attribute-group',

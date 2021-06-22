@@ -31,10 +31,16 @@ import {
     mockSearchResponseWithCutomerGroup,
     mockSearchResponseWithCutomerAccount,
     mockCreatePriceZoneUpdateResponse,
+    seedGetItemAttributeGroupMockResponse,
+    cipzApiGetSubmittedRequestMockResponse,
+    cipzApiGetPriceZoneUpdateMockData,
+    cipzApiRespnseToApproveRequestMockData,
 } from '../../config/test.config.pzreassignment';
 import HttpClientException from '../../exception/httpClientException';
 import {BATCH_API_DATA_FETCH_ERROR_CODE, HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
-import {HTTP_DELETE, HTTP_GET, HTTP_POST} from '../../util/constants';
+import {
+    HTTP_DELETE, HTTP_GET, HTTP_POST, HTTP_PATCH,
+} from '../../util/constants';
 import InvalidRequestException from '../../exception/invalidRequestException';
 
 class HttpClient {
@@ -59,6 +65,18 @@ class HttpClient {
             },
 
         };
+        if (URL.includes('/v1/edwp/attribute-groups') && method === HTTP_GET) {
+            return seedGetItemAttributeGroupMockResponse;
+        }
+        if (URL.includes('/v1/cipz/pz-update-requests') && method === HTTP_GET) {
+            return cipzApiGetSubmittedRequestMockResponse;
+        }
+        if (URL.includes('/v1/cipz/price-zone-updates/33') && method === HTTP_GET) {
+            return cipzApiGetPriceZoneUpdateMockData;
+        }
+        if (URL.includes('/v1/cipz/pz-update-requests') && method === HTTP_PATCH) {
+            return cipzApiRespnseToApproveRequestMockData;
+        }
         if (URL.includes('/batch/files/signed-url/input') && method === HTTP_POST
             && JSON.stringify(data) === JSON.stringify(mockBatchApiUploadUrlRequest)) {
             return mockResponseSignedUrl;

@@ -14,6 +14,10 @@ import {
     ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA,
     ERROR_IN_HANDLING_CIPZ_PRICE_ZONE_UPDATE,
     ERROR_IN_RESPONSING_CIPZ_PRICE_ZONE_APPROVAL_REQ,
+    ITEM_ATTRIBUTE_GROUPS,
+    PZ_UPDATE_REQUESTS,
+    PZ_UPDATES,
+    PZ_SEARCH,
 } from '../../../util/constants';
 import { getCorrelationId } from '../../../util/correlationIdGenerator';
 import SeedApiDataFetchException from '../../../exception/seedApiDataFechException';
@@ -78,11 +82,11 @@ export default () => {
         }
     };
 
-    priceZoneReassignmentRouter.get('/item-attribute-groups', async (req, res) => {
+    priceZoneReassignmentRouter.get(ITEM_ATTRIBUTE_GROUPS, async (req, res) => {
         try {
             const responseData = await seedService.getSeedItemAttributeGroupsData();
-            logger.info(`Success Seed Data response received: ${JSON.stringify(responseData)}`);
-            handleSuccessResponse(res, responseData);
+            logger.info(`Success Seed Data response received: ${JSON.stringify(responseData.data)}`);
+            handleSuccessResponse(res, responseData.data);
         } catch (error) {
             const errMessage = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA;
             logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
@@ -90,7 +94,7 @@ export default () => {
         }
     });
 
-    priceZoneReassignmentRouter.get('/pz-update-requests', async (req, res) => {
+    priceZoneReassignmentRouter.get(PZ_UPDATE_REQUESTS , async (req, res) => {
         try {
             const responseData = await PriceZoneReassignmentService.getCIPZSubmittedRequestData(req.query);
             logger.info(`Success CIPZ submitted requets Data response received: ${JSON.stringify(responseData)}`);
@@ -102,7 +106,7 @@ export default () => {
         }
     });
 
-    priceZoneReassignmentRouter.post('/pz-update-requests', async (req, res) => {
+    priceZoneReassignmentRouter.post(PZ_UPDATE_REQUESTS , async (req, res) => {
         try {
             // const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
             const isAuthorized = true;
@@ -122,7 +126,7 @@ export default () => {
         }
     });
 
-    priceZoneReassignmentRouter.get('/pz-updates/:request_id', async (req, res) => {
+    priceZoneReassignmentRouter.get(PZ_UPDATES, async (req, res) => {
         try {
             const requestId = req.params.request_id;
             const responseData = await PriceZoneReassignmentService.getPriceZoneUpdatesData(req.query, requestId);
@@ -135,7 +139,7 @@ export default () => {
         }
     });
 
-    priceZoneReassignmentRouter.patch('/pz-update-requests', async (req, res) => {
+    priceZoneReassignmentRouter.patch(PZ_UPDATE_REQUESTS, async (req, res) => {
         const { error } = cipzApprovalRequestReqBody.validate(req.body);
         if (error) {
             logger.error(`Request body validation failed in getting CIPZ Approval update request data: ${JSON.stringify(req.body)}`);
@@ -164,7 +168,7 @@ export default () => {
         }
     };
 
-    priceZoneReassignmentRouter.post('/search', async (req, res) => {
+    priceZoneReassignmentRouter.post(PZ_SEARCH, async (req, res) => {
         try {
             const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
             if (isAuthorized) {

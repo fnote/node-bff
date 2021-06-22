@@ -40,6 +40,12 @@ export const ERROR_IN_RESPONSING_CIPZ_PRICE_ZONE_APPROVAL_REQ = 'Error occurred 
 export const ERROR_IN_GETTING_SEED_SEARCH_RESULTS = 'Error occurred while searching Seed API for customer & item-attribute-group data';
 export const ERROR_IN_HANDLING_SEARCH_RESULTS = 'Error occurred while handling the price zone reassignment search request';
 
+// Price Zone Reassignment Routes
+export const ITEM_ATTRIBUTE_GROUPS = '/item-attribute-groups';
+export const PZ_UPDATE_REQUESTS = '/pz-update-requests';
+export const PZ_UPDATES = '/pz-updates/:request_id';
+export const PZ_SEARCH = '/search';
+
 // whitelisted url paths
 export const AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK = '/v1/pci-bff/support/healthcheck';
 export const AUTHENTICATION_NOT_REQUIRED_STATUS_CHECK = '/v1/pci-bff/support/status';
