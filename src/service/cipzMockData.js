@@ -172,9 +172,9 @@ export const searchByCustomerGroupMockResponse = {
 
 export const cipzCreatePriceZoneChangeMockResponse = {
     data: {
-        requestId: '112',
-        requestStatus: 'PENDING_APPROVAL',
-        createdTime: 1621837508,
+      requestId: '112',
+      status: 'PENDING_APPROVAL',
+      createdTime: 1621837508,
     },
 };
 export const cipzApiGetPriceZoneUpdateMockData = {
