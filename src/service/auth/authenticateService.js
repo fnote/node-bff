@@ -239,6 +239,7 @@ class AuthenticateService {
                 userRole: '',
             };
         }
+        // eslint-disable one-return-only
         return '';
     }
 }
