@@ -2,7 +2,6 @@ import { Router } from 'express';
 import * as HttpStatus from 'http-status-codes';
 import logger from '../../../util/logger';
 import { createErrorResponse } from '../../../mapper/responseMapper';
-import AuthorizationService from '../../../service/auth/authorizationService';
 import seedService from '../../../service/seed/seedService';
 import PriceZoneReassignmentService from '../../../service/priceZoneReassignment/priceZoneReassignmentService';
 import {
@@ -32,12 +31,6 @@ import CipzApiDataFetchException from '../../../exception/cipzApiDataFetchExcept
 
 export default () => {
     const priceZoneReassignmentRouter = new Router();
-
-    const handleUnauthorizedRequest = (res) => {
-        res.status(HttpStatus.UNAUTHORIZED).send(createErrorResponse('Unauthorized',
-            'User is not authorized to perform this action in the requested opco',
-            null, 'User authorization validations failed'));
-    };
 
     const handleSuccessResponse = (res, responseData) => {
         res.set(CORRELATION_ID_HEADER, getCorrelationId());
@@ -72,7 +65,6 @@ export default () => {
 
     const validateCreatePriceZoneChangeRequest = ({ body }) => {
         const { error } = priceZoneReassignmentCreateReqBody.validate(body);
-        console.log(error);
         if (error || !containsValidCustomerIdentifier(body) || !containsValidPriceZone(body)) {
             throw new InvalidRequestException(
                 INVALID_REQUEST_BODY,
@@ -94,7 +86,7 @@ export default () => {
         }
     });
 
-    priceZoneReassignmentRouter.get(PZ_UPDATE_REQUESTS , async (req, res) => {
+    priceZoneReassignmentRouter.get(PZ_UPDATE_REQUESTS, async (req, res) => {
         try {
             const responseData = await PriceZoneReassignmentService.getCIPZSubmittedRequestData(req.query);
             logger.info(`Success CIPZ submitted requets Data response received: ${JSON.stringify(responseData)}`);
@@ -106,19 +98,13 @@ export default () => {
         }
     });
 
-    priceZoneReassignmentRouter.post(PZ_UPDATE_REQUESTS , async (req, res) => {
+    priceZoneReassignmentRouter.post(PZ_UPDATE_REQUESTS, async (req, res) => {
         try {
-            // const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
-            const isAuthorized = true;
-            if (isAuthorized) {
-                validateCreatePriceZoneChangeRequest(req);
-                const responseData = await PriceZoneReassignmentService.createPriceZoneChange(req);
-                logger.info(`Success CIPZ create price zone update response received: ${JSON.stringify(responseData)}`);
-                res.set(CORRELATION_ID_HEADER, getCorrelationId());
-                res.status(HttpStatus.CREATED).send(responseData);
-            } else {
-                handleUnauthorizedRequest(res);
-            }
+            validateCreatePriceZoneChangeRequest(req);
+            const responseData = await PriceZoneReassignmentService.createPriceZoneChange(req);
+            logger.info(`Success CIPZ create price zone update response received: ${JSON.stringify(responseData)}`);
+            res.set(CORRELATION_ID_HEADER, getCorrelationId());
+            res.status(HttpStatus.CREATED).send(responseData);
         } catch (error) {
             const errMessage = ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE;
             logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
@@ -170,20 +156,15 @@ export default () => {
 
     priceZoneReassignmentRouter.post(PZ_SEARCH, async (req, res) => {
         try {
-            const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
-            if (isAuthorized) {
-                validateSearchRequest(req);
-                let responseData;
-                if (isCustomerAccountDefined(req.body)) {
-                    responseData = await seedService.getPriceZoneDetailsForCustomerAndItemAttributeGroup(req);
-                } else {
-                    responseData = await seedService.getPriceZoneDetailsForCustomerGroupAndItemAttributeGroup(req);
-                }
-                logger.info(`Success Seed Data response received for search: ${JSON.stringify(responseData)}`);
-                handleSuccessResponse(res, responseData);
+            validateSearchRequest(req);
+            let responseData;
+            if (isCustomerAccountDefined(req.body)) {
+                responseData = await seedService.getPriceZoneDetailsForCustomerAndItemAttributeGroup(req);
             } else {
-                handleUnauthorizedRequest(res);
+                responseData = await seedService.getPriceZoneDetailsForCustomerGroupAndItemAttributeGroup(req);
             }
+            logger.info(`Success Seed Data response received for search: ${JSON.stringify(responseData)}`);
+            handleSuccessResponse(res, responseData);
         } catch (error) {
             const errMessage = ERROR_IN_HANDLING_SEARCH_RESULTS;
             logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
