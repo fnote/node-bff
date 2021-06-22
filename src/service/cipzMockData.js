@@ -147,7 +147,7 @@ export const searchByCustomerMockResponse = {
       limit: 20,
       data: {
          business_unit_number: '020',
-         customer_group: '1662',
+         customer_account: '123456',
          item_attribute_group: 'MILK',
          item_attribute_group_id: '1234',
          item_price_zones: itemPriceZones,
@@ -162,7 +162,7 @@ export const searchByCustomerGroupMockResponse = {
       limit: 20,
       data: {
           business_unit_number: '020',
-          customer_account: '123456',
+          customer_group: '1662',
           item_attribute_group: 'MILK',
           item_attribute_group_id: '1234',
           item_price_zones: itemPriceZones,
