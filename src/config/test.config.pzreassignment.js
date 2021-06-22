@@ -48,6 +48,36 @@ export const mockSearchRequestWithCustomerAccount = {
     limit: 20,
 };
 
+export const mockSearchRequestWithoutOpCoId = {
+    customer_account: '100001',
+    item_attribute_group_id: '123',
+    offset: 0,
+    limit: 20,
+};
+
+export const mockSearchRequestWithoutCustomer = {
+    business_unit_number: '020',
+    item_attribute_group_id: '123',
+    offset: 0,
+    limit: 20,
+};
+
+export const mockSearchRequestWithBothCustomerAndCutomerGroup = {
+    business_unit_number: '020',
+    customer_account: '100001',
+    customer_group: '1662',
+    item_attribute_group_id: '123',
+    offset: 0,
+    limit: 20,
+};
+
+export const mockSearchRequestWithoutItemAttributeGroup = {
+    business_unit_number: '020',
+    customer_account: '100001',
+    offset: 0,
+    limit: 20,
+};
+
 const itemPriceZones = [
     {
        supc: '1000001',
@@ -98,17 +128,37 @@ export const mockSearchResponseWithCutomerGroup = {
 };
 
 export const mockSearchResponseWithCutomerAccount = {
-    status: HTTP.OK,
+    total_records: 3,
+    offset: 1,
+    limit: 20,
     data: {
-        total_records: 3,
-        offset: 1,
-        limit: 20,
-        data: {
-           business_unit_number: '020',
-           customer_account: '123456',
-           item_attribute_group: 'MILK',
-           item_attribute_group_id: '1234',
-           item_price_zones: itemPriceZones,
-        },
+        business_unit_number: '020',
+        customer_account: '123456',
+        item_attribute_group: 'MILK',
+        item_attribute_group_id: '1234',
+        item_price_zones: itemPriceZones,
+    },
+};
+
+export const mockCreatePriceZoneUpdateResponse = {
+    requestId: '112',
+    status: 'PENDING_APPROVAL',
+    createdTime: 1621837508,
+};
+
+export const mockCreatePriceZoneUpdatePayload = {
+    businessUnitNumber: '020',
+    itemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
+    itemAttributeGroupId: '12345',
+    customerGroup: '8287',
+    customerAccount: '700001',
+    newPriceZone: 3,
+    effectiveFromDate: '20210530',
+    submissionNote: '',
+    submitter: {
+       id: 'vvit5827',
+       givenName: 'Vithulan',
+       surname: 'MV',
+       email: 'vvit5827@sysco.com',
     },
 };

@@ -47,15 +47,16 @@ export const priceZoneReassignmentCreateReqBody = Joi.object({
     customerGroupId: Joi.string(),
     customerGroup: Joi.string().allow(null),
     customerAccount: Joi.string(),
-    newPriceZone: Joi.number().integer().max(5).required(),
+    newPriceZone: Joi.number().integer().required(),
     effectiveFromDate: Joi.string().required(),
+    submissionNote: Joi.string().allow(''),
     submitter: Joi.object({
         id: Joi.string().required(),
         givenName: Joi.string().required(),
         surname: Joi.string().required(),
         email: Joi.string().email({ tlds: {allow: false} }).required(),
     }).required(),
-}).xor('customerAccount', 'customerGroupId');
+});
 
 export const cipzApprovalRequestReqBody = Joi.object({
     requestId: Joi.number()

@@ -29,7 +29,8 @@ import {
 } from '../../config/test.config';
 import {
     mockSearchResponseWithCutomerGroup,
-    mockSearchResponseWithCutomerAccount
+    mockSearchResponseWithCutomerAccount,
+    mockCreatePriceZoneUpdateResponse,
 } from '../../config/test.config.pzreassignment';
 import HttpClientException from '../../exception/httpClientException';
 import {BATCH_API_DATA_FETCH_ERROR_CODE, HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
@@ -121,6 +122,9 @@ class HttpClient {
         }
         if (URL.includes('/item-price-zone/customer-group-attribute-group')) {
             return mockSearchResponseWithCutomerGroup;
+        }
+        if (URL.includes('/pz-update-requests') && method === HTTP_POST) {
+            return mockCreatePriceZoneUpdateResponse;
         }
         if (JSON.stringify(data) === JSON
             .stringify(cloudPricingMockRequestForErrorScenario.body)) {

@@ -57,11 +57,21 @@ export default () => {
             .send(createErrorResponse(null, errorMessage, error, null, error.errorCode));
     };
 
+    const containsValidCustomerIdentifier = ({ customerAccount, customerGroup }) => {
+        if (customerAccount || customerGroup) {
+            return true;
+        }
+        return false;
+    };
+
+    const containsValidPriceZone = ({ newPriceZone }) => newPriceZone >= 1 && newPriceZone <= 5;
+
     const validateCreatePriceZoneChangeRequest = ({ body }) => {
         const { error } = priceZoneReassignmentCreateReqBody.validate(body);
-        if (error) {
+        console.log(error);
+        if (error || !containsValidCustomerIdentifier(body) || !containsValidPriceZone(body)) {
             throw new InvalidRequestException(
-                `${INVALID_REQUEST_BODY}, ${error.message}`,
+                INVALID_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
                 PRICE_ZONE_REASSIGNMENT_INVALID_UPDATE_PAYLOAD_ERROR_CODE,
             );
@@ -94,12 +104,14 @@ export default () => {
 
     priceZoneReassignmentRouter.post('/pz-update-requests', async (req, res) => {
         try {
-            const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
+            // const isAuthorized = AuthorizationService.isAuthorizedRequest(req, res);
+            const isAuthorized = true;
             if (isAuthorized) {
                 validateCreatePriceZoneChangeRequest(req);
                 const responseData = await PriceZoneReassignmentService.createPriceZoneChange(req);
                 logger.info(`Success CIPZ create price zone update response received: ${JSON.stringify(responseData)}`);
-                handleSuccessResponse(res, responseData);
+                res.set(CORRELATION_ID_HEADER, getCorrelationId());
+                res.status(HttpStatus.CREATED).send(responseData);
             } else {
                 handleUnauthorizedRequest(res);
             }

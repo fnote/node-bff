@@ -17,6 +17,8 @@ import {
     mockSearchRequestWithoutItemAttributeGroup,
     mockSearchRequestWithBothCustomerAndCutomerGroup,
     mockSearchRequestWithoutOpCoId,
+    mockCreatePriceZoneUpdatePayload,
+    mockCreatePriceZoneUpdateResponse,
 } from '../../../config/test.config.pzreassignment';
 
 jest.mock('../../../httpClient/httpClient');
@@ -47,6 +49,12 @@ const executeAuthMiddlewareMockImplementation = () => {
         };
         next();
     });
+};
+
+const removeObjectAttribute = (obj = {}, attribute) => {
+    const { ...copy } = obj;
+    delete copy[attribute];
+    return copy;
 };
 
 describe('routes: /item-attribute-groups', () => {
@@ -268,6 +276,154 @@ describe('route: /search', () => {
         await request(app.app)
         .post('/v1/pci-bff/price-zone-reassignment/search')
         .send(mockSearchRequestWithBothCustomerAndCutomerGroup)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+            expect(res.body).toBeDefined();
+        });
+    });
+});
+
+describe('routes: post /pz-update-requests', () => {
+    test('valid create pz update request have both customer & group ids', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
+        .send(mockCreatePriceZoneUpdatePayload)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.CREATED);
+            expect(res.body).toBeDefined();
+            expect(res.body).toEqual(mockCreatePriceZoneUpdateResponse);
+        });
+    });
+
+    test('valid create pz update request only group id', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        const requestPayloadWithGroupIdOnly = removeObjectAttribute(mockCreatePriceZoneUpdatePayload, 'customerAccount');
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
+        .send(requestPayloadWithGroupIdOnly)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.CREATED);
+            expect(res.body).toBeDefined();
+            expect(res.body).toEqual(mockCreatePriceZoneUpdateResponse);
+        });
+    });
+
+    test('valid create pz update request only cutomer id', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        const requestPayloadWithCustomerAccountOnly = removeObjectAttribute(mockCreatePriceZoneUpdatePayload, 'customerGroup');
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
+        .send(requestPayloadWithCustomerAccountOnly)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.CREATED);
+            expect(res.body).toBeDefined();
+            expect(res.body).toEqual(mockCreatePriceZoneUpdateResponse);
+        });
+    });
+
+    test('invalid create pz update request', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        const requestPayloadWithoutOpCo = removeObjectAttribute(mockCreatePriceZoneUpdatePayload, 'businessUnitNumber');
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
+        .send(requestPayloadWithoutOpCo)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+            expect(res.body).toBeDefined();
+        });
+    });
+
+    test('invalid create pz update request', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        const requestPayloadWithoutItemAttrGrp = removeObjectAttribute(mockCreatePriceZoneUpdatePayload, 'itemAttributeGroupId');
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
+        .send(requestPayloadWithoutItemAttrGrp)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+            expect(res.body).toBeDefined();
+        });
+    });
+
+    test('invalid create pz update request: without customer identifier', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        const requestPayloadWithoutCustomerGrp = removeObjectAttribute(mockCreatePriceZoneUpdatePayload, 'customerGroup');
+        const requestPayloadWithoutCutomerId = removeObjectAttribute(requestPayloadWithoutCustomerGrp, 'customerAccount');
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
+        .send(requestPayloadWithoutCutomerId)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+            expect(res.body).toBeDefined();
+        });
+    });
+
+    test('invalid create pz update request: without effectiveFromDate', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        const requestPayloadWithoutEffectiveDate = removeObjectAttribute(mockCreatePriceZoneUpdatePayload, 'effectiveFromDate');
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
+        .send(requestPayloadWithoutEffectiveDate)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+            expect(res.body).toBeDefined();
+        });
+    });
+
+    test('invalid create pz update request: without submitter', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        const requestPayloadWithoutSubmitter = removeObjectAttribute(mockCreatePriceZoneUpdatePayload, 'submitter');
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
+        .send(requestPayloadWithoutSubmitter)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+            expect(res.body).toBeDefined();
+        });
+    });
+
+    test('invalid create pz update request: without newPriceZone', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        const requestPayloadWithoutPriceZone = removeObjectAttribute(mockCreatePriceZoneUpdatePayload, 'newPriceZone');
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
+        .send(requestPayloadWithoutPriceZone)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+            expect(res.body).toBeDefined();
+        });
+    });
+
+    test('invalid create pz update request: newPriceZone below 1', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        const requestPayloadPriceZoneBelow1 = mockCreatePriceZoneUpdatePayload[0];
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
+        .send(requestPayloadPriceZoneBelow1)
+        .then((res) => {
+            expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+            expect(res.body).toBeDefined();
+        });
+    });
+
+    test('invalid create pz update request: newPriceZone over 5', async () => {
+        executeAuthMiddlewareMockImplementation();
+        jest.setTimeout(100000);
+        const requestPayloadPriceZoneOver5 = mockCreatePriceZoneUpdatePayload[6];
+        await request(app.app)
+        .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
+        .send(requestPayloadPriceZoneOver5)
         .then((res) => {
             expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
             expect(res.body).toBeDefined();

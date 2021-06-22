@@ -9,6 +9,7 @@ import {
     APPLICATION_JSON, CORRELATION_ID_HEADER,
     ERROR_IN_RESPONSING_CIPZ_PRICE_ZONE_APPROVAL_REQ,
     // HTTP_GET,
+    HTTP_POST,
     // HTTP_PATCH,
     ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE,
 } from '../../util/constants';
@@ -25,6 +26,7 @@ import {
     cipzApiRespnseToApproveRequestMockData,
     cipzCreatePriceZoneChangeMockResponse,
 } from '../cipzMockData';
+import {httpClient} from '../../httpClient/httpClient';
 
 class PriceZoneReassignmentService {
     constructor() {
