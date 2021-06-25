@@ -163,8 +163,8 @@ export default () => {
             } else {
                 responseData = await seedService.getPriceZoneDetailsForCustomerGroupAndItemAttributeGroup(req);
             }
-            logger.info(`Success Seed Data response received for search: ${JSON.stringify(responseData)}`);
-            handleSuccessResponse(res, responseData);
+            logger.info(`Success Seed Data response received for search: ${JSON.stringify(responseData.data)}`);
+            handleSuccessResponse(res, responseData.data);
         } catch (error) {
             const errMessage = ERROR_IN_HANDLING_SEARCH_RESULTS;
             logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
