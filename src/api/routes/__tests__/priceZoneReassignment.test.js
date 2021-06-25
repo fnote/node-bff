@@ -225,7 +225,7 @@ describe('route: /search', () => {
         .then((res) => {
             expect(res.status).toEqual(HttpStatus.OK);
             expect(res.body).toBeDefined();
-            expect(res.body).toEqual(mockSearchResponseWithCutomerGroup);
+            expect(res.body).toEqual(mockSearchResponseWithCutomerGroup.data);
         });
     });
 
@@ -238,7 +238,7 @@ describe('route: /search', () => {
         .then((res) => {
             expect(res.status).toEqual(HttpStatus.OK);
             expect(res.body).toBeDefined();
-            expect(res.body).toEqual(mockSearchResponseWithCutomerAccount);
+            expect(res.body).toEqual(mockSearchResponseWithCutomerAccount.data);
         });
     });
 
@@ -278,14 +278,14 @@ describe('route: /search', () => {
         });
     });
 
-    test('search with invalid payload, both customer & customer group id present', async () => {
+    test('search with valid payload, both customer & customer group id present', async () => {
         executeAuthMiddlewareMockImplementation();
         jest.setTimeout(100000);
         await request(app.app)
         .post('/v1/pci-bff/price-zone-reassignment/search')
         .send(mockSearchRequestWithBothCustomerAndCutomerGroup)
         .then((res) => {
-            expect(res.status).toEqual(HttpStatus.BAD_REQUEST);
+            expect(res.status).toEqual(HttpStatus.OK);
             expect(res.body).toBeDefined();
         });
     });
