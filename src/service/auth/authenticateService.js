@@ -200,6 +200,10 @@ class AuthenticateService {
                         authorizedPricingTransformationEnabledBunitList = authorizedBunitList.authorizedPricingTransformationEnabledBunitList;
                         authorizedBatchEnabledBunitList = authorizedBunitList.authorizedBatchEnabledBunitList;
                     }
+
+                    const allActiveOpcos = AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit();
+                    console.log(allActiveOpcos);
+
                     const userDetailsData = {
                         authorizedPricingTransformationEnabledBunitList,
                         authorizedBatchEnabledBunitList,
@@ -210,6 +214,7 @@ class AuthenticateService {
                         jobTitle: decodedPayloadFromJwt.zoneinfo,
                         role: selectedUserRole,
                         cipzRole: selectedCIPZUserRole,
+                        allActiveOpcos,
                     };
 
                     logger.info(`Authenticated user's user details: First name: ${userDetailsData.firstName}
