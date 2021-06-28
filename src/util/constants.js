@@ -68,5 +68,5 @@ export const IS_APPLICABLE = 'isApplicable';
 export const ORDER_PRICE_TYPE_HAND = 'H';
 
 // Seed API Error Codes
-export const INVALID_CUSTOMER_GROUP = '10202';
+export const INVALID_CUSTOMER_GROUP = '102023';
 export const INVALID_CUSTOMER_ACCOUNT = '102021';
