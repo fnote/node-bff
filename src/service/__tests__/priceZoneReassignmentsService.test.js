@@ -3,7 +3,7 @@ import PriceZoneReassignmentService from '../priceZoneReassignment/priceZoneReas
 import CipzApiDataFetchException from '../../exception/cipzApiDataFetchException';
 import InvalidRequestException from '../../exception/invalidRequestException';
 
-jest.mock('../../httpClient/httpClient');
+jest.mock('../../httpClient/PZRHttpClient');
 jest.mock('../../util/accessTokenGenerator');
 
 describe(' Price Zone Reassignment Service - getCIPZSubmittedRequestData', () => {

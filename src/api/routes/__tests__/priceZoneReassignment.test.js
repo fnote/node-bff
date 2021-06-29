@@ -25,7 +25,7 @@ import {
     cipzApiRespnseToApproveRequestMockData,
 } from '../../../config/test.config.pzreassignment';
 
-jest.mock('../../../httpClient/httpClient');
+jest.mock('../../../httpClient/PZRHttpClient');
 jest.mock('../../../util/accessTokenGenerator');
 
 jest.mock('../../../initializer', () => ({

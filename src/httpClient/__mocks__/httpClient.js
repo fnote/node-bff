@@ -27,19 +27,10 @@ import {
     pricingDataMockRequestThrowErrorForCloudPricingCall,
     productInfoMockResponse,
 } from '../../config/test.config';
-import {
-    mockSearchResponseWithCutomerGroup,
-    mockSearchResponseWithCutomerAccount,
-    mockCreatePriceZoneUpdateResponse,
-    seedGetItemAttributeGroupMockResponse,
-    cipzApiGetSubmittedRequestMockResponse,
-    cipzApiGetPriceZoneUpdateMockData,
-    cipzApiRespnseToApproveRequestMockData,
-} from '../../config/test.config.pzreassignment';
 import HttpClientException from '../../exception/httpClientException';
 import {BATCH_API_DATA_FETCH_ERROR_CODE, HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
 import {
-    HTTP_DELETE, HTTP_GET, HTTP_POST, HTTP_PATCH,
+    HTTP_DELETE, HTTP_GET, HTTP_POST,
 } from '../../util/constants';
 import InvalidRequestException from '../../exception/invalidRequestException';
 
@@ -65,18 +56,6 @@ class HttpClient {
             },
 
         };
-        if (URL.includes('/v1/edwp/attribute-groups') && method === HTTP_GET) {
-            return seedGetItemAttributeGroupMockResponse;
-        }
-        if (URL.includes('/v1/cipz/pz-update-requests') && method === HTTP_GET) {
-            return cipzApiGetSubmittedRequestMockResponse;
-        }
-        if (URL.includes('/v1/cipz/price-zone-updates/33') && method === HTTP_GET) {
-            return cipzApiGetPriceZoneUpdateMockData;
-        }
-        if (URL.includes('/v1/cipz/pz-update-requests') && method === HTTP_PATCH) {
-            return cipzApiRespnseToApproveRequestMockData;
-        }
         if (URL.includes('/batch/files/signed-url/input') && method === HTTP_POST
             && JSON.stringify(data) === JSON.stringify(mockBatchApiUploadUrlRequest)) {
             return mockResponseSignedUrl;
@@ -134,15 +113,6 @@ class HttpClient {
         }
         if (URL.includes('/opcos/999/products/9999999')) {
             throw new HttpClientException('Http client exception', HTTP_CLIENT_EXCEPTION);
-        }
-        if (URL.includes('/item-price-zone/customer-attribute-group')) {
-            return mockSearchResponseWithCutomerAccount;
-        }
-        if (URL.includes('/item-price-zone/customer-group-attribute-group')) {
-            return mockSearchResponseWithCutomerGroup;
-        }
-        if (URL.includes('/pz-update-requests') && method === HTTP_POST) {
-            return mockCreatePriceZoneUpdateResponse;
         }
         if (JSON.stringify(data) === JSON
             .stringify(cloudPricingMockRequestForErrorScenario.body)) {

@@ -4,7 +4,7 @@
  import SeedApiDataFetchException from '../../exception/seedApiDataFechException';
  import { CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES } from '../../exception/exceptionCodes';
 
- jest.mock('../../httpClient/httpClient');
+ jest.mock('../../httpClient/PZRHttpClient');
  jest.mock('../../util/accessTokenGenerator');
 
  describe('Seed API Data Service', () => {
