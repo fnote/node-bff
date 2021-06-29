@@ -172,26 +172,15 @@ class AuthenticateService {
                         // '[appadmin, generaluser, submitter,reviewer]', '[appadmin, generaluser]' ,'[submitter,reviewer]',[appadmin,reviewer]'
                         // above can come and for returns for each case (appadmin, reviewer )/(appadmin ,'')/ ('', reviewer)
                         try {
-                            const userRolesArray = userRoles.split(',').map((item) => item.trim());
-
-                            if (userRolesArray.length > 1) {
-                                userRolesArray[0] = userRolesArray[0].substring(1);
-
-                                const lastElement = userRolesArray[userRolesArray.length - 1];
-                                userRolesArray[userRolesArray.length - 1] = lastElement.substring(0, lastElement.length - 1);
-                                selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_REGULAR);
-                                selectedCIPZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_CIPZ);
-                            } else {
-                                // input here will be single roles in the form of an array
-                                // have to call this method again in order to check that the string is a valid role
-                                selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_REGULAR);
-                                selectedCIPZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_CIPZ);
-                            }
+                            const userRolesArray = userRoles.replace('[', '')
+                                .replace(']', '')
+                                .split(',');
+                            selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_REGULAR);
+                            selectedCIPZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_CIPZ);
                         } catch (e) {
                             logger.error(`Error in parsing the user role value: ${userRoles}`);
                             selectedUserRole = userRoles;
                         }
-
                         // selected user role either empty , regular
                         const authorizedBunitList = AuthorizationService.getAuthorizedBusinessUnits(opcoString, selectedUserRole);
                         authorizedPricingTransformationEnabledBunitList = authorizedBunitList.authorizedPricingTransformationEnabledBunitList;
