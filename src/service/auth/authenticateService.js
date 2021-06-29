@@ -202,7 +202,6 @@ class AuthenticateService {
                     }
 
                     const allActiveOpcos = AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit();
-                    console.log(allActiveOpcos);
 
                     const userDetailsData = {
                         authorizedPricingTransformationEnabledBunitList,
