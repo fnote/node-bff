@@ -12,12 +12,10 @@ import {
     HTTP_PATCH,
     HTTP_POST,
     ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE,
+    CIPZ_API,
 } from '../../util/constants';
 import {
-    CIPZ_API_DATA_FETCH_ERROR_CODE,
-    CIPZ_API_CREATE_PRICE_ZONE_UPDATE_ERROR_CODE,
-    ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA_CODE,
-    UPDATING_CIPZ_PRICE_ZONE_SUBMITTED_REQ_ERROR_CODE,
+    CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES,
 
 } from '../../exception/exceptionCodes';
 import {
@@ -57,11 +55,11 @@ class PriceZoneReassignmentService {
                 data: null,
                 headers,
                 params,
-                api: 'CIPZ_API',
+                api: CIPZ_API,
             });
         } catch (e) {
             const errorMessage = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA;
-            const errorCode = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA_CODE;
+            const errorCode = CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES.ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA_CODE;
             logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
             throw new CipzApiDataFetchException(e, errorMessage, errorCode);
         }
@@ -82,12 +80,12 @@ class PriceZoneReassignmentService {
                 data: null,
                 headers,
                 params,
-                api: 'CIPZ_API',
+                api: CIPZ_API,
             });
             // return cipzApiGetPriceZoneUpdateMockData.data;
         } catch (e) {
             const errorMessage = ERROR_IN_GETTING_CIPZ_PRICE_ZONE_UPDATE_DATA;
-            const errorCode = UPDATING_CIPZ_PRICE_ZONE_SUBMITTED_REQ_ERROR_CODE;
+            const errorCode = CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES.UPDATING_CIPZ_PRICE_ZONE_SUBMITTED_REQ_ERROR_CODE;
             logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
             throw new CipzApiDataFetchException(e, errorMessage, errorCode);
         }
@@ -104,11 +102,11 @@ class PriceZoneReassignmentService {
                 data: body,
                 headers,
                 params: null,
-                api: 'CIPZ_API',
+                api: CIPZ_API,
             });
         } catch (e) {
             const errorMessage = ERROR_IN_RESPONSING_CIPZ_PRICE_ZONE_APPROVAL_REQ;
-            const errorCode = CIPZ_API_DATA_FETCH_ERROR_CODE;
+            const errorCode = CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES.CIPZ_API_DATA_FETCH_ERROR_CODE;
             logger.error(`${errorMessage} due to: ${e}, stacktrace: ${e.stack}`);
             throw new CipzApiDataFetchException(e, errorMessage, errorCode);
         }
@@ -124,11 +122,12 @@ class PriceZoneReassignmentService {
                 data: req.body,
                 headers,
                 params: null,
-                api: 'CIPZ_API',
+                api: CIPZ_API,
             });
             // return (cipzCreatePriceZoneChangeMockResponse.data);
         } catch (error) {
-            throw new CipzApiDataFetchException(error, ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE, CIPZ_API_CREATE_PRICE_ZONE_UPDATE_ERROR_CODE);
+            throw new CipzApiDataFetchException(error, ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE,
+                CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES.CIPZ_API_CREATE_PRICE_ZONE_UPDATE_ERROR_CODE);
         }
     }
 }

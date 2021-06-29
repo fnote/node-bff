@@ -21,11 +21,7 @@ import {
 import { getCorrelationId } from '../../../util/correlationIdGenerator';
 import SeedApiDataFetchException from '../../../exception/seedApiDataFechException';
 import InvalidRequestException from '../../../exception/invalidRequestException';
-import {
-    PRICE_ZONE_REASSIGNMENT_INVALID_SEARCH_PAYLOAD_ERROR_CODE,
-    PRICE_ZONE_REASSIGNMENT_INVALID_UPDATE_PAYLOAD_ERROR_CODE,
-    CPIZ_API_DATA_INVALID_PAYLOAD_ERROR_CODE,
-} from '../../../exception/exceptionCodes';
+import {CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES} from '../../../exception/exceptionCodes';
 import { priceZoneReassignmentSearchReqBody, priceZoneReassignmentCreateReqBody, cipzApprovalRequestReqBody } from '../../../validator/schema';
 import CipzApiDataFetchException from '../../../exception/cipzApiDataFetchException';
 
@@ -69,7 +65,7 @@ export default () => {
             throw new InvalidRequestException(
                 INVALID_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
-                PRICE_ZONE_REASSIGNMENT_INVALID_UPDATE_PAYLOAD_ERROR_CODE,
+                CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES.PRICE_ZONE_REASSIGNMENT_INVALID_UPDATE_PAYLOAD_ERROR_CODE,
             );
         }
     };
@@ -129,7 +125,8 @@ export default () => {
         const { error } = cipzApprovalRequestReqBody.validate(req.body);
         if (error) {
             logger.error(`Request body validation failed in getting CIPZ Approval update request data: ${JSON.stringify(req.body)}`);
-            throw new InvalidRequestException(INVALID_REQUEST_BODY, HttpStatus.BAD_REQUEST, CPIZ_API_DATA_INVALID_PAYLOAD_ERROR_CODE);
+            throw new InvalidRequestException(INVALID_REQUEST_BODY, HttpStatus.BAD_REQUEST,
+                CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES.CPIZ_API_DATA_INVALID_PAYLOAD_ERROR_CODE);
         }
         try {
             const responseData = await PriceZoneReassignmentService.reviewSubmission(req.body);
@@ -149,7 +146,7 @@ export default () => {
             throw new InvalidRequestException(
                 INVALID_REQUEST_BODY,
                 HttpStatus.BAD_REQUEST,
-                PRICE_ZONE_REASSIGNMENT_INVALID_SEARCH_PAYLOAD_ERROR_CODE,
+                CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES.PRICE_ZONE_REASSIGNMENT_INVALID_SEARCH_PAYLOAD_ERROR_CODE,
             );
         }
     };

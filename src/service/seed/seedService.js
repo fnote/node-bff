@@ -12,7 +12,7 @@ import {
 import { getAccessToken } from '../../util/accessTokenGenerator';
 import {
     SEED_API_ERROR_CODES_MAP,
-    SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE,
+    CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES,
 } from '../../exception/exceptionCodes';
 import { httpClient } from '../../httpClient/PZRHttpClient';
 
@@ -45,7 +45,8 @@ class SeedService {
                 api: SEED_API,
             });
         } catch (error) {
-            throw new SeedApiDataFetchException(error, ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA, SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE);
+            throw new SeedApiDataFetchException(error, ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA,
+                CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES.SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE);
         }
     }
 
