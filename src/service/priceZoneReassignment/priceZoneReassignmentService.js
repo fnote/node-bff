@@ -1,4 +1,4 @@
-import {httpClient} from '../../httpClient/httpClient';
+import {httpClient} from '../../httpClient/PZRHttpClient';
 import { getCIPZApiConfig } from '../../config/configs';
 import logger from '../../util/logger';
 import CipzApiDataFetchException from '../../exception/cipzApiDataFetchException';
@@ -50,8 +50,15 @@ class PriceZoneReassignmentService {
         try {
             const headers = await this.constructHeaders();
             const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.getSubmittedRequestEndpoint;
-            return cipzApiGetSubmittedRequestMockResponse.data;
-            // return httpClient.makeRequest(HTTP_GET, reqUrl, null, headers, params);
+            // return cipzApiGetSubmittedRequestMockResponse.data;
+            return httpClient.makeRequest({
+                method: HTTP_GET,
+                reqUrl,
+                data: null,
+                headers,
+                params,
+                api: 'CIPZ_API',
+            });
         } catch (e) {
             const errorMessage = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA;
             const errorCode = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA_CODE;
@@ -69,8 +76,15 @@ class PriceZoneReassignmentService {
         try {
             const headers = await this.constructHeaders();
             const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.getPriceZoneUpdateEndpoint + requestId;
-            // return httpClient.makeRequest(HTTP_GET, reqUrl, null, headers, params);
-            return cipzApiGetPriceZoneUpdateMockData.data;
+            return httpClient.makeRequest({
+                method: HTTP_GET,
+                reqUrl,
+                data: null,
+                headers,
+                params,
+                api: 'CIPZ_API',
+            });
+            // return cipzApiGetPriceZoneUpdateMockData.data;
         } catch (e) {
             const errorMessage = ERROR_IN_GETTING_CIPZ_PRICE_ZONE_UPDATE_DATA;
             const errorCode = UPDATING_CIPZ_PRICE_ZONE_SUBMITTED_REQ_ERROR_CODE;
@@ -83,8 +97,15 @@ class PriceZoneReassignmentService {
         try {
             const headers = await this.constructHeaders();
             const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.patchApproveRejectApprovalReqEndpoint;
-            return cipzApiRespnseToApproveRequestMockData;
-            // return httpClient.makeRequest(HTTP_PATCH, reqUrl, body, headers);
+            // return cipzApiRespnseToApproveRequestMockData;
+            return httpClient.makeRequest({
+                method: HTTP_PATCH,
+                reqUrl,
+                data: body,
+                headers,
+                params: null,
+                api: 'CIPZ_API',
+            });
         } catch (e) {
             const errorMessage = ERROR_IN_RESPONSING_CIPZ_PRICE_ZONE_APPROVAL_REQ;
             const errorCode = CIPZ_API_DATA_FETCH_ERROR_CODE;
@@ -95,10 +116,17 @@ class PriceZoneReassignmentService {
 
     async createPriceZoneChange(req) {
         try {
-            // const headers = await this.constructHeaders();
-            // const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.createPriceZoneUpdateEndpoint;
-            // return httpClient.makeRequest(HTTP_POST, reqUrl, req.body, headers);
-            return (cipzCreatePriceZoneChangeMockResponse.data);
+            const headers = await this.constructHeaders();
+            const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.createPriceZoneUpdateEndpoint;
+            return httpClient.makeRequest({
+                mathod: HTTP_POST,
+                reqUrl,
+                data: req.body,
+                headers,
+                params: null,
+                api: 'CIPZ_API',
+            });
+            // return (cipzCreatePriceZoneChangeMockResponse.data);
         } catch (error) {
             throw new CipzApiDataFetchException(error, ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE, CIPZ_API_CREATE_PRICE_ZONE_UPDATE_ERROR_CODE);
         }

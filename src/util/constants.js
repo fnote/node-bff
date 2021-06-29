@@ -67,6 +67,7 @@ export const IS_APPLICABLE = 'isApplicable';
 // misc
 export const ORDER_PRICE_TYPE_HAND = 'H';
 
-// Seed API Error Codes
-export const INVALID_CUSTOMER_GROUP_ERROR_CODE_IN_SEED = '102023';
-export const INVALID_CUSTOMER_ACCOUNT_ERROR_CODE_IN_SEED = '102021';
+export const CIPZ_API = 'CIPZ_API';
+export const SEED_API = 'SEED_API';
+export const CIPZ_VALIDATION = 'CIPZ_VALIDATION';
+

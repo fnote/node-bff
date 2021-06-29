@@ -7,19 +7,14 @@ import {
     APPLICATION_JSON, CORRELATION_ID_HEADER,
     HTTP_GET,
     HTTP_POST,
+    SEED_API,
 } from '../../util/constants';
 import { getAccessToken } from '../../util/accessTokenGenerator';
 import {
+    SEED_API_ERROR_CODES_MAP,
     SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE,
-    SEED_API_SEARCH_BY_CUSTOMER_ERROR_CODE,
-    SEED_API_SEARCH_BY_CUSTOMER_GROUP_ERROR_CODE,
 } from '../../exception/exceptionCodes';
-import {
-    searchByCustomerMockResponse,
-    searchByCustomerGroupMockResponse,
-} from '../cipzMockData';
-import logger from '../../util/logger';
-import { httpClient } from '../../httpClient/httpClient';
+import { httpClient } from '../../httpClient/PZRHttpClient';
 
 class SeedService {
     constructor() {
@@ -41,7 +36,14 @@ class SeedService {
         try {
             const headers = await this.constructHeaders();
             const reqUrl = this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getItemAttributeGroupsEndpoint;
-            return httpClient.makeRequest(HTTP_GET, reqUrl, null, headers);
+            return httpClient.makeRequest({
+                method: HTTP_GET,
+                reqUrl,
+                data: null,
+                headers,
+                param: null,
+                api: SEED_API,
+            });
         } catch (error) {
             throw new SeedApiDataFetchException(error, ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA, SEED_API_ITEM_ATT_GROUP_FETCH_ERROR_CODE);
         }
@@ -51,9 +53,16 @@ class SeedService {
         try {
             const headers = await this.constructHeaders();
             const reqUrl = this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getCustomerAndItemAttributeGroupsEndpoint;
-            return httpClient.makeRequest(HTTP_POST, reqUrl, req.body, headers);
+            return httpClient.makeRequest({
+                method: HTTP_POST,
+                reqUrl,
+                data: req.body,
+                headers,
+                params: null,
+                api: SEED_API,
+            });
         } catch (error) {
-            throw new SeedApiDataFetchException(error, ERROR_IN_GETTING_SEED_SEARCH_RESULTS, SEED_API_SEARCH_BY_CUSTOMER_ERROR_CODE);
+            throw new SeedApiDataFetchException(error, ERROR_IN_GETTING_SEED_SEARCH_RESULTS, SEED_API_ERROR_CODES_MAP.SEARCH_BY_CUSTOMER_ERROR_CODE);
         }
     }
 
@@ -61,9 +70,17 @@ class SeedService {
         try {
             const headers = await this.constructHeaders();
             const reqUrl = this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getCustomerGroupAndItemAttributeGroupsEndpoint;
-            return httpClient.makeRequest(HTTP_POST, reqUrl, req.body, headers);
+            return httpClient.makeRequest({
+                method: HTTP_POST,
+                reqUrl,
+                data: req.body,
+                headers,
+                params: null,
+                api: SEED_API,
+            });
         } catch (error) {
-            throw new SeedApiDataFetchException(error, ERROR_IN_GETTING_SEED_SEARCH_RESULTS, SEED_API_SEARCH_BY_CUSTOMER_GROUP_ERROR_CODE);
+            throw new SeedApiDataFetchException(error, ERROR_IN_GETTING_SEED_SEARCH_RESULTS,
+                 SEED_API_ERROR_CODES_MAP.SEARCH_BY_CUSTOMER_GROUP_ERROR_CODE);
         }
     }
 }
