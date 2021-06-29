@@ -168,17 +168,9 @@ class AuthenticateService {
                         // If it's multiple: it'll come like "[appadmin, generaluser]"
 
                         const userRoles = decodedPayloadFromJwt.profile;
-                        const roleResult = this.extractCIPZRoleDetails(userRoles);
-                        if (Object.keys(roleResult).length !== 0) {
-                            selectedUserRole = roleResult.userRole;
-                            selectedCIPZUserRole = roleResult.cipzUserRole;
-                        } else {
-                            // either array or single string , arrays will be sorted below or single regular role value which is assigned here
-                            selectedUserRole = userRoles;
-                        }
-                        //  Issue when only reviewer and submitter comes
-                        // '[appadmin, generaluser, submitter,approver]', '[appadmin, generaluser]' ,'[submitter,approver]'
-                        // above can come and for returns for each case (appadmin, approver )/(appadmin ,'')/ ('', approver)
+                        selectedUserRole = userRoles;
+                        // '[appadmin, generaluser, submitter,reviewer]', '[appadmin, generaluser]' ,'[submitter,reviewer]',[appadmin,reviewer]'
+                        // above can come and for returns for each case (appadmin, reviewer )/(appadmin ,'')/ ('', reviewer)
                         try {
                             const userRolesArray = userRoles.split(',').map((item) => item.trim());
 
@@ -187,6 +179,11 @@ class AuthenticateService {
 
                                 const lastElement = userRolesArray[userRolesArray.length - 1];
                                 userRolesArray[userRolesArray.length - 1] = lastElement.substring(0, lastElement.length - 1);
+                                selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_REGULAR);
+                                selectedCIPZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_CIPZ);
+                            } else {
+                                // input here will be single roles in the form of an array
+                                // have to call this method again in order to check that the string is a valid role
                                 selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_REGULAR);
                                 selectedCIPZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_CIPZ);
                             }
@@ -235,16 +232,6 @@ class AuthenticateService {
             logger.error('Username is not present in the auth token');
             return this.sendUnauthenticatedErrorResponse('Username is not present in the auth token');
         }
-    }
-
-    extractCIPZRoleDetails= (userRoles) => {
-        if (userRoles === ROLE_CIPZ_SUBMITTER || userRoles === ROLE_CIPZ_REVIEWER) {
-            return {
-                cipzUserRole: userRoles,
-                userRole: '',
-            };
-        }
-        return {};
     }
 }
 

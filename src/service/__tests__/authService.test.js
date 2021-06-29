@@ -625,17 +625,4 @@ describe('Auth Service', () => {
         const response = await AuthenticateService.prepareToValidateToken(mockRequest, mockResponse);
         expect(response).toEqual(authenticatedMockResponseWithHighProfile);
     });
-
-    test('should generate proper response when extract cipz role details method called', async () => {
-        const reviewerResponseExpected = {cipzUserRole: 'cipz_reviewer', userRole: ''};
-        const submitterResponseExpected = {cipzUserRole: 'cipz_submitter', userRole: ''};
-        const response = await AuthenticateService.extractCIPZRoleDetails('appadmin');
-        const response2 = await AuthenticateService.extractCIPZRoleDetails('[appadmin, cipz_approver]');
-        const response3 = await AuthenticateService.extractCIPZRoleDetails('cipz_reviewer');
-        const response4 = await AuthenticateService.extractCIPZRoleDetails('cipz_submitter');
-        expect(response).toEqual({});
-        expect(response2).toEqual({});
-        expect(response3).toEqual(reviewerResponseExpected);
-        expect(response4).toEqual(submitterResponseExpected);
-    });
 });
