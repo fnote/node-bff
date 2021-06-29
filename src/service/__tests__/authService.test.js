@@ -56,6 +56,7 @@ const authorizedPricingTransformationEnabledBunitList = [
     },
 ];
 const authorizedBatchEnabledBunitList = ['001', '002'];
+const allActiveOpcos = ['001', '002'];
 
 const authenticatedMockResponse = {
     authenticated: true,
@@ -71,6 +72,7 @@ const authenticatedMockResponse = {
         username: 'username',
         role: 'appadmin',
         cipzRole: '',
+        allActiveOpcos,
     },
 };
 
@@ -120,6 +122,7 @@ jwkToPem.mockReturnValueOnce('pems2')
 
 describe('Auth Service', () => {
     test('should generate the authenticated output when a valid token is given', async () => {
+        AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit = jest.fn().mockReturnValueOnce(['001', '002']);
         jwt.decode.mockReturnValue({
             payload: {
                 iss: 'testIssuer',
@@ -467,6 +470,7 @@ describe('Auth Service', () => {
     });
 
     test('should generate authenticated with high profile when more user roles are passed', async () => {
+        AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit = jest.fn().mockReturnValueOnce(['001', '002']);
         JSON.parse = jest.fn().mockImplementationOnce(() => ({
             username: 'AD_username',
             profile: '[appadmin, generaluser]',
@@ -509,6 +513,7 @@ describe('Auth Service', () => {
                 username: 'username',
                 role: '[appadmin, generaluser]',
                 cipzRole: '',
+                allActiveOpcos,
             },
         };
 
@@ -517,6 +522,7 @@ describe('Auth Service', () => {
     });
     test('should generate authenticated with high profile when more cipz user roles are passed', async () => {
         AuthorizationService.getTheRoleWithHighestAuthority = jest.fn().mockReturnValueOnce('appadmin').mockReturnValueOnce('cipz_approver');
+        AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit = jest.fn().mockReturnValueOnce(['001', '002']);
         JSON.parse = jest.fn().mockImplementationOnce(() => ({
             username: 'AD_username',
             profile: '[cipz_submitter,cipz_reviewer]',
@@ -559,6 +565,7 @@ describe('Auth Service', () => {
                 username: 'username',
                 role: 'appadmin',
                 cipzRole: 'cipz_approver',
+                allActiveOpcos,
             },
         };
 
@@ -568,6 +575,7 @@ describe('Auth Service', () => {
 
     test('should generate authenticated with high profile when single cipz user role is passed', async () => {
         AuthorizationService.getTheRoleWithHighestAuthority = jest.fn().mockReturnValueOnce('').mockReturnValueOnce('cipz_submitter');
+        AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit = jest.fn().mockReturnValueOnce(['001', '002']);
         JSON.parse = jest.fn().mockImplementationOnce(() => ({
             username: 'AD_username',
             profile: 'cipz_submitter',
@@ -610,6 +618,7 @@ describe('Auth Service', () => {
                 username: 'username',
                 role: '',
                 cipzRole: 'cipz_submitter',
+                allActiveOpcos,
             },
         };
 
@@ -624,8 +633,8 @@ describe('Auth Service', () => {
         const response2 = await AuthenticateService.extractCIPZRoleDetails('[appadmin, cipz_approver]');
         const response3 = await AuthenticateService.extractCIPZRoleDetails('cipz_reviewer');
         const response4 = await AuthenticateService.extractCIPZRoleDetails('cipz_submitter');
-        expect(response).toEqual('');
-        expect(response2).toEqual('');
+        expect(response).toEqual({});
+        expect(response2).toEqual({});
         expect(response3).toEqual(reviewerResponseExpected);
         expect(response4).toEqual(submitterResponseExpected);
     });

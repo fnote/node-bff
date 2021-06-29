@@ -142,7 +142,9 @@ class AuthorizationService {
         let selectedAuthorizedRole = '';
 
         let selectedHierarchyNumber = MAX_ROLE_HIERARCHY_NUMBER;
-        if (rolesArray.length === 0) {
+
+        // checks whether its argument is an array. This weeds out values like null, undefined and anything else that is not an array.
+        if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
             return selectedAuthorizedRole;
         }
         rolesArray.forEach((roleFromUserLogin) => {

@@ -169,7 +169,7 @@ class AuthenticateService {
 
                         const userRoles = decodedPayloadFromJwt.profile;
                         const roleResult = this.extractCIPZRoleDetails(userRoles);
-                        if (roleResult !== '') {
+                        if (Object.keys(roleResult).length !== 0) {
                             selectedUserRole = roleResult.userRole;
                             selectedCIPZUserRole = roleResult.cipzUserRole;
                         } else {
@@ -195,7 +195,7 @@ class AuthenticateService {
                             selectedUserRole = userRoles;
                         }
 
-                        // selected use role either empty , regular or
+                        // selected user role either empty , regular
                         const authorizedBunitList = AuthorizationService.getAuthorizedBusinessUnits(opcoString, selectedUserRole);
                         authorizedPricingTransformationEnabledBunitList = authorizedBunitList.authorizedPricingTransformationEnabledBunitList;
                         authorizedBatchEnabledBunitList = authorizedBunitList.authorizedBatchEnabledBunitList;
@@ -244,7 +244,7 @@ class AuthenticateService {
                 userRole: '',
             };
         }
-        return '';
+        return {};
     }
 }
 
