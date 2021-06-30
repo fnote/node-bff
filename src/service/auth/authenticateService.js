@@ -13,8 +13,6 @@ import {httpClient} from '../../httpClient/httpClient';
 import {
     HTTP_GET,
     ROLE_CIPZ,
-    ROLE_CIPZ_REVIEWER,
-    ROLE_CIPZ_SUBMITTER,
     ROLE_REGULAR,
 } from '../../util/constants';
 import AuthorizationService from './authorizationService';
@@ -167,13 +165,15 @@ class AuthenticateService {
                         // If it's single role: it'll come like a string "appadmin"
                         // If it's multiple: it'll come like "[appadmin, generaluser]"
 
-                        const userRoles = decodedPayloadFromJwt.profile;
+                        // const userRoles = decodedPayloadFromJwt.profile;
+                        const userRoles = '[appadmin, cipz_submitter]';
                         selectedUserRole = userRoles;
                         // '[appadmin, generaluser, submitter,reviewer]', '[appadmin, generaluser]' ,'[submitter,reviewer]',[appadmin,reviewer]'
                         // above can come and for returns for each case (appadmin, reviewer )/(appadmin ,'')/ ('', reviewer)
                         try {
                             const userRolesArray = userRoles.replace('[', '')
                                 .replace(']', '')
+                                .replace(' ', '')
                                 .split(',');
                             selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_REGULAR);
                             selectedCIPZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_CIPZ);
