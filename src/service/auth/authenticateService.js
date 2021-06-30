@@ -172,7 +172,7 @@ class AuthenticateService {
                         try {
                             const userRolesArray = userRoles.replace('[', '')
                                 .replace(']', '')
-                                .replace(' ', '')
+                                .replace(/\s/g, '')
                                 .split(',');
                             selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_REGULAR);
                             selectedCIPZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_CIPZ);
