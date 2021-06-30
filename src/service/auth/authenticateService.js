@@ -165,8 +165,7 @@ class AuthenticateService {
                         // If it's single role: it'll come like a string "appadmin"
                         // If it's multiple: it'll come like "[appadmin, generaluser]"
 
-                        // const userRoles = decodedPayloadFromJwt.profile;
-                        const userRoles = '[appadmin, cipz_submitter]';
+                        const userRoles = decodedPayloadFromJwt.profile;
                         selectedUserRole = userRoles;
                         // '[appadmin, generaluser, submitter,reviewer]', '[appadmin, generaluser]' ,'[submitter,reviewer]',[appadmin,reviewer]'
                         // above can come and for returns for each case (appadmin, reviewer )/(appadmin ,'')/ ('', reviewer)
