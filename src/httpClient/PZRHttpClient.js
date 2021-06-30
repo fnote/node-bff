@@ -6,17 +6,20 @@ class HttpClient {
     }
 
     async makeRequest({
-        method, reqUrl, data, headers, params,
-    }) {
-            return this.axiosInstance({
-                method,
-                url: reqUrl,
-                data,
-                headers,
-                params,
-            });
+                          method,
+                          reqUrl,
+                          data,
+                          headers,
+                          params,
+                      }) {
+        return this.axiosInstance({
+            method,
+            url: reqUrl,
+            data,
+            headers,
+            params,
+        });
     }
 }
 
-export default HttpClient;
 export const httpClient = new HttpClient();

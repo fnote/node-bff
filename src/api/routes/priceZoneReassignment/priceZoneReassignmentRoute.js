@@ -1,7 +1,7 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import * as HttpStatus from 'http-status-codes';
 import logger from '../../../util/logger';
-import { createErrorResponse } from '../../../mapper/responseMapper';
+import {createErrorResponse} from '../../../mapper/responseMapper';
 import seedService from '../../../service/seed/seedService';
 import PriceZoneReassignmentService from '../../../service/priceZoneReassignment/priceZoneReassignmentService';
 import {
@@ -18,11 +18,15 @@ import {
     PZ_UPDATES,
     PZ_SEARCH,
 } from '../../../util/constants';
-import { getCorrelationId } from '../../../util/correlationIdGenerator';
+import {getCorrelationId} from '../../../util/correlationIdGenerator';
 import SeedApiDataFetchException from '../../../exception/seedApiDataFechException';
 import InvalidRequestException from '../../../exception/invalidRequestException';
 import {CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES} from '../../../exception/exceptionCodes';
-import { priceZoneReassignmentSearchReqBody, priceZoneReassignmentCreateReqBody, cipzApprovalRequestReqBody } from '../../../validator/schema';
+import {
+    priceZoneReassignmentSearchReqBody,
+    priceZoneReassignmentCreateReqBody,
+    cipzApprovalRequestReqBody,
+} from '../../../validator/schema';
 import CipzApiDataFetchException from '../../../exception/cipzApiDataFetchException';
 
 export default () => {
@@ -50,17 +54,12 @@ export default () => {
             .send(createErrorResponse(null, errorMessage, error, null, error.errorCode));
     };
 
-    const containsValidCustomerIdentifier = ({ customerAccount, customerGroup }) => {
-        if (customerAccount || customerGroup) {
-            return true;
-        }
-        return false;
-    };
+    const containsValidCustomerIdentifier = ({customerAccount, customerGroup}) => !!(customerAccount || customerGroup);
 
-    const containsValidPriceZone = ({ newPriceZone }) => newPriceZone >= 1 && newPriceZone <= 5;
+    const containsValidPriceZone = ({newPriceZone}) => newPriceZone >= 1 && newPriceZone <= 5;
 
-    const validateCreatePriceZoneChangeRequest = ({ body }) => {
-        const { error } = priceZoneReassignmentCreateReqBody.validate(body);
+    const validateCreatePriceZoneChangeRequest = ({body}) => {
+        const {error} = priceZoneReassignmentCreateReqBody.validate(body);
         if (error || !containsValidCustomerIdentifier(body) || !containsValidPriceZone(body)) {
             throw new InvalidRequestException(
                 INVALID_REQUEST_BODY,
@@ -70,17 +69,53 @@ export default () => {
         }
     };
 
+    const isCustomerAccountDefined = ({customer_account: customerAccount}) => !!customerAccount;
+
+    const validateSearchRequest = ({body}) => {
+        const {error} = priceZoneReassignmentSearchReqBody.validate(body);
+        if (error) {
+            throw new InvalidRequestException(
+                INVALID_REQUEST_BODY,
+                HttpStatus.BAD_REQUEST,
+                CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES.PRICE_ZONE_REASSIGNMENT_INVALID_SEARCH_PAYLOAD_ERROR_CODE,
+            );
+        }
+    };
+
+    // SEED API Endpoints
+
     priceZoneReassignmentRouter.get(ITEM_ATTRIBUTE_GROUPS, async (req, res) => {
         try {
             const responseData = await seedService.getSeedItemAttributeGroupsData();
             logger.info(`Success Seed Data response received: ${JSON.stringify(responseData.data)}`);
             handleSuccessResponse(res, responseData.data);
         } catch (error) {
-            const errMessage = ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA;
+            const errMessage = error.errorDetails && error.errorDetails.message ? error.errorDetails.message
+                : ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA;
             logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
             handleUnsuccessfulResponse(res, error, errMessage);
         }
     });
+
+    priceZoneReassignmentRouter.post(PZ_SEARCH, async (req, res) => {
+        try {
+            validateSearchRequest(req);
+            let responseData;
+            if (isCustomerAccountDefined(req.body)) {
+                responseData = await seedService.getPriceZoneDetailsForCustomerAndItemAttributeGroup(req);
+            } else {
+                responseData = await seedService.getPriceZoneDetailsForCustomerGroupAndItemAttributeGroup(req);
+            }
+            logger.info(`Success Seed Data response received for search: ${JSON.stringify(responseData.data)}`);
+            handleSuccessResponse(res, responseData.data);
+        } catch (error) {
+            const errMessage = error.errorDetails && error.errorDetails.message ? error.errorDetails.message : ERROR_IN_HANDLING_SEARCH_RESULTS;
+            logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
+            handleUnsuccessfulResponse(res, error, errMessage);
+        }
+    });
+
+    // CIPZ API Endpoints
 
     priceZoneReassignmentRouter.get(PZ_UPDATE_REQUESTS, async (req, res) => {
         try {
@@ -122,7 +157,7 @@ export default () => {
     });
 
     priceZoneReassignmentRouter.patch(PZ_UPDATE_REQUESTS, async (req, res) => {
-        const { error } = cipzApprovalRequestReqBody.validate(req.body);
+        const {error} = cipzApprovalRequestReqBody.validate(req.body);
         if (error) {
             logger.error(`Request body validation failed in getting CIPZ Approval update request data: ${JSON.stringify(req.body)}`);
             throw new InvalidRequestException(INVALID_REQUEST_BODY, HttpStatus.BAD_REQUEST,
@@ -136,36 +171,6 @@ export default () => {
             const errorMsg = ERROR_IN_RESPONSING_CIPZ_PRICE_ZONE_APPROVAL_REQ;
             logger.error(`${errorMsg} : ${e} cause : ${e.stack} errorCode : ${e.errorCode}`);
             handleUnsuccessfulResponse(res, e, errorMsg);
-        }
-    });
-
-    const isCustomerAccountDefined = ({ customer_account: customerAccount }) => !!customerAccount;
-    const validateSearchRequest = ({ body }) => {
-        const { error } = priceZoneReassignmentSearchReqBody.validate(body);
-        if (error) {
-            throw new InvalidRequestException(
-                INVALID_REQUEST_BODY,
-                HttpStatus.BAD_REQUEST,
-                CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES.PRICE_ZONE_REASSIGNMENT_INVALID_SEARCH_PAYLOAD_ERROR_CODE,
-            );
-        }
-    };
-
-    priceZoneReassignmentRouter.post(PZ_SEARCH, async (req, res) => {
-        try {
-            validateSearchRequest(req);
-            let responseData;
-            if (isCustomerAccountDefined(req.body)) {
-                responseData = await seedService.getPriceZoneDetailsForCustomerAndItemAttributeGroup(req);
-            } else {
-                responseData = await seedService.getPriceZoneDetailsForCustomerGroupAndItemAttributeGroup(req);
-            }
-            logger.info(`Success Seed Data response received for search: ${JSON.stringify(responseData.data)}`);
-            handleSuccessResponse(res, responseData.data);
-        } catch (error) {
-            const errMessage = ERROR_IN_HANDLING_SEARCH_RESULTS;
-            logger.error(`${errMessage}: ${error} cause: ${error.stack} errorCode: ${error.errorCode}`);
-            handleUnsuccessfulResponse(res, error, errMessage);
         }
     });
 

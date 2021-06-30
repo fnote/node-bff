@@ -30,7 +30,7 @@ export const INVALID_REQUEST_BODY = 'Invalid/ Unsupported request body';
 export const EMPTY_REQUEST_BODY = 'Empty request body';
 export const INVALID_QUERY_PARAMS = 'Invalid/ Unsupported query parameters';
 export const ERROR_IN_FETCHING_CLOUD_PRICING_DATA = 'Failed to fetch data from Cloud Pricing Endpoint';
-export const ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA = 'Failed to fetch data from Seed Api while getting item attributes group data';
+export const ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA = 'Failed to fetch data from SEED while getting item attributes group data';
 export const ERROR_IN_FETCHING_CIPZ_API_DATA = 'Failed to fetch data from CIPZ Api Endpoint';
 export const ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE = 'Error occurred while creating price zone update request from CIPZ Api Endpoint';
 export const ERROR_IN_HANDLING_CIPZ_PRICE_ZONE_UPDATE = 'Error occurred while handling price zone update request';
@@ -39,7 +39,8 @@ export const ERROR_IN_GETTING_CIPZ_PRICE_ZONE_SUBMITTED_REQ_DATA = 'Error occurr
 export const ERROR_IN_RESPONSING_CIPZ_PRICE_ZONE_APPROVAL_REQ = 'Error occurred in responsing CIPZ API approval request';
 export const ERROR_IN_GETTING_SEED_SEARCH_RESULTS = 'Error occurred while searching Seed API for customer & item-attribute-group data';
 export const ERROR_IN_HANDLING_SEARCH_RESULTS = 'Error occurred while handling the price zone reassignment search request';
-export const UNKNOWN_400_ERROR_IN_SEED_API = 'Something went wrong in fetching data from Seed API';
+export const UNKNOWN_SEED_API_ERROR_MESSAGE = 'Something went wrong while fetching data from SEED';
+export const GENERIC_SEED_API_ERROR_MESSAGE = 'Error occurred while fetching the search results from SEED';
 export const SEARCH_DATA_NOT_FOUND_IN_SEED = 'Search not found';
 // Price Zone Reassignment Routes
 export const ITEM_ATTRIBUTE_GROUPS = '/item-attribute-groups';
@@ -71,4 +72,3 @@ export const ORDER_PRICE_TYPE_HAND = 'H';
 export const CIPZ_API = 'CIPZ_API';
 export const SEED_API = 'SEED_API';
 export const CIPZ_VALIDATION = 'CIPZ_VALIDATION';
-
