@@ -14,16 +14,15 @@ import {
     ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE,
     CIPZ_API,
 } from '../../util/constants';
-import {
-    CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES,
-
-} from '../../exception/exceptionCodes';
+import {CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES, HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
 import {
     cipzCreatePriceZoneChangeMockResponse,
     cipzApiGetSubmittedRequestMockResponse,
     cipzApiGetPriceZoneUpdateMockData,
     cipzApiRespnseToApproveRequestMockData,
 } from '../cipzMockData';
+import { CIPZAPIToPZRErrorMap } from '../../exception/exceptionCodeMapping';
+import HttpClientException from '../../exception/httpClientException';
 
 class PriceZoneReassignmentService {
     constructor() {
@@ -37,6 +36,18 @@ class PriceZoneReassignmentService {
             clientID: this.CipzConfig.CONFIG.clientId,
             [CORRELATION_ID_HEADER]: getCorrelationId(),
         });
+    }
+
+    async handleError(error) {
+        if (error && error.response && error.response.data) {
+            const errorData = error.response.data;
+            const errorCode = Number(errorData.code);
+            const errorMesssage = errorData.message;
+            if (CIPZAPIToPZRErrorMap.get(errorCode)) {
+                throw new CipzApiDataFetchException(error, errorMesssage, CIPZAPIToPZRErrorMap.get(errorCode));
+            }
+        }
+        throw new HttpClientException(error, HTTP_CLIENT_EXCEPTION);
     }
 
     async getCIPZSubmittedRequestData(query) {
