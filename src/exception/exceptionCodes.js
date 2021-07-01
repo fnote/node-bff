@@ -27,6 +27,7 @@ export const BATCH_API_DATA_FETCH_ERROR_CODE = 2029;
 export const INTERNAL_SERVER_ERROR_CODE = 4000;
 
 export const UNKNOWN_SEED_API_ERROR = 5005;
+export const UNKNOWN_CIPZ_API_ERROR = 6005;
 
 // Validation Errors Map
 

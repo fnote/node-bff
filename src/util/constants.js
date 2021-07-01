@@ -41,6 +41,8 @@ export const ERROR_IN_GETTING_SEED_SEARCH_RESULTS = 'Error occurred while search
 export const ERROR_IN_HANDLING_SEARCH_RESULTS = 'Error occurred while handling the price zone reassignment search request';
 export const UNKNOWN_SEED_API_ERROR_MESSAGE = 'Something went wrong while fetching data from SEED';
 export const GENERIC_SEED_API_ERROR_MESSAGE = 'Error occurred while fetching the search results from SEED';
+export const GENERIC_CIPZ_API_ERROR_MESSAGE = 'Error occurred while processing your request in CIPZ';
+export const UNKNOWN_CIPZ_API_ERROR_MESSAGE = 'Something went wrong while fetching data from CIPZ';
 export const SEARCH_DATA_NOT_FOUND_IN_SEED = 'Search not found';
 // Price Zone Reassignment Routes
 export const ITEM_ATTRIBUTE_GROUPS = '/item-attribute-groups';
