@@ -133,11 +133,9 @@ export default () => {
     priceZoneReassignmentRouter.post(PZ_UPDATE_REQUESTS, async (req, res) => {
         try {
             validateCreatePriceZoneChangeRequest(req);
-            console.log(req.body);
             const responseData = await PriceZoneReassignmentService.createPriceZoneChange(req);
             logger.info(`Success CIPZ create price zone update response received: ${JSON.stringify(responseData)}`);
-            res.set(CORRELATION_ID_HEADER, getCorrelationId());
-            res.status(HttpStatus.CREATED).send(responseData);
+            handleSuccessResponse(res, responseData);
         } catch (error) {
             const errMessage = error.errorDetails && error.errorDetails.message ? error.errorDetails.message
                 : ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE;

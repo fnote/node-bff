@@ -43,6 +43,7 @@ class PriceZoneReassignmentService {
     }
 
     handleError(error) {
+        console.log("---- inside error---")
         console.log(error)
         if (error && error.response && error.response.data) {
             const errorData = error.response.data;
@@ -133,12 +134,12 @@ class PriceZoneReassignmentService {
         const headers = await this.constructHeaders();
         const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.createPriceZoneUpdateEndpoint;
         return httpClient.makeRequest({
-            mathod: HTTP_POST,
+            method: HTTP_POST,
             reqUrl,
             data: req.body,
             headers,
             params: null,
-        }).then((response) => response).catch((error) => this.handleError(error));
+        }).then((response) => response.data).catch((error) => this.handleError(error));
     }
 }
 
