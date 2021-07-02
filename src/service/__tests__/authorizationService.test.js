@@ -6,7 +6,14 @@
 import {jest} from '@jest/globals';
 import AuthorizationService from '../auth/authorizationService';
 import BusinessUnitDao from '../../dao/businessUnitDao';
-import {ROLE_APP_ADMIN, ROLE_CIPZ, ROLE_CIPZ_REVIEWER, ROLE_CIPZ_SUBMITTER, ROLE_GENERAL_USER, ROLE_REGULAR} from '../../util/constants';
+import {
+    ROLE_APP_ADMIN,
+    ROLE_CIPZ,
+    ROLE_CIPZ_REVIEWER,
+    ROLE_CIPZ_SUBMITTER,
+    ROLE_GENERAL_USER,
+    ROLE_REGULAR,
+} from '../../util/constants';
 
 jest.mock('../../dao/businessUnitDao');
 
@@ -158,15 +165,15 @@ describe('Auth Service', () => {
                     bunit_name: 'Sysco Intermountain',
                     periscope_on: 'N',
                 },
-        ];
+            ];
 
-        BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArrayWithNoPerisoceOnYes);
+            BusinessUnitDao.getBusinessUnitDetails.mockReturnValue(bUnitDetailsArrayWithNoPerisoceOnYes);
 
-        await AuthorizationService.loadBusinessUnitDetails();
+            await AuthorizationService.loadBusinessUnitDetails();
 
-        const filteredArray = AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit();
-        expect(filteredArray).toEqual([]);
-    });
+            const filteredArray = AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit();
+            expect(filteredArray).toEqual([]);
+        });
 
     test('should send an empty array when called bUnitDetailsArray is empty', async () => {
         BusinessUnitDao.getBusinessUnitDetails.mockReturnValue('');

@@ -6,11 +6,7 @@ class HttpClient {
     }
 
     async makeRequest({
-                          method,
-                          reqUrl,
-                          data,
-                          headers,
-                          params,
+                          method, reqUrl, data, headers, params,
                       }) {
         return this.axiosInstance({
             method,

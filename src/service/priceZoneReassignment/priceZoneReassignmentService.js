@@ -1,35 +1,25 @@
-import { httpClient } from '../../httpClient/PZRHttpClient';
-import { getCIPZApiConfig } from '../../config/configs';
+import {httpClient} from '../../httpClient/PZRHttpClient';
+import {getCIPZApiConfig} from '../../config/configs';
 import logger from '../../util/logger';
 import CipzApiDataFetchException from '../../exception/cipzApiDataFetchException';
-import { getCorrelationId } from '../../util/correlationIdGenerator';
+import {getCorrelationId} from '../../util/correlationIdGenerator';
 import {
     APPLICATION_JSON, CORRELATION_ID_HEADER,
     HTTP_GET,
     HTTP_PATCH,
     HTTP_POST,
-    ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE,
-    CIPZ_API, GENERIC_CIPZ_API_ERROR_MESSAGE, UNKNOWN_CIPZ_API_ERROR_MESSAGE,
+    GENERIC_CIPZ_API_ERROR_MESSAGE, UNKNOWN_CIPZ_API_ERROR_MESSAGE,
 } from '../../util/constants';
 import {
-    CIPZ_SEED_VALIDATION_AND_GENERAL_ERROR_CODES,
-    HTTP_CLIENT_EXCEPTION,
     UNKNOWN_CIPZ_API_ERROR,
 } from '../../exception/exceptionCodes';
-import {
-    cipzCreatePriceZoneChangeMockResponse,
-    cipzApiGetSubmittedRequestMockResponse,
-    cipzApiGetPriceZoneUpdateMockData,
-    cipzApiRespnseToApproveRequestMockData,
-} from '../cipzMockData';
-import { CIPZAPIToPZRErrorMap } from '../../exception/exceptionCodeMapping';
-import HttpClientException from '../../exception/httpClientException';
 
 class PriceZoneReassignmentService {
     constructor() {
         this.CipzConfig = getCIPZApiConfig();
     }
 
+    // TODO - Add logs
     async constructHeaders() {
         return ({
             'Content-type': APPLICATION_JSON,

@@ -11,7 +11,7 @@ import {
 
  class HttpClient {
      async makeRequest({
-         method, reqUrl, data, header, params, api,
+         method, reqUrl,
         }) {
          if (reqUrl.includes('/v1/edwp/attribute-groups') && method === HTTP_GET) {
              return seedGetItemAttributeGroupMockResponse;

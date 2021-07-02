@@ -17,7 +17,6 @@ import {
     PZ_UPDATE_REQUESTS,
     PZ_UPDATES,
     PZ_SEARCH,
-    GENERIC_CIPZ_API_ERROR_MESSAGE,
 } from '../../../util/constants';
 import {getCorrelationId} from '../../../util/correlationIdGenerator';
 import SeedApiDataFetchException from '../../../exception/seedApiDataFechException';
