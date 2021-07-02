@@ -13,6 +13,7 @@ import {
     HTTP_POST, ERROR_IN_FETCHING_CLOUD_PRICING_DATA,
     APPLICATION_JSON, CORRELATION_ID_HEADER, ORDER_PRICE_TYPE_HAND,
 } from '../../util/constants';
+import ApiCentralClient from "../../httpClient/apiCentralClient";
 
 class CloudPricingDataService {
     constructor() {
@@ -29,15 +30,14 @@ class CloudPricingDataService {
             ],
         };
         const headers = {
-            'Content-type': APPLICATION_JSON,
-            Accept: APPLICATION_JSON,
             clientID: this.cloudPricingConfig.CONFIG.clientId,
             priceEngineType: this.cloudPricingConfig.CONFIG.priceEngineType,
             [CORRELATION_ID_HEADER]: getCorrelationId(),
         };
 
-        const reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl
+        const reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingApiCentralBaseUrl
             + this.cloudPricingConfig.CONFIG.productPricesEndpoint;
+
         return this.sendRequest(reqUrl, headers, body);
     }
 
@@ -62,22 +62,21 @@ class CloudPricingDataService {
         logger.debug(`Request to PCI-Prices: ${JSON.stringify(body)}`);
 
         const headers = {
-            'Content-type': APPLICATION_JSON,
-            Accept: APPLICATION_JSON,
             clientID: this.cloudPricingConfig.CONFIG.clientId,
             priceEngineType: this.cloudPricingConfig.CONFIG.priceEngineType,
             [CORRELATION_ID_HEADER]: getCorrelationId(),
         };
 
-        const reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingBaseUrl + this.cloudPricingConfig.CONFIG.pciPricesEndpoint;
+        const reqUrl = this.cloudPricingConfig.CONFIG.cloudPricingApiCentralBaseUrl
+            + this.cloudPricingConfig.CONFIG.pciPricesEndpoint;
 
         return this.sendRequest(reqUrl, headers, body);
     }
 
     async sendRequest(reqUrl, headers, body) {
         try {
-            return await httpClient.makeRequest(
-                HTTP_POST, reqUrl, body, headers,
+            return await ApiCentralClient.post(
+                reqUrl, body, headers,
             );
         } catch (e) {
             const specificErrorMessage = e.errorDetails.response.data.message;
