@@ -60,6 +60,7 @@ class AuthorizationService {
             authorizedPricingTransformationEnabledBunitList: [],
             authorizedBatchEnabledBunitList: [],
         };
+        // change here as well
         if (userRole === ROLE_APP_ADMIN || userRole === ROLE_GENERAL_USER) {
             // If these user roles, they should have access to all opcos
             logger.info(`User because of his user role: ${userRole} is given access to all opcos`);
@@ -135,11 +136,17 @@ class AuthorizationService {
         return false;
     };
 
-    getTheRoleWithHighestAuthority = (rolesArray) => {
-        const authorizationRoleHierarchy = getAuthorizationRoleHierarchy();
+    getTheRoleWithHighestAuthority = (rolesArray, roleType) => {
+        // we receive multiple values here  in role array
+        const authorizationRoleHierarchy = getAuthorizationRoleHierarchy(roleType);
         let selectedAuthorizedRole = '';
 
         let selectedHierarchyNumber = MAX_ROLE_HIERARCHY_NUMBER;
+
+        // checks whether its argument is an array. This weeds out values like null, undefined and anything else that is not an array.
+        if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
+            return selectedAuthorizedRole;
+        }
         rolesArray.forEach((roleFromUserLogin) => {
             const hierarchyNumber = authorizationRoleHierarchy[roleFromUserLogin];
 

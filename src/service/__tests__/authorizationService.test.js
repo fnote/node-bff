@@ -6,7 +6,7 @@
 import {jest} from '@jest/globals';
 import AuthorizationService from '../auth/authorizationService';
 import BusinessUnitDao from '../../dao/businessUnitDao';
-import {ROLE_APP_ADMIN, ROLE_GENERAL_USER} from '../../util/constants';
+import {ROLE_APP_ADMIN, ROLE_CIPZ, ROLE_CIPZ_REVIEWER, ROLE_CIPZ_SUBMITTER, ROLE_GENERAL_USER, ROLE_REGULAR} from '../../util/constants';
 
 jest.mock('../../dao/businessUnitDao');
 
@@ -465,19 +465,49 @@ describe('Auth Service', () => {
 
     test('should send ROLE_APP_ADMIN when passed other roles is less priority in the hierarchy', async () => {
         const rolesArrayFromUser = [ROLE_APP_ADMIN, ROLE_GENERAL_USER];
-        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser);
+        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser, ROLE_REGULAR);
         expect(selectedRole).toEqual(ROLE_APP_ADMIN);
     });
 
     test('should send ROLE_GENERAL_USER when passed other roles is less priority in the hierarchy', async () => {
         const rolesArrayFromUser = [ROLE_GENERAL_USER, OTHER_ROLE];
-        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser);
+        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser, ROLE_REGULAR);
         expect(selectedRole).toEqual(ROLE_GENERAL_USER);
     });
 
     test('should send an empty role when no role array is passed', async () => {
         const rolesArrayFromUser = [];
-        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser);
+        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser, ROLE_REGULAR);
         expect(selectedRole).toEqual('');
+    });
+
+    test('should send ROLE_CIPZ_REVIEWER when passed other roles is less priority in the hierarchy', async () => {
+        const rolesArrayFromUser = [ROLE_CIPZ_REVIEWER, ROLE_CIPZ_SUBMITTER];
+        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser, ROLE_CIPZ);
+        expect(selectedRole).toEqual(ROLE_CIPZ_REVIEWER);
+    });
+
+    test('should send ROLE_CIPZ_SUBMITTER when passed other roles is less priority in the hierarchy', async () => {
+        const rolesArrayFromUser = [ROLE_CIPZ_SUBMITTER, OTHER_ROLE, ROLE_APP_ADMIN];
+        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser, ROLE_CIPZ);
+        expect(selectedRole).toEqual(ROLE_CIPZ_SUBMITTER);
+    });
+
+    test('should send an empty role when no role array is passed for cipz roles', async () => {
+        const rolesArrayFromUser = [];
+        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser, ROLE_CIPZ);
+        expect(selectedRole).toEqual('');
+    });
+
+    test('should send the superior cipz role when cipz roles and regular roles present in array but cipz selected', async () => {
+        const rolesArrayFromUser = [ROLE_CIPZ_SUBMITTER, OTHER_ROLE, ROLE_APP_ADMIN];
+        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser, ROLE_CIPZ);
+        expect(selectedRole).toEqual(ROLE_CIPZ_SUBMITTER);
+    });
+
+    test('should send the superior regular role when cipz roles and regular roles present in array but regular selected', async () => {
+        const rolesArrayFromUser = [ROLE_CIPZ_SUBMITTER, OTHER_ROLE, ROLE_APP_ADMIN];
+        const selectedRole = AuthorizationService.getTheRoleWithHighestAuthority(rolesArrayFromUser, ROLE_REGULAR);
+        expect(selectedRole).toEqual(ROLE_APP_ADMIN);
     });
 });

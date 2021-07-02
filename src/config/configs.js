@@ -1,4 +1,6 @@
-import {ROLE_APP_ADMIN, ROLE_GENERAL_USER} from '../util/constants';
+import {
+ROLE_APP_ADMIN, ROLE_CIPZ, ROLE_CIPZ_REVIEWER, ROLE_CIPZ_SUBMITTER, ROLE_GENERAL_USER, ROLE_REGULAR, ROLE_CIPZ_SUPPORT,
+} from '../util/constants';
 
 export default function getBatchAPIConfigs() {
     return {
@@ -81,11 +83,17 @@ export const getCIPZApiConfig = () => ({
     },
 });
 
-export const getAuthorizationRoleHierarchy = () => {
+export const getAuthorizationRoleHierarchy = (roleType) => {
     const authorizationRoleHierarchy = {};
-
-    authorizationRoleHierarchy[ROLE_APP_ADMIN] = 1;
-    authorizationRoleHierarchy[ROLE_GENERAL_USER] = 2;
+    if (roleType === ROLE_REGULAR) {
+        authorizationRoleHierarchy[ROLE_APP_ADMIN] = 1;
+        authorizationRoleHierarchy[ROLE_GENERAL_USER] = 2;
+    }
+    if (roleType === ROLE_CIPZ) {
+        authorizationRoleHierarchy[ROLE_CIPZ_SUPPORT] = 1;
+        authorizationRoleHierarchy[ROLE_CIPZ_REVIEWER] = 2;
+        authorizationRoleHierarchy[ROLE_CIPZ_SUBMITTER] = 3;
+    }
 
     return authorizationRoleHierarchy;
 };
