@@ -91,7 +91,7 @@ class PriceZoneReassignmentService {
     async reviewSubmission(body) {
         const headers = await this.constructHeaders();
         const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.patchApproveRejectApprovalReqEndpoint;
-        return cipzApiRespnseToApproveRequestMockData,
+        return cipzApiRespnseToApproveRequestMockData;
         // return httpClient.makeRequest({
         //     method: HTTP_PATCH,
         //     reqUrl,
