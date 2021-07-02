@@ -12,7 +12,7 @@ import HttpClientException from '../exception/httpClientException';
 import {getAccessToken} from '../util/accessTokenGenerator';
 import logger from '../util/logger';
 import { getCorrelationId } from '../util/correlationIdGenerator';
-import {APPLICATION_JSON} from "../util/constants";
+import {APPLICATION_JSON} from '../util/constants';
 
 class ApiCentral extends HttpClient {
     constructor() {
@@ -54,7 +54,7 @@ class ApiCentral extends HttpClient {
                         Accept: APPLICATION_JSON,
                         'accept-encoding': 'gzip',
                         'correlation-id': getCorrelationId() || 'correlation id dropped from the bff',
-                        ...reqHeaders
+                        ...reqHeaders,
                     };
                     return await this.apiCentralMakeRequest(
                         method, url, data, headers, pageNumber, pageSize,

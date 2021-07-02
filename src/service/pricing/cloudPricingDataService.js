@@ -5,15 +5,14 @@
  * */
 
 import {getCloudPricingConfig} from '../../config/configs';
-import {httpClient} from '../../httpClient/httpClient';
 import logger from '../../util/logger';
 import CloudPricingDataFetchException from '../../exception/cloudPricingDataFetchException';
 import { getCorrelationId } from '../../util/correlationIdGenerator';
 import {
-    HTTP_POST, ERROR_IN_FETCHING_CLOUD_PRICING_DATA,
-    APPLICATION_JSON, CORRELATION_ID_HEADER, ORDER_PRICE_TYPE_HAND,
+    ERROR_IN_FETCHING_CLOUD_PRICING_DATA,
+    CORRELATION_ID_HEADER, ORDER_PRICE_TYPE_HAND,
 } from '../../util/constants';
-import ApiCentralClient from "../../httpClient/apiCentralClient";
+import ApiCentralClient from '../../httpClient/apiCentralClient';
 
 class CloudPricingDataService {
     constructor() {

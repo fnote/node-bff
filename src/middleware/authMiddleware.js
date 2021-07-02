@@ -1,5 +1,7 @@
 import * as HttpStatus from 'http-status-codes';
-import {AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK, AUTHENTICATION_NOT_REQUIRED_STATUS_CHECK, LOGIN_URL, LOGOUT_URL} from '../util/constants';
+import {
+AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK, AUTHENTICATION_NOT_REQUIRED_STATUS_CHECK, LOGIN_URL, LOGOUT_URL,
+} from '../util/constants';
 import AuthenticateService from '../service/auth/authenticateService';
 import logger from '../util/logger';
 import {createErrorResponse} from '../mapper/responseMapper';
