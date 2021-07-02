@@ -62,6 +62,27 @@ export const getSSMlConfig = () => ({
     },
 });
 
+export const getSeedApiConfig = () => ({
+    CONFIG: {
+        seedApiBaseUrl: `${process.env.SEED_URL}/services/v1/edwp`,
+        clientId: 'Cloud_PCI',
+        getItemAttributeGroupsEndpoint: '/attribute-groups',
+        getCustomerAndItemAttributeGroupsEndpoint: '/item-price-zone/customer-attribute-group',
+        getCustomerGroupAndItemAttributeGroupsEndpoint: '/item-price-zone/customer-group-attribute-group',
+    },
+});
+
+export const getCIPZApiConfig = () => ({
+    CONFIG: {
+        cipzApiBaseUrl: `${process.env.CIPZ_API_URL}/v1/cipz`,
+        clientId: 'cloud-pci-bff',
+        getSubmittedRequestEndpoint: '/pz-update-requests',
+        getPriceZoneUpdateEndpoint: '/price-zone-updates/',
+        createPriceZoneUpdateEndpoint: '/pz-update-requests',
+        patchApproveRejectApprovalReqEndpoint: '/pz-update-requests',
+    },
+});
+
 export const getAuthorizationRoleHierarchy = (roleType) => {
     const authorizationRoleHierarchy = {};
     if (roleType === ROLE_REGULAR) {

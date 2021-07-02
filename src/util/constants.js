@@ -15,6 +15,7 @@ export const AWS_REGION = 'us-east-1';
 export const HTTP_GET = 'GET';
 export const HTTP_POST = 'POST';
 export const HTTP_DELETE = 'DELETE';
+export const HTTP_PATCH = 'PATCH';
 
 // HTTP req/res metadata
 export const APPLICATION_JSON = 'application/json';
@@ -27,7 +28,27 @@ export const ERROR_IN_GETTING_BATCH_JOBS = 'Error occurred while retrieving batc
 export const ERROR_IN_DELETING_BATCH_JOBS = 'Error occurred while deleting a batch job';
 export const INVALID_REQUEST_BODY = 'Invalid/ Unsupported request body';
 export const EMPTY_REQUEST_BODY = 'Empty request body';
+export const INVALID_QUERY_PARAMS = 'Invalid/ Unsupported query parameters';
 export const ERROR_IN_FETCHING_CLOUD_PRICING_DATA = 'Failed to fetch data from Cloud Pricing Endpoint';
+export const ERROR_IN_FETCHING_SEED_ITEM_ATTRIBUTE_GROUP_DATA = 'Failed to fetch data from SEED while getting item attributes group data';
+export const ERROR_IN_FETCHING_CIPZ_API_DATA = 'Failed to fetch data from CIPZ Api Endpoint';
+export const ERROR_IN_CREATING_CIPZ_PRICE_ZONE_UPDATE = 'Error occurred while creating price zone update request from CIPZ Api Endpoint';
+export const ERROR_IN_HANDLING_CIPZ_PRICE_ZONE_UPDATE = 'Error occurred while handling price zone update request';
+export const ERROR_IN_GETTING_CIPZ_PRICE_ZONE_UPDATE_DATA = 'Error occurred while getting price zone update request data';
+export const ERROR_IN_GETTING_CIPZ_PRICE_ZONE_SUBMITTED_REQ_DATA = 'Error occurred in getting CIPZ API submitted requests data';
+export const ERROR_IN_RESPONSING_CIPZ_PRICE_ZONE_APPROVAL_REQ = 'Error occurred in responsing CIPZ API approval request';
+export const ERROR_IN_GETTING_SEED_SEARCH_RESULTS = 'Error occurred while searching Seed API for customer & item-attribute-group data';
+export const ERROR_IN_HANDLING_SEARCH_RESULTS = 'Error occurred while handling the price zone reassignment search request';
+export const UNKNOWN_SEED_API_ERROR_MESSAGE = 'Something went wrong while fetching data from SEED';
+export const GENERIC_SEED_API_ERROR_MESSAGE = 'Error occurred while fetching the search results from SEED';
+export const GENERIC_CIPZ_API_ERROR_MESSAGE = 'Error occurred while processing your request in CIPZ';
+export const UNKNOWN_CIPZ_API_ERROR_MESSAGE = 'Something went wrong while fetching data from CIPZ';
+export const SEARCH_DATA_NOT_FOUND_IN_SEED = 'Search not found';
+// Price Zone Reassignment Routes
+export const ITEM_ATTRIBUTE_GROUPS = '/item-attribute-groups';
+export const PZ_UPDATE_REQUESTS = '/pz-update-requests';
+export const PZ_UPDATES = '/pz-updates/:request_id';
+export const PZ_SEARCH = '/search';
 
 // whitelisted url paths
 export const AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK = '/v1/pci-bff/support/healthcheck';
@@ -56,3 +77,7 @@ export const IS_APPLICABLE = 'isApplicable';
 
 // misc
 export const ORDER_PRICE_TYPE_HAND = 'H';
+
+export const CIPZ_API = 'CIPZ_API';
+export const SEED_API = 'SEED_API';
+export const CIPZ_VALIDATION = 'CIPZ_VALIDATION';

@@ -85,7 +85,7 @@ functions:
     timeout: 60
     # to locally up the application, uncomment -> events: ${file(./serverless-routes.js)} this line and comment
     # out the other events section which is used in alb
-#    events: ${file(./serverless-routes.js)}
+    # events: ${file(./serverless-routes.js)}
     events:
       - alb:
           listenerArn: !Ref LoadBalancerListenerHTTPS

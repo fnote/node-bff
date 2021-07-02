@@ -1,6 +1,7 @@
 const GET = 'get';
 const POST = 'post';
 const DELETE = 'delete';
+const PATCH = 'patch';
 const version = '/v1';
 const appName = '/pci-bff';
 
@@ -16,6 +17,12 @@ const routes = [
   { path: '/auth/logout', method: GET },
   { path: '/auth/user-details', method: GET },
   { path: '/pricing/pricing-data', method: POST },
+  { path: '/price-zone-reassignment/pz-updates/{request_id}', method: GET },
+  { path: '/price-zone-reassignment/item-attribute-groups', method: GET },
+  { path: '/price-zone-reassignment/pz-update-requests', method: GET },
+  { path: '/price-zone-reassignment/pz-update-requests', method: POST },
+  { path: '/price-zone-reassignment/search', method: POST },
+  { path: '/price-zone-reassignment/pz-update-requests', method: PATCH },
 ];
 
 module.exports = () => {

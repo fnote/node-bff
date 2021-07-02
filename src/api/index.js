@@ -8,6 +8,7 @@ import BatchRouter from './routes/batch/batch';
 import SupportRouter from './routes/support/support';
 import AuthRouter from './routes/auth/auth';
 import CloudPricingRouter from './routes/pricing/pricingDataRoute';
+import PriceZoneReassignmentRouter from './routes/priceZoneReassignment/priceZoneReassignmentRoute';
 
 const router = express.Router();
 
@@ -22,5 +23,8 @@ router.use('/auth', AuthRouter());
 
 // Pricing API
 router.use('/pricing', CloudPricingRouter());
+
+// CPIZ API
+router.use('/price-zone-reassignment', PriceZoneReassignmentRouter());
 
 export default router;
