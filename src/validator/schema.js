@@ -34,7 +34,7 @@ export const priceZoneReassignmentSearchReqBody = Joi.object({
     customer_group_id: Joi.string().allow(null),
     offset: Joi.number().integer().required(),
     limit: Joi.number().integer().required(),
-}).or('customer_account', 'customer_group');
+}).or('customer_account', 'customer_group_id');
 
 export const priceZoneReassignmentCreateReqBody = Joi.object({
     businessUnitNumber: Joi.string()
@@ -48,7 +48,7 @@ export const priceZoneReassignmentCreateReqBody = Joi.object({
     customerAccount: Joi.string().allow(null),
     newPriceZone: Joi.number().integer().required(),
     effectiveFromDate: Joi.string().required(),
-    submissionNote: Joi.string().allow(''),
+    submissionNote: Joi.string().required(),
     submitter: Joi.object({
         id: Joi.string().required(),
         givenName: Joi.string().required(),

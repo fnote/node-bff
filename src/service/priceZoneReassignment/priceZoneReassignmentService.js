@@ -1,35 +1,32 @@
 import {httpClient} from '../../httpClient/PZRHttpClient';
 import {getCIPZApiConfig} from '../../config/configs';
-import logger from '../../util/logger';
 import CipzApiDataFetchException from '../../exception/cipzApiDataFetchException';
 import {getCorrelationId} from '../../util/correlationIdGenerator';
+// constants
 import {
     APPLICATION_JSON, CORRELATION_ID_HEADER,
     HTTP_GET,
     HTTP_PATCH,
     HTTP_POST,
-    GENERIC_CIPZ_API_ERROR_MESSAGE, UNKNOWN_CIPZ_API_ERROR_MESSAGE,
+    GENERIC_CIPZ_API_ERROR_MESSAGE, UNKNOWN_CIPZ_API_ERROR_MESSAGE, CLOUD_PCI_CLIENT_ID,
 } from '../../util/constants';
-import {
-    UNKNOWN_CIPZ_API_ERROR,
-} from '../../exception/exceptionCodes';
+import {UNKNOWN_CIPZ_API_ERROR, UNKNOWN_CIPZ_API_CAUGHT_ERROR} from '../../exception/exceptionCodes';
 
 class PriceZoneReassignmentService {
     constructor() {
         this.CipzConfig = getCIPZApiConfig();
     }
 
-    // TODO - Add logs
-    async constructHeaders() {
+    static constructHeaders() {
         return ({
             'Content-type': APPLICATION_JSON,
             Accept: APPLICATION_JSON,
-            'client-id': this.CipzConfig.CONFIG.clientId,
+            'client-id': CLOUD_PCI_CLIENT_ID,
             [CORRELATION_ID_HEADER]: getCorrelationId(),
         });
     }
 
-    handleError(error) {
+    static handleError(error) {
         if (error && error.response && error.response.data) {
             const errorData = error.response.data;
             const errorCode = Number(errorData.code);
@@ -39,7 +36,7 @@ class PriceZoneReassignmentService {
             }
             throw new CipzApiDataFetchException(error, UNKNOWN_CIPZ_API_ERROR_MESSAGE, UNKNOWN_CIPZ_API_ERROR);
         }
-        throw new CipzApiDataFetchException(error, UNKNOWN_CIPZ_API_ERROR_MESSAGE, UNKNOWN_CIPZ_API_ERROR);
+        throw new CipzApiDataFetchException(error, UNKNOWN_CIPZ_API_ERROR_MESSAGE, UNKNOWN_CIPZ_API_CAUGHT_ERROR);
     }
 
     async getCIPZSubmittedRequestData(query) {
@@ -49,7 +46,7 @@ class PriceZoneReassignmentService {
             request_status: query.request_status,
         };
 
-        const headers = await this.constructHeaders();
+        const headers = PriceZoneReassignmentService.constructHeaders();
         const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.getSubmittedRequestEndpoint;
         return httpClient.makeRequest({
             method: HTTP_GET,
@@ -57,7 +54,7 @@ class PriceZoneReassignmentService {
             data: null,
             headers,
             params,
-        }).then((response) => response.data).catch((error) => this.handleError(error));
+        }).then((response) => response.data).catch((error) => PriceZoneReassignmentService.handleError(error));
     }
 
     async getPriceZoneUpdatesData(query, requestId) {
@@ -67,7 +64,7 @@ class PriceZoneReassignmentService {
             source: query.source,
         };
 
-        const headers = await this.constructHeaders();
+        const headers = PriceZoneReassignmentService.constructHeaders();
         const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.getPriceZoneUpdateEndpoint + requestId;
         return httpClient.makeRequest({
             method: HTTP_GET,
@@ -75,23 +72,23 @@ class PriceZoneReassignmentService {
             data: null,
             headers,
             params,
-        }).then((response) => response.data).catch((error) => this.handleError(error));
+        }).then((response) => response.data).catch((error) => PriceZoneReassignmentService.handleError(error));
     }
 
     async reviewSubmission(body) {
-        const headers = await this.constructHeaders();
-        const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.patchApproveRejectApprovalReqEndpoint;
+        const headers = PriceZoneReassignmentService.constructHeaders();
+        const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.patchPriceZoneReviewEndpoint;
         return httpClient.makeRequest({
             method: HTTP_PATCH,
             reqUrl,
             data: body,
             headers,
             params: null,
-        }).then((response) => response.data).catch((error) => this.handleError(error));
+        }).then((response) => response.data).catch((error) => PriceZoneReassignmentService.handleError(error));
     }
 
     async createPriceZoneChange(req) {
-        const headers = await this.constructHeaders();
+        const headers = PriceZoneReassignmentService.constructHeaders();
         const reqUrl = this.CipzConfig.CONFIG.cipzApiBaseUrl + this.CipzConfig.CONFIG.createPriceZoneUpdateEndpoint;
         return httpClient.makeRequest({
             method: HTTP_POST,
@@ -99,7 +96,7 @@ class PriceZoneReassignmentService {
             data: req.body,
             headers,
             params: null,
-        }).then((response) => response.data).catch((error) => this.handleError(error));
+        }).then((response) => response.data).catch((error) => PriceZoneReassignmentService.handleError(error));
     }
 }
 

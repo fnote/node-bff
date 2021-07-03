@@ -4,7 +4,7 @@
  * */
 
 export const CLOUD_PCI_BFF = 'Cloud PCI BFF';
-export const CLOUD_PCI_BFF_VERSION = '1.6.0';
+export const CLOUD_PCI_BFF_VERSION = '1.8.0-IR v1.0';
 export const SUCCESS = 'success';
 export const ERROR = 'error';
 
@@ -72,3 +72,5 @@ export const IS_APPLICABLE = 'isApplicable';
 
 // misc
 export const ORDER_PRICE_TYPE_HAND = 'H';
+
+export const CLOUD_PCI_CLIENT_ID = 'Cloud_PCI';

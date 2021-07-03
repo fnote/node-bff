@@ -1,5 +1,11 @@
 import {
-ROLE_APP_ADMIN, ROLE_CIPZ, ROLE_CIPZ_REVIEWER, ROLE_CIPZ_SUBMITTER, ROLE_GENERAL_USER, ROLE_REGULAR, ROLE_CIPZ_SUPPORT,
+    ROLE_APP_ADMIN,
+    ROLE_CIPZ,
+    ROLE_CIPZ_REVIEWER,
+    ROLE_CIPZ_SUBMITTER,
+    ROLE_GENERAL_USER,
+    ROLE_REGULAR,
+    ROLE_CIPZ_SUPPORT,
 } from '../util/constants';
 
 export default function getBatchAPIConfigs() {
@@ -65,7 +71,6 @@ export const getSSMlConfig = () => ({
 export const getSeedApiConfig = () => ({
     CONFIG: {
         seedApiBaseUrl: `${process.env.SEED_URL}/services/v1/edwp`,
-        clientId: 'Cloud_PCI',
         getItemAttributeGroupsEndpoint: '/attribute-groups',
         getCustomerAndItemAttributeGroupsEndpoint: '/item-price-zone/customer-attribute-group',
         getCustomerGroupAndItemAttributeGroupsEndpoint: '/item-price-zone/customer-group-attribute-group',
@@ -75,11 +80,10 @@ export const getSeedApiConfig = () => ({
 export const getCIPZApiConfig = () => ({
     CONFIG: {
         cipzApiBaseUrl: `${process.env.CIPZ_API_URL}/v1/cipz`,
-        clientId: 'cloud-pci-bff',
         getSubmittedRequestEndpoint: '/pz-update-requests',
         getPriceZoneUpdateEndpoint: '/price-zone-updates/',
         createPriceZoneUpdateEndpoint: '/pz-update-requests',
-        patchApproveRejectApprovalReqEndpoint: '/pz-update-requests',
+        patchPriceZoneReviewEndpoint: '/pz-update-requests',
     },
 });
 
