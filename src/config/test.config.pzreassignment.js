@@ -398,7 +398,9 @@ export const cipzApiGetSubmittedRequestMockResponse = {
  };
 
  export const cipzApiRespnseToApproveRequestMockData = {
-    requestId: '112',
-    requestStatus: 'APPROVED',
-    approverUpdatedTime: 1621837508,
+     data: {
+        requestId: '112',
+        requestStatus: 'APPROVED',
+        approverUpdatedTime: 1621837508,
+     },
  };

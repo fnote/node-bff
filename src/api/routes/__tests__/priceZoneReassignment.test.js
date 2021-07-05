@@ -22,6 +22,7 @@ import {
     cipzApiGetSubmittedRequestMockResponse,
     cipzApiGetPriceZoneUpdateMockData,
     mockCreatePriceZoneUpdateResponse,
+    cipzApiRespnseToApproveRequestMockData,
 } from '../../../config/test.config.pzreassignment';
 
 jest.mock('../../../httpClient/PZRHttpClient');
@@ -192,6 +193,8 @@ describe('routes: /pz-update-requests', () => {
             .send(mockPzUpdateRequestBody)
             .then((res) => {
                 expect(res.status).toEqual(HttpStatus.OK);
+                expect(res.body).toBeDefined();
+                expect(res.body).toEqual(cipzApiRespnseToApproveRequestMockData.data);
             });
     });
 
