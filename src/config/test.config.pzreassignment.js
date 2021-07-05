@@ -34,7 +34,7 @@ export const seedGetItemAttributeGroupMockResponse = {
 
 export const mockSearchRequestWithCustomerGroup = {
     business_unit_number: '020',
-    customer_group: '1662',
+    customer_group_id: '1662',
     item_attribute_group_id: '123',
     offset: 0,
     limit: 20,
@@ -65,7 +65,7 @@ export const mockSearchRequestWithoutCustomer = {
 export const mockSearchRequestWithBothCustomerAndCutomerGroup = {
     business_unit_number: '020',
     customer_account: '100001',
-    customer_group: '1662',
+    customer_group_id: '1662',
     item_attribute_group_id: '123',
     offset: 0,
     limit: 20,
@@ -151,7 +151,7 @@ export const mockCreatePriceZoneUpdatePayload = {
     customerAccount: '700001',
     newPriceZone: 3,
     effectiveFromDate: '20210530',
-    submissionNote: '',
+    submissionNote: 'need to be submitted',
     submitter: {
        id: 'vvit5827',
        givenName: 'Vithulan',

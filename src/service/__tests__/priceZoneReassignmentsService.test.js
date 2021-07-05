@@ -35,9 +35,11 @@ describe(' Price Zone Reassignment Service - getCIPZSubmittedRequestData', () =>
                 offset: 20,
                 request_status: 'request_status',
         };
-        jest.spyOn(PriceZoneReassignmentService, 'constructHeaders').mockImplementation(() => {
+        const mockStaticF = jest.fn().mockImplementation(() => {
             throw new Error();
         });
+        PriceZoneReassignmentService.constructHeaders = mockStaticF;
+
         try {
             await PriceZoneReassignmentService.getCIPZSubmittedRequestData(query);
         } catch (e) {
@@ -53,9 +55,10 @@ describe(' Price Zone Reassignment Service - getPriceZoneUpdatesData', () => {
                 offset: 20,
                 source: 'test-source',
         };
-        jest.spyOn(PriceZoneReassignmentService, 'constructHeaders').mockImplementation(() => ({
-                headers: 'mock headers',
-            }));
+        const mockStaticF = jest.fn().mockImplementation(() => ({
+            headers: 'mock headers',
+        }));
+        PriceZoneReassignmentService.constructHeaders = mockStaticF;
         const reqId = 33;
         const response = await PriceZoneReassignmentService.getPriceZoneUpdatesData(query, reqId);
         expect(response).not.toBeNull();
