@@ -70,7 +70,7 @@ export const getSSMlConfig = () => ({
 
 export const getSeedApiConfig = () => ({
     CONFIG: {
-        seedApiBaseUrl: `${process.env.SEED_URL}services/v1/edwp`,
+        seedApiBaseUrl: `${process.env.SEED_URL}/services/v1/edwp`,
         getItemAttributeGroupsEndpoint: '/attribute-groups',
         getCustomerAndItemAttributeGroupsEndpoint: '/item-price-zone/customer-attribute-group',
         getCustomerGroupAndItemAttributeGroupsEndpoint: '/item-price-zone/customer-group-attribute-group',
