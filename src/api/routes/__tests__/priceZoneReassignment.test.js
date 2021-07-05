@@ -18,10 +18,10 @@ import {
     mockSearchRequestWithBothCustomerAndCutomerGroup,
     mockSearchRequestWithoutOpCoId,
     mockCreatePriceZoneUpdatePayload,
-    mockCreatePriceZoneUpdateResponse,
     seedGetItemAttributeGroupMockResponse,
     cipzApiGetSubmittedRequestMockResponse,
     cipzApiGetPriceZoneUpdateMockData,
+    mockCreatePriceZoneUpdateResponse,
     cipzApiRespnseToApproveRequestMockData,
 } from '../../../config/test.config.pzreassignment';
 
@@ -193,7 +193,8 @@ describe('routes: /pz-update-requests', () => {
             .send(mockPzUpdateRequestBody)
             .then((res) => {
                 expect(res.status).toEqual(HttpStatus.OK);
-                expect(res.body).toEqual(cipzApiRespnseToApproveRequestMockData);
+                expect(res.body).toBeDefined();
+                expect(res.body).toEqual(cipzApiRespnseToApproveRequestMockData.data);
             });
     });
 
@@ -287,6 +288,7 @@ describe('route: /search', () => {
         .then((res) => {
             expect(res.status).toEqual(HttpStatus.OK);
             expect(res.body).toBeDefined();
+            expect(res.body).toEqual(mockSearchResponseWithCutomerAccount.data);
         });
     });
 });
@@ -299,9 +301,9 @@ describe('routes: post /pz-update-requests', () => {
         .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
         .send(mockCreatePriceZoneUpdatePayload)
         .then((res) => {
-            expect(res.status).toEqual(HttpStatus.CREATED);
             expect(res.body).toBeDefined();
-            expect(res.body).toEqual(mockCreatePriceZoneUpdateResponse);
+            expect(res.status).toEqual(HttpStatus.OK);
+            expect(res.body).toEqual(mockCreatePriceZoneUpdateResponse.data);
         });
     });
 
@@ -313,9 +315,9 @@ describe('routes: post /pz-update-requests', () => {
         .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
         .send(requestPayloadWithGroupIdOnly)
         .then((res) => {
-            expect(res.status).toEqual(HttpStatus.CREATED);
             expect(res.body).toBeDefined();
-            expect(res.body).toEqual(mockCreatePriceZoneUpdateResponse);
+            expect(res.status).toEqual(HttpStatus.OK);
+            expect(res.body).toEqual(mockCreatePriceZoneUpdateResponse.data);
         });
     });
 
@@ -327,9 +329,9 @@ describe('routes: post /pz-update-requests', () => {
         .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
         .send(requestPayloadWithCustomerAccountOnly)
         .then((res) => {
-            expect(res.status).toEqual(HttpStatus.CREATED);
             expect(res.body).toBeDefined();
-            expect(res.body).toEqual(mockCreatePriceZoneUpdateResponse);
+            expect(res.status).toEqual(HttpStatus.OK);
+            expect(res.body).toEqual(mockCreatePriceZoneUpdateResponse.data);
         });
     });
 

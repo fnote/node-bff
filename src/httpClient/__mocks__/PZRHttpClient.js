@@ -5,6 +5,7 @@ import {
      cipzApiGetSubmittedRequestMockResponse,
      cipzApiGetPriceZoneUpdateMockData,
      cipzApiRespnseToApproveRequestMockData,
+     mockCreatePriceZoneUpdateResponse
  } from '../../config/test.config.pzreassignment';
 
  import {HTTP_GET, HTTP_POST, HTTP_PATCH} from '../../util/constants';
@@ -19,6 +20,9 @@ import {
          if (reqUrl.includes('/v1/edwp/item-price-zone/customer-attribute-group') && method === HTTP_POST) {
              return mockSearchResponseWithCutomerAccount;
          }
+         if (reqUrl.includes('/v1/cipz/pz-update-requests') && method === HTTP_POST) {
+            return mockCreatePriceZoneUpdateResponse;
+        }
          if (reqUrl.includes('/v1/edwp/item-price-zone/customer-group-attribute-group') && method === HTTP_POST) {
              return mockSearchResponseWithCutomerGroup;
          }
