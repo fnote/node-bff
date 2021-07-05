@@ -138,9 +138,11 @@ export const mockSearchResponseWithCutomerAccount = {
 };
 
 export const mockCreatePriceZoneUpdateResponse = {
-    requestId: '112',
-    status: 'PENDING_APPROVAL',
-    createdTime: 1621837508,
+    data: {
+        requestId: '112',
+        status: 'PENDING_APPROVAL',
+        createdTime: 1621837508,
+    },
 };
 
 export const mockCreatePriceZoneUpdatePayload = {

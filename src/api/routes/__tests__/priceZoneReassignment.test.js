@@ -21,6 +21,7 @@ import {
     seedGetItemAttributeGroupMockResponse,
     cipzApiGetSubmittedRequestMockResponse,
     cipzApiGetPriceZoneUpdateMockData,
+    mockCreatePriceZoneUpdateResponse,
 } from '../../../config/test.config.pzreassignment';
 
 jest.mock('../../../httpClient/PZRHttpClient');
@@ -284,6 +285,7 @@ describe('route: /search', () => {
         .then((res) => {
             expect(res.status).toEqual(HttpStatus.OK);
             expect(res.body).toBeDefined();
+            expect(res.body).toEqual(mockSearchResponseWithCutomerAccount.data);
         });
     });
 });
@@ -298,6 +300,7 @@ describe('routes: post /pz-update-requests', () => {
         .then((res) => {
             expect(res.body).toBeDefined();
             expect(res.status).toEqual(HttpStatus.OK);
+            expect(res.body).toEqual(mockCreatePriceZoneUpdateResponse.data);
         });
     });
 
@@ -311,6 +314,7 @@ describe('routes: post /pz-update-requests', () => {
         .then((res) => {
             expect(res.body).toBeDefined();
             expect(res.status).toEqual(HttpStatus.OK);
+            expect(res.body).toEqual(mockCreatePriceZoneUpdateResponse.data);
         });
     });
 
@@ -324,6 +328,7 @@ describe('routes: post /pz-update-requests', () => {
         .then((res) => {
             expect(res.body).toBeDefined();
             expect(res.status).toEqual(HttpStatus.OK);
+            expect(res.body).toEqual(mockCreatePriceZoneUpdateResponse.data);
         });
     });
 
