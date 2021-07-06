@@ -38,7 +38,7 @@ export const isCustomerAccountDefined = ({customer_account: customerAccount}) =>
 export const validateCreatePriceZoneChangeRequest = ({body}) => {
     const {error} = priceZoneReassignmentCreateReqBody.validate(body);
     if (error || !containsValidCustomerIdentifier(body) || !containsValidPriceZone(body)) {
-        logger.error(`Request body validation failed in pz update request data: ${JSON.stringify(body)}`);
+        logger.error(`Request body validation failed in pz update request data: ${JSON.stringify(body)} Error: ${error}`);
         throw new InvalidRequestException(
             INVALID_REQUEST_BODY,
             BAD_REQUEST,
@@ -50,7 +50,7 @@ export const validateCreatePriceZoneChangeRequest = ({body}) => {
 export const validateSearchRequest = ({body}) => {
     const {error} = priceZoneReassignmentSearchReqBody.validate(body);
     if (error) {
-        logger.error(`Request body validation failed in search request data: ${JSON.stringify(body)}`);
+        logger.error(`Request body validation failed in search request data: ${JSON.stringify(body)} Error: ${error}`);
         throw new InvalidRequestException(
             INVALID_REQUEST_BODY,
             BAD_REQUEST,
@@ -62,7 +62,7 @@ export const validateSearchRequest = ({body}) => {
 export const validateReviewPatchRequest = ({body}) => {
     const {error} = cipzApprovalRequestReqBody.validate(body);
     if (error) {
-        logger.error(`Request body validation failed in getting CIPZ review update request data: ${JSON.stringify(body)}`);
+        logger.error(`Request body validation failed in getting CIPZ review update request data: ${JSON.stringify(body)} Error: ${error}`);
         throw new InvalidRequestException(
             INVALID_REQUEST_BODY,
             BAD_REQUEST,
