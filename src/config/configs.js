@@ -28,11 +28,11 @@ export const getAuthConfig = () => ({
 
 export const getCloudPricingConfig = () => ({
     CONFIG: {
-        cloudPricingBaseUrl: `${process.env.CLOUD_PRICING_URL}/v1/pricing/`,
+        cloudPricingApiCentralBaseUrl: `${process.env.API_CENTRAL_BASE_URL}/services/enterprise-prcp-pricing-service-v1`,
         clientId: 'Cloud-PCI',
         priceEngineType: 'CP',
-        pciPricesEndpoint: 'pci-prices',
-        productPricesEndpoint: 'product-prices',
+        pciPricesEndpoint: '/pci-prices',
+        productPricesEndpoint: '/product-prices',
     },
 });
 
