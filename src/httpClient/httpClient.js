@@ -12,7 +12,7 @@ class HttpClient {
         this.axiosInstance = axios.create(configs);
     }
 
-    async makeRequest(method, URL, data, headers, params) {
+    async makeRequest(method, URL, data, headers, params, configurations = {}) {
         try {
             return await this.axiosInstance({
                 method,
@@ -20,6 +20,7 @@ class HttpClient {
                 data,
                 headers,
                 params,
+                ...configurations,
             });
         } catch (error) {
             throw new HttpClientException(error, HTTP_CLIENT_EXCEPTION);
