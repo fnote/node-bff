@@ -46,7 +46,7 @@ class ApiCentral extends HttpClient {
         });
 
         ['post', 'put', 'delete'].forEach((method) => {
-            this[method] = async (url, data, pageNumber, pageSize) => {
+            this[method] = async (url, data, pageNumber, pageSize, configurations = {}) => {
                 try {
                     const headers = {
                         'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ class ApiCentral extends HttpClient {
                         'correlation-id': getCorrelationId() || 'correlation id dropped from the bff',
                     };
                     return await this.apiCentralMakeRequest(
-                        method, url, data, headers, pageNumber, pageSize,
+                        method, url, data, headers, pageNumber, pageSize, configurations,
                     );
                 } catch (error) {
                     if (error instanceof HttpClientException) {
