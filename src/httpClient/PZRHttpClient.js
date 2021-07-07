@@ -6,15 +6,15 @@ class HttpClient {
     }
 
     async makeRequest({
-        method, reqUrl, data, headers, params, timeout,
-    }) {
-        const requestJson = {
-            method, url: reqUrl, data, headers, params, timeout,
-        };
-        if (!timeout) {
-            delete requestJson.timeout;
-        }
-        return this.axiosInstance(requestJson);
+                          method, reqUrl, data, headers, params,
+                      }) {
+        return this.axiosInstance({
+            method,
+            url: reqUrl,
+            data,
+            headers,
+            params,
+        });
     }
 }
 

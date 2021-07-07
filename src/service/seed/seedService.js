@@ -18,7 +18,6 @@ import {httpClient} from '../../httpClient/PZRHttpClient';
 class SeedService {
     constructor() {
         this.seedApiConfig = getSeedApiConfig();
-        this.timeout = Number(process.env.SEED_API_TIMEOUT);
     }
 
     static async constructHeaders() {
@@ -54,7 +53,6 @@ class SeedService {
             data: null,
             headers,
             param: null,
-            timeout: this.timeout,
         }).then((response) => response).catch((error) => SeedService.handleError(error));
     }
 
@@ -67,7 +65,6 @@ class SeedService {
             data: req.body,
             headers,
             params: null,
-            timeout: this.timeout,
         }).then((response) => response).catch((error) => SeedService.handleError(error));
     }
 
@@ -80,7 +77,6 @@ class SeedService {
             data: req.body,
             headers,
             params: null,
-            timeout: this.timeout,
         }).then((response) => response).catch((error) => SeedService.handleError(error));
     }
 }

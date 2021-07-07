@@ -82,7 +82,7 @@ functions:
       ENVIRONMENT: ${self:provider.environmentShort}
       PORT: ${opt:port, 4000}
     memorySize: 1024
-    timeout: 60
+    timeout: ${ssm:/CP/CIPZ_SERVICE/${self:provider.environmentShort}/CIPZ/API/TIMEOUT}
     # to locally up the application, uncomment -> events: ${file(./serverless-routes.js)} this line and comment
     # out the other events section which is used in alb
     # events: ${file(./serverless-routes.js)}
