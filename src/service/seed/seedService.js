@@ -1,34 +1,24 @@
-import {getSeedApiConfig} from '../../config/configs';
+import {getSeedApiConfig, getSeedApiBaseUrl} from '../../config/configs';
 import SeedApiDataFetchException from '../../exception/seedApiDataFechException';
-import {getCorrelationId} from '../../util/correlationIdGenerator';
-import {getAccessToken} from '../../util/accessTokenGenerator';
 // constants
 import {
-    APPLICATION_JSON, CORRELATION_ID_HEADER,
     UNKNOWN_SEED_API_ERROR_MESSAGE,
     GENERIC_SEED_API_ERROR_MESSAGE,
-    HTTP_GET,
-    HTTP_POST,
-    CLOUD_PCI_CLIENT_ID,
 } from '../../util/constants';
 import {UNKNOWN_SEED_API_ERROR, UNKNOWN_SEED_API_CAUGHT_ERROR} from '../../exception/exceptionCodes';
 
-import {httpClient} from '../../httpClient/PZRHttpClient';
+import ApiCentralClient from '../../httpClient/apiCentralClient';
 
 class SeedService {
     constructor() {
         this.seedApiConfig = getSeedApiConfig();
     }
 
-    static async constructHeaders() {
-        // const accessToken = await getAccessToken(false);
-        return ({
-            'Content-type': APPLICATION_JSON,
-            Accept: APPLICATION_JSON,
-            'client-id': CLOUD_PCI_CLIENT_ID,
-            [CORRELATION_ID_HEADER]: getCorrelationId(),
-            // BearerAuth: accessToken,
-        });
+    generateRequestConfigs() {
+        return {
+            timeout: this.seedApiConfig.CONFIG.timeout,
+            baseURL: getSeedApiBaseUrl(),
+        };
     }
 
     static handleError(error) {
@@ -45,39 +35,33 @@ class SeedService {
     }
 
     async getSeedItemAttributeGroupsData() {
-        const headers = await SeedService.constructHeaders();
-        const reqUrl = `${this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getItemAttributeGroupsEndpoint}`;
-        return httpClient.makeRequest({
-            method: HTTP_GET,
-            reqUrl,
-            data: null,
-            headers,
-            param: null,
-        }).then((response) => response).catch((error) => SeedService.handleError(error));
+        const reqUrl = this.seedApiConfig.CONFIG.getItemAttributeGroupsEndpoint;
+        try {
+            const response = await ApiCentralClient.get(reqUrl, null, this.generateRequestConfigs());
+            return response;
+        } catch (error) {
+            return SeedService.handleError(error);
+        }
     }
 
     async getPriceZoneDetailsForCustomerAndItemAttributeGroup(req) {
-        const headers = await SeedService.constructHeaders();
-        const reqUrl = this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getCustomerAndItemAttributeGroupsEndpoint;
-        return httpClient.makeRequest({
-            method: HTTP_POST,
-            reqUrl,
-            data: req.body,
-            headers,
-            params: null,
-        }).then((response) => response).catch((error) => SeedService.handleError(error));
+        const reqUrl = this.seedApiConfig.CONFIG.getCustomerAndItemAttributeGroupsEndpoint;
+        try {
+            const response = await ApiCentralClient.post(reqUrl, req.body, null, this.generateRequestConfigs());
+            return response;
+        } catch (error) {
+            return SeedService.handleError(error);
+        }
     }
 
     async getPriceZoneDetailsForCustomerGroupAndItemAttributeGroup(req) {
-        const headers = await SeedService.constructHeaders();
-        const reqUrl = this.seedApiConfig.CONFIG.seedApiBaseUrl + this.seedApiConfig.CONFIG.getCustomerGroupAndItemAttributeGroupsEndpoint;
-        return httpClient.makeRequest({
-            method: HTTP_POST,
-            reqUrl,
-            data: req.body,
-            headers,
-            params: null,
-        }).then((response) => response).catch((error) => SeedService.handleError(error));
+        const reqUrl = this.seedApiConfig.CONFIG.getCustomerGroupAndItemAttributeGroupsEndpoint;
+        try {
+            const response = await ApiCentralClient.post(reqUrl, req.body, null, this.generateRequestConfigs());
+            return response;
+        } catch (error) {
+            return SeedService.handleError(error);
+        }
     }
 }
 

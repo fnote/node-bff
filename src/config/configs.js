@@ -7,6 +7,7 @@ import {
     ROLE_REGULAR,
     ROLE_CIPZ_SUPPORT,
 } from '../util/constants';
+import {getSsmConfigSync} from '../service/aws/ssmService';
 
 export default function getBatchAPIConfigs() {
     return {
@@ -68,12 +69,14 @@ export const getSSMlConfig = () => ({
     },
 });
 
+export const getSeedApiBaseUrl = () => `${getSsmConfigSync('seedApiHost')}/services/v1/edwp`;
+
 export const getSeedApiConfig = () => ({
     CONFIG: {
-        seedApiBaseUrl: `${process.env.SEED_URL}/services/v1/edwp`,
         getItemAttributeGroupsEndpoint: '/attribute-groups',
         getCustomerAndItemAttributeGroupsEndpoint: '/item-price-zone/customer-attribute-group',
         getCustomerGroupAndItemAttributeGroupsEndpoint: '/item-price-zone/customer-group-attribute-group',
+        timeout: Number(`${process.env.SEED_API_REQUEST_TIMEOUT}`),
     },
 });
 
