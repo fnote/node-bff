@@ -22,8 +22,8 @@ class SeedService {
     }
 
     static handleError(error) {
-        if (error && error.response && error.response.data) {
-            const errorData = error.response.data;
+        const errorData = error.errorDetails?.response?.data;
+        if (errorData) {
             const errorCode = Number(errorData.code);
             const errorMesssage = errorData.message ? errorData.message : GENERIC_SEED_API_ERROR_MESSAGE;
             if (errorCode) {
@@ -37,7 +37,8 @@ class SeedService {
     async getSeedItemAttributeGroupsData() {
         const reqUrl = this.seedApiConfig.CONFIG.getItemAttributeGroupsEndpoint;
         try {
-            return ApiCentralClient.get(reqUrl, null, this.generateRequestConfigs());
+            const response = ApiCentralClient.get(reqUrl, null, this.generateRequestConfigs());
+            return response;
         } catch (error) {
             return SeedService.handleError(error);
         }
@@ -46,7 +47,8 @@ class SeedService {
     async getPriceZoneDetailsForCustomerAndItemAttributeGroup(req) {
         const reqUrl = this.seedApiConfig.CONFIG.getCustomerAndItemAttributeGroupsEndpoint;
         try {
-            return ApiCentralClient.post(reqUrl, req.body, null, this.generateRequestConfigs());
+            const response = await ApiCentralClient.post(reqUrl, req.body, null, this.generateRequestConfigs());
+            return response;
         } catch (error) {
             return SeedService.handleError(error);
         }
@@ -55,7 +57,8 @@ class SeedService {
     async getPriceZoneDetailsForCustomerGroupAndItemAttributeGroup(req) {
         const reqUrl = this.seedApiConfig.CONFIG.getCustomerGroupAndItemAttributeGroupsEndpoint;
         try {
-            return ApiCentralClient.post(reqUrl, req.body, null, this.generateRequestConfigs());
+            const response = ApiCentralClient.post(reqUrl, req.body, null, this.generateRequestConfigs());
+            return response;
         } catch (error) {
             return SeedService.handleError(error);
         }
