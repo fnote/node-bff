@@ -35,9 +35,9 @@ class SeedService {
     }
 
     async getSeedItemAttributeGroupsData() {
-        const reqUrl = this.seedApiConfig.CONFIG.getItemAttributeGroupsEndpoint;
+        const endpoint = this.seedApiConfig.CONFIG.getItemAttributeGroupsEndpoint;
         try {
-            const response = await ApiCentralClient.get(reqUrl, null, this.generateRequestConfigs());
+            const response = await ApiCentralClient.get(endpoint, null, this.generateRequestConfigs());
             return response;
         } catch (error) {
             return SeedService.handleError(error);
@@ -45,9 +45,9 @@ class SeedService {
     }
 
     async getPriceZoneDetailsForCustomerAndItemAttributeGroup(req) {
-        const reqUrl = this.seedApiConfig.CONFIG.getCustomerAndItemAttributeGroupsEndpoint;
+        const endpoint = this.seedApiConfig.CONFIG.getCustomerAndItemAttributeGroupsEndpoint;
         try {
-            const response = await ApiCentralClient.post(reqUrl, req.body, null, this.generateRequestConfigs());
+            const response = await ApiCentralClient.post(endpoint, req.body, null, null, this.generateRequestConfigs());
             return response;
         } catch (error) {
             return SeedService.handleError(error);
@@ -55,9 +55,9 @@ class SeedService {
     }
 
     async getPriceZoneDetailsForCustomerGroupAndItemAttributeGroup(req) {
-        const reqUrl = this.seedApiConfig.CONFIG.getCustomerGroupAndItemAttributeGroupsEndpoint;
+        const endpoint = this.seedApiConfig.CONFIG.getCustomerGroupAndItemAttributeGroupsEndpoint;
         try {
-            const response = await ApiCentralClient.post(reqUrl, req.body, null, this.generateRequestConfigs());
+            const response = await ApiCentralClient.post(endpoint, req.body, null, null, this.generateRequestConfigs());
             return response;
         } catch (error) {
             return SeedService.handleError(error);

@@ -12,6 +12,7 @@ import HttpClientException from '../exception/httpClientException';
 import {getAccessToken} from '../util/accessTokenGenerator';
 import logger from '../util/logger';
 import { getCorrelationId } from '../util/correlationIdGenerator';
+import {APPLICATION_JSON} from '../util/constants';
 
 class ApiCentral extends HttpClient {
     constructor() {
@@ -27,8 +28,8 @@ class ApiCentral extends HttpClient {
             this[method] = async (url, params, configurations = {}) => {
                 try {
                     const headers = {
-                        'Content-Type': 'application/json',
-                        Accept: 'application/json',
+                        'Content-type': APPLICATION_JSON,
+                        Accept: APPLICATION_JSON,
                         'accept-encoding': 'gzip',
                         'correlation-id': getCorrelationId() || 'correlation id dropped from the bff',
                     };
@@ -46,13 +47,14 @@ class ApiCentral extends HttpClient {
         });
 
         ['post', 'put', 'delete'].forEach((method) => {
-            this[method] = async (url, data, params, configurations = {}) => {
+            this[method] = async (url, data, reqHeaders, params, configurations = {}) => {
                 try {
                     const headers = {
-                        'Content-Type': 'application/json',
-                        Accept: 'application/json',
+                        'Content-type': APPLICATION_JSON,
+                        Accept: APPLICATION_JSON,
                         'accept-encoding': 'gzip',
                         'correlation-id': getCorrelationId() || 'correlation id dropped from the bff',
+                        ...reqHeaders,
                     };
                     return await this.apiCentralMakeRequest(
                         method, url, data, headers, params, configurations,
