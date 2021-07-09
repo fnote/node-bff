@@ -14,6 +14,7 @@ import {
 } from '../../config/test.config';
 
 jest.mock('../../httpClient/httpClient');
+jest.mock('../../util/accessTokenGenerator');
 
 describe('Cloud Pricing Data Service', () => {
     test('should generate the correct response from getCloudPricingData when flow is correct', async () => {

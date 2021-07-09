@@ -93,14 +93,13 @@ class HttpClient {
         if (JSON.stringify(data) === JSON.stringify(cloudPricingErrorMockRequest.body)) {
             return {data2: cloudPricingMockResponse};
         }
-        if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
+        if (URL.includes('/services/enterprise-prcp-pricing-service-v1/product-prices')
+            && JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
             return {data: cloudPricingMockResponse};
         }
-        if (JSON.stringify(data) === JSON.stringify(cloudPricingPCIMockRequest.body)) {
+        if (URL.includes('/services/enterprise-prcp-pricing-service-v1/pci-prices')
+            && JSON.stringify(data) === JSON.stringify(cloudPricingPCIMockRequest.body)) {
             return { data: cloudPCIPricingMockResponse };
-        }
-        if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
-            return cloudPricingMockResponse;
         }
         if (URL.includes('/opcos/068/products/7203474')) {
             return productInfoMockResponse;
