@@ -41,7 +41,6 @@ export async function loadSsmConfigs() {
     };
     const response = await ssmClient.getParameters(params).promise();
     response.Parameters.forEach(({Name, Value}) => {
-        logger.info(`${Name}: ${Value}`);
         const { readableConfigName } = REQUIRED_SSM_PARAMS.find(({ paramName }) => paramName === Name);
         values[readableConfigName] = Value;
     });
