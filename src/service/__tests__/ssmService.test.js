@@ -4,23 +4,58 @@
  * @author: gkar5861 on 23/06/20
  * */
 import sinon from 'sinon';
-import {getSsmConfig, loadSsmConfigs, ssmClient} from '../aws/ssmService';
+import {
+    getSsmConfig, getSsmConfigSync, loadSsmConfigs, ssmClient,
+} from '../aws/ssmService';
 
 const paramName = 'ApiCentralAuthorizationToken';
 const paramValue = 'mockParamValue';
-const stub = sinon.stub(ssmClient, 'getParametersByPath');
+const stub = sinon.stub(ssmClient, 'getParameters');
+
+const ACCESS_KEY_PARAM_NAME = '/CP/CLOUD-PCI/undefined/APICENTRAL/ACCESSKEY';
+const DB_URL_PARAM_NAME = '/CP/CLOUD-PCI/undefined/DATABASE/COMMON/DB_URL';
+const PASSWORD_PARAM_NAME = '/CP/CLOUD-PCI/undefined/DATABASE/COMMON/PASSWORD';
+const USER_NAME_PARAM_NAME = '/CP/CLOUD-PCI/undefined/DATABASE/COMMON/USERNAME';
+const SEED_API_HOST_PARAM_NAME = '/CP/CIPZ_SERVICE/undefined/SEED/API/HOST';
+
+const PARAM_NAMES = [
+    ACCESS_KEY_PARAM_NAME,
+    DB_URL_PARAM_NAME,
+    PASSWORD_PARAM_NAME,
+    USER_NAME_PARAM_NAME,
+    SEED_API_HOST_PARAM_NAME,
+];
+
 const ssmResponse = {
     Parameters: [
         {
-            Name: '/CP/CLOUD-PCI/undefined/APICENTRAL/ACCESSKEY',
+            Name: ACCESS_KEY_PARAM_NAME,
             Type: 'String',
             Value: paramValue,
             Version: 1,
         },
         {
-            Name: 'mock name',
+            Name: DB_URL_PARAM_NAME,
             Type: 'String',
-            Value: 'mock value',
+            Value: 'localhost:3306',
+            Version: 1,
+        },
+        {
+            Name: PASSWORD_PARAM_NAME,
+            Type: 'String',
+            Value: 'mockedPassword',
+            Version: 1,
+        },
+        {
+            Name: USER_NAME_PARAM_NAME,
+            Type: 'String',
+            Value: 'mockedUsername',
+            Version: 1,
+        },
+        {
+            Name: SEED_API_HOST_PARAM_NAME,
+            Type: 'String',
+            Value: 'http://localhost:3000',
             Version: 1,
         },
     ],
@@ -35,9 +70,10 @@ describe('SSM Service', () => {
         await loadSsmConfigs();
         const val = await getSsmConfig(paramName);
         expect(val).toEqual(paramValue);
-        sinon.assert.calledWithMatch(ssmClient.getParametersByPath, {
-            Path: '/CP/CLOUD-PCI/undefined',
-            Recursive: true,
+        const valSync = getSsmConfigSync(paramName);
+        expect(valSync).toEqual(paramValue);
+        sinon.assert.calledWithMatch(ssmClient.getParameters, {
+            Names: PARAM_NAMES,
             WithDecryption: true,
         });
         sinon.assert.calledOnce(promiseStub);
@@ -50,9 +86,8 @@ describe('SSM Service', () => {
         }));
         await loadSsmConfigs();
         expect(() => getSsmConfig('')).rejects.toThrowError(new Error('configuration key  not found'));
-        sinon.assert.calledWithMatch(ssmClient.getParametersByPath, {
-            Path: '/CP/CLOUD-PCI/undefined',
-            Recursive: true,
+        sinon.assert.calledWithMatch(ssmClient.getParameters, {
+            Names: PARAM_NAMES,
             WithDecryption: true,
         });
         sinon.assert.calledOnce(promiseStub);
