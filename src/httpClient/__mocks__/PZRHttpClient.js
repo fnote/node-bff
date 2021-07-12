@@ -5,10 +5,10 @@ import {
     mockCreatePriceZoneUpdateResponse,
 } from '../../config/test.config.pzreassignment';
 
-import {HTTP_GET, HTTP_POST, HTTP_PATCH} from '../../util/constants';
+import { HTTP_GET, HTTP_POST, HTTP_PATCH } from '../../util/constants';
 
 class HttpClient {
-    async makeRequest({method, reqUrl}) {
+    async makeRequest({ method, reqUrl }) {
         if (reqUrl.includes('/v1/cipz/pz-update-requests') && method === HTTP_POST) {
             return mockCreatePriceZoneUpdateResponse;
         }
