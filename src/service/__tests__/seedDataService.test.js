@@ -4,12 +4,25 @@
  import SeedApiDataFetchException from '../../exception/seedApiDataFechException';
  import { CIPZ_SEED_VALIDATION_ERROR_CODES } from '../../exception/exceptionCodes';
 
- jest.mock('../../httpClient/PZRHttpClient');
+ jest.mock('../../httpClient/httpClient');
  jest.mock('../../util/accessTokenGenerator');
+
+ jest.mock('../../config/configs', () => ({
+    getSeedApiBaseUrl: () => 'http://localhost:3000/services/v1/edwp',
+    getSeedApiConfig: () => ({
+        CONFIG: {
+            getItemAttributeGroupsEndpoint: '/attribute-groups',
+            getCustomerAndItemAttributeGroupsEndpoint: '/item-price-zone/customer-attribute-group',
+            getCustomerGroupAndItemAttributeGroupsEndpoint: '/item-price-zone/customer-group-attribute-group',
+            timeout: 0,
+        },
+    }),
+}));
 
  describe('Seed API Data Service', () => {
      test('should generate the correct response when flow is correct', async () => {
          const response = await seedService.getSeedItemAttributeGroupsData();
+         console.log(response);
          expect(response.data).toEqual(seedGetItemAttributeGroupMockResponse.data);
      });
 

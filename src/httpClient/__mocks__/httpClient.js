@@ -27,6 +27,11 @@ import {
     pricingDataMockRequestThrowErrorForCloudPricingCall,
     productInfoMockResponse,
 } from '../../config/test.config';
+import {
+    mockSearchResponseWithCutomerGroup,
+    mockSearchResponseWithCutomerAccount,
+    seedGetItemAttributeGroupMockResponse,
+} from '../../config/test.config.pzreassignment';
 import HttpClientException from '../../exception/httpClientException';
 import {BATCH_API_DATA_FETCH_ERROR_CODE, HTTP_CLIENT_EXCEPTION} from '../../exception/exceptionCodes';
 import {
@@ -93,14 +98,13 @@ class HttpClient {
         if (JSON.stringify(data) === JSON.stringify(cloudPricingErrorMockRequest.body)) {
             return {data2: cloudPricingMockResponse};
         }
-        if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
+        if (URL.includes('/services/enterprise-prcp-pricing-service-v1/product-prices')
+            && JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
             return {data: cloudPricingMockResponse};
         }
-        if (JSON.stringify(data) === JSON.stringify(cloudPricingPCIMockRequest.body)) {
+        if (URL.includes('/services/enterprise-prcp-pricing-service-v1/pci-prices')
+            && JSON.stringify(data) === JSON.stringify(cloudPricingPCIMockRequest.body)) {
             return { data: cloudPCIPricingMockResponse };
-        }
-        if (JSON.stringify(data) === JSON.stringify(cloudPricingMockRequest.body)) {
-            return cloudPricingMockResponse;
         }
         if (URL.includes('/opcos/068/products/7203474')) {
             return productInfoMockResponse;
@@ -134,6 +138,15 @@ class HttpClient {
             throw new Error('test-error');
         } else if (URL === jwkRequestURLForTest) {
             return resolvedValue;
+        }
+        if (URL.includes('/attribute-groups')) {
+            return seedGetItemAttributeGroupMockResponse;
+        }
+        if (URL.includes('/item-price-zone/customer-attribute-group')) {
+            return mockSearchResponseWithCutomerAccount;
+        }
+        if (URL.includes('/item-price-zone/customer-group-attribute-group')) {
+            return mockSearchResponseWithCutomerGroup;
         }
     }
 }

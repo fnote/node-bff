@@ -12,6 +12,7 @@ import HttpClientException from '../exception/httpClientException';
 import {getAccessToken} from '../util/accessTokenGenerator';
 import logger from '../util/logger';
 import { getCorrelationId } from '../util/correlationIdGenerator';
+import {APPLICATION_JSON} from '../util/constants';
 
 class ApiCentral extends HttpClient {
     constructor() {
@@ -24,16 +25,16 @@ class ApiCentral extends HttpClient {
         super(configs);
 
         ['get'].forEach((method) => {
-            this[method] = async (url, pageNumber, pageSize) => {
+            this[method] = async (url, params, configurations = {}) => {
                 try {
                     const headers = {
-                        'Content-Type': 'application/json',
-                        Accept: 'application/json',
+                        'Content-type': APPLICATION_JSON,
+                        Accept: APPLICATION_JSON,
                         'accept-encoding': 'gzip',
                         'correlation-id': getCorrelationId() || 'correlation id dropped from the bff',
                     };
                     return await this.apiCentralMakeRequest(
-                        method, url, null, headers, pageNumber, pageSize,
+                        method, url, null, headers, params, configurations,
                     );
                 } catch (error) {
                     if (error instanceof HttpClientException) {
@@ -46,16 +47,17 @@ class ApiCentral extends HttpClient {
         });
 
         ['post', 'put', 'delete'].forEach((method) => {
-            this[method] = async (url, data, pageNumber, pageSize) => {
+            this[method] = async (url, data, reqHeaders, params, configurations = {}) => {
                 try {
                     const headers = {
-                        'Content-Type': 'application/json',
-                        Accept: 'application/json',
+                        'Content-type': APPLICATION_JSON,
+                        Accept: APPLICATION_JSON,
                         'accept-encoding': 'gzip',
                         'correlation-id': getCorrelationId() || 'correlation id dropped from the bff',
+                        ...reqHeaders,
                     };
                     return await this.apiCentralMakeRequest(
-                        method, url, data, headers, pageNumber, pageSize,
+                        method, url, data, headers, params, configurations,
                     );
                 } catch (error) {
                     if (error instanceof HttpClientException) {
@@ -68,7 +70,7 @@ class ApiCentral extends HttpClient {
         });
     }
 
-    async apiCentralMakeRequest(type, url, data, headers, pageNumber, pageSize) {
+    async apiCentralMakeRequest(type, url, data, headers, params, configurations = {}) {
         let response = null;
         try {
             const headersWithAccessToken = {
@@ -76,7 +78,7 @@ class ApiCentral extends HttpClient {
                 authorization: await getAccessToken(false),
             };
             response = await this.makeRequest(
-                type, url, data, headersWithAccessToken, pageNumber, pageSize,
+                type, url, data, headersWithAccessToken, params, configurations,
             );
         } catch (error) {
             if (error instanceof HttpClientException && error.getStatus() === UNAUTHORIZED) {
@@ -87,7 +89,7 @@ class ApiCentral extends HttpClient {
                     authorization: await getAccessToken(true),
                 };
                 response = await this.makeRequest(
-                    type, url, data, headersWithAccessToken, pageNumber, pageSize,
+                    type, url, data, headersWithAccessToken, params, configurations,
                 );
             } else {
                 throw error;
