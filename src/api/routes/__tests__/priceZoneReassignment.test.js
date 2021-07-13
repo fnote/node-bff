@@ -26,7 +26,9 @@ import {
 } from '../../../config/test.config.pzreassignment';
 
 jest.mock('../../../httpClient/PZRHttpClient');
+jest.mock('../../../httpClient/httpClient');
 jest.mock('../../../util/accessTokenGenerator');
+jest.mock('../../../config/configs');
 
 jest.mock('../../../initializer', () => ({
     initializer: (req, res, next) => next(),

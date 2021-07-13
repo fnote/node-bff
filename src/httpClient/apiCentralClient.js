@@ -25,7 +25,7 @@ class ApiCentral extends HttpClient {
         super(configs);
 
         ['get'].forEach((method) => {
-            this[method] = async (url, pageNumber, pageSize) => {
+            this[method] = async (url, params, configurations = {}) => {
                 try {
                     const headers = {
                         'Content-type': APPLICATION_JSON,
@@ -34,7 +34,7 @@ class ApiCentral extends HttpClient {
                         'correlation-id': getCorrelationId() || 'correlation id dropped from the bff',
                     };
                     return await this.apiCentralMakeRequest(
-                        method, url, null, headers, pageNumber, pageSize,
+                        method, url, null, headers, params, configurations,
                     );
                 } catch (error) {
                     if (error instanceof HttpClientException) {
@@ -47,7 +47,7 @@ class ApiCentral extends HttpClient {
         });
 
         ['post', 'put', 'delete'].forEach((method) => {
-            this[method] = async (url, data, reqHeaders, pageNumber, pageSize) => {
+            this[method] = async (url, data, reqHeaders, params, configurations = {}) => {
                 try {
                     const headers = {
                         'Content-type': APPLICATION_JSON,
@@ -57,7 +57,7 @@ class ApiCentral extends HttpClient {
                         ...reqHeaders,
                     };
                     return await this.apiCentralMakeRequest(
-                        method, url, data, headers, pageNumber, pageSize,
+                        method, url, data, headers, params, configurations,
                     );
                 } catch (error) {
                     if (error instanceof HttpClientException) {
@@ -70,7 +70,7 @@ class ApiCentral extends HttpClient {
         });
     }
 
-    async apiCentralMakeRequest(type, url, data, headers, pageNumber, pageSize) {
+    async apiCentralMakeRequest(type, url, data, headers, params, configurations = {}) {
         let response = null;
         try {
             const headersWithAccessToken = {
@@ -78,7 +78,7 @@ class ApiCentral extends HttpClient {
                 authorization: await getAccessToken(false),
             };
             response = await this.makeRequest(
-                type, url, data, headersWithAccessToken, pageNumber, pageSize,
+                type, url, data, headersWithAccessToken, params, configurations,
             );
         } catch (error) {
             if (error instanceof HttpClientException && error.getStatus() === UNAUTHORIZED) {
@@ -89,7 +89,7 @@ class ApiCentral extends HttpClient {
                     authorization: await getAccessToken(true),
                 };
                 response = await this.makeRequest(
-                    type, url, data, headersWithAccessToken, pageNumber, pageSize,
+                    type, url, data, headersWithAccessToken, params, configurations,
                 );
             } else {
                 throw error;
