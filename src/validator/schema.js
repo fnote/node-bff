@@ -43,7 +43,7 @@ export const priceZoneReassignmentCreateReqBody = Joi.object({
         .max(3)
         .required(),
     businessCenterItemAttributeGroup: Joi.string().required(),
-    itemAttributeGroupId: Joi.string().required(),
+    businessCenterItemAttributeGroupId: Joi.string().required(),
     customerGroup: Joi.string().allow(null),
     customerAccount: Joi.string().allow(null),
     newPriceZone: Joi.number().integer().required(),
