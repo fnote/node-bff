@@ -147,7 +147,7 @@ export const mockCreatePriceZoneUpdateResponse = {
 
 export const mockCreatePriceZoneUpdatePayload = {
     businessUnitNumber: '020',
-    itemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
+    businessCenterItemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
     itemAttributeGroupId: '12345',
     customerGroup: '8287',
     customerAccount: '700001',
@@ -171,7 +171,7 @@ export const cipzApiGetSubmittedRequestMockResponse = {
              {
                 id: 121,
                 businessUnitNumber: '020',
-                itemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
+                businessCenterItemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
                 itemAttributeGroupId: '12345',
                 customerGroupId: '221',
                 customerAccount: '700001',
@@ -197,7 +197,7 @@ export const cipzApiGetSubmittedRequestMockResponse = {
              {
                 id: 122,
                 businessUnitNumber: '020',
-                itemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
+                businessCenterItemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
                 itemAttributeGroupId: '12345',
                 customerGroupId: '221',
                 customerAccount: '700001',
@@ -223,7 +223,7 @@ export const cipzApiGetSubmittedRequestMockResponse = {
              {
                 id: 124,
                 businessUnitNumber: '020',
-                itemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
+                businessCenterItemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
                 itemAttributeGroupId: '12345',
                 customerGroupId: '221',
                 customerAccount: '700001',
@@ -260,7 +260,7 @@ export const cipzApiGetSubmittedRequestMockResponse = {
              businessUnitNumber: '020',
              customerGroupId: '112',
              customerGroup: 'El Cerro',
-             itemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
+             businessCenterItemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
              itemAttributeGroupId: '123',
              priceZones: [
                  {
@@ -307,7 +307,7 @@ export const cipzApiGetSubmittedRequestMockResponse = {
              businessUnitNumber: '020',
              customerGroupId: '112',
              customerGroup: 'El Cerro',
-             itemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
+             businessCenterItemAttributeGroup: 'VEGETABLE PUREES/SEASONINGS/PASTES',
              itemAttributeGroupId: '123',
              priceZones: [
                  {
