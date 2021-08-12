@@ -11,6 +11,7 @@ import {
     validateCreatePriceZoneChangeRequest,
     validateSearchRequest,
     validateReviewPatchRequest,
+    sortAttributeGroups,
 } from '../../../helper/pzrHelper';
 import logger from '../../../util/logger';
 // Constants, Exception codes, Validation schema
@@ -34,6 +35,7 @@ export default () => {
     priceZoneReassignmentRouter.get(ITEM_ATTRIBUTE_GROUPS, async (req, res) => {
         try {
             const responseData = await seedService.getSeedItemAttributeGroupsData();
+            sortAttributeGroups(responseData);
             logger.info(`Success Seed Data response received for att group: ${JSON.stringify(responseData.data)}`);
             handleSuccessResponse(res, responseData.data);
         } catch (error) {
