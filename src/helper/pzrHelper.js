@@ -83,3 +83,19 @@ export const handleUnsuccessfulResponse = (res, error, errorMessage) => {
     res.status(httpStatusCode)
         .send(createErrorResponse(null, errorMessage, error, null, error.errorCode));
 };
+
+const ascendingComaparator = ({ name: groupAName }, { name: groupBName }) => {
+    if (groupAName > groupBName) {
+        return 1;
+    }
+    if (groupAName < groupBName) {
+        return -1;
+    }
+    return 0;
+};
+
+export const sortAttributeGroups = (responseData) => {
+    if (responseData.data?.attribute_groups) {
+        responseData.data.attribute_groups.sort(ascendingComaparator);
+    }
+};
