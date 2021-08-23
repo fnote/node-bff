@@ -4,7 +4,7 @@
  * */
 
 export const CLOUD_PCI_BFF = 'Cloud PCI BFF';
-export const CLOUD_PCI_BFF_VERSION = '1.8.0';
+export const CLOUD_PCI_BFF_VERSION = '1.7.0';
 export const SUCCESS = 'success';
 export const ERROR = 'error';
 
