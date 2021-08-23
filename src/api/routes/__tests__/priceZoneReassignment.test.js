@@ -353,7 +353,7 @@ describe('routes: post /pz-update-requests', () => {
     test('invalid create pz update request', async () => {
         executeAuthMiddlewareMockImplementation();
         jest.setTimeout(100000);
-        const requestPayloadWithoutItemAttrGrp = removeObjectAttribute(mockCreatePriceZoneUpdatePayload, 'itemAttributeGroupId');
+        const requestPayloadWithoutItemAttrGrp = removeObjectAttribute(mockCreatePriceZoneUpdatePayload, 'businessCenterItemAttributeGroupId');
         await request(app.app)
         .post('/v1/pci-bff/price-zone-reassignment/pz-update-requests')
         .send(requestPayloadWithoutItemAttrGrp)
