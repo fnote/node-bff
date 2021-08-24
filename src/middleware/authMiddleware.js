@@ -5,7 +5,7 @@ AUTHENTICATION_NOT_REQUIRED_HEALTH_CHECK, AUTHENTICATION_NOT_REQUIRED_STATUS_CHE
 import AuthenticateService from '../service/auth/authenticateService';
 import logger from '../util/logger';
 import {createErrorResponse} from '../mapper/responseMapper';
-import { USER_UNAUTHORIZED_ERROR_CODE } from '../exception/exceptionCodes';
+import {USER_UNAUTHORIZED_ERROR_CODE} from '../exception/exceptionCodes';
 
 export async function authMiddleware(req, res, next) {
     if (process.env.STAGE !== 'LOCAL'

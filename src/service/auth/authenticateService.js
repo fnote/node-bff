@@ -1,3 +1,4 @@
+// eslint-disable one-return-only
 /**
  * Auth Service functions
  *
@@ -9,7 +10,11 @@ import jwkToPem from 'jwk-to-pem';
 import logger from '../../util/logger';
 import {getAuthConfig} from '../../config/configs';
 import {httpClient} from '../../httpClient/httpClient';
-import {HTTP_GET} from '../../util/constants';
+import {
+    HTTP_GET,
+    ROLE_CIPZ,
+    ROLE_REGULAR,
+} from '../../util/constants';
 import AuthorizationService from './authorizationService';
 
 const unauthenticatedReturn = {
@@ -27,7 +32,6 @@ class AuthenticateService {
     prepareToValidateToken = async (req, res) => {
         try {
             const accessToken = req.headers[this.authConfig.CONFIG.authTokenHeaderAttribute];
-
             logger.debug(`Given access token: ${accessToken}`);
 
             if (!accessToken) {
@@ -128,6 +132,7 @@ class AuthenticateService {
         logger.debug(`Given user claim token: ${userClaimToken}`);
 
         const decodedPayloadFromJwt = JSON.parse(Buffer.from(userClaimToken.split('.')[1], 'base64').toString());
+        logger.info(JSON.stringify(decodedPayloadFromJwt));
 
         if (decodedPayloadFromJwt) {
             if (decodedPayloadFromJwt.username) {
@@ -150,37 +155,38 @@ class AuthenticateService {
                     let authorizedPricingTransformationEnabledBunitList;
                     let authorizedBatchEnabledBunitList;
                     let selectedUserRole;
+                    let selectedCIPZUserRole = '';
                     if (Number.isNaN(opcoParsed)) {
                         logger.warn(`User's opco attribute: ${opcoParsed} is not numeric parsable, so returning empty set of authorized opco list`);
                         authorizedPricingTransformationEnabledBunitList = [];
                         authorizedBatchEnabledBunitList = [];
                     } else {
                         // User roles can come in two formats
-                        // If it's single role: it'll come like a string "rsm"
+                        // If it's single role: it'll come like a string "appadmin"
                         // If it's multiple: it'll come like "[appadmin, generaluser]"
 
                         const userRoles = decodedPayloadFromJwt.profile;
                         selectedUserRole = userRoles;
-
+                        // '[appadmin, generaluser, submitter,reviewer]', '[appadmin, generaluser]' ,'[submitter,reviewer]',[appadmin,reviewer]'
+                        // above can come and for returns for each case (appadmin, reviewer )/(appadmin ,'')/ ('', reviewer)
                         try {
-                            const userRolesArray = userRoles.split(',').map((item) => item.trim());
-
-                            if (userRolesArray.length > 1) {
-                                userRolesArray[0] = userRolesArray[0].substring(1);
-
-                                const lastElement = userRolesArray[userRolesArray.length - 1];
-                                userRolesArray[userRolesArray.length - 1] = lastElement.substring(0, lastElement.length - 1);
-
-                                selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray);
-                            }
+                            const userRolesArray = userRoles.replace('[', '')
+                                .replace(']', '')
+                                .replace(/\s/g, '')
+                                .split(',');
+                            selectedUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_REGULAR);
+                            selectedCIPZUserRole = AuthorizationService.getTheRoleWithHighestAuthority(userRolesArray, ROLE_CIPZ);
                         } catch (e) {
                             logger.error(`Error in parsing the user role value: ${userRoles}`);
                             selectedUserRole = userRoles;
                         }
+                        // selected user role either empty , regular
                         const authorizedBunitList = AuthorizationService.getAuthorizedBusinessUnits(opcoString, selectedUserRole);
                         authorizedPricingTransformationEnabledBunitList = authorizedBunitList.authorizedPricingTransformationEnabledBunitList;
                         authorizedBatchEnabledBunitList = authorizedBunitList.authorizedBatchEnabledBunitList;
                     }
+
+                    const allActiveOpcos = AuthorizationService.generatePricingTransformationEnabledAllBusinessUnit();
 
                     const userDetailsData = {
                         authorizedPricingTransformationEnabledBunitList,
@@ -191,6 +197,8 @@ class AuthenticateService {
                         email: decodedPayloadFromJwt.email,
                         jobTitle: decodedPayloadFromJwt.zoneinfo,
                         role: selectedUserRole,
+                        cipzRole: selectedCIPZUserRole,
+                        allActiveOpcos,
                     };
 
                     logger.info(`Authenticated user's user details: First name: ${userDetailsData.firstName}
